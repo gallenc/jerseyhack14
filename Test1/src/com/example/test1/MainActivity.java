@@ -12,12 +12,8 @@ import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
-
-
-
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
-import android.text.format.DateFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -291,9 +287,11 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 
 	protected void onDestroy() {
+		if (am != null) {
 	       am.cancel(pi);
 	       unregisterReceiver(br);
-	       super.onDestroy();
+		}
+	    super.onDestroy();
 	}
 	
 	}
