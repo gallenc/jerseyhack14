@@ -291,6 +291,7 @@ public class MainActivity extends ActionBarActivity {
 	       am.cancel(pi);
 	       unregisterReceiver(br);
 		}
+		pingTimer.cancel();
 	    super.onDestroy();
 	}
 	
