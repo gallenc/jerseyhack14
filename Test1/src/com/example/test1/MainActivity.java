@@ -1,18 +1,14 @@
 package com.example.test1;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -21,6 +17,7 @@ import java.net.UnknownHostException;
 
 import android.support.v7.app.ActionBarActivity;
 import android.telephony.TelephonyManager;
+import android.text.format.DateFormat;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -36,7 +33,6 @@ import android.content.IntentFilter;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.widget.Toast;
@@ -44,6 +40,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Intent;
+import android.os.Vibrator;
 
 public class MainActivity extends ActionBarActivity {
 	private static final int CALLBACKTIMER = 30*1000; // in ms
@@ -55,7 +52,7 @@ public class MainActivity extends ActionBarActivity {
     PendingIntent pi;
     BroadcastReceiver br;
     AlarmManager am;	 
-	 
+	int alarmCount; 
 	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -75,6 +72,7 @@ public class MainActivity extends ActionBarActivity {
 		btnReport.setEnabled(false);
 		Button btnFinish = (Button) findViewById(R.id.button3);
 		btnFinish.setEnabled(false);
+		alarmCount = 0;
 	}
 
 	@Override
@@ -99,7 +97,7 @@ public class MainActivity extends ActionBarActivity {
 		TextView mybox = (TextView) findViewById(R.id.textView1);
 		mybox.setText("Start");
 		setupAlarm();
-		String str = BuildEvent("uei.opennms.org/application/mobilelocation-startjob");
+		String str = BuildEvent("uei.opennms.org/application/mobilelocation/single-working");
 		new MakeNMSPost().execute(str);
 		Button btnReport = (Button) findViewById(R.id.button2);
 		btnReport.setEnabled(true);
@@ -110,19 +108,28 @@ public class MainActivity extends ActionBarActivity {
 	public boolean btnReportInOnClick(View view){
 		TextView mybox = (TextView) findViewById(R.id.textView1);
 		mybox.setText("Running");
-		String str = BuildEvent("uei.opennms.org/application/mobilelocation-startjob");
+		String str = BuildEvent("uei.opennms.org/application/mobilelocation/single-working");
 		new MakeNMSPost().execute(str);
 		pi = PendingIntent.getBroadcast( this, 0, new Intent("com.example.test1"),0 );
 		am.cancel(pi);
+		alarmCount=0;
 		setupAlarm();
+		return true;
+	}
+	public boolean btnPanicClick(View view){
+		TextView mybox = (TextView) findViewById(R.id.textView1);
+		mybox.setText("PANIC MODE");
+		String str = BuildEvent("uei.opennms.org/application/mobilelocation/single-working-panic");
+		new MakeNMSPost().execute(str);
 		return true;
 	}
 	public boolean btnJobFinishClick(View view){
 		TextView mybox = (TextView) findViewById(R.id.textView1);
-		mybox.setText("Finish");
+		mybox.setText("");
 		pi = PendingIntent.getBroadcast( this, 0, new Intent("com.example.test1"),0 );
 		am.cancel(pi);
-		String str = BuildEvent("uei.opennms.org/application/mobilelocation-endjob");
+		alarmCount=0;
+		String str = BuildEvent("uei.opennms.org/application/mobilelocation/single-working-end");
 		new MakeNMSPost().execute(str);
 		Button btnReport = (Button) findViewById(R.id.button2);
 		btnReport.setEnabled(false);
@@ -148,10 +155,17 @@ public class MainActivity extends ActionBarActivity {
 	                                    .getDefaultUri(RingtoneManager.TYPE_RINGTONE);
 	                        }
 	                     }
-                         
-                         try {
-                        	mMediaPlayer = MediaPlayer.create(c, R.raw.airhorn);
-                            mMediaPlayer.start();
+                        
+                        try {
+                        	if (alarmCount==3){
+	                        	mMediaPlayer = MediaPlayer.create(c, R.raw.airhorn);
+	                            mMediaPlayer.start();
+                        	}else{
+                        		 Vibrator v = (Vibrator) c.getSystemService(Context.VIBRATOR_SERVICE);
+                        		 // Vibrate for 2500 milliseconds
+                        		 v.vibrate(2500);
+                        		 alarmCount+=1; 
+                        	}
                         } catch (Exception e) {
                         	Log.e("com.example.test1","",e);
                         }
@@ -165,6 +179,7 @@ public class MainActivity extends ActionBarActivity {
 	      pi = PendingIntent.getBroadcast( this, 0, new Intent("com.example.test1"),0 );
 	      am = (AlarmManager)(this.getSystemService( Context.ALARM_SERVICE ));
 	      am.set( AlarmManager.ELAPSED_REALTIME_WAKEUP, SystemClock.elapsedRealtime() + ALARMREALERTTIMER, pi );
+	      alarmCount=0;
 	}	
 	
 	
@@ -175,9 +190,8 @@ public class MainActivity extends ActionBarActivity {
 				 "<events>" +
 				 "<event>" +
 				 "<uei>" + eventType + "</uei>" +
-				 "<uei></uei>"+
 				 "<source>OpenNMS Android Application</source>"+
-				 "<time>Saturday, 27 September 2014 9:23:30 o'clock GMT</time>"+
+				 "<time>" + new SimpleDateFormat("dd/MM/yy HH:mm").format(new Date()) +"</time>"+
 				 "<host>mack-virtual-machine</host>"+
 				"<parms>" +
 				    "<parm>" +
@@ -225,7 +239,7 @@ public class MainActivity extends ActionBarActivity {
 		  runOnUiThread(new Runnable(){
 			  @Override
 			  public void run() {
-				  String str = BuildEvent("uei.opennms.org/application/mobile-location-updated");
+				  String str = BuildEvent("uei.opennms.org/application/mobilelocation");
 			
 				  new MakeNMSPost().execute(str);
 					Toast.makeText( getApplicationContext(),

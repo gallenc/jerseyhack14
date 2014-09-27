@@ -15,7 +15,6 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="33dp"
-        android:text="Jersey Hackathon"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <Button
@@ -32,20 +31,38 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button1"
         android:layout_below="@+id/button1"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="24dp"
         android:onClick="btnReportInOnClick"
         android:text="Report In" />
 
     <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/button3"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
+        android:onClick="btnPanicClick"
+        android:text="PANIC" />
+
+    <Button
         android:id="@+id/button3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/button2"
         android:layout_below="@+id/button2"
-        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="21dp"
         android:onClick="btnJobFinishClick"
         android:text="Finish Job" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="Jersey Hackathon 2014"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
 
 </RelativeLayout>
