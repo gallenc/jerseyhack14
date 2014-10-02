@@ -19,7 +19,7 @@
   <uei>uei.opennms.org/application/mobilelocation/single-working</uei>
   <event-label>Single Mobile Worker on site</event-label>
   <descr>
-&lt;p&gt;Worker name='%parm[workerid]%' has reported working alone on site. Reported from device asset number='%parm[assetnumber]%'  latitude='%parm[latitude]%'  longitude='%parm[longitude] %location valid='%parm[locationvalid]%'&lt;/p&gt;
+&lt;p&gt;Worker name='%parm[workerid]%' has reported working alone on site. Reported from device asset number='%parm[assetnumber]%'  latitude='%parm[latitude]%'  longitude='%parm[longitude]% location valid='%parm[locationvalid]%'&lt;/p&gt;
   </descr>
     <logmsg dest='logndisplay'>&lt;p&gt;&lt;b&gt;Worker name='%parm[workerid]%' has reported working alone on site.&lt;/b&gt; &lt;BR&gt;
        Reported from device asset number='%parm[assetnumber]%' &lt;BR&gt;
@@ -40,7 +40,7 @@
   <uei>uei.opennms.org/application/mobilelocation/single-working-end</uei>
   <event-label>Single Mobile Worker leaving site</event-label>
   <descr>
-&lt;p&gt;Worker name='%parm[workerid]%' has reported leaving site. Reported from device asset number='%parm[assetnumber]%'  latitude='%parm[latitude]%'  longitude='%parm[longitude] %location valid='%parm[locationvalid]%'&lt;/p&gt;
+&lt;p&gt;Worker name='%parm[workerid]%' has reported leaving site. Reported from device asset number='%parm[assetnumber]%'  latitude='%parm[latitude]%'  longitude='%parm[longitude]% location valid='%parm[locationvalid]%'&lt;/p&gt;
   </descr>
     <logmsg dest='logndisplay'>&lt;p&gt;&lt;b&gt;Worker name='%parm[workerid]%' has reported leaving site..&lt;/b&gt; &lt;BR&gt; 
        Reported from device asset number='%parm[assetnumber]%' &lt;BR&gt;

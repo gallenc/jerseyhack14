@@ -145,9 +145,10 @@
     -->
     
     <!-- MAN ON SITE ALARM -->
-    <!-- Escalate the man on site alarm until critical. Will be reset if a reset event comes in. -->
-    <!-- escalates man on site alarm if not reset within (35 minutes 2100000) (5 minutes 300000) -->
-        <automation name="escalateManOnSiteAlarm" interval="3000000" active="true" 
+    <!-- Escalate the man on site alarm until critical. Will be reset if a reset event comes in.      -->
+    <!-- escalates man on site alarm if not reset within the time set in escalateManOnSiteAlarmAction -->
+    <!-- This test runs every 30 seconds                                                              -->
+        <automation name="escalateManOnSiteAlarm" interval="30000" active="true" 
                 trigger-name="selectManOnSiteAlarmsTrigger" 
                 action-name="escalateManOnSiteAlarmAction" 
                 action-event="eventEscalated" 
