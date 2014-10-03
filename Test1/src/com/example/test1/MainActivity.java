@@ -49,6 +49,7 @@ public class MainActivity extends ActionBarActivity {
     BroadcastReceiver br;
     AlarmManager am;	 
 	int alarmCount; 
+	String userName="Username Undefined";
 	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -189,9 +190,14 @@ public class MainActivity extends ActionBarActivity {
 				 "<source>OpenNMS Android Application</source>"+
 				 "<time>" + new SimpleDateFormat("dd/MM/yy HH:mm").format(new Date()) +"</time>"+
 				 "<host>mack-virtual-machine</host>"+
-				"<parms>" +
+				 "<severity>warning</severity>"+
+				 "<parms>" +
+		            " <parm>"+
+		            " <parmName><![CDATA[workerid]]></parmName>" +
+			        "  <value type=\"string\" encoding=\"text\"><![CDATA["+userName+"]]></value>" +
+			        " </parm>"+ 
 				    "<parm>" +
-				     "<parmName><![CDATA[longitude]]></parmName>";
+				    "<parmName><![CDATA[longitude]]></parmName>";
 				    if (currentLocation == null) {
 				        str = str +"<value type=\"string\" encoding=\"text\"><![CDATA[0]]></value>" +
 				        " </parm>"+
