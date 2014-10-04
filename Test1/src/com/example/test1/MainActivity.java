@@ -26,6 +26,7 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -39,9 +40,13 @@ import android.content.Intent;
 import android.os.Vibrator;
 
 public class MainActivity extends ActionBarActivity {
-	private static final int CALLBACKTIMER = 30*1000; // in ms
-	private static final int ALARMALERTTIMER = 15*1000; // in ms
-	private static final int ALARMREALERTTIMER = 10*1000; // in ms
+	public static final int CALLBACKTIMER = 30*1000; // in ms
+	public static final int ALARMALERTTIMER = 15*1000; // in ms
+	public static final int ALARMREALERTTIMER = 10*1000; // in ms
+	public static final String PREFS_NAME = "OpenNMSSettings";
+	public static final String SERVERPORT = "5817";
+	public static final String SERVER_IP = "demo1.opennms.co.uk";	
+	
 	private Location currentLocation ;
 	private Timer pingTimer;
 	MyTimerTask myTimerTask;
@@ -49,6 +54,7 @@ public class MainActivity extends ActionBarActivity {
     BroadcastReceiver br;
     AlarmManager am;	 
 	int alarmCount; 
+
 	 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -85,6 +91,8 @@ public class MainActivity extends ActionBarActivity {
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 		if (id == R.id.action_settings) {
+            Intent nextScreen = new Intent(getApplicationContext(), Settings.class);
+            startActivity(nextScreen);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -94,7 +102,7 @@ public class MainActivity extends ActionBarActivity {
 		mybox.setText("Start");
 		setupAlarm();
 		String str = BuildEvent("uei.opennms.org/application/mobilelocation/single-working");
-		new MakeNMSPost().execute(str);
+		createPost(str);
 		Button btnReport = (Button) findViewById(R.id.button2);
 		btnReport.setEnabled(true);
 		Button btnFinish = (Button) findViewById(R.id.button3);
@@ -105,7 +113,7 @@ public class MainActivity extends ActionBarActivity {
 		TextView mybox = (TextView) findViewById(R.id.textView1);
 		mybox.setText("Running");
 		String str = BuildEvent("uei.opennms.org/application/mobilelocation/single-working");
-		new MakeNMSPost().execute(str);
+		createPost(str);
 		pi = PendingIntent.getBroadcast( this, 0, new Intent("com.example.test1"),0 );
 		am.cancel(pi);
 		alarmCount=0;
@@ -116,9 +124,10 @@ public class MainActivity extends ActionBarActivity {
 		TextView mybox = (TextView) findViewById(R.id.textView1);
 		mybox.setText("PANIC MODE");
 		String str = BuildEvent("uei.opennms.org/application/mobilelocation/single-working-panic");
-		new MakeNMSPost().execute(str);
+		createPost(str);
 		return true;
 	}
+
 	public boolean btnJobFinishClick(View view){
 		TextView mybox = (TextView) findViewById(R.id.textView1);
 		mybox.setText("");
@@ -126,13 +135,26 @@ public class MainActivity extends ActionBarActivity {
 		am.cancel(pi);
 		alarmCount=0;
 		String str = BuildEvent("uei.opennms.org/application/mobilelocation/single-working-end");
-		new MakeNMSPost().execute(str);
+		createPost(str);
 		Button btnReport = (Button) findViewById(R.id.button2);
 		btnReport.setEnabled(false);
 		Button btnFinish = (Button) findViewById(R.id.button3);
 		btnFinish.setEnabled(false);
 		return true;
 	}
+	
+	private void createPost(String sEvent){
+		String[] sParametersArray = new String[3];
+		SharedPreferences settings = getSharedPreferences(MainActivity.PREFS_NAME, 0);  
+		sParametersArray[0]= settings.getString("openNMSServer", MainActivity.SERVER_IP);
+        sParametersArray[1] =settings.getString("openNMSPort", MainActivity.SERVERPORT);		
+        sParametersArray[2]=sEvent;
+        if (sParametersArray[0].length()>0 && sParametersArray[1].length()>0) {
+        	new MakeNMSPost().execute(sParametersArray);
+        }
+	}
+	
+
 	/* Class My Location Listener */
 
 	private void setupAlarm() {
@@ -182,6 +204,8 @@ public class MainActivity extends ActionBarActivity {
 	public String BuildEvent(String eventType){
 		TelephonyManager telephonyManager = (TelephonyManager)getSystemService(Context.TELEPHONY_SERVICE);
 		String devID = telephonyManager.getDeviceId();
+        SharedPreferences settings = getSharedPreferences(MainActivity.PREFS_NAME, 0);
+        String sopenNMSUserName = settings.getString("openNMSUserName", "Username Undefined");
 		String str = "<log>" +
 				 "<events>" +
 				 "<event>" +
@@ -189,9 +213,14 @@ public class MainActivity extends ActionBarActivity {
 				 "<source>OpenNMS Android Application</source>"+
 				 "<time>" + new SimpleDateFormat("dd/MM/yy HH:mm").format(new Date()) +"</time>"+
 				 "<host>mack-virtual-machine</host>"+
-				"<parms>" +
+				 "<severity>warning</severity>"+
+				 "<parms>" +
+		            " <parm>"+
+		            " <parmName><![CDATA[workerid]]></parmName>" +
+			        "  <value type=\"string\" encoding=\"text\"><![CDATA["+sopenNMSUserName+"]]></value>" +
+			        " </parm>"+ 
 				    "<parm>" +
-				     "<parmName><![CDATA[longitude]]></parmName>";
+				    "<parmName><![CDATA[longitude]]></parmName>";
 				    if (currentLocation == null) {
 				        str = str +"<value type=\"string\" encoding=\"text\"><![CDATA[0]]></value>" +
 				        " </parm>"+
@@ -237,7 +266,7 @@ public class MainActivity extends ActionBarActivity {
 			  public void run() {
 				  String str = BuildEvent("uei.opennms.org/application/mobilelocation");
 			
-				  new MakeNMSPost().execute(str);
+				  createPost(str);
 					Toast.makeText( getApplicationContext(),
 							"Pinged Home",
 							Toast.LENGTH_SHORT ).show();
@@ -301,15 +330,13 @@ class MakeNMSPost extends AsyncTask<String, Void, Void> {
 
     //private Exception exception;
 	private Socket socket;
-
-	private static final int SERVERPORT = 5817;
-	private static final String SERVER_IP = "demo1.opennms.co.uk";
 	
 	protected Void doInBackground(String... arg0) {  
 		try {
-			InetAddress serverAddr = InetAddress.getByName(SERVER_IP);
-
-			socket = new Socket(serverAddr, SERVERPORT);
+			String sServerName = arg0[0];
+			InetAddress serverAddr = InetAddress.getByName(sServerName);
+			int iServerPort = Integer.parseInt( arg0[1]);
+			socket = new Socket(serverAddr, iServerPort);
 
 		} catch (UnknownHostException e1) {
 			Log.e("openNMS",e1.toString());
@@ -317,7 +344,7 @@ class MakeNMSPost extends AsyncTask<String, Void, Void> {
 			Log.e("openNMS",e1.toString());
 		}
 		try {
-			String str = arg0[0];
+			String str = arg0[2];
 			PrintWriter out = new PrintWriter(new BufferedWriter(
 					new OutputStreamWriter(socket.getOutputStream())),
 					true);
@@ -333,4 +360,3 @@ class MakeNMSPost extends AsyncTask<String, Void, Void> {
 	}
 
 }
-
