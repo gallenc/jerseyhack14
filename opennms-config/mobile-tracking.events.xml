@@ -29,7 +29,7 @@
     </logmsg>
   <operinstruct>This event indicates that worker '%parm[workerid]%' is working alone. The worker should regularly report they are OK. If this escalates above normal severity they haven't 
   reported in on time and you should check that '%parm[workerid]%' is OK</operinstruct>
-  <severity>Warning</severity>
+  <severity>Minor</severity>
   <alarm-data reduction-key="%uei%:%parm[workerid]%" alarm-type="1" auto-clean="false" >
       <update-field field-name="severity" update-on-reduction="true"/>
       <update-field field-name="logmsg" update-on-reduction="true"/>
@@ -59,7 +59,7 @@
   <uei>uei.opennms.org/application/mobilelocation/single-working-panic</uei>
   <event-label>Single Mobile Worker on site reporting panic situation</event-label>
   <descr>
-&lt;p&gt;Worker name='%parm[workerid]%' has requested PANIC help while working alone on site. Reported from device asset number='%parm[assetnumber]%'  latitude='%parm[latitude]%'  longitude='%parm[longitude] %location valid='%parm[locationvalid]%'&lt;/p&gt;
+&lt;p&gt;Worker name='%parm[workerid]%' has requested PANIC help while working alone on site. Reported from device asset number='%parm[assetnumber]%'  latitude='%parm[latitude]%'  longitude='%parm[longitude]% location valid='%parm[locationvalid]%'&lt;/p&gt;
   </descr>
     <logmsg dest='logndisplay'>&lt;p&gt;&lt;b&gt;Worker name='%parm[workerid]%' has requested PANIC help while working alone on site.&lt;/b&gt; &lt;BR&gt;
        Reported from device asset number='%parm[assetnumber]%' &lt;BR&gt;
