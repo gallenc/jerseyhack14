@@ -1,9 +1,10 @@
 
 
 jerseyhack14
+
 Code played with during jersey hackathon 2014 (http://www.digital.je/news/hackathon-success).
 
-Authors: Craig Gallen and Mark Warton
+Authors: Craig Gallen and Mark Wharton
 
 Published under the GPL licence.
 
