@@ -1,6 +1,6 @@
 
 
-jerseyhack14
+Jerseyhack14
 
 Code played with during jersey hackathon 2014 (http://www.digital.je/news/hackathon-success).
 
