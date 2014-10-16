@@ -110,7 +110,7 @@
       </mappings>
     </event-translation-spec>
     
-    <!-- translator for mobile location update event -actually just modified asset table latitude and longitude -->
+    <!-- translator for mobile location update event - modifies asset table latitude and longitude for matching node -->
     <event-translation-spec uei="uei.opennms.org/application/mobilelocation" >
       <mappings>
         <mapping>
@@ -118,10 +118,11 @@
             <value type="constant" result="uei.opennms.org/application/mobilelocation-updated" />
           </assignment>
           <assignment name="nodeid" type="field" >
-            <value type="sql" result="UPDATE assets SET longitude = cast( ? as double precision), latitude = cast( ? as double precision) WHERE assetnumber = ? RETURNING nodeid" >
+            <value type="sql" result="UPDATE assets SET longitude = cast( ? as double precision), latitude = cast( ? as double precision) WHERE assetnumber = ? AND 'true' = ? RETURNING nodeid" >
               <value type="parameter" name="longitude"  matches=".*" result="${0}" />
               <value type="parameter" name="latitude" matches=".*" result="${0}" />
               <value type="parameter" name="assetnumber"  matches=".*" result="${0}" />
+              <value type="parameter" name="locationvalid"  matches=".*" result="${0}" />
             </value>
           </assignment>
         </mapping>
