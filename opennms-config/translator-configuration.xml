@@ -128,6 +128,31 @@
         </mapping>
       </mappings>
     </event-translation-spec>
+    
+    <!-- translator for single-working update event - modifies alarm to point to correct node -->
+    <!-- NOTE this can only work once serialisation bug in event translator is fixed          -->
+    <!-- see issue http://issues.opennms.org/browse/NMS-7024                                  -->
+<!-- example query: UPDATE alarms SET nodeid = ( SELECT nodeid FROM assets WHERE assetnumber = '353973051721703') -->
+<!-- WHERE alarms.reductionkey ='uei.opennms.org/application/mobilelocation/single-working:'||'fred' -->
+<!-- AND EXISTS ( SELECT nodeid FROM assets WHERE assetnumber = '353973051721703') RETURNING nodeid; -->
+<!--     <event-translation-spec uei="uei.opennms.org/application/mobilelocation/single-working" > -->
+<!--       <mappings> -->
+<!--         <mapping> -->
+<!--           <assignment name="uei" type="field" > -->
+<!--             <value type="constant" result="uei.opennms.org/application/mobilelocation/single-working-node-updated" /> -->
+<!--           </assignment> -->
+<!--           <assignment name="nodeid" type="field" > -->
+<!--             <value type="sql" result="UPDATE alarms SET nodeid = ( SELECT nodeid FROM assets WHERE assetnumber = ?) -->
+<!--                     WHERE alarms.reductionkey ='uei.opennms.org/application/mobilelocation/single-working:'|| ?   -->
+<!--                     AND EXISTS ( SELECT nodeid FROM assets WHERE assetnumber = ? ) RETURNING nodeid" > -->
+<!--               <value type="parameter" name="assetnumber"  matches=".*" result="${0}" /> -->
+<!--               <value type="parameter" name="workerid"  matches=".*" result="${0}" /> -->
+<!--               <value type="parameter" name="assetnumber"  matches=".*" result="${0}" /> -->
+<!--             </value> -->
+<!--           </assignment> -->
+<!--         </mapping> -->
+<!--       </mappings> -->
+<!--     </event-translation-spec> -->
   
   </translation>
 
