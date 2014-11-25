@@ -1,0 +1,72 @@
+<!-- event-gateway.events.xml for opennms http event gateway -->
+<events xmlns="http://xmlns.opennms.org/xsd/eventconf">
+<event>
+	<uei>uei.opennms.org/internal/eventGateway/RejectedEventUEI</uei>
+	<event-label>OpenNMS Event Gateway '%parm[gatewayReference]%' rejected an external event</event-label>
+	<descr>
+        &lt;p&gt;An event with UEI '%parm[receivedUEI]%' was received and rejected by the event gateway '%parm[gatewayReference]%' &lt;/p&gt;
+	</descr>
+		<logmsg dest='logndisplay'> 
+           &lt;p&gt;An event with UEI '%parm[receivedUEI]%' was received and rejected by the event gateway '%parm[gatewayReference]%' &lt;/p&gt;
+           &lt;p&gt;The http message headers identified the message source as hostHeader='%parm[hostHeader]%', refererHeader='%parm[refererHeader]%'&lt;/p&gt;
+           &lt;p&gt;This event contains the following parameters %parm[all]% &lt;/p&gt;
+		</logmsg>
+    <severity>Normal</severity>
+    <operinstruct>
+          &lt;p&gt;Some device is sending events which are not allowed by gateway configuration '%parm[gatewayReference]%'. 
+          Check that the gateway configurations and/or the device configurations are correct.&lt;/p&gt;
+    </operinstruct>
+</event>
+<event>
+  <uei>uei.opennms.org/internal/eventGateway/AdditionalValuesReceived</uei>
+  <event-label>OpenNMS Event Gateway '%parm[gatewayReference]%' received a message with additional values.</event-label>
+  <descr>
+        &lt;p&gt;OpenNMS Event Gateway '%parm[gatewayReference]%' received a message with additional values.&lt;/p&gt;
+  </descr>
+    <logmsg dest='logndisplay'>
+           &lt;p&gt;OpenNMS Event Gateway '%parm[gatewayReference]%' received a message with additional values.&lt;/p&gt;
+           &lt;p&gt;The http message headers identified the message source as hostHeader='%parm[hostHeader]%', refererHeader='%parm[refererHeader]%'&lt;/p&gt;
+           &lt;p&gt;This event contains the following parameters %parm[all]% &lt;/p&gt;
+    </logmsg>
+    <severity>Normal</severity>
+    <operinstruct>
+          &lt;p&gt;A device is sending additional message values to the gateway '%parm[gatewayReference]%'. 
+          An event translator should be configured to deal with these additional message values. &lt;/p&gt;
+    </operinstruct>
+</event>
+<event>
+  <uei>uei.opennms.org/internal/eventGateway/MessageFromUnauthorisedUser</uei>
+  <event-label>OpenNMS Event Gateway '%parm[gatewayReference]%' received a message from an unauthorized user name '%parm[gatewayUsername]%'</event-label>
+  <descr>
+        &lt;p&gt;OpenNMS Event Gateway '%parm[gatewayReference]%' received a message from an unauthorized user name '%parm[gatewayUsername]%'&lt;/p&gt;
+  </descr>
+    <logmsg dest='logndisplay'>
+           &lt;p&gt;OpenNMS Event Gateway '%parm[gatewayReference]%' received a message from an unauthorized user name '%parm[gatewayUsername]%'&lt;/p&gt;
+           &lt;p&gt;The http message headers identified the message source as hostHeader='%parm[hostHeader]%', refererHeader='%parm[refererHeader]%'&lt;/p&gt;
+           &lt;p&gt;This event contains the following parameters %parm[all]% &lt;/p&gt;
+    </logmsg>
+    <severity>Normal</severity>
+    <operinstruct>
+          &lt;p&gt;A device is sending messages to the gateway '%parm[gatewayReference]%' with an incorrect user name '%parm[gatewayUsername]%' 
+          Check that the gateway configurations and/or the device configurations are correct.&lt;/p&gt;
+    </operinstruct>
+</event>
+<event>
+  <uei>uei.opennms.org/internal/eventGateway/UnauthorisedUserPassword</uei>
+  <event-label>OpenNMS Event Gateway '%parm[gatewayReference]%' received a message with a wrong password for user name '%parm[gatewayUsername]%'</event-label>
+  <descr>
+        &lt;p&gt;OpenNMS Event Gateway '%parm[gatewayReference]%' received a message message with a wrong password for user name '%parm[gatewayUsername]%'&lt;/p&gt;
+  </descr>
+    <logmsg dest='logndisplay'>
+           &lt;p&gt;OpenNMS Event Gateway '%parm[gatewayReference]%' received a message message with a wrong password for user name '%parm[gatewayUsername]%'&lt;/p&gt;
+           &lt;p&gt;The http message headers identified the message source as hostHeader='%parm[hostHeader]%', refererHeader='%parm[refererHeader]%'&lt;/p&gt;
+           &lt;p&gt;This event contains the following parameters %parm[all]% &lt;/p&gt;
+    </logmsg>
+    <severity>Normal</severity>
+    <operinstruct>
+          &lt;p&gt;A device is sending messages to the gateway '%parm[gatewayReference]%' with a wrong password for user name '%parm[gatewayUsername]%' 
+          Check that the gateway configurations and/or the device configurations are correct.&lt;/p&gt;
+    </operinstruct>
+</event>
+</events>
+<!-- End of event-gateway.events.xml for opennms http event gateway -->
