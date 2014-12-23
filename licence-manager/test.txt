@@ -1,0 +1,8 @@
+mvn archetype:generate -DarchetypeGroupId=org.apache.karaf.archetypes -DarchetypeArtifactId=karaf-bundle-archetype -DarchetypeVersion=2.2.11 -DgroupId=org.opennms -DartifactId=org.opennms.licencemanager -Dversion=1.0-SNAPSHOT -Dpackage=org.opennms.licence.manager
+
+
+
+mvn archetype:generate   -DarchetypeGroupId=org.apache.karaf.archetypes  -DarchetypeArtifactId=karaf-blueprint-archetype   -DarchetypeVersion=2.2.11 -DgroupId=org.opennms -DartifactId=org.opennms.licencemanager -Dversion=1.0-SNAPSHOT -Dpackage=org.opennms.licence.manager
+
+
+mvn archetype:create   -DarchetypeArtifactId=maven-archetype-quickstart   -DgroupId=org.apache.karaf.shell.samples   -DartifactId=shell-sample-commands   -Dversion=1.0-SNAPSHOT

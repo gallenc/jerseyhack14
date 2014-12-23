@@ -1,0 +1,47 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+    <service ref="licenceServiceImpl" interface="org.opennms.karaf.licencemgr.LicenceService"/>
+        
+	<bean id="licenceServiceImpl" class="org.opennms.karaf.licencemgr.LicenceServiceImpl" init-method="load" >
+	    <property name="fileUri" value="./licenceService.xml" /> <!-- TODO replace with properties loader -->
+	</bean>
+
+	<command-bundle xmlns="http://karaf.apache.org/xmlns/shell/v1.0.0">
+		<command name="licence-mgr/list">
+			<action class="org.opennms.karaf.licencemgr.cmd.ListLicencesCommand">
+				<property name="licenceService" ref="licenceServiceImpl" />
+			</action>
+		</command>
+		<command name="licence-mgr/product-licence">
+			<action class="org.opennms.karaf.licencemgr.cmd.ProductLicenceCommand">
+				<property name="licenceService" ref="licenceServiceImpl" />
+			</action>
+		</command>
+		<command name="licence-mgr/add">
+			<action class="org.opennms.karaf.licencemgr.cmd.AddLicenceCommand">
+				<property name="licenceService" ref="licenceServiceImpl" />
+			</action>
+		</command>
+		<command name="licence-mgr/remove">
+			<action class="org.opennms.karaf.licencemgr.cmd.RemoveLicenceCommand">
+				<property name="licenceService" ref="licenceServiceImpl" />
+			</action>
+		</command>
+		<command name="licence-mgr/getSystemInstance">
+			<action class="org.opennms.karaf.licencemgr.cmd.GetSystemInstanceCommand">
+				<property name="licenceService" ref="licenceServiceImpl" />
+			</action>
+		</command>
+		<command name="licence-mgr/setSystemInstance">
+			<action class="org.opennms.karaf.licencemgr.cmd.SetSystemInstanceCommand">
+				<property name="licenceService" ref="licenceServiceImpl" />
+			</action>
+		</command>
+		<command name="licence-mgr/makeSystemInstance">
+			<action class="org.opennms.karaf.licencemgr.cmd.MakeSystemInstanceCommand">
+				<property name="licenceService" ref="licenceServiceImpl" />
+			</action>
+		</command>
+	</command-bundle>
+
+</blueprint>
