@@ -329,7 +329,7 @@
     -->
     
     <!-- MAN ON SITE ALARM -->
-    <!-- Escalate the man on site alarm until critical. Will be reset if a reset event comes in. -->
+    <!-- Escalate the man on site alarm until critical. Will be reset if a single-working event comes in. -->
     <trigger name="selectManOnSiteAlarmsTrigger" operator="&gt;=" row-count="1" >
       <statement>
           SELECT a.alarmid AS _alarmid, 
@@ -341,7 +341,7 @@
                  a.ipaddr AS _ipaddr,
                  'MAN ON SITE MONITOR' AS _servicename
             FROM alarms a
-           WHERE a.severity &gt;= 2 
+           WHERE a.severity &gt;= 3 
              AND ( a.eventuei = 'uei.opennms.org/application/mobilelocation/single-working' )
              AND lasteventtime &lt; now() - interval '5 minutes'
       </statement>
