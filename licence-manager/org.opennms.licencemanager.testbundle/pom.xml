@@ -4,10 +4,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.opennms</groupId>
-	<artifactId>org.opennms.licencemanager</artifactId>
+	<artifactId>org.opennms.karaf.licencemanager.testbundle</artifactId>
 	<version>1.0-SNAPSHOT</version>
 	<packaging>bundle</packaging>
-	<name>org.opennms.licencemanager</name>
+	<name>org.opennms.karaf.licencemanager.testbundle</name>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -15,11 +15,12 @@
 	</properties>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.apache.karaf.shell</groupId>
-			<artifactId>org.apache.karaf.shell.console</artifactId>
-			<version>2.2.11</version>
-		</dependency>
+	    <dependency>
+	        <groupId>org.opennms</groupId>
+	        <artifactId>org.opennms.licencemanager</artifactId>
+	        <version>1.0-SNAPSHOT</version>
+	        <scope>provided</scope>
+	    </dependency>
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
@@ -52,22 +53,9 @@
 
 						<Import-Package>
 							org.apache.felix.service.command,
-							org.apache.felix.gogo.commands,
-							org.apache.karaf.shell.console,
 							*
 						</Import-Package>
 					</instructions>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.18</version>
-				<!-- allows tests to run in order with static vairable passed between tests -->
-				<configuration>
-					<reuseForks>false</reuseForks>
-					<forkCount>1</forkCount>
 				</configuration>
 			</plugin>
 		</plugins>

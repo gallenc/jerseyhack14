@@ -22,11 +22,15 @@ public class ListLicencesCommand extends OsgiCommandSupport {
 
 	@Override
 	protected Object doExecute() throws Exception {
-		System.out.println("list of licences");
+		try {
+			System.out.println("list of licences");
 
-		Map<String, String> licenceMap = getLicenceService().getLicenceMap();
-		for (Entry<String, String> entry : licenceMap.entrySet()){
-			System.out.println("   productId='"+entry.getKey()+"' licence='"+entry.getValue()+"'");
+			Map<String, String> licenceMap = getLicenceService().getLicenceMap();
+			for (Entry<String, String> entry : licenceMap.entrySet()){
+				System.out.println("   productId='"+entry.getKey()+"' licence='"+entry.getValue()+"'");
+			}
+		} catch (Exception e) {
+			System.out.println("Error getting list of installed licences. Exception="+e);
 		}
 		return null;
 	}

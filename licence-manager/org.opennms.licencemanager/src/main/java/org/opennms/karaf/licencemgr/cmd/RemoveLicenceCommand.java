@@ -23,11 +23,14 @@ public class RemoveLicenceCommand extends OsgiCommandSupport {
 
 	@Override
 	protected Object doExecute() throws Exception {
-
-		if (getLicenceService().removeLicence(productId)){
-			System.out.println("Removed licence for productId=" + productId);
-		}else {
-			System.out.println("No licence installed for productId='" + productId+"'");
+		try{
+			if (getLicenceService().removeLicence(productId)){
+				System.out.println("Removed licence for productId=" + productId);
+			}else {
+				System.out.println("No licence installed for productId='" + productId+"'");
+			}
+		} catch (Exception e) {
+			System.out.println("error removing licence for productId. Exception="+e);
 		}
 
 		return null;

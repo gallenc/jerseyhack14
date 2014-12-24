@@ -80,7 +80,7 @@ public class LicenceManagerTest {
 		try {
 			licenceService.setSystemId("bc032e68b0defeb4-e7dde04b");
 		} catch (RuntimeException e) {
-			System.out.println("testSetWrongSystemInstance() Unexpected Exception:"+e);
+			System.out.println("testSetCorrectSystemInstance() Unexpected Exception:"+e);
 			thrown = true;
 		}
 		assertFalse(thrown);

@@ -110,6 +110,15 @@ public class LicenceServiceImpl implements LicenceService {
 		return systemId;
 	}
 
+	/**
+	 * adds checksum onto end of given string separated by - character
+	 */
+	@Override
+	public String checksumForString(String valueString) {
+		if (valueString==null) throw new RuntimeException("valueString cannot be null");
+		StringChecksum stringChecksum = new StringChecksum();
+		return stringChecksum.addCRC(valueString);
+	}
 
 	public synchronized void persist(){
 		if (fileUri==null) throw new RuntimeException("fileUri must be set for licence manager");
@@ -153,5 +162,7 @@ public class LicenceServiceImpl implements LicenceService {
 			throw new RuntimeException("Problem loading Licence Manager Data",e);
 		}
 	}
+
+
 
 }

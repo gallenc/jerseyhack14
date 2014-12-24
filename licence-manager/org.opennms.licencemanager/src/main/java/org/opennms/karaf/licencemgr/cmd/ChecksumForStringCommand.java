@@ -5,9 +5,8 @@ import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.opennms.karaf.licencemgr.LicenceService;
 
-
-@Command(scope = "licence-mgr", name = "makeSystemInstance", description="Make a new SystemInstance id for Karaf licence manager")
-public class MakeSystemInstanceCommand extends OsgiCommandSupport {
+@Command(scope = "licence-mgr", name = "checksumForString", description="creates and adds a checksum to a given string")
+public class ChecksumForStringCommand extends OsgiCommandSupport {
 
 	private LicenceService _licenceService;
 
@@ -17,17 +16,21 @@ public class MakeSystemInstanceCommand extends OsgiCommandSupport {
 
 	public void setLicenceService( LicenceService licenceService) {
 		_licenceService = licenceService;
-	} 
+	}
+
+	@Argument(index = 0, name = "string", description = "simple string to add checksum.", required = true, multiValued = false)
+	String string = null;
 
 
 	@Override
 	protected Object doExecute() throws Exception {
 		try{
-			String systemId = getLicenceService().makeSystemInstance();
-			System.out.println("Made new Licence System Instance set to='"+systemId+"'");
+			String stringPlusChecksum =  getLicenceService().checksumForString(string);
+			System.out.println("string plus checksum='"+stringPlusChecksum+"'");
 		} catch (Exception e) {
-			System.out.println("Error making system instance. Exception="+e);
+			System.out.println("Error Adding Checksum. Exception="+e);
 		}
+
 		return null;
 	}
 }

@@ -17,5 +17,7 @@ public interface LicenceService {
 	public void setSystemId(String systemId);
 	
 	public String makeSystemInstance();
+	
+	public String checksumForString(String string);
 
 }

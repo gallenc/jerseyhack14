@@ -21,12 +21,16 @@ public class SetSystemInstanceCommand extends OsgiCommandSupport {
 
 	@Argument(index = 0, name = "systemInstance", description = "System Instance of licence manager ", required = true, multiValued = false)
 	String systemInstance = null;
-	
-	
+
+
 	@Override
 	protected Object doExecute() throws Exception {
-		getLicenceService().setSystemId(systemInstance);
-		System.out.println("Licence System Instance set to='"+getLicenceService().getSystemId()+"'");
+		try{
+			getLicenceService().setSystemId(systemInstance);
+			System.out.println("Licence System Instance set to='"+getLicenceService().getSystemId()+"'");
+		} catch (Exception e) {
+			System.out.println("Error setting System Instance. Exception="+e);
+		}
 		return null;
 	}
 }

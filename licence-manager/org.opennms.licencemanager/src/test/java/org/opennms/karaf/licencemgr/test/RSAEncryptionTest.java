@@ -25,6 +25,7 @@ import javax.crypto.NoSuchPaddingException;
 import org.junit.*;
 import org.opennms.karaf.licencemgr.LicenceService;
 import org.opennms.karaf.licencemgr.LicenceServiceImpl;
+import org.opennms.karaf.licencemgr.RsaKeyEncryptor;
 import org.opennms.karaf.licencemgr.StringChecksum;
 
 import static org.junit.Assert.*;
@@ -34,13 +35,19 @@ import static org.junit.Assert.*;
  * @author cgallen
  * See http://www.javamex.com/tutorials/cryptography/asymmetric.shtml 
  * This example based on tutorial
+ * Note tests are run by surefire in alphabetical order - not order in class
  *
  */
-public class RSAEncryptionTest3 {
+
+public class RSAEncryptionTest {
 
 	static String publicKeyStr=null;
 	static String privateKeyStr=null;
 	static String encryptedStr=null;
+	static String encryptedStrPlusCrc=null;
+	
+	// system instance
+	static final String testString="4ad72a34e3635c1b-99da3323";
 
 	//static LicenceService licenceService=null;
 
@@ -57,7 +64,7 @@ public class RSAEncryptionTest3 {
 
 
 	@Test
-	public void testGenerateKeys() {
+	public void atestGenerateKeys() {
 		RsaKeyEncryptor rsaKeyEncryptor = new RsaKeyEncryptor();
 		rsaKeyEncryptor.generateKeys();
 		
@@ -67,33 +74,47 @@ public class RSAEncryptionTest3 {
 		assertNotNull(privateKeyStr);
 		assertNotNull(publicKeyStr);
 		
-		System.out.println("@Test generateKeys() privatekey="+privateKeyStr);
-		System.out.println("@Test generateKeys() publickey="+publicKeyStr);
+		System.out.println("@Test generateKeys() privateKeyStr="+privateKeyStr);
+		System.out.println("@Test generateKeys() publicKeyStr="+publicKeyStr);
 	}
 
 	@Test
-	public void testEncrypt() {
-		String testString="teststring";
-		
+	public void btestEncrypt() {
+
 		RsaKeyEncryptor rsaKeyEncryptor = new RsaKeyEncryptor();
 		rsaKeyEncryptor.setPublicKeyStr(publicKeyStr);
 		
 		encryptedStr = rsaKeyEncryptor.rsaEncryptString(testString);
 		System.out.println("@Test testEncrypt testString="+testString);
 		System.out.println("@Test testEncrypt encryptedStr="+encryptedStr);
-
+		
+		// test string plus crc
+		encryptedStrPlusCrc=rsaKeyEncryptor.rsaEncryptStringAddChecksum(testString);
+		System.out.println("@Test testEncrypt encryptedStrPlusCrc="+encryptedStrPlusCrc);
+		
+		
 	}
 
 	@Test
-	public void testDecrypt() {
+	public void ctestDecrypt() {
 		System.out.println("@Test testDecrypt encryptedStr="+encryptedStr);
 		
 		RsaKeyEncryptor rsaKeyEncryptor = new RsaKeyEncryptor();
 		rsaKeyEncryptor.setPrivateKeyStr(privateKeyStr);
 		
 		String decriptedStr= rsaKeyEncryptor.rsaDecryptString(encryptedStr);
+		
 		System.out.println("@Test testDecrypt decryptedStr="+decriptedStr);
-
+		
+		assertEquals(testString,decriptedStr);
+		
+		// test string plus crc
+		decriptedStr=rsaKeyEncryptor.rsaDecryptStringRemoveChecksum(encryptedStrPlusCrc);
+		System.out.println("@Test testDecrypt  encryptedStrPlusCrc="+encryptedStrPlusCrc);
+		System.out.println("@Test testDecrypt  decryptedstring="+decriptedStr);
+		
+		assertEquals(testString,decriptedStr);
+		
 	}
 
 

@@ -20,7 +20,12 @@ public class GetSystemInstanceCommand extends OsgiCommandSupport {
 
 	@Override
 	protected Object doExecute() throws Exception {
-		System.out.println("Licence System Instance ID='"+getLicenceService().getSystemId()+"'");
+		try{
+			System.out.println("Licence System Instance ID='"+getLicenceService().getSystemId()+"'");
+		} catch (Exception e) {
+			System.out.println("Error getting System Instance ID. Exception="+e);
+		}
+
 		return null;
 	}
 }
