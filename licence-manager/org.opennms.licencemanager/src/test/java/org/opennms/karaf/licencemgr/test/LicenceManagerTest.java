@@ -3,7 +3,7 @@ package org.opennms.karaf.licencemgr.test;
 import org.junit.*;
 import org.opennms.karaf.licencemgr.LicenceService;
 import org.opennms.karaf.licencemgr.LicenceServiceImpl;
-import org.opennms.karaf.licencemgr.StringChecksum;
+import org.opennms.karaf.licencemgr.StringCrc32Checksum;
 
 import static org.junit.Assert.*;
 
@@ -38,8 +38,8 @@ public class LicenceManagerTest {
 		String instanceId = licenceService.makeSystemInstance();
 		System.out.println("@Test - testMakeSystemInstance(). instanceId="+instanceId);
 
-		StringChecksum stringChecksum = new StringChecksum();
-		assertTrue(stringChecksum.checkCRC(instanceId));
+		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
+		assertTrue(stringCrc32Checksum.checkCRC(instanceId));
 
 	}
 

@@ -1,32 +1,7 @@
 package org.opennms.karaf.licencemgr.test;
 
-
-import javax.xml.bind.DatatypeConverter; 
-
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.RSAPrivateKeySpec;
-import java.security.spec.RSAPublicKeySpec;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-
 import org.junit.*;
-import org.opennms.karaf.licencemgr.LicenceService;
-import org.opennms.karaf.licencemgr.LicenceServiceImpl;
-import org.opennms.karaf.licencemgr.RsaKeyEncryptor;
-import org.opennms.karaf.licencemgr.StringChecksum;
+import org.opennms.karaf.licencemgr.RsaAsymetricKeyCipher;
 
 import static org.junit.Assert.*;
 
@@ -65,11 +40,11 @@ public class RSAEncryptionTest {
 
 	@Test
 	public void atestGenerateKeys() {
-		RsaKeyEncryptor rsaKeyEncryptor = new RsaKeyEncryptor();
-		rsaKeyEncryptor.generateKeys();
+		RsaAsymetricKeyCipher rsaAsymetricKeyCipher = new RsaAsymetricKeyCipher();
+		rsaAsymetricKeyCipher.generateKeys();
 		
-		privateKeyStr=rsaKeyEncryptor.getPrivateKeyStr();
-		publicKeyStr=rsaKeyEncryptor.getPublicKeyStr();
+		privateKeyStr=rsaAsymetricKeyCipher.getPrivateKeyStr();
+		publicKeyStr=rsaAsymetricKeyCipher.getPublicKeyStr();
 		
 		assertNotNull(privateKeyStr);
 		assertNotNull(publicKeyStr);
@@ -81,15 +56,15 @@ public class RSAEncryptionTest {
 	@Test
 	public void btestEncrypt() {
 
-		RsaKeyEncryptor rsaKeyEncryptor = new RsaKeyEncryptor();
-		rsaKeyEncryptor.setPublicKeyStr(publicKeyStr);
+		RsaAsymetricKeyCipher rsaAsymetricKeyCipher = new RsaAsymetricKeyCipher();
+		rsaAsymetricKeyCipher.setPublicKeyStr(publicKeyStr);
 		
-		encryptedStr = rsaKeyEncryptor.rsaEncryptString(testString);
+		encryptedStr = rsaAsymetricKeyCipher.rsaEncryptString(testString);
 		System.out.println("@Test testEncrypt testString="+testString);
 		System.out.println("@Test testEncrypt encryptedStr="+encryptedStr);
 		
 		// test string plus crc
-		encryptedStrPlusCrc=rsaKeyEncryptor.rsaEncryptStringAddChecksum(testString);
+		encryptedStrPlusCrc=rsaAsymetricKeyCipher.rsaEncryptStringAddChecksum(testString);
 		System.out.println("@Test testEncrypt encryptedStrPlusCrc="+encryptedStrPlusCrc);
 		
 		
@@ -99,17 +74,17 @@ public class RSAEncryptionTest {
 	public void ctestDecrypt() {
 		System.out.println("@Test testDecrypt encryptedStr="+encryptedStr);
 		
-		RsaKeyEncryptor rsaKeyEncryptor = new RsaKeyEncryptor();
-		rsaKeyEncryptor.setPrivateKeyStr(privateKeyStr);
+		RsaAsymetricKeyCipher rsaAsymetricKeyCipher = new RsaAsymetricKeyCipher();
+		rsaAsymetricKeyCipher.setPrivateKeyStr(privateKeyStr);
 		
-		String decriptedStr= rsaKeyEncryptor.rsaDecryptString(encryptedStr);
+		String decriptedStr= rsaAsymetricKeyCipher.rsaDecryptString(encryptedStr);
 		
 		System.out.println("@Test testDecrypt decryptedStr="+decriptedStr);
 		
 		assertEquals(testString,decriptedStr);
 		
 		// test string plus crc
-		decriptedStr=rsaKeyEncryptor.rsaDecryptStringRemoveChecksum(encryptedStrPlusCrc);
+		decriptedStr=rsaAsymetricKeyCipher.rsaDecryptStringRemoveChecksum(encryptedStrPlusCrc);
 		System.out.println("@Test testDecrypt  encryptedStrPlusCrc="+encryptedStrPlusCrc);
 		System.out.println("@Test testDecrypt  decryptedstring="+decriptedStr);
 		

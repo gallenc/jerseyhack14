@@ -1,7 +1,7 @@
 package org.opennms.karaf.licencemanager.testbundle;
 
 import org.opennms.karaf.licencemgr.LicenceService;
-import org.opennms.karaf.licencemgr.RsaKeyEncryptor;
+import org.opennms.karaf.licencemgr.RsaAsymetricKeyCipher;
 import org.osgi.framework.ServiceException;
 import org.opennms.karaf.licencemanager.testbundle.LicenceAuthenticator;
 
@@ -36,11 +36,11 @@ public class LicenceAuthenticatorImpl implements LicenceAuthenticator {
 			System.out.println("No licence installed for productId:'"+productId+"'");
 			throw new ServiceException("No licence installed for productId:'"+productId+"'");
 		} else {
-			RsaKeyEncryptor rsaKeyEncryptor = new RsaKeyEncryptor();
-			rsaKeyEncryptor.setPrivateKeyStr(privateKeyStr);
+			RsaAsymetricKeyCipher rsaAsymetricKeyCipher = new RsaAsymetricKeyCipher();
+			rsaAsymetricKeyCipher.setPrivateKeyStr(privateKeyStr);
 			String decryptedLicence=null;
 			try {
-				decryptedLicence = rsaKeyEncryptor.rsaDecryptStringRemoveChecksum(licencewithCRC);	
+				decryptedLicence = rsaAsymetricKeyCipher.rsaDecryptStringRemoveChecksum(licencewithCRC);	
 			} catch (Exception e){
 				System.out.println("Licence Authenticator unable to authenticate licence for productId:'"+productId+"' Exception:"+e);
 				throw new ServiceException("Licence Authenticator unable to authenticate licence for productId:'"+productId+"'", e);

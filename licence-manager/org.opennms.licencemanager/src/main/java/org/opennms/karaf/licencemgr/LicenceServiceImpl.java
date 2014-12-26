@@ -40,8 +40,8 @@ public class LicenceServiceImpl implements LicenceService {
 	public synchronized void addLicence(String productID, String licence) {
 		if (productID==null) throw new RuntimeException("productID cannot be null");
 		if (licence==null) throw new RuntimeException("licence cannot be null");
-		StringChecksum stringChecksum = new StringChecksum();
-		if (! stringChecksum.checkCRC(licence)){
+		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
+		if (! stringCrc32Checksum.checkCRC(licence)){
 			throw new RuntimeException("Incorrect checksum or format for licence="+licence);
 		};
 		licenceMap.put(productID, licence);
@@ -81,8 +81,8 @@ public class LicenceServiceImpl implements LicenceService {
 
 	@Override
 	public synchronized void setSystemId(String systemId) {
-		StringChecksum stringChecksum = new StringChecksum();
-		if (! stringChecksum.checkCRC(systemId)){
+		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
+		if (! stringCrc32Checksum.checkCRC(systemId)){
 			throw new RuntimeException("Incorrect checksum or format for systemId="+systemId);
 		};
 
@@ -104,8 +104,8 @@ public class LicenceServiceImpl implements LicenceService {
 
 		// make hex string
 		String hexSystemIdString=Long.toHexString(systemIdValue);
-		StringChecksum stringChecksum = new StringChecksum();
-		String systemId = stringChecksum.addCRC(hexSystemIdString);
+		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
+		String systemId = stringCrc32Checksum.addCRC(hexSystemIdString);
 		this.setSystemId(systemId);
 		return systemId;
 	}
@@ -116,8 +116,8 @@ public class LicenceServiceImpl implements LicenceService {
 	@Override
 	public String checksumForString(String valueString) {
 		if (valueString==null) throw new RuntimeException("valueString cannot be null");
-		StringChecksum stringChecksum = new StringChecksum();
-		return stringChecksum.addCRC(valueString);
+		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
+		return stringCrc32Checksum.addCRC(valueString);
 	}
 
 	public synchronized void persist(){

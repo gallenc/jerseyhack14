@@ -3,7 +3,7 @@ package org.opennms.karaf.licencemgr;
 import java.io.UnsupportedEncodingException;
 import java.util.zip.CRC32;
 
-public class StringChecksum {
+public class StringCrc32Checksum {
 
 	/**
 	 * Adds a CRC32 encoded string to supplied string separated by '-'

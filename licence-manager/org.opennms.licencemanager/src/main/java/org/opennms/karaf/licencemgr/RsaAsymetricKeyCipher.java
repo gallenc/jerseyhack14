@@ -22,7 +22,7 @@ import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
 
-import org.opennms.karaf.licencemgr.StringChecksum;
+import org.opennms.karaf.licencemgr.StringCrc32Checksum;
 
 /**
  * @author cgallen
@@ -30,7 +30,9 @@ import org.opennms.karaf.licencemgr.StringChecksum;
  * This example based on tutorial
  *
  */
-public class RsaKeyEncryptor {
+public class RsaAsymetricKeyCipher {
+	
+	private static final int keysize = 2048; // key size
 
 	private String publicKeyStr=null;
 	private String privateKeyStr=null;
@@ -74,7 +76,7 @@ public class RsaKeyEncryptor {
 		KeyPairGenerator kpg;
 		try {
 			kpg = KeyPairGenerator.getInstance("RSA");
-			kpg.initialize(2048);
+			kpg.initialize(keysize);
 			KeyPair kp = kpg.genKeyPair();
 			Key publicKey = kp.getPublic();
 			Key privateKey = kp.getPrivate();
@@ -150,8 +152,8 @@ public class RsaKeyEncryptor {
 	 */
 	public String rsaEncryptStringAddChecksum(String sourceStr){
 		String encryptedStr =rsaEncryptString(sourceStr);
-		StringChecksum stringChecksum = new StringChecksum();
-		return stringChecksum.addCRC(encryptedStr);
+		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
+		return stringCrc32Checksum.addCRC(encryptedStr);
 	}
 
 	/**
@@ -210,8 +212,8 @@ public class RsaKeyEncryptor {
 	 */
 	public String rsaDecryptStringRemoveChecksum(String encryptedStrAndCRC){
 		
-		StringChecksum stringChecksum = new StringChecksum();
-		String encryptedStr = stringChecksum.removeCRC(encryptedStrAndCRC);
+		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
+		String encryptedStr = stringCrc32Checksum.removeCRC(encryptedStrAndCRC);
 		if (encryptedStr==null) return null;
 		return rsaDecryptString(encryptedStr);
 	}
@@ -225,10 +227,9 @@ public class RsaKeyEncryptor {
 	public String rsaDecryptString(String encryptedStr){
 		String decriptedStr=null;
 		try {
-			byte[] decrypt;
 			//byte[] encrypted = DatatypeConverter.parseBase64Binary(encryptedStr);
 			byte[] encrypted = DatatypeConverter.parseHexBinary(encryptedStr);
-			decrypt = rsaDecrypt(encrypted);
+			byte[] decrypt = rsaDecrypt(encrypted);
 			decriptedStr = new String(decrypt, "UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("UTF-8 encoding is not supported", e);

@@ -1,9 +1,7 @@
 package org.opennms.karaf.licencemgr.test;
 
 import org.junit.*;
-import org.opennms.karaf.licencemgr.LicenceService;
-import org.opennms.karaf.licencemgr.LicenceServiceImpl;
-import org.opennms.karaf.licencemgr.StringChecksum;
+import org.opennms.karaf.licencemgr.StringCrc32Checksum;
 
 import static org.junit.Assert.*;
 
@@ -12,7 +10,7 @@ import static org.junit.Assert.*;
  * @author cgallen
  *
  */
-public class StringChecksumTest {
+public class StringCrc32ChecksumTest {
 
     @BeforeClass
 	public static void oneTimeSetUp() {
@@ -54,14 +52,14 @@ public class StringChecksumTest {
 	}
 
     public void checksumTest(String valueString){
-		StringChecksum stringChecksum = new StringChecksum();
-		String testStringPlusCrc=stringChecksum.addCRC(valueString);
+		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
+		String testStringPlusCrc=stringCrc32Checksum.addCRC(valueString);
 		
 		System.out.println("     testStringChecksum testStringPlusCrc="+testStringPlusCrc);
 		
-		assertTrue(stringChecksum.checkCRC(testStringPlusCrc));
+		assertTrue(stringCrc32Checksum.checkCRC(testStringPlusCrc));
 		
-		String stringwithoutChecksum = stringChecksum.removeCRC(testStringPlusCrc);
+		String stringwithoutChecksum = stringCrc32Checksum.removeCRC(testStringPlusCrc);
 		assertEquals(valueString, stringwithoutChecksum );
 		System.out.println("     stringwithoutChecksum="+stringwithoutChecksum);
     }
@@ -70,14 +68,14 @@ public class StringChecksumTest {
     public void checksum1FailTest(){
 		System.out.println("@Test - checksum1FailTest ");
 		String valueString="test-String";
-		StringChecksum stringChecksum = new StringChecksum();
-		String testStringPlusCrc=stringChecksum.addCRC(valueString)+"b"; // incorrect checksum
+		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
+		String testStringPlusCrc=stringCrc32Checksum.addCRC(valueString)+"b"; // incorrect checksum
 		
 		System.out.println("     testStringChecksum Wrong testStringPlusCrc="+testStringPlusCrc);
 		
-		assertFalse(stringChecksum.checkCRC(testStringPlusCrc));
+		assertFalse(stringCrc32Checksum.checkCRC(testStringPlusCrc));
 		
-		String stringwithoutChecksum = stringChecksum.removeCRC(testStringPlusCrc);
+		String stringwithoutChecksum = stringCrc32Checksum.removeCRC(testStringPlusCrc);
 		assertNull(stringwithoutChecksum);
 		System.out.println("     null  stringwithoutChecksum="+stringwithoutChecksum);
     }
@@ -85,14 +83,14 @@ public class StringChecksumTest {
     public void checksum2FailTest(){
 		System.out.println("@Test - checksum2FailTest ");
 		String valueString="test-String";
-		StringChecksum stringChecksum = new StringChecksum();
-		String testStringPlusCrc=stringChecksum.addCRC(valueString)+"z"; // incorrect checksum not a number
+		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
+		String testStringPlusCrc=stringCrc32Checksum.addCRC(valueString)+"z"; // incorrect checksum not a number
 		
 		System.out.println("     testStringChecksum Wrong testStringPlusCrc="+testStringPlusCrc);
 		
-		assertFalse(stringChecksum.checkCRC(testStringPlusCrc));
+		assertFalse(stringCrc32Checksum.checkCRC(testStringPlusCrc));
 		
-		String stringwithoutChecksum = stringChecksum.removeCRC(testStringPlusCrc);
+		String stringwithoutChecksum = stringCrc32Checksum.removeCRC(testStringPlusCrc);
 		assertNull(stringwithoutChecksum);
 		System.out.println("     null  stringwithoutChecksum="+stringwithoutChecksum);
     }
@@ -101,14 +99,14 @@ public class StringChecksumTest {
     public void checksum3FailTest(){
 		System.out.println("@Test - checksum2FailTest ");
 		String valueString="test-String";
-		StringChecksum stringChecksum = new StringChecksum();
-		String testStringPlusCrc="EXTRA"+stringChecksum.addCRC(valueString); // incorrect checksum
+		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
+		String testStringPlusCrc="EXTRA"+stringCrc32Checksum.addCRC(valueString); // incorrect checksum
 		
 		System.out.println("     testString3Checksum Wrong testStringPlusCrc="+testStringPlusCrc);
 		
-		assertFalse(stringChecksum.checkCRC(testStringPlusCrc));
+		assertFalse(stringCrc32Checksum.checkCRC(testStringPlusCrc));
 		
-		String stringwithoutChecksum = stringChecksum.removeCRC(testStringPlusCrc);
+		String stringwithoutChecksum = stringCrc32Checksum.removeCRC(testStringPlusCrc);
 		assertNull(stringwithoutChecksum);
 		System.out.println("     null  stringwithoutChecksum="+stringwithoutChecksum);
     }
