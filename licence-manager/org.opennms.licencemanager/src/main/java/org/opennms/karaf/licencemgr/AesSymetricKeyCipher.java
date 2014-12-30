@@ -46,10 +46,8 @@ public class AesSymetricKeyCipher {
     /**
      * Sets the Secretkey using  a xsd:hexBinary lexical representation of the SecretKey as obtained using getEncodedSecretKeyStr()
      * @param secretKeyStr
-     * @throws NoSuchAlgorithmException
-     * @throws InvalidKeySpecException
      */
-    public void setEncodedSecretKeyStr(String secretKeyStr) throws NoSuchAlgorithmException, InvalidKeySpecException{
+    public void setEncodedSecretKeyStr(String secretKeyStr) {
     	secretKey = new SecretKeySpec(DatatypeConverter.parseHexBinary(secretKeyStr), "AES");
     }
     
@@ -58,15 +56,22 @@ public class AesSymetricKeyCipher {
 	 * This key string can be accessed by getEncodedSecretKeyStr() after it is generated
 	 * generateKey() overwites any previous value for the secret key
 	 */
-    public void generateKey() throws NoSuchAlgorithmException, InvalidKeySpecException{
-        SecretKeyFactory secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-        
+    public void generateKey() {
+        SecretKeyFactory secretKeyFactory;
+		try {
+			secretKeyFactory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
+
         SecureRandom secureRandom = new SecureRandom();
 
         KeySpec keySpec = new PBEKeySpec(getRandomPassword(), secureRandom.generateSeed(saltLength), hashIterations, keyLength);
         
         secretKey = new SecretKeySpec(secretKeyFactory.generateSecret(keySpec).getEncoded(), "AES");
-
+        
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("cannot generate AesSymmetricKey:",e);
+		} catch (InvalidKeySpecException e) {
+			throw new RuntimeException("cannot generate AesSymmetricKey:",e);
+		}
     }
 
 	/**
@@ -74,24 +79,42 @@ public class AesSymetricKeyCipher {
 	 * @param src
 	 * @return AES encoded lexical representation of xsd:hexBinary
 	 */
-    public String aesEncryptStr(String src )
-            throws NoSuchAlgorithmException, InvalidKeySpecException, InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchPaddingException {
+    public String aesEncryptStr(String src ) {
 
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        Cipher cipher;
+        String aesEncryptStr=null;
         
-        SecureRandom secureRandom = new SecureRandom();
-        
-        byte[] seed = secureRandom.generateSeed(initializationVectorSeedLength);
-        AlgorithmParameterSpec algorithmParameterSpec = new IvParameterSpec(seed);
+		try {
+			cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+	        SecureRandom secureRandom = new SecureRandom();
+	        
+	        byte[] seed = secureRandom.generateSeed(initializationVectorSeedLength);
+	        AlgorithmParameterSpec algorithmParameterSpec = new IvParameterSpec(seed);
 
-        cipher.init(Cipher.ENCRYPT_MODE, secretKey, algorithmParameterSpec);
-        byte[] encryptedMessageBytes = cipher.doFinal(src.getBytes());
+	        cipher.init(Cipher.ENCRYPT_MODE, secretKey, algorithmParameterSpec);
+	        byte[] encryptedMessageBytes = cipher.doFinal(src.getBytes());
+	        
+	        byte[] bytesToEncode = new byte[seed.length + encryptedMessageBytes.length];
+	        System.arraycopy(seed, 0, bytesToEncode, 0, seed.length);
+	        System.arraycopy(encryptedMessageBytes, 0, bytesToEncode, seed.length, encryptedMessageBytes.length);
 
-        byte[] bytesToEncode = new byte[seed.length + encryptedMessageBytes.length];
-        System.arraycopy(seed, 0, bytesToEncode, 0, seed.length);
-        System.arraycopy(encryptedMessageBytes, 0, bytesToEncode, seed.length, encryptedMessageBytes.length);
+	        aesEncryptStr = DatatypeConverter.printHexBinary(bytesToEncode);
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("problem encrypting AesSymetricKey",e);
+		} catch (NoSuchPaddingException e) {
+			throw new RuntimeException("problem encrypting AesSymetricKey",e);
+		} catch (InvalidKeyException e) {
+			throw new RuntimeException("problem encrypting AesSymetricKey",e);
+		} catch (InvalidAlgorithmParameterException e) {
+			throw new RuntimeException("problem encrypting AesSymetricKey",e);
+		} catch (IllegalBlockSizeException e) {
+			throw new RuntimeException("problem encrypting AesSymetricKey",e);
+		} catch (BadPaddingException e) {
+			throw new RuntimeException("problem encrypting AesSymetricKey",e);
+		}
+		
+		return aesEncryptStr;
 
-        return DatatypeConverter.printHexBinary(bytesToEncode);
     }
 
 	/**
@@ -100,23 +123,42 @@ public class AesSymetricKeyCipher {
 	 * @param encryptedStr string to decode
 	 * @return decryptedStr decrypted string
 	 */
-    public String aesDecryptStr(String encryptedStr)
-            throws InvalidKeyException, IllegalBlockSizeException, BadPaddingException, InvalidAlgorithmParameterException, NoSuchAlgorithmException, NoSuchPaddingException {
+    public String aesDecryptStr(String encryptedStr) {
 
         byte[] bytesToDecode = DatatypeConverter.parseHexBinary(encryptedStr);
 
         byte[] emptySeed = new byte[initializationVectorSeedLength];
         System.arraycopy(bytesToDecode, 0, emptySeed, 0, initializationVectorSeedLength);
         
-        Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+        Cipher cipher;
+        
+        String aesDecryptStr =null;
+        
+		try {
+			cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+		    cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(emptySeed));
 
-        cipher.init(Cipher.DECRYPT_MODE, secretKey, new IvParameterSpec(emptySeed));
+	        int messageDecryptedBytesLength = bytesToDecode.length - initializationVectorSeedLength;
+	        byte[] messageDecryptedBytes = new byte[messageDecryptedBytesLength];
+	        System.arraycopy(bytesToDecode, initializationVectorSeedLength, messageDecryptedBytes, 0, messageDecryptedBytesLength);
 
-        int messageDecryptedBytesLength = bytesToDecode.length - initializationVectorSeedLength;
-        byte[] messageDecryptedBytes = new byte[messageDecryptedBytesLength];
-        System.arraycopy(bytesToDecode, initializationVectorSeedLength, messageDecryptedBytes, 0, messageDecryptedBytesLength);
+	        aesDecryptStr = new String(cipher.doFinal(messageDecryptedBytes));
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException("problem decrypting AesSymetricKey",e);
+		} catch (NoSuchPaddingException e) {
+			throw new RuntimeException("problem decrypting AesSymetricKey",e);
+		} catch (InvalidKeyException e) {
+			throw new RuntimeException("problem decrypting AesSymetricKey",e);
+		} catch (InvalidAlgorithmParameterException e) {
+			throw new RuntimeException("problem decrypting AesSymetricKey",e);
+		} catch (IllegalBlockSizeException e) {
+			throw new RuntimeException("problem decrypting AesSymetricKey",e);
+		} catch (BadPaddingException e) {
+			throw new RuntimeException("problem decrypting AesSymetricKey",e);
+		}
 
-        return new String(cipher.doFinal(messageDecryptedBytes));
+		return aesDecryptStr;
+
     }
 
 

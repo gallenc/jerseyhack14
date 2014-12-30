@@ -13,7 +13,7 @@ public class AesSymmetricKeyCipherTest {
         AesSymetricKeyCipher aesCipher = new AesSymetricKeyCipher();
         aesCipher.generateKey();
         
-        String sourceStr="John has a long mustache.";
+        String sourceStr="Craig is very tall.";
 		System.out.println("sourceStr="+sourceStr);
         String encrypted = aesCipher.aesEncryptStr(sourceStr);
         System.out.println("encrypted="+encrypted);

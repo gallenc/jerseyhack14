@@ -5,7 +5,8 @@ import static org.junit.Assert.*;
 import java.util.Date;
 
 import org.junit.Test;
-import org.opennms.karaf.licencemgr.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.OptionMetadata;
 
 public class LicenceMetadataTest {
 
@@ -14,6 +15,12 @@ public class LicenceMetadataTest {
 	public static String licenceMetadataHashStr=null;
 	
     @Test
+    public void LicenceMetadataTestTests(){
+    	AmetadataTest();
+    	BmetadataTest();
+    	CmetadataTest();
+    }
+    
     public void AmetadataTest(){
     	System.out.println("@Test AmetadataTest() Start");
     	metadata=new LicenceMetadata();
@@ -21,18 +28,30 @@ public class LicenceMetadataTest {
     	System.out.println("@Test AmetadataTest() End");
     }
     
-    @Test
+
     public void BmetadataTest(){
     	System.out.println("@Test BmetadataTest() Start");
     	metadata=new LicenceMetadata();
     	
-    	metadata.setEndDate(new Date());
+    	metadata.setExpiryDate(new Date());
     	metadata.setStartDate(new Date());
     	metadata.setLiscencee("Mr Craig Gallen");
     	metadata.setLiscencor("OpenNMS UK");
     	metadata.setProductId("product id");
     	metadata.setSystemId("system id");
-    	metadata.getOptions().put("key1", "value1");
+    	
+    	
+    	OptionMetadata option1 = new OptionMetadata("newname1", "newvalue1", "this is the description1");
+		metadata.getOptions().add(option1);
+		
+    	OptionMetadata option2 = new OptionMetadata("newname2", "newvalue2", "this is the description2");
+		metadata.getOptions().add(option2);
+		
+		// should add only one instance of each unique object
+		metadata.getOptions().add(option1);
+		assertEquals (metadata.getOptions().size(),2);
+		
+		
     	
     	licenceMetadataHexStr=metadata.toHexString();
     	licenceMetadataHashStr=metadata.sha256Hash();
@@ -42,7 +61,7 @@ public class LicenceMetadataTest {
     	System.out.println("@Test BmetadataTest() End");
     }
     
-    @Test
+
     public void CmetadataTest(){
     	System.out.println("@Test CmetadataTest() Start");
     	
@@ -65,11 +84,11 @@ public class LicenceMetadataTest {
     public void printMetadata(LicenceMetadata metadata){
     	
     	String xml = metadata.toXml();
-    	System.out.println("@Test metadataTest1() MetatdataXML="+xml);
-    	String metatdataHex = metadata.toHexString();
-    	System.out.println("@Test metadataTest1() MetatdataHex="+metatdataHex);
+    	System.out.println("@Test metadataTest1() MetadataXML="+xml);
+    	String MetadataHex = metadata.toHexString();
+    	System.out.println("@Test metadataTest1() MetadataHex="+MetadataHex);
     	String hash = metadata.sha256Hash();
-    	System.out.println("@Test metadataTest1() Metatdatasha256Hash="+hash);
+    	System.out.println("@Test metadataTest1() Metadatasha256Hash="+hash);
     	
     }
     

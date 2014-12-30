@@ -38,8 +38,18 @@ public class RSAEncryptionTest {
 	}
 
 
-	@Test
-	public void atestGenerateKeys() {
+	@Test 
+	public void tests() {
+		A_testGenerateKeys();
+		B_testEncrypt();
+		C_testDecrypt();
+	}
+	
+	
+	
+	
+	
+	public void A_testGenerateKeys() {
 		RsaAsymetricKeyCipher rsaAsymetricKeyCipher = new RsaAsymetricKeyCipher();
 		rsaAsymetricKeyCipher.generateKeys();
 		
@@ -53,8 +63,8 @@ public class RSAEncryptionTest {
 		System.out.println("@Test generateKeys() publicKeyStr="+publicKeyStr);
 	}
 
-	@Test
-	public void btestEncrypt() {
+
+	public void B_testEncrypt() {
 
 		RsaAsymetricKeyCipher rsaAsymetricKeyCipher = new RsaAsymetricKeyCipher();
 		rsaAsymetricKeyCipher.setPublicKeyStr(publicKeyStr);
@@ -70,8 +80,8 @@ public class RSAEncryptionTest {
 		
 	}
 
-	@Test
-	public void ctestDecrypt() {
+
+	public void C_testDecrypt() {
 		System.out.println("@Test testDecrypt encryptedStr="+encryptedStr);
 		
 		RsaAsymetricKeyCipher rsaAsymetricKeyCipher = new RsaAsymetricKeyCipher();

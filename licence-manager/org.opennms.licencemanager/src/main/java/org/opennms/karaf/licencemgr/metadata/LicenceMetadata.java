@@ -1,4 +1,4 @@
-package org.opennms.karaf.licencemgr;
+package org.opennms.karaf.licencemgr.metadata;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -6,7 +6,9 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.JAXBContext;
@@ -18,21 +20,51 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 
 @XmlRootElement(name="LicenceMetadata")
 @XmlAccessorType(XmlAccessType.NONE)
+@XmlType (propOrder={"productId","liscencee","liscencor","systemId","startDate","expiryDate","options"})
 public class LicenceMetadata {
 
-
+	/**
+	 * productId is expected to contain the concatenated <groupId>/<artifactId>/<version>
+     * such that mvn:<groupId>/<artifactId>/<version> will resolve an object
+	 */
 	String productId=null;
+	
+	/**
+	 * systemId is expected to contain the unique identifier of the system on which which the licensed artifact 
+	 * will be installed. The systemId is terminated with a CRC32 checksum seperated by a - symbol <systemId>-<CRC32>
+	 */
 	String systemId=null;
+	
+	/**
+	 * startDate - the date from which the licence will be valid
+	 */
 	Date startDate=new Date();
-	Date endDate=null;
+	
+	/**
+	 * expiryDate - the date on which teh licencce will expire. If Null there is no expiry date.
+	 */
+	Date expiryDate=null;
 
+	/**
+	 * the name / address of the person / organisation granted the licence
+	 */
 	String liscencee=null;
+	
+	/**
+	 * the name / address of the person / organisation granting the licence
+	 */
 	String liscencor=null;
-	Map<String,String> options=new HashMap<String, String>();
+	
+	/**
+	 * licence options. Each option contains a name/value pair and a description field.
+	 * This is intended to grant/restrict access to particular features
+	 */
+	Set<OptionMetadata> options=new HashSet<OptionMetadata>();
 	
 	/**
 	 * sets LicenceMetadata values of this object from another licenceMetadata object
@@ -42,11 +74,11 @@ public class LicenceMetadata {
 		this.productId=licenceMetadata.productId;
 		this.systemId=licenceMetadata.systemId;
 		this.startDate=licenceMetadata.startDate;
-		this.endDate=licenceMetadata.endDate;
+		this.expiryDate=licenceMetadata.expiryDate;
 		this.liscencee=licenceMetadata.liscencee;
 		this.liscencor=licenceMetadata.liscencor;
 		this.options.clear();
-		if (licenceMetadata.options!=null) this.options.putAll(licenceMetadata.options);
+		if (licenceMetadata.options!=null) this.options.addAll(licenceMetadata.options);
 	}
 
 
@@ -96,18 +128,18 @@ public class LicenceMetadata {
 	}
 
 	/**
-	 * @return the endDate
+	 * @return the expiryDate
 	 */
-	public Date getEndDate() {
-		return endDate;
+	public Date getExpiryDate() {
+		return expiryDate;
 	}
 
 	/**
-	 * @param endDate the endDate to set
+	 * @param expiryDate the expiryDate to set
 	 */
-	@XmlElement(name="endDate")
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
+	@XmlElement(name="expiryDate")
+	public void setExpiryDate(Date expiryDate) {
+		this.expiryDate = expiryDate;
 	}
 
 	/**
@@ -143,7 +175,7 @@ public class LicenceMetadata {
 	/**
 	 * @return the options
 	 */
-	public Map<String, String> getOptions() {
+	public Set<OptionMetadata> getOptions() {
 		return options;
 	}
 
@@ -151,7 +183,8 @@ public class LicenceMetadata {
 	 * @param options the options to set
 	 */
 	@XmlElementWrapper(name="options")
-	public void setOptions(Map<String, String> options) {
+	@XmlElement(name="option")
+	public void setOptions(Set<OptionMetadata> options) {
 		this.options = options;
 	}
 
@@ -162,7 +195,7 @@ public class LicenceMetadata {
 	public String toXml(){
 
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(LicenceMetadata.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(org.opennms.karaf.licencemgr.metadata.ObjectFactory.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 			jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			StringWriter stringWriter = new StringWriter();
@@ -181,18 +214,18 @@ public class LicenceMetadata {
 	public void fromXml(String xmlStr){
 
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(LicenceMetadata.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(org.opennms.karaf.licencemgr.metadata.ObjectFactory.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			StringReader reader = new StringReader(xmlStr);
 			LicenceMetadata licenceMetadata= (LicenceMetadata) jaxbUnmarshaller.unmarshal(reader);
 			this.productId=licenceMetadata.productId;
 			this.systemId=licenceMetadata.systemId;
 			this.startDate=licenceMetadata.startDate;
-			this.endDate=licenceMetadata.endDate;
+			this.expiryDate=licenceMetadata.expiryDate;
 			this.liscencee=licenceMetadata.liscencee;
 			this.liscencor=licenceMetadata.liscencor;
 			this.options.clear();
-			if (licenceMetadata.options!=null) this.options.putAll(licenceMetadata.options);
+			if (licenceMetadata.options!=null) this.options.addAll(licenceMetadata.options);
 		} catch (JAXBException e) {
 			throw new RuntimeException("Problem unmarshalling LicenceMetadata:",e);
 		}

@@ -3,7 +3,7 @@
     
     <reference id="licenceService" interface="org.opennms.karaf.licencemgr.LicenceService" />
         
-	<bean id="licenceAuthenticator" class="org.opennms.karaf.licencemanager.testbundle.LicenceAuthenticatorImpl"  >
+	<bean id="licenceAuthenticator" class="org.opennms.karaf.licencemanager.LicenceAuthenticatorImpl"  >
 	    <argument ref="licenceService"/>
 	</bean>
 

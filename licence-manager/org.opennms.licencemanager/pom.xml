@@ -67,7 +67,7 @@
 				<!-- allows tests to run in order with static vairable passed between tests -->
 				<configuration>
 					<reuseForks>false</reuseForks>
-					<forkCount>1</forkCount>
+					<forkCount>0</forkCount>
 				</configuration>
 			</plugin>
 		</plugins>
