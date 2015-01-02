@@ -35,8 +35,8 @@ public class LicenceMetadataTest {
     	
     	metadata.setExpiryDate(new Date());
     	metadata.setStartDate(new Date());
-    	metadata.setLiscencee("Mr Craig Gallen");
-    	metadata.setLiscencor("OpenNMS UK");
+    	metadata.setLicensee("Mr Craig Gallen");
+    	metadata.setLicensor("OpenNMS UK");
     	metadata.setProductId("product id");
     	metadata.setSystemId("system id");
     	

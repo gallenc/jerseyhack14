@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 @XmlRootElement(name="option")
 @XmlAccessorType(XmlAccessType.NONE)
-public class ProductMetadata {
+public class ProductDescription {
 
 	//productId is expected to contain the concatenated <groupId>/<artifactId>/<version>
 	//such that mvn:<groupId>/<artifactId>/<version> will resolve an object
@@ -99,7 +99,5 @@ public class ProductMetadata {
 	public void setOrganization(String organization) {
 		this.organization = organization;
 	}
-			
-	
-	
+
 }

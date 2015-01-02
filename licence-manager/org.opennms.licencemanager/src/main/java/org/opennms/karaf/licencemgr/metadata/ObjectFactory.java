@@ -18,8 +18,8 @@ public class ObjectFactory {
     /**
      * Create an instance of {@link OptionMetadata }
      */
-    public ProductMetadata createProductMetadata() {
-        return new ProductMetadata();
+    public ProductDescription createProductMetadata() {
+        return new ProductDescription();
     }
     
     /**

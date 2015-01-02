@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name="LicenceMetadata")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType (propOrder={"productId","liscencee","liscencor","systemId","startDate","expiryDate","options"})
+@XmlType (propOrder={"productId","licensee","licensor","systemId","startDate","expiryDate","options"})
 public class LicenceMetadata {
 
 	/**
@@ -51,14 +51,20 @@ public class LicenceMetadata {
 	Date expiryDate=null;
 
 	/**
-	 * the name / address of the person / organisation granted the licence
+	 * (Definition licensee n. a person (organisation) given a license by 
+	 * government or under private agreement)
+	 * 
+	 * the name / address of the person / organisation who is granted the licence
 	 */
-	String liscencee=null;
+	String licensee=null;
 	
 	/**
+	 * (Definition: licensor n. a person who gives another a license, particularly 
+	 *  a private party doing so, such as a business giving someone a license to sell its product)
+	 * 
 	 * the name / address of the person / organisation granting the licence
 	 */
-	String liscencor=null;
+	String licensor=null;
 	
 	/**
 	 * licence options. Each option contains a name/value pair and a description field.
@@ -75,8 +81,8 @@ public class LicenceMetadata {
 		this.systemId=licenceMetadata.systemId;
 		this.startDate=licenceMetadata.startDate;
 		this.expiryDate=licenceMetadata.expiryDate;
-		this.liscencee=licenceMetadata.liscencee;
-		this.liscencor=licenceMetadata.liscencor;
+		this.licensee=licenceMetadata.licensee;
+		this.licensor=licenceMetadata.licensor;
 		this.options.clear();
 		if (licenceMetadata.options!=null) this.options.addAll(licenceMetadata.options);
 	}
@@ -143,33 +149,33 @@ public class LicenceMetadata {
 	}
 
 	/**
-	 * @return the liscencee
+	 * @return the licensee
 	 */
-	public String getLiscencee() {
-		return liscencee;
+	public String getLicensee() {
+		return licensee;
 	}
 
 	/**
-	 * @param liscencee the liscencee to set
+	 * @param licensee the licensee to set
 	 */
-	@XmlElement(name="liscencee")
-	public void setLiscencee(String liscencee) {
-		this.liscencee = liscencee;
+	@XmlElement(name="licensee")
+	public void setLicensee(String licensee) {
+		this.licensee = licensee;
 	}
 
 	/**
-	 * @return the liscencor
+	 * @return the licensor
 	 */
-	public String getLiscencor() {
-		return liscencor;
+	public String getLicensor() {
+		return licensor;
 	}
 
 	/**
-	 * @param liscencor the liscencor to set
+	 * @param licensor the licensor to set
 	 */
-	@XmlElement(name="liscencor")
-	public void setLiscencor(String liscencor) {
-		this.liscencor = liscencor;
+	@XmlElement(name="licensor")
+	public void setLicensor(String licensor) {
+		this.licensor = licensor;
 	}
 
 	/**
@@ -222,8 +228,8 @@ public class LicenceMetadata {
 			this.systemId=licenceMetadata.systemId;
 			this.startDate=licenceMetadata.startDate;
 			this.expiryDate=licenceMetadata.expiryDate;
-			this.liscencee=licenceMetadata.liscencee;
-			this.liscencor=licenceMetadata.liscencor;
+			this.licensee=licenceMetadata.licensee;
+			this.licensor=licenceMetadata.licensor;
 			this.options.clear();
 			if (licenceMetadata.options!=null) this.options.addAll(licenceMetadata.options);
 		} catch (JAXBException e) {
@@ -276,6 +282,81 @@ public class LicenceMetadata {
 		} catch (Exception e) {
 			throw new RuntimeException("problem calculating sha-256 hash for LicenceMetadata:",e);
 		}
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#hashCode()
+	 */
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((expiryDate == null) ? 0 : expiryDate.hashCode());
+		result = prime * result
+				+ ((licensee == null) ? 0 : licensee.hashCode());
+		result = prime * result
+				+ ((licensor == null) ? 0 : licensor.hashCode());
+		result = prime * result + ((options == null) ? 0 : options.hashCode());
+		result = prime * result
+				+ ((productId == null) ? 0 : productId.hashCode());
+		result = prime * result
+				+ ((startDate == null) ? 0 : startDate.hashCode());
+		result = prime * result
+				+ ((systemId == null) ? 0 : systemId.hashCode());
+		return result;
+	}
+
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		LicenceMetadata other = (LicenceMetadata) obj;
+		if (expiryDate == null) {
+			if (other.expiryDate != null)
+				return false;
+		} else if (!expiryDate.equals(other.expiryDate))
+			return false;
+		if (licensee == null) {
+			if (other.licensee != null)
+				return false;
+		} else if (!licensee.equals(other.licensee))
+			return false;
+		if (licensor == null) {
+			if (other.licensor != null)
+				return false;
+		} else if (!licensor.equals(other.licensor))
+			return false;
+		if (options == null) {
+			if (other.options != null)
+				return false;
+		} else if (!options.equals(other.options))
+			return false;
+		if (productId == null) {
+			if (other.productId != null)
+				return false;
+		} else if (!productId.equals(other.productId))
+			return false;
+		if (startDate == null) {
+			if (other.startDate != null)
+				return false;
+		} else if (!startDate.equals(other.startDate))
+			return false;
+		if (systemId == null) {
+			if (other.systemId != null)
+				return false;
+		} else if (!systemId.equals(other.systemId))
+			return false;
+		return true;
 	}
 
 }

@@ -4,13 +4,15 @@ import java.util.Map;
 
 public interface LicenceService {
 
-	public void addLicence(String productId, String licence);
+	public void addLicence(String licence);
 
 	public boolean removeLicence(String productId);
 
 	public String getLicence(String productId);
 
 	public Map<String, String> getLicenceMap();
+	
+	public void deleteLicences();
 
 	public String getSystemId();
 

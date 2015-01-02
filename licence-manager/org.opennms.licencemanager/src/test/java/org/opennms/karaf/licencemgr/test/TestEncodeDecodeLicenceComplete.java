@@ -23,7 +23,13 @@ import org.opennms.karaf.licencemgr.StringCrc32Checksum;
 import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
 import org.opennms.karaf.licencemgr.metadata.OptionMetadata;
 
-public class TestEncodeDecodeLicence {
+/**
+ * This test goes through the complete lifecycle of the algorithms for generating and decoding a licence. 
+ * It does not use the Licence object. 
+ * @author cgallen
+ *
+ */
+public class TestEncodeDecodeLicenceComplete {
 
 	public static  String aesSecretKeyStr=null;
 
@@ -61,7 +67,7 @@ public class TestEncodeDecodeLicence {
 		aesCipher.generateKey();
 
 		aesSecretKeyStr = aesCipher.getEncodedSecretKeyStr();
-		System.out.println("secretKeyStr="+aesSecretKeyStr);
+		System.out.println("@Test AgenerateKeys() aesSecretKeyStr="+aesSecretKeyStr);
 
 		// generate RSA keys
 		RsaAsymetricKeyCipher rsaAsymetricKeyCipher = new RsaAsymetricKeyCipher();
@@ -81,7 +87,7 @@ public class TestEncodeDecodeLicence {
 
 		privateKeyEnryptedStr = aesCipher.aesEncryptStr(privateKeyStr);
 
-		System.out.println("@Test generateKeys() privateKeyEnryptedStrr="+privateKeyEnryptedStr);
+		System.out.println("@Test generateKeys() privateKeyEnryptedStr="+privateKeyEnryptedStr);
 
 		System.out.println("@Test AgenerateKeys() END");
 	}
@@ -93,8 +99,8 @@ public class TestEncodeDecodeLicence {
 
 		metadata.setExpiryDate(new Date());
 		metadata.setStartDate(new Date());
-		metadata.setLiscencee("Mr Craig Gallen");
-		metadata.setLiscencor("OpenNMS UK");
+		metadata.setLicensee("Mr Craig Gallen");
+		metadata.setLicensor("OpenNMS UK");
 		metadata.setProductId("org.opennms/org.opennms.karaf.licencemanager.testbundle/1.0-SNAPSHOT");
 		metadata.setSystemId("4ad72a34e3635c1b-99da3323");
 
@@ -118,7 +124,7 @@ public class TestEncodeDecodeLicence {
 		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
 		licenceStrPlusCrc=stringCrc32Checksum.addCRC(licenceStr);
 
-		System.out.println("    LicenceStringPlusCrc="+licenceStrPlusCrc);
+		System.out.println("@Test BencodeLicence() licenceStringPlusCrc="+licenceStrPlusCrc);
 
 		assertTrue(stringCrc32Checksum.checkCRC(licenceStrPlusCrc));
 

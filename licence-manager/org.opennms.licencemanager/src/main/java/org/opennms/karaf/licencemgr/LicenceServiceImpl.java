@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -15,6 +17,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlAccessType;
 
+import org.opennms.karaf.licencemgr.metadata.Licence;
+import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
+
 @XmlRootElement(name="LicenceServiceData")
 @XmlAccessorType(XmlAccessType.NONE)
 public class LicenceServiceImpl implements LicenceService {
@@ -23,7 +28,7 @@ public class LicenceServiceImpl implements LicenceService {
 	private String fileUri=null;
 
 	@XmlElementWrapper(name="licenceMap")
-	private HashMap<String, String> licenceMap = new HashMap<String, String>();
+	private SortedMap<String, String> licenceMap = new TreeMap<String, String>();
 
 	@XmlElement
 	private String systemId="NOT_SET";
@@ -37,24 +42,21 @@ public class LicenceServiceImpl implements LicenceService {
 	}
 
 	@Override
-	public synchronized void addLicence(String productID, String licence) {
-		if (productID==null) throw new RuntimeException("productID cannot be null");
-		if (licence==null) throw new RuntimeException("licence cannot be null");
-		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
-		if (! stringCrc32Checksum.checkCRC(licence)){
-			throw new RuntimeException("Incorrect checksum or format for licence="+licence);
-		};
-		licenceMap.put(productID, licence);
+	public synchronized void addLicence(String licenceStrPlusCrc) {
+		if (licenceStrPlusCrc==null) throw new RuntimeException("licenceStrPlusCrc cannot be null");
+		LicenceMetadata unverifiedMetadata = Licence.getUnverifiedMetadata(licenceStrPlusCrc);
+		String productId = unverifiedMetadata.getProductId();
+		licenceMap.put(productId, licenceStrPlusCrc);
 		persist();
 	}
 
 	@Override
-	public synchronized boolean removeLicence(String productID) {
-		if (productID==null) throw new RuntimeException("productID cannot be null");
-		if (! licenceMap.containsKey(productID)) {
+	public synchronized boolean removeLicence(String productId) {
+		if (productId==null) throw new RuntimeException("productID cannot be null");
+		if (! licenceMap.containsKey(productId)) {
 			return false;
 		} else{
-			licenceMap.remove(productID);
+			licenceMap.remove(productId);
 			persist();
 			return true;
 		}
@@ -70,7 +72,7 @@ public class LicenceServiceImpl implements LicenceService {
 	@Override
 	public synchronized Map<String, String> getLicenceMap() {
 		// returns an instance of the map because it may change after returned.
-		Map<String, String> map = new HashMap<String, String>(licenceMap);
+		Map<String, String> map = new TreeMap<String, String>(licenceMap);
 		return map;
 	}
 
@@ -161,6 +163,12 @@ public class LicenceServiceImpl implements LicenceService {
 		} catch (JAXBException e) {
 			throw new RuntimeException("Problem loading Licence Manager Data",e);
 		}
+	}
+
+	@Override
+	public synchronized void deleteLicences() {
+		licenceMap.clear();
+		
 	}
 
 
