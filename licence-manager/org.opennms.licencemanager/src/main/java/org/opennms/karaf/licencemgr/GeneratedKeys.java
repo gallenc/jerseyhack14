@@ -9,7 +9,7 @@ import org.opennms.karaf.licencemgr.RsaAsymetricKeyCipher;
  * @author cgallen
  *
  */
-public class GeneratedKeys {
+public class GeneratedKeys implements ClientKeys, PublisherKeys {
 
 	private final String aesSecretKeyStr;
 	private final String privateKeyStr;
@@ -66,4 +66,52 @@ public class GeneratedKeys {
 	public String getPrivateKeyEnryptedStr() {
 		return privateKeyEnryptedStr;
 	}
+	
+	/**
+	 * Returns a new client key object based upon keys in this key generator
+	 * @return
+	 */
+	public PublisherKeys makePublisherKeys() {
+		
+		final String aesSecret = aesSecretKeyStr;
+		final String pubKeyStr=publicKeyStr;
+		
+		return new PublisherKeys(){
+
+			private final String aesSecretKeyStr = aesSecret;
+			private final String publicKeyStr = pubKeyStr;
+
+			@Override
+			public String getAesSecretKeyStr() {
+				return aesSecretKeyStr;
+			}
+
+			@Override
+			public String getPublicKeyStr() {
+				return publicKeyStr;
+			}
+			
+		};
+		
+	}
+	
+	/**
+	 * Returns a new public key object based upon keys in this key generator
+	 * @return
+	 */
+	public ClientKeys makeClientKeys() {
+		
+		final String privKeyEnryptedStr = privateKeyEnryptedStr;
+		
+		return new ClientKeys(){
+
+			private final String privateKeyEnryptedStr = privKeyEnryptedStr;
+
+			@Override
+			public String getPrivateKeyEnryptedStr() {
+				return privateKeyEnryptedStr;
+			}
+		};
+	}
+
 }

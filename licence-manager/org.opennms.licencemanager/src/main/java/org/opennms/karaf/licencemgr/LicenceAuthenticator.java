@@ -1,4 +1,4 @@
-package org.opennms.karaf.licencemanager;
+package org.opennms.karaf.licencemgr;
 
 public interface LicenceAuthenticator {
 

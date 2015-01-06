@@ -3,10 +3,12 @@
     
     <reference id="licenceService" interface="org.opennms.karaf.licencemgr.LicenceService" />
         
-	<bean id="licenceAuthenticator" class="org.opennms.karaf.licencemanager.LicenceAuthenticatorImpl"  >
+<!-- 	<bean id="licenceAuthenticator" class="org.opennms.karaf.licencemgr.LicenceAuthenticatorImpl"  > -->
+<!-- 	    <argument ref="licenceService"/> -->
+<!-- 	</bean> -->
+
+    <bean id="licenceAuthenticator" class="org.opennms.karaf.licencemanager.testbundle.BundleLicenceAuthenticatorImpl"  >
 	    <argument ref="licenceService"/>
 	</bean>
-
-    
 
 </blueprint>

@@ -1,6 +1,8 @@
 package org.opennms.karaf.licencemgr.metadata;
 
 import org.opennms.karaf.licencemgr.AesSymetricKeyCipher;
+import org.opennms.karaf.licencemgr.ClientKeys;
+import org.opennms.karaf.licencemgr.PublisherKeys;
 import org.opennms.karaf.licencemgr.RsaAsymetricKeyCipher;
 import org.opennms.karaf.licencemgr.StringCrc32Checksum;
 
@@ -24,6 +26,14 @@ public class Licence {
 		return licenceStrPlusCrc;
 	}
 
+	
+	/**
+	 * Creates a new licence object from LicenceMetadata and PublisherKeys object
+	 */
+	public Licence(LicenceMetadata licenceMetadata, PublisherKeys publisherKeys ){
+		this(licenceMetadata, publisherKeys.getPublicKeyStr(), publisherKeys.getAesSecretKeyStr());
+	}
+	
 	/**
 	 * Creates a new licence object from LicenceMetadata and cipher key strings
 	 * @param licenceMetadata metadata object to be encoded as a licence
@@ -60,6 +70,14 @@ public class Licence {
 
 	}
 
+	/**
+	 * Creates a new licence object from a licence string and ClientKeys object
+	 * This method will ONLY CREATE A VALID LICENCE AND SHOULD BE USED TO VALIDATE received licenceStrPlusCrc
+	 */
+	public Licence(String licenceStrPlusCrc, ClientKeys clientKeys){
+		this(licenceStrPlusCrc, clientKeys.getPrivateKeyEnryptedStr());
+	}
+	
 	/**
 	 * Creates a new licence object from a licence string and an encrypted public key
 	 * This method will ONLY CREATE A VALID LICENCE AND SHOULD BE USED TO VALIDATE received licenceStrPlusCrc

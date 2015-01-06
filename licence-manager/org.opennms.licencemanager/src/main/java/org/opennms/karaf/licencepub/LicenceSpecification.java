@@ -1,5 +1,6 @@
 package org.opennms.karaf.licencepub;
 
+import org.opennms.karaf.licencemgr.PublisherKeys;
 import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
 
 public class LicenceSpecification {
@@ -8,6 +9,10 @@ public class LicenceSpecification {
 	private final String publicKeyStr;
 	private final LicenceMetadata licenceMetadataSpec;
     private final String productId;
+    
+    public LicenceSpecification(String productId, LicenceMetadata licenceMetadataSpec, PublisherKeys publisherKeys){
+    	this(productId, licenceMetadataSpec, publisherKeys.getAesSecretKeyStr(), publisherKeys.getPublicKeyStr());
+    }
 	
 	public LicenceSpecification(String productId, LicenceMetadata licenceMetadataSpec, String aesSecretKeyStr, 
 			String publicKeyStr) {
