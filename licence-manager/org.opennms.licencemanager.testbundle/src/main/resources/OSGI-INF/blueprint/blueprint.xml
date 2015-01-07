@@ -1,7 +1,7 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
     
-    <reference id="licenceService" interface="org.opennms.karaf.licencemgr.LicenceService" />
+    <reference id="licenceService" interface="org.opennms.karaf.licencemgr.LicenceService" timeout="20000"/>
         
 <!-- 	<bean id="licenceAuthenticator" class="org.opennms.karaf.licencemgr.LicenceAuthenticatorImpl"  > -->
 <!-- 	    <argument ref="licenceService"/> -->

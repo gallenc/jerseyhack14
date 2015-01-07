@@ -8,7 +8,7 @@ import org.opennms.karaf.licencemgr.metadata.Licence;
 import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
 import org.opennms.karaf.licencepub.LicencePublisher;
 
-@Command(scope = "licence-pub", name = "createLicence", description="creates a new licence for given metadata xml")
+@Command(scope = "licence-pub", name = "createLicence", description="creates a new licence for given metadata xml (surround xml in 'quotes')")
 public class CreateLicenceCommand extends OsgiCommandSupport {
 
 	private LicencePublisher _licencePublisher;

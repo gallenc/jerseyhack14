@@ -4,16 +4,16 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.opennms.karaf.licencemgr.metadata.ProductDescription;
+import org.opennms.karaf.licencemgr.metadata.ProductMetadata;
 
 public class ProductPublisherImpl implements ProductPublisher{
 
-	private SortedMap<String, ProductDescription> productSpecMap = new TreeMap<String, ProductDescription>();
+	private SortedMap<String, ProductMetadata> productSpecMap = new TreeMap<String, ProductMetadata>();
 		
 	@Override
-	public void addProductDescription(ProductDescription productDescription) {
-		if (productDescription==null) throw new IllegalArgumentException("productMetadata cannot be null");
-		productSpecMap.put(productDescription.getProductId(), productDescription);
+	public void addProductDescription(ProductMetadata productMetadata) {
+		if (productMetadata==null) throw new IllegalArgumentException("productMetadata cannot be null");
+		productSpecMap.put(productMetadata.getProductId(), productMetadata);
 	}
 
 	@Override
@@ -28,14 +28,14 @@ public class ProductPublisherImpl implements ProductPublisher{
 	}
 
 	@Override
-	public ProductDescription getProductDescription(String productId) {
+	public ProductMetadata getProductDescription(String productId) {
 		if (productId==null) throw new IllegalArgumentException("productId cannot be null");
 		return productSpecMap.get(productId);
 	}
 
 	@Override
-	public Map<String, ProductDescription> getProductDescriptionMap() {
-		return new TreeMap<String, ProductDescription>(productSpecMap);
+	public Map<String, ProductMetadata> getProductDescriptionMap() {
+		return new TreeMap<String, ProductMetadata>(productSpecMap);
 	}
 
 	@Override

@@ -12,17 +12,24 @@
         
 	<bean id="licencePublisherImpl" class="org.opennms.karaf.licencepub.LicencePublisherImpl"  >
 	</bean>
+	
+	<!-- product publisher -->
+    <service ref="productPublisherImpl" interface="org.opennms.karaf.productpub.ProductPublisher"/>
+        
+	<bean id="productPublisherImpl" class="org.opennms.karaf.productpub.ProductPublisherImpl"  >
+	</bean>
 
 	<!-- command line commands -->
 	<command-bundle xmlns="http://karaf.apache.org/xmlns/shell/v1.0.0">
-	    <!--  licence service commands -->
+	    
+	    <!--  licence manager service commands -->
 		<command name="licence-mgr/list">
 			<action class="org.opennms.karaf.licencemgr.cmd.ListLicencesCommand">
 				<property name="licenceService" ref="licenceServiceImpl" />
 			</action>
 		</command>
-		<command name="licence-mgr/product-licence">
-			<action class="org.opennms.karaf.licencemgr.cmd.ProductLicenceCommand">
+		<command name="licence-mgr/getlicence">
+			<action class="org.opennms.karaf.licencemgr.cmd.GetProductLicenceCommand">
 				<property name="licenceService" ref="licenceServiceImpl" />
 			</action>
 		</command>
@@ -57,7 +64,7 @@
 			</action>
 		</command>
 		
-		<!-- licence publisher commands -->
+		<!-- licence publisher service commands -->
 		<command name="licence-pub/createLicence">
 			<action class="org.opennms.karaf.licencepub.cmd.CreateLicenceCommand">
 				<property name="licencePublisher" ref="licencePublisherImpl" />
@@ -71,6 +78,28 @@
 		<command name="licence-pub/getLicenceSpec">
 			<action class="org.opennms.karaf.licencepub.cmd.GetLicenceSpecCommand">
 				<property name="licencePublisher" ref="licencePublisherImpl" />
+			</action>
+		</command>
+		
+		<!-- product publisher service commands  -->
+		<command name="product-mgr/add">
+			<action class="org.opennms.karaf.productpub.cmd.AddProductSpecCommand">
+				<property name="productPublisher" ref="productPublisherImpl" />
+			</action>
+		</command>
+		<command name="product-mgr/getProductInfo">
+			<action class="org.opennms.karaf.productpub.cmd.GetProductSpecCommand">
+				<property name="productPublisher" ref="productPublisherImpl" />
+			</action>
+		</command>
+		<command name="product-mgr/list">
+			<action class="org.opennms.karaf.productpub.cmd.ListProductSpecsCommand">
+				<property name="productPublisher" ref="productPublisherImpl" />
+			</action>
+		</command>
+		<command name="product-mgr/removeProduct">
+			<action class="org.opennms.karaf.productpub.cmd.RemoveProductSpecCommand">
+				<property name="productPublisher" ref="productPublisherImpl" />
 			</action>
 		</command>
 	</command-bundle>

@@ -252,9 +252,9 @@ public class LicenceMetadata {
 	}
 
 	/**
-	 * importes licence metadata from hex encoded version of xML metadata
+	 * imports licence metadata from hex encoded version of XML metadata
 	 * @param hexString
-	 * @throws UnsupportedEncodingException
+	 * 
 	 */
 	public void fromHexString(String hexString){
 		try {

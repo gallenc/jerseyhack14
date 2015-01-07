@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<product>
+	<organization>OpenNMS Project</organization>
+	<productMetadata>Test product description</productMetadata>
+	<productId>org.opennms/org.opennms.karaf.licencemanager.testbundle/1.0-SNAPSHOT</productId>
+	<productName>test Bundle</productName>
+	<productUrl>http:opennms.co.uk</productUrl>
+</product>

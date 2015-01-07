@@ -5,7 +5,7 @@ import org.opennms.karaf.licencepub.LicencePublisher;
 import org.opennms.karaf.licencepub.LicenceSpecification;
 
 public class BundleLicenceSpecImpl implements BundleLicenceSpec{
-	
+
 	private String productId="org.opennms/org.opennms.karaf.licencemanager.testbundle/1.0-SNAPSHOT";
 
 	private String licenceMetadataSpecXml=null;
@@ -13,7 +13,7 @@ public class BundleLicenceSpecImpl implements BundleLicenceSpec{
 	private String publicKeyStr=null;
 	private LicencePublisher licencePublisher=null;
 	private LicenceMetadata licenceMetadataSpec=null;
-	
+
 	/**
 	 * constructor
 	 * @param licencePublisher
@@ -29,24 +29,29 @@ public class BundleLicenceSpecImpl implements BundleLicenceSpec{
 		this.licenceMetadataSpecXml=licenceMetadataSpecXml;
 		this.aesSecretKeyStr=aesSecretKeyStr;
 		this.publicKeyStr=publicKeyStr;
-		
+
 		licenceMetadataSpec=new LicenceMetadata();
 		licenceMetadataSpec.fromXml(licenceMetadataSpecXml);
-		
-		
+
+
 		LicenceSpecification licenceSpec= new LicenceSpecification(productId, 
 				licenceMetadataSpec, aesSecretKeyStr, publicKeyStr);
-		
+
 		licencePublisher.addLicenceSpec(licenceSpec);
-		System.out.println("Added licence specification for productId="+productId);
+		System.out.println("Registered licence specification for productId="+productId);
 	}
-	
+
 	public void unregisterSpec(){
 		if (licencePublisher!=null){
-			licencePublisher.removeLicenceSpec(productId);
-			System.out.println("Unregistered licence specification for productId="+productId);
+			try{
+				licencePublisher.removeLicenceSpec(productId);
+				System.out.println("Unregistered licence specification for productId="+productId);
+			} catch (Exception e){
+				System.out.println("Problem unregistering licence specification for productId="+productId+"  "+e);
+			} finally {
+				licencePublisher=null; //release resources
+			}
 		}
 	}
 
-	
 }
