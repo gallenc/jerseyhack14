@@ -158,8 +158,11 @@ public class LicenceServiceImpl implements LicenceService {
 				this.licenceMap.clear();
 				this.licenceMap.putAll(licenceServiceImpl.getLicenceMap());
 				this.systemId= licenceServiceImpl.getSystemId();
+				System.out.println("Licence Manager successfully loaded licences from file="+fileUri);
+			} else {
+				System.out.println("Licence Manager licence file="+fileUri+" does not exist. A new one will be created.");
 			}
-
+			System.out.println("Licence Manager Started");
 		} catch (JAXBException e) {
 			throw new RuntimeException("Problem loading Licence Manager Data",e);
 		}

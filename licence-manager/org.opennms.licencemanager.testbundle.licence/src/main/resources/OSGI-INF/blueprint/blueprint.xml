@@ -1,7 +1,7 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
 	<reference id="productPublisher" interface="org.opennms.karaf.productpub.ProductPublisher"
-		timeout="20000" />
+		timeout="10000" />
 
 	<bean id="localBundleProductSpec" class="org.opennms.karaf.productpub.BundleProductSpecImpl"
 		init-method="registerSpec" destroy-method="unregisterSpec">
@@ -11,12 +11,15 @@
 	</bean>
 
 	<reference id="licencePublisher" interface="org.opennms.karaf.licencepub.LicencePublisher"
-		timeout="20000" />
+		timeout="10000" />
 
+    <!-- BundleLocalLicenceSpecImpl(LicencePublisher licencePublisher, BundleContext bundleContext, String licenceMetadataUri -->
 	<bean id="localBundleLicenceSpec"
 		class="org.opennms.karaf.licencemanager.testbundle.licence.BundleLocalLicenceSpecImpl"
 		destroy-method="unregisterSpec">
-		<argument ref="licencePublisher" />
+		<argument index="0" ref="licencePublisher" />
+        <argument index="1" ref="blueprintBundleContext" />
+        <argument index="2" value="/licenceMetadataSpec.xml" />
 	</bean>
 
 </blueprint>
