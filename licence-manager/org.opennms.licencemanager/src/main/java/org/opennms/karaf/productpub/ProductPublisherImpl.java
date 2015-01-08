@@ -6,7 +6,7 @@ import java.util.TreeMap;
 
 import org.opennms.karaf.licencemgr.metadata.ProductMetadata;
 
-public class ProductPublisherImpl implements ProductPublisher{
+public class ProductPublisherImpl implements ProductPublisher, ProductRegister {
 
 	private SortedMap<String, ProductMetadata> productSpecMap = new TreeMap<String, ProductMetadata>();
 		

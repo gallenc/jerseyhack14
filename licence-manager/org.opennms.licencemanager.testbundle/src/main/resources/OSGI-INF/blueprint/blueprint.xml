@@ -1,14 +1,20 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-    
-    <reference id="licenceService" interface="org.opennms.karaf.licencemgr.LicenceService" timeout="20000"/>
-        
-<!-- 	<bean id="licenceAuthenticator" class="org.opennms.karaf.licencemgr.LicenceAuthenticatorImpl"  > -->
-<!-- 	    <argument ref="licenceService"/> -->
-<!-- 	</bean> -->
 
-    <bean id="licenceAuthenticator" class="org.opennms.karaf.licencemanager.testbundle.BundleLicenceAuthenticatorImpl"  >
-	    <argument ref="licenceService"/>
-	</bean>
+  <!-- check licence with licence service -->
+  <reference id="licenceService" interface="org.opennms.karaf.licencemgr.LicenceService" timeout="10000" />
+
+  <bean id="licenceAuthenticator" class="org.opennms.karaf.licencemanager.testbundle.BundleLicenceAuthenticatorImpl">
+    <argument ref="licenceService" />
+  </bean>
+
+  <!-- register product information with product registry -->
+  <reference id="productRegister" interface="org.opennms.karaf.productpub.ProductRegister" timeout="10000" />
+
+  <bean id="localBundleProductSpec" class="org.opennms.karaf.productpub.BundleProductSpecImpl" init-method="registerSpec" destroy-method="unregisterSpec">
+    <property name="bundleContext" ref="blueprintBundleContext"></property>
+    <property name="productPublisher" ref="productRegister"></property>
+    <property name="productMetadataUri" value="/productSpec.xml"></property>
+  </bean>
 
 </blueprint>

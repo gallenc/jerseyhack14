@@ -74,7 +74,7 @@ public class ProductMetadata {
 	/**
 	 * @param productMetadata the productMetadata to set
 	 */
-	@XmlElement(name="productMetadata")
+	@XmlElement(name="productDescription")
 	public void setProductDescription(String productDescription) {
 		this.productDescription = productDescription;
 	}

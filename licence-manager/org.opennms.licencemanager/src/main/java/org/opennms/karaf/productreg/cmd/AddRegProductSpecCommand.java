@@ -1,30 +1,28 @@
-package org.opennms.karaf.productpub.cmd;
+package org.opennms.karaf.productreg.cmd;
 
 import org.apache.felix.gogo.commands.Argument;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
-import org.opennms.karaf.licencemgr.LicenceService;
-import org.opennms.karaf.licencemgr.metadata.Licence;
 import org.opennms.karaf.licencemgr.metadata.ProductMetadata;
-import org.opennms.karaf.productpub.ProductPublisher;
+import org.opennms.karaf.productpub.ProductRegister;
 
-@Command(scope = "product-mgr", name = "add", description="adds product spec to product publisher for productId")
-public class AddProductSpecCommand extends OsgiCommandSupport {
+@Command(scope = "product-reg", name = "add", description="adds product spec to product registry for productId")
+public class AddRegProductSpecCommand extends OsgiCommandSupport {
 
-	private ProductPublisher productPublisher;
+	private ProductRegister productRegister;
 
 	/**
-	 * @return the productPublisher
+	 * @return the productRegister
 	 */
-	public ProductPublisher getProductPublisher() {
-		return productPublisher;
+	public ProductRegister getProductRegister() {
+		return productRegister;
 	}
 
 	/**
-	 * @param productPublisher the productPublisher to set
+	 * @param productRegister the productRegister to set
 	 */
-	public void setProductPublisher(ProductPublisher productPublisher) {
-		this.productPublisher = productPublisher;
+	public void setProductRegister(ProductRegister productRegister) {
+		this.productRegister = productRegister;
 	}
 
 	@Argument(index = 0, name = "productMetadata", description = "product metadata as xml (surround xml in 'quotes') ", required = true, multiValued = false)
@@ -36,7 +34,7 @@ public class AddProductSpecCommand extends OsgiCommandSupport {
 			ProductMetadata pmeta= new ProductMetadata();
 			pmeta.fromXml(productMetadataXml);
 			
-			getProductPublisher().addProductDescription(pmeta);
+			getProductRegister().addProductDescription(pmeta);
 			System.out.println("Added Product Metadata for productId='"+pmeta.getProductId()+ "' productMetadata='" + pmeta.toXml()+"'");
 		} catch (Exception e) {
 			System.out.println("Error adding product spec for productId. Exception="+e);

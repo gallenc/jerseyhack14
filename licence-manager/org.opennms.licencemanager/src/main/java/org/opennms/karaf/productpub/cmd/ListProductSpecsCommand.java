@@ -12,7 +12,7 @@ import org.opennms.karaf.licencepub.LicencePublisher;
 import org.opennms.karaf.licencepub.LicenceSpecification;
 import org.opennms.karaf.productpub.ProductPublisher;
 
-@Command(scope = "product-mgr", name = "list", description="lists installed product specifications")
+@Command(scope = "product-mgr", name = "list", description="lists product specifications installed in product publisher")
 public class ListProductSpecsCommand extends OsgiCommandSupport {
 
 	private ProductPublisher productPublisher=null;

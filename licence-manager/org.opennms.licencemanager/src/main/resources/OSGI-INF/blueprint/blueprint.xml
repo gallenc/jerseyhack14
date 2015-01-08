@@ -1,107 +1,135 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-    <!-- licence manager -->
-    <service ref="licenceServiceImpl" interface="org.opennms.karaf.licencemgr.LicenceService"/>
-        
-	<bean id="licenceServiceImpl" class="org.opennms.karaf.licencemgr.LicenceServiceImpl" init-method="load" >
-	    <property name="fileUri" value="./licenceService.xml" /> <!-- TODO replace with properties loader -->
-	</bean>
-	
-	<!-- licence publisher -->
-	<service ref="licencePublisherImpl" interface="org.opennms.karaf.licencepub.LicencePublisher"/>
-        
-	<bean id="licencePublisherImpl" class="org.opennms.karaf.licencepub.LicencePublisherImpl"  >
-	</bean>
-	
-	<!-- product publisher -->
-    <service ref="productPublisherImpl" interface="org.opennms.karaf.productpub.ProductPublisher"/>
-        
-	<bean id="productPublisherImpl" class="org.opennms.karaf.productpub.ProductPublisherImpl"  >
-	</bean>
+  <!-- licence manager -->
+  <service ref="licenceServiceImpl" interface="org.opennms.karaf.licencemgr.LicenceService" />
 
-	<!-- command line commands -->
-	<command-bundle xmlns="http://karaf.apache.org/xmlns/shell/v1.0.0">
-	    
-	    <!--  licence manager service commands -->
-		<command name="licence-mgr/list">
-			<action class="org.opennms.karaf.licencemgr.cmd.ListLicencesCommand">
-				<property name="licenceService" ref="licenceServiceImpl" />
-			</action>
-		</command>
-		<command name="licence-mgr/getlicence">
-			<action class="org.opennms.karaf.licencemgr.cmd.GetProductLicenceCommand">
-				<property name="licenceService" ref="licenceServiceImpl" />
-			</action>
-		</command>
-		<command name="licence-mgr/add">
-			<action class="org.opennms.karaf.licencemgr.cmd.AddLicenceCommand">
-				<property name="licenceService" ref="licenceServiceImpl" />
-			</action>
-		</command>
-		<command name="licence-mgr/remove">
-			<action class="org.opennms.karaf.licencemgr.cmd.RemoveLicenceCommand">
-				<property name="licenceService" ref="licenceServiceImpl" />
-			</action>
-		</command>
-		<command name="licence-mgr/getSystemInstance">
-			<action class="org.opennms.karaf.licencemgr.cmd.GetSystemInstanceCommand">
-				<property name="licenceService" ref="licenceServiceImpl" />
-			</action>
-		</command>
-		<command name="licence-mgr/setSystemInstance">
-			<action class="org.opennms.karaf.licencemgr.cmd.SetSystemInstanceCommand">
-				<property name="licenceService" ref="licenceServiceImpl" />
-			</action>
-		</command>
-		<command name="licence-mgr/makeSystemInstance">
-			<action class="org.opennms.karaf.licencemgr.cmd.MakeSystemInstanceCommand">
-				<property name="licenceService" ref="licenceServiceImpl" />
-			</action>
-		</command>
-		<command name="licence-mgr/checksumForString">
-			<action class="org.opennms.karaf.licencemgr.cmd.ChecksumForStringCommand">
-				<property name="licenceService" ref="licenceServiceImpl" />
-			</action>
-		</command>
-		
-		<!-- licence publisher service commands -->
-		<command name="licence-pub/createLicence">
-			<action class="org.opennms.karaf.licencepub.cmd.CreateLicenceCommand">
-				<property name="licencePublisher" ref="licencePublisherImpl" />
-			</action>
-		</command>
-		<command name="licence-pub/list">
-			<action class="org.opennms.karaf.licencepub.cmd.ListLicenceSpecsCommand">
-				<property name="licencePublisher" ref="licencePublisherImpl" />
-			</action>
-		</command>
-		<command name="licence-pub/getLicenceSpec">
-			<action class="org.opennms.karaf.licencepub.cmd.GetLicenceSpecCommand">
-				<property name="licencePublisher" ref="licencePublisherImpl" />
-			</action>
-		</command>
-		
-		<!-- product publisher service commands  -->
-		<command name="product-mgr/add">
-			<action class="org.opennms.karaf.productpub.cmd.AddProductSpecCommand">
-				<property name="productPublisher" ref="productPublisherImpl" />
-			</action>
-		</command>
-		<command name="product-mgr/getProductInfo">
-			<action class="org.opennms.karaf.productpub.cmd.GetProductSpecCommand">
-				<property name="productPublisher" ref="productPublisherImpl" />
-			</action>
-		</command>
-		<command name="product-mgr/list">
-			<action class="org.opennms.karaf.productpub.cmd.ListProductSpecsCommand">
-				<property name="productPublisher" ref="productPublisherImpl" />
-			</action>
-		</command>
-		<command name="product-mgr/removeProduct">
-			<action class="org.opennms.karaf.productpub.cmd.RemoveProductSpecCommand">
-				<property name="productPublisher" ref="productPublisherImpl" />
-			</action>
-		</command>
-	</command-bundle>
+  <bean id="licenceServiceImpl" class="org.opennms.karaf.licencemgr.LicenceServiceImpl" init-method="load">
+    <property name="fileUri" value="./licenceService.xml" /> <!-- TODO replace with properties loader -->
+  </bean>
+
+  <!-- licence publisher -->
+  <service ref="licencePublisherImpl" interface="org.opennms.karaf.licencepub.LicencePublisher" />
+
+  <bean id="licencePublisherImpl" class="org.opennms.karaf.licencepub.LicencePublisherImpl">
+  </bean>
+
+  <!-- product publisher -->
+  <service ref="productPublisherImpl" interface="org.opennms.karaf.productpub.ProductPublisher" />
+
+  <bean id="productPublisherImpl" class="org.opennms.karaf.productpub.ProductPublisherImpl">
+  </bean>
+
+  <!-- product register -->
+  <service ref="productRegisterImpl" interface="org.opennms.karaf.productpub.ProductRegister" />
+
+  <bean id="productRegisterImpl" class="org.opennms.karaf.productpub.ProductPublisherImpl">
+  </bean>
+
+  <!-- command line commands -->
+  <command-bundle xmlns="http://karaf.apache.org/xmlns/shell/v1.0.0">
+
+    <!-- licence manager service commands -->
+    <command name="licence-mgr/list">
+      <action class="org.opennms.karaf.licencemgr.cmd.ListLicencesCommand">
+        <property name="licenceService" ref="licenceServiceImpl" />
+      </action>
+    </command>
+    <command name="licence-mgr/getlicence">
+      <action class="org.opennms.karaf.licencemgr.cmd.GetProductLicenceCommand">
+        <property name="licenceService" ref="licenceServiceImpl" />
+      </action>
+    </command>
+    <command name="licence-mgr/add">
+      <action class="org.opennms.karaf.licencemgr.cmd.AddLicenceCommand">
+        <property name="licenceService" ref="licenceServiceImpl" />
+      </action>
+    </command>
+    <command name="licence-mgr/remove">
+      <action class="org.opennms.karaf.licencemgr.cmd.RemoveLicenceCommand">
+        <property name="licenceService" ref="licenceServiceImpl" />
+      </action>
+    </command>
+    <command name="licence-mgr/getSystemInstance">
+      <action class="org.opennms.karaf.licencemgr.cmd.GetSystemInstanceCommand">
+        <property name="licenceService" ref="licenceServiceImpl" />
+      </action>
+    </command>
+    <command name="licence-mgr/setSystemInstance">
+      <action class="org.opennms.karaf.licencemgr.cmd.SetSystemInstanceCommand">
+        <property name="licenceService" ref="licenceServiceImpl" />
+      </action>
+    </command>
+    <command name="licence-mgr/makeSystemInstance">
+      <action class="org.opennms.karaf.licencemgr.cmd.MakeSystemInstanceCommand">
+        <property name="licenceService" ref="licenceServiceImpl" />
+      </action>
+    </command>
+    <command name="licence-mgr/checksumForString">
+      <action class="org.opennms.karaf.licencemgr.cmd.ChecksumForStringCommand">
+        <property name="licenceService" ref="licenceServiceImpl" />
+      </action>
+    </command>
+
+    <!-- licence publisher service commands -->
+    <command name="licence-pub/createLicence">
+      <action class="org.opennms.karaf.licencepub.cmd.CreateLicenceCommand">
+        <property name="licencePublisher" ref="licencePublisherImpl" />
+      </action>
+    </command>
+    <command name="licence-pub/list">
+      <action class="org.opennms.karaf.licencepub.cmd.ListLicenceSpecsCommand">
+        <property name="licencePublisher" ref="licencePublisherImpl" />
+      </action>
+    </command>
+    <command name="licence-pub/getLicenceSpec">
+      <action class="org.opennms.karaf.licencepub.cmd.GetLicenceSpecCommand">
+        <property name="licencePublisher" ref="licencePublisherImpl" />
+      </action>
+    </command>
+
+    <!-- product publisher service commands -->
+    <command name="product-mgr/add">
+      <action class="org.opennms.karaf.productpub.cmd.AddProductSpecCommand">
+        <property name="productPublisher" ref="productPublisherImpl" />
+      </action>
+    </command>
+    <command name="product-mgr/getProductInfo">
+      <action class="org.opennms.karaf.productpub.cmd.GetProductSpecCommand">
+        <property name="productPublisher" ref="productPublisherImpl" />
+      </action>
+    </command>
+    <command name="product-mgr/list">
+      <action class="org.opennms.karaf.productpub.cmd.ListProductSpecsCommand">
+        <property name="productPublisher" ref="productPublisherImpl" />
+      </action>
+    </command>
+    <command name="product-mgr/removeProduct">
+      <action class="org.opennms.karaf.productpub.cmd.RemoveProductSpecCommand">
+        <property name="productPublisher" ref="productPublisherImpl" />
+      </action>
+    </command>
+
+    <!-- product registry service commands -->
+    <command name="product-reg/add">
+      <action class="org.opennms.karaf.productreg.cmd.AddRegProductSpecCommand">
+        <property name="productRegister" ref="productRegisterImpl" />
+      </action>
+    </command>
+    <command name="product-reg/getProductInfo">
+      <action class="org.opennms.karaf.productreg.cmd.GetRegProductSpecCommand">
+        <property name="productRegister" ref="productRegisterImpl" />
+      </action>
+    </command>
+    <command name="product-reg/list">
+      <action class="org.opennms.karaf.productreg.cmd.ListRegProductSpecsCommand">
+        <property name="productRegister" ref="productRegisterImpl" />
+      </action>
+    </command>
+    <command name="product-reg/removeProduct">
+      <action class="org.opennms.karaf.productreg.cmd.RemoveRegProductSpecCommand">
+        <property name="productRegister" ref="productRegisterImpl" />
+      </action>
+    </command>
+  </command-bundle>
 
 </blueprint>

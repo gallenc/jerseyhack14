@@ -8,7 +8,7 @@ import org.opennms.karaf.licencemgr.metadata.Licence;
 import org.opennms.karaf.licencemgr.metadata.ProductMetadata;
 import org.opennms.karaf.productpub.ProductPublisher;
 
-@Command(scope = "product-mgr", name = "getProductInfo", description="gets product info for productId")
+@Command(scope = "product-mgr", name = "getProductInfo", description="gets product info from product publisher for productId")
 public class GetProductSpecCommand extends OsgiCommandSupport {
 
 	private ProductPublisher productPublisher=null;

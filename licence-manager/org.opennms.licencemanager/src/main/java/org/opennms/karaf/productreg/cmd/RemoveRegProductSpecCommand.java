@@ -1,37 +1,36 @@
-package org.opennms.karaf.productpub.cmd;
+package org.opennms.karaf.productreg.cmd;
 
 import org.apache.felix.gogo.commands.Argument;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
-import org.opennms.karaf.licencemgr.LicenceService;
-import org.opennms.karaf.productpub.ProductPublisher;
+import org.opennms.karaf.productpub.ProductRegister;
 
-@Command(scope = "product-mgr", name = "removeProduct", description="removes product description from product manager")
-public class RemoveProductSpecCommand extends OsgiCommandSupport {
+@Command(scope = "product-reg", name = "removeProduct", description="removes product description from product register")
+public class RemoveRegProductSpecCommand extends OsgiCommandSupport {
 
-	private ProductPublisher productPublisher=null;
+	private ProductRegister productRegister;
 
 	/**
-	 * @return the productPublisher
+	 * @return the productRegister
 	 */
-	public ProductPublisher getProductPublisher() {
-		return productPublisher;
+	public ProductRegister getProductRegister() {
+		return productRegister;
 	}
 
 	/**
-	 * @param productPublisher the productPublisher to set
+	 * @param productRegister the productRegister to set
 	 */
-	public void setProductPublisher(ProductPublisher productPublisher) {
-		this.productPublisher = productPublisher;
+	public void setProductRegister(ProductRegister productRegister) {
+		this.productRegister = productRegister;
 	}
-
+	
 	@Argument(index = 0, name = "productId", description = "Product Id to remove product information", required = true, multiValued = false)
 	String productId = null;
 
 	@Override
 	protected Object doExecute() throws Exception {
 		try{
-			if (getProductPublisher().removeProductDescription(productId)){
+			if (getProductRegister().removeProductDescription(productId)){
 				System.out.println("Removed description for productId=" + productId);
 			}else {
 				System.out.println("No product description installed for productId='" + productId+"'");
