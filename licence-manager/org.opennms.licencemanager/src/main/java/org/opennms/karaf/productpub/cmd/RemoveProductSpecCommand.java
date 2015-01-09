@@ -3,7 +3,6 @@ package org.opennms.karaf.productpub.cmd;
 import org.apache.felix.gogo.commands.Argument;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
-import org.opennms.karaf.licencemgr.LicenceService;
 import org.opennms.karaf.productpub.ProductPublisher;
 
 @Command(scope = "product-mgr", name = "removeProduct", description="removes product description from product manager")

@@ -5,11 +5,7 @@ import java.util.Map.Entry;
 
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
-import org.opennms.karaf.licencemgr.LicenceService;
-import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
 import org.opennms.karaf.licencemgr.metadata.ProductMetadata;
-import org.opennms.karaf.licencepub.LicencePublisher;
-import org.opennms.karaf.licencepub.LicenceSpecification;
 import org.opennms.karaf.productpub.ProductPublisher;
 
 @Command(scope = "product-mgr", name = "list", description="lists product specifications installed in product publisher")

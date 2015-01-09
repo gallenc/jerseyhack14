@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>org.opennms.co.uk</groupId>
+  <artifactId>org.opennms.co.uk.newfeature</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <name>New Feature - Test Project</name>
+  <description>New Feature parent project</description>
+
+  <packaging>pom</packaging>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <productId>${pom.groupId}/${pom.artifactId}/${pom.version}</productId>
+    <licenceClassPath>org.opennms.co.uk.newfeature</licenceClassPath>
+  </properties>
+
+  <modules>
+    <!-- define main project modules here -->
+  </modules>
+
+  <profiles>
+    <profile>
+      <id>generateLicence</id>
+      <!-- TODO REMOVE - SHOULD NOT GENERATE BY DEFAULT -->
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <modules>
+        <module>org.opennms.co.uk.newfeature.LicenceSpec</module>
+        <module>org.opennms.co.uk.newfeature.LicenceAuthenticator</module>
+      </modules>
+    </profile>
+  </profiles>
+</project>

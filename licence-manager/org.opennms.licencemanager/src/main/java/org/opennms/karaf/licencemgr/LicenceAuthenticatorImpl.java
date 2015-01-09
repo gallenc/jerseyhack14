@@ -85,7 +85,7 @@ public class LicenceAuthenticatorImpl implements LicenceAuthenticator {
 			throw new ServiceException("licence systemId='"+licenceMetadata.getSystemId()+"' does not match expected systemId:'"+productId+"'");
 		}
 
-		// TODO licenceService.autehnticated licence 
+		// TODO licenceService.authenticated licence 
 		System.out.println("BundleLicenceAuthenticator authenticated licence for productId="+productId);
 		System.out.println("Licence Metadata xml="+licenceMetadata.toXml());
 

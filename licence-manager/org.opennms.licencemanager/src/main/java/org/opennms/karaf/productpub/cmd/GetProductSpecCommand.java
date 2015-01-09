@@ -3,8 +3,6 @@ package org.opennms.karaf.productpub.cmd;
 import org.apache.felix.gogo.commands.Argument;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
-import org.opennms.karaf.licencemgr.LicenceService;
-import org.opennms.karaf.licencemgr.metadata.Licence;
 import org.opennms.karaf.licencemgr.metadata.ProductMetadata;
 import org.opennms.karaf.productpub.ProductPublisher;
 
