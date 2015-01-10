@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LicenceMetadata>
+  <productId>org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT</productId>
+  <licensee>Mr Craig Gallen</licensee>
+  <licensor>OpenNMS UK</licensor>
+  <systemId>4ad72a34e3635c1b-99da3323</systemId>
+  <startDate>2015-01-07T15:10:45.138Z</startDate>
+  <expiryDate>2015-01-07T15:10:45.138Z</expiryDate>
+  <options>
+    <option>
+      <description>this is the description</description>
+      <name>newname</name>
+      <value>newvalue</value>
+    </option>
+  </options>
+</LicenceMetadata>

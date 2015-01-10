@@ -7,7 +7,126 @@
 
   <modelVersion>4.0.0</modelVersion>
   <artifactId>org.opennms.co.uk.newfeature.LicenceAuthenticator</artifactId>
-  <name>New Feature Licence Authenticator</name>
-  <description>Licence Authenticator for newfeature</description>
-  
+  <name>LicenceAuthenticator for New Feature</name>
+  <description>LicenceAuthenticator for New Feature </description>
+  <packaging>bundle</packaging>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.9</version>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>org.opennms.co.uk.newfeature.LicenceGenerator</artifactId>
+                  <version>${project.version}</version>
+                  <type>jar</type>
+                  <classifier>sources</classifier>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/generated-licence/java</outputDirectory>
+                  <includes>**/*LicenceAuthenticator*.java</includes>
+                  <excludes>**/*.xml</excludes>
+                </artifactItem>
+                <artifactItem>
+                  <groupId>${project.groupId}</groupId>
+                  <artifactId>org.opennms.co.uk.newfeature.LicenceGenerator</artifactId>
+                  <version>${project.version}</version>
+                  <type>jar</type>
+                  <classifier>sources</classifier>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/generated-licence/resources</outputDirectory>
+                  <includes>**/licenceAuthenticatorBlueprint.xml,**/productSpec.xml</includes>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>build-helper-maven-plugin</artifactId>
+        <version>1.9.1</version>
+        <executions>
+          <execution>
+            <id>add-source</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>add-source</goal>
+            </goals>
+            <configuration>
+              <sources>
+                <source>${project.build.directory}/generated-licence/java</source>
+              </sources>
+            </configuration>
+          </execution>
+          <execution>
+            <id>add-resource</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>add-resource</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>${project.build.directory}/generated-licence/resources</directory>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <target>1.6</target>
+          <source>1.6</source>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>2.3.7</version>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+            <Bundle-Version>${project.version}</Bundle-Version>
+
+            <Import-Package>
+              org.apache.felix.service.command,
+              *
+            </Import-Package>
+          </instructions>
+        </configuration>
+      </plugin>
+
+    </plugins>
+
+  </build>
+  <dependencies>
+    <dependency>
+      <groupId>org.opennms</groupId>
+      <artifactId>org.opennms.licencemanager</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <type>jar</type>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+
 </project>

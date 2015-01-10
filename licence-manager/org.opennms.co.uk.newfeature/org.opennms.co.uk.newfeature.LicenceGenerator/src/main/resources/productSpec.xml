@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<product>
+	<organization>OpenNMS Project</organization>
+	<productDescription>Test product description</productDescription>
+	<productId>org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT</productId>
+	<productName>test Bundle</productName>
+	<productUrl>http:\\opennms.co.uk</productUrl>
+</product>

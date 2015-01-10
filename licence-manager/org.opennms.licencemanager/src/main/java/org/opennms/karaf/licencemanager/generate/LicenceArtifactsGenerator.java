@@ -47,7 +47,7 @@ public class LicenceArtifactsGenerator {
 
 		this.javaOutputDirectory=outputDirectory+"/java";
 		this.resourcesOutputDirectory=outputDirectory+"/resources";
-		this.productIdHash = Integer.toHexString(productId.hashCode());
+		this.productIdHash = "x"+Integer.toHexString(productId.hashCode());
 
 		generateLicenceKeys();
 		generateLicenceSpec();

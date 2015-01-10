@@ -34,7 +34,7 @@ public class GetLicenceSpecCommand extends OsgiCommandSupport {
 				LicenceMetadata licenceMetadata = licenceSpecification.getLicenceMetadataSpec();
 				String metadatastr = (licenceMetadata==null) ? "null" : licenceMetadata.toXml();
 				System.out.println("  productId='"+productId+"'\n"
-						+ "      licenceMetadata='"+metadatastr+"'\n"
+						+ "      licenceMetadataSpec='"+metadatastr+"'\n"
 						+ "      licenceSpecification secret key String='"+licenceSpecification.getAesSecretKeyStr()+"'\n"
 						+ "      licenceSpecification public key String='"+licenceSpecification.getPublicKeyStr()+"'\n");
 			}
