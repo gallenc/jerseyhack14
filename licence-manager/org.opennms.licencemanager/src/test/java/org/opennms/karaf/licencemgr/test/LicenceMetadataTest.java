@@ -5,8 +5,8 @@ import static org.junit.Assert.*;
 import java.util.Date;
 
 import org.junit.Test;
-import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
-import org.opennms.karaf.licencemgr.metadata.OptionMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.OptionMetadata;
 
 public class LicenceMetadataTest {
 

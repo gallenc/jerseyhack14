@@ -6,7 +6,7 @@ import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.opennms.karaf.licencemgr.LicenceService;
 import org.opennms.karaf.licencemgr.metadata.Licence;
 
-@Command(scope = "licence-mgr", name = "add", description="adds licence for productId")
+@Command(scope = "licence-mgr", name = "addlicence", description="adds licence for productId")
 public class AddLicenceCommand extends OsgiCommandSupport {
 
 	private LicenceService _licenceService;

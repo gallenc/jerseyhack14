@@ -3,11 +3,11 @@ package org.opennms.karaf.licencepub.cmd;
 import org.apache.felix.gogo.commands.Argument;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
-import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceSpecification;
 import org.opennms.karaf.licencepub.LicencePublisher;
-import org.opennms.karaf.licencepub.LicenceSpecification;
 
-@Command(scope = "licence-pub", name = "getLicenceSpec", description="gets the licence specification for a given product id")
+@Command(scope = "licence-pub", name = "getlicencespec", description="Gets the licence specification for a given product id")
 public class GetLicenceSpecCommand extends OsgiCommandSupport {
 
 	private LicencePublisher _licencePublisher;

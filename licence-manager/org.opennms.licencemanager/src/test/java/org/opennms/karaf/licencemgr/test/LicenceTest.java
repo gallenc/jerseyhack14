@@ -6,9 +6,9 @@ import java.util.Date;
 
 import org.junit.Test;
 import org.opennms.karaf.licencemgr.GeneratedKeys;
-import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
-import org.opennms.karaf.licencemgr.metadata.OptionMetadata;
-import org.opennms.karaf.licencemgr.metadata.Licence;;
+import org.opennms.karaf.licencemgr.metadata.Licence;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.OptionMetadata;
 
 public class LicenceTest {
 	

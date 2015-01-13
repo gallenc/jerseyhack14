@@ -3,9 +3,9 @@ package org.opennms.karaf.licencemgr;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceSpecification;
 import org.opennms.karaf.licencepub.LicencePublisher;
-import org.opennms.karaf.licencepub.LicenceSpecification;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 

@@ -6,7 +6,7 @@ import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.opennms.karaf.licencemgr.LicenceService;
 
 
-@Command(scope = "licence-mgr", name = "makeSystemInstance", description="Make a new SystemInstance id for Karaf licence manager")
+@Command(scope = "licence-mgr", name = "makesysteminstance", description="Make and install a new SystemInstance id for licence manager")
 public class MakeSystemInstanceCommand extends OsgiCommandSupport {
 
 	private LicenceService _licenceService;

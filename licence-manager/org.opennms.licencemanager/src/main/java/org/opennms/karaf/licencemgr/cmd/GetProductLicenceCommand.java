@@ -5,7 +5,7 @@ import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.opennms.karaf.licencemgr.LicenceService;
 
-@Command(scope = "licence-mgr", name = "getLicence", description="returns licence set for productId")
+@Command(scope = "licence-mgr", name = "getlicence", description="returns licence string installed for productId")
 public class GetProductLicenceCommand extends OsgiCommandSupport {
 
 	private LicenceService _licenceService;

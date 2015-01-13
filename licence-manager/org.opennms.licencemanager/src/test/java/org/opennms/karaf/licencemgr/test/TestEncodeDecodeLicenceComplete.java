@@ -20,8 +20,8 @@ import org.junit.Test;
 import org.opennms.karaf.licencemgr.AesSymetricKeyCipher;
 import org.opennms.karaf.licencemgr.RsaAsymetricKeyCipher;
 import org.opennms.karaf.licencemgr.StringCrc32Checksum;
-import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
-import org.opennms.karaf.licencemgr.metadata.OptionMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.OptionMetadata;
 
 /**
  * This test goes through the complete lifecycle of the algorithms for generating and decoding a licence. 

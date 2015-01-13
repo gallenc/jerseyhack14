@@ -5,4 +5,6 @@
 	<productId>org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT</productId>
 	<productName>test Bundle</productName>
 	<productUrl>http:\\opennms.co.uk</productUrl>
+    <licenceKeyRequired>true</licenceKeyRequired>
+    <licenceType>OpenNMS EULA See http:\\opennms.co.uk\EULA</licenceType>
 </product>

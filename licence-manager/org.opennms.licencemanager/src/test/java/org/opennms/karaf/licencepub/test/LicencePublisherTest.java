@@ -9,11 +9,11 @@ import org.opennms.karaf.licencemgr.ClientKeys;
 import org.opennms.karaf.licencemgr.GeneratedKeys;
 import org.opennms.karaf.licencemgr.PublisherKeys;
 import org.opennms.karaf.licencemgr.metadata.Licence;
-import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
-import org.opennms.karaf.licencemgr.metadata.OptionMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceSpecification;
+import org.opennms.karaf.licencemgr.metadata.jaxb.OptionMetadata;
 import org.opennms.karaf.licencepub.LicencePublisher;
 import org.opennms.karaf.licencepub.LicencePublisherImpl;
-import org.opennms.karaf.licencepub.LicenceSpecification;
 
 public class LicencePublisherTest {
 

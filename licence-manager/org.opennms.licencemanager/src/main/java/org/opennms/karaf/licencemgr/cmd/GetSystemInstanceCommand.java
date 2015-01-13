@@ -5,7 +5,7 @@ import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.opennms.karaf.licencemgr.LicenceService;
 
 
-@Command(scope = "licence-mgr", name = "getSystemInstance", description="Get Instance ID of Karaf licence manager")
+@Command(scope = "licence-mgr", name = "getsystemid", description="Get System Instance ID installed for licence manager")
 public class GetSystemInstanceCommand extends OsgiCommandSupport {
 
 	private LicenceService _licenceService;

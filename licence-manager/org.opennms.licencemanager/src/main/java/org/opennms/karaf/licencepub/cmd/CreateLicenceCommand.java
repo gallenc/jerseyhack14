@@ -5,10 +5,10 @@ import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.opennms.karaf.licencemgr.LicenceService;
 import org.opennms.karaf.licencemgr.metadata.Licence;
-import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
 import org.opennms.karaf.licencepub.LicencePublisher;
 
-@Command(scope = "licence-pub", name = "createLicence", description="creates a new licence for given metadata xml (surround xml in 'quotes')")
+@Command(scope = "licence-pub", name = "createlicence", description="creates a new licence for given metadata xml (surround xml in 'quotes')")
 public class CreateLicenceCommand extends OsgiCommandSupport {
 
 	private LicencePublisher _licencePublisher;

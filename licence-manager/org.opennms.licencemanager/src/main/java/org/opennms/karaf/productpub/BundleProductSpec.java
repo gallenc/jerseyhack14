@@ -1,6 +1,6 @@
 package org.opennms.karaf.productpub;
 
-import org.opennms.karaf.licencemgr.metadata.ProductMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
 import org.osgi.framework.BundleContext;
 
 public interface BundleProductSpec {

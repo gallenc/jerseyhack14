@@ -5,7 +5,7 @@ import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.opennms.karaf.licencemgr.LicenceService;
 
-@Command(scope = "licence-mgr", name = "checksumForString", description="creates and adds a checksum to a given string")
+@Command(scope = "licence-mgr", name = "checksumforstring", description="creates and adds a checksum to a given string")
 public class ChecksumForStringCommand extends OsgiCommandSupport {
 
 	private LicenceService _licenceService;

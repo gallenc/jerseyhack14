@@ -1,6 +1,6 @@
 package org.opennms.karaf.licencemgr;
 
-import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
 import org.opennms.karaf.licencepub.LicencePublisher;
 import org.osgi.framework.BundleContext;
 

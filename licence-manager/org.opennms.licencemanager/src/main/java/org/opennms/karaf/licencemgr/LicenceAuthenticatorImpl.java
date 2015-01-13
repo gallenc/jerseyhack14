@@ -1,7 +1,7 @@
 package org.opennms.karaf.licencemgr;
 
 import org.opennms.karaf.licencemgr.LicenceAuthenticator;
-import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
 import org.osgi.framework.ServiceException;
 
 public class LicenceAuthenticatorImpl implements LicenceAuthenticator {

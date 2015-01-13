@@ -3,10 +3,10 @@ package org.opennms.karaf.productreg.cmd;
 import org.apache.felix.gogo.commands.Argument;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
-import org.opennms.karaf.licencemgr.metadata.ProductMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
 import org.opennms.karaf.productpub.ProductRegister;
 
-@Command(scope = "product-reg", name = "getProductInfo", description="gets product info from  product registry for productId")
+@Command(scope = "product-reg", name = "getproductspec", description="gets product spec from  product registry for productId")
 public class GetRegProductSpecCommand extends OsgiCommandSupport {
 
 	private ProductRegister productRegister;

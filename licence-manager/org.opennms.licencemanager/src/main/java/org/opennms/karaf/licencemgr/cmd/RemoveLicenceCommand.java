@@ -5,7 +5,7 @@ import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.opennms.karaf.licencemgr.LicenceService;
 
-@Command(scope = "licence-mgr", name = "product", description="lists installed licence-mgrs")
+@Command(scope = "licence-mgr", name = "removelicence", description="Removes licence for selected productId")
 public class RemoveLicenceCommand extends OsgiCommandSupport {
 
 	private LicenceService _licenceService;
@@ -18,7 +18,7 @@ public class RemoveLicenceCommand extends OsgiCommandSupport {
 		_licenceService = licenceService;
 	} 
 
-	@Argument(index = 0, name = "productId", description = "Product Id to which licence-mgr applies", required = true, multiValued = false)
+	@Argument(index = 0, name = "productId", description = "ProductId to remove licence", required = true, multiValued = false)
 	String productId = null;
 
 	@Override

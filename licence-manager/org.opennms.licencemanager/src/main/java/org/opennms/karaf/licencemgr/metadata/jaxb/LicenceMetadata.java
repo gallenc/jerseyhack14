@@ -1,4 +1,4 @@
-package org.opennms.karaf.licencemgr.metadata;
+package org.opennms.karaf.licencemgr.metadata.jaxb;
 
 import java.io.StringReader;
 import java.io.StringWriter;
@@ -201,7 +201,7 @@ public class LicenceMetadata {
 	public String toXml(){
 
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(org.opennms.karaf.licencemgr.metadata.ObjectFactory.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(org.opennms.karaf.licencemgr.metadata.jaxb.ObjectFactory.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
 			jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
 			StringWriter stringWriter = new StringWriter();
@@ -220,7 +220,7 @@ public class LicenceMetadata {
 	public void fromXml(String xmlStr){
 
 		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(org.opennms.karaf.licencemgr.metadata.ObjectFactory.class);
+			JAXBContext jaxbContext = JAXBContext.newInstance(org.opennms.karaf.licencemgr.metadata.jaxb.ObjectFactory.class);
 			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			StringReader reader = new StringReader(xmlStr);
 			LicenceMetadata licenceMetadata= (LicenceMetadata) jaxbUnmarshaller.unmarshal(reader);

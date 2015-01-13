@@ -18,7 +18,7 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlAccessType;
 
 import org.opennms.karaf.licencemgr.metadata.Licence;
-import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
 
 @XmlRootElement(name="LicenceServiceData")
 @XmlAccessorType(XmlAccessType.NONE)

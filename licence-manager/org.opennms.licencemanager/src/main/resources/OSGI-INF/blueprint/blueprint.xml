@@ -39,27 +39,27 @@
         <property name="licenceService" ref="licenceServiceImpl" />
       </action>
     </command>
-    <command name="licence-mgr/add">
+    <command name="licence-mgr/addlicence">
       <action class="org.opennms.karaf.licencemgr.cmd.AddLicenceCommand">
         <property name="licenceService" ref="licenceServiceImpl" />
       </action>
     </command>
-    <command name="licence-mgr/remove">
+    <command name="licence-mgr/removelicence">
       <action class="org.opennms.karaf.licencemgr.cmd.RemoveLicenceCommand">
         <property name="licenceService" ref="licenceServiceImpl" />
       </action>
     </command>
-    <command name="licence-mgr/getSystemInstance">
+    <command name="licence-mgr/getsystemid">
       <action class="org.opennms.karaf.licencemgr.cmd.GetSystemInstanceCommand">
         <property name="licenceService" ref="licenceServiceImpl" />
       </action>
     </command>
-    <command name="licence-mgr/setSystemInstance">
+    <command name="licence-mgr/setsystemid">
       <action class="org.opennms.karaf.licencemgr.cmd.SetSystemInstanceCommand">
         <property name="licenceService" ref="licenceServiceImpl" />
       </action>
     </command>
-    <command name="licence-mgr/makeSystemInstance">
+    <command name="licence-mgr/makesystemid">
       <action class="org.opennms.karaf.licencemgr.cmd.MakeSystemInstanceCommand">
         <property name="licenceService" ref="licenceServiceImpl" />
       </action>
@@ -88,34 +88,34 @@
     </command>
 
     <!-- product publisher service commands -->
-    <command name="product-mgr/add">
+    <command name="product-pub/addproductspec">
       <action class="org.opennms.karaf.productpub.cmd.AddProductSpecCommand">
         <property name="productPublisher" ref="productPublisherImpl" />
       </action>
     </command>
-    <command name="product-mgr/getProductInfo">
+    <command name="product-pub/getproductspec">
       <action class="org.opennms.karaf.productpub.cmd.GetProductSpecCommand">
         <property name="productPublisher" ref="productPublisherImpl" />
       </action>
     </command>
-    <command name="product-mgr/list">
+    <command name="product-pub/list">
       <action class="org.opennms.karaf.productpub.cmd.ListProductSpecsCommand">
         <property name="productPublisher" ref="productPublisherImpl" />
       </action>
     </command>
-    <command name="product-mgr/removeProduct">
+    <command name="product-pub/removeproductspec">
       <action class="org.opennms.karaf.productpub.cmd.RemoveProductSpecCommand">
         <property name="productPublisher" ref="productPublisherImpl" />
       </action>
     </command>
 
     <!-- product registry service commands -->
-    <command name="product-reg/add">
+    <command name="product-reg/addproductspec">
       <action class="org.opennms.karaf.productreg.cmd.AddRegProductSpecCommand">
         <property name="productRegister" ref="productRegisterImpl" />
       </action>
     </command>
-    <command name="product-reg/getProductInfo">
+    <command name="product-reg/getproductspec">
       <action class="org.opennms.karaf.productreg.cmd.GetRegProductSpecCommand">
         <property name="productRegister" ref="productRegisterImpl" />
       </action>
@@ -125,11 +125,41 @@
         <property name="productRegister" ref="productRegisterImpl" />
       </action>
     </command>
-    <command name="product-reg/removeProduct">
+    <command name="product-reg/removeproductspec">
       <action class="org.opennms.karaf.productreg.cmd.RemoveRegProductSpecCommand">
         <property name="productRegister" ref="productRegisterImpl" />
       </action>
     </command>
   </command-bundle>
+
+  <!-- ReST Servelet configuration -->
+
+  <service interface="javax.servlet.http.HttpServlet">
+    <service-properties>
+      <entry key="alias" value="/pluginmgr/rest" />
+    </service-properties>
+    <bean class="com.sun.jersey.spi.container.servlet.ServletContainer">
+      <argument ref="licenceManagerRestApplication" />
+    </bean>
+  </service>
+
+  <bean id="licenceManagerRestApplication" class="org.opennms.karaf.licencemgr.rest.LicenceManagerRestApplication" />
+
+  <!-- ServiceLoader(LicenceService licenceService, LicencePublisher licencePublisher, ProductPublisher productPublisher, ProductRegister productRegister ) -->
+  <bean id="serviceLoader" class="org.opennms.karaf.licencemgr.rest.ServiceLoader">
+    <argument ref="licenceServiceImpl" />
+    <argument ref="licencePublisherImpl" />
+    <argument ref="productPublisherImpl" />
+    <argument ref="productRegisterImpl" />
+  </bean>
+  
+  <!-- Maps in the test resource files for serving basic test pages -->
+  <bean id="testResourceMapping" class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
+    <property name="alias" value="/pluginmgr/test" />
+    <property name="path" value="/test" />
+  </bean>
+
+  <service id="testResources" ref="testResourceMapping" interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping" />
+
 
 </blueprint>

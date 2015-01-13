@@ -5,7 +5,7 @@ import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.opennms.karaf.productpub.ProductPublisher;
 
-@Command(scope = "product-mgr", name = "removeProduct", description="removes product description from product manager")
+@Command(scope = "product-pub", name = "removeproductspec", description="removes product specification from product publisher")
 public class RemoveProductSpecCommand extends OsgiCommandSupport {
 
 	private ProductPublisher productPublisher=null;

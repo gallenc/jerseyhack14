@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.opennms.karaf.licencemgr.metadata.ProductMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
 
 public class ProductPublisherImpl implements ProductPublisher, ProductRegister {
 

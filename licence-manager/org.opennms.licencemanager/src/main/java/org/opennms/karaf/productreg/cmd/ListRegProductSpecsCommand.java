@@ -5,7 +5,7 @@ import java.util.Map.Entry;
 
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
-import org.opennms.karaf.licencemgr.metadata.ProductMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
 import org.opennms.karaf.productpub.ProductRegister;
 
 @Command(scope = "product-reg", name = "list", description="lists product specifications installed in product registry")

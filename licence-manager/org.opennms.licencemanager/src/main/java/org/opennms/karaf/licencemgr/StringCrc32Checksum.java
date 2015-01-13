@@ -7,9 +7,9 @@ public class StringCrc32Checksum {
 
 	/**
 	 * Adds a CRC32 encoded string to supplied string separated by '-'
-	 * resulting in string of form <valueString>-<CRC32 in hex>
+	 * resulting in string of form 'valueString'-'CRC32 in hex'
 	 * @param valueString
-	 * @return
+	 * @return original string plus checksum in form 'valueString'-'CRC32 in Hex'
 	 */
 	public String addCRC(String valueString){
 		// make checksum

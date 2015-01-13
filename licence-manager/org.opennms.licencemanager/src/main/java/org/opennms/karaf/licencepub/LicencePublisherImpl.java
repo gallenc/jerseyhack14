@@ -8,8 +8,9 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 import org.opennms.karaf.licencemgr.metadata.Licence;
-import org.opennms.karaf.licencemgr.metadata.LicenceMetadata;
-import org.opennms.karaf.licencemgr.metadata.OptionMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceSpecification;
+import org.opennms.karaf.licencemgr.metadata.jaxb.OptionMetadata;
 
 public class LicencePublisherImpl implements LicencePublisher {
 

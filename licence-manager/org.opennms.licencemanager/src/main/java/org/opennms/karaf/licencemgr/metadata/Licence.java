@@ -5,6 +5,7 @@ import org.opennms.karaf.licencemgr.ClientKeys;
 import org.opennms.karaf.licencemgr.PublisherKeys;
 import org.opennms.karaf.licencemgr.RsaAsymetricKeyCipher;
 import org.opennms.karaf.licencemgr.StringCrc32Checksum;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
 
 
 public class Licence {

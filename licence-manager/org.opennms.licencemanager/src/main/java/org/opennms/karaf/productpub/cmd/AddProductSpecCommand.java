@@ -3,10 +3,10 @@ package org.opennms.karaf.productpub.cmd;
 import org.apache.felix.gogo.commands.Argument;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
-import org.opennms.karaf.licencemgr.metadata.ProductMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
 import org.opennms.karaf.productpub.ProductPublisher;
 
-@Command(scope = "product-mgr", name = "add", description="adds product spec to product publisher for productId")
+@Command(scope = "product-pub", name = "addproductspec", description="Adds product spec to product publisher for productId")
 public class AddProductSpecCommand extends OsgiCommandSupport {
 
 	private ProductPublisher productPublisher;

@@ -3,7 +3,7 @@ package org.opennms.karaf.productpub;
 import java.io.IOException;
 import java.io.InputStream;
 
-import org.opennms.karaf.licencemgr.metadata.ProductMetadata;
+import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
 import org.osgi.framework.Bundle;
 import org.osgi.framework.BundleContext;
 
