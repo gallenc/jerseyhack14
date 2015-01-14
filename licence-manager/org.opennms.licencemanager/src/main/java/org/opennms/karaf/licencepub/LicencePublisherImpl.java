@@ -16,6 +16,9 @@ public class LicencePublisherImpl implements LicencePublisher {
 
 	private SortedMap<String, LicenceSpecification> licenceSpecMap = new TreeMap<String, LicenceSpecification>();
 
+	/**
+	 * @param licenceSpec LicenceSpecification to be added to licence publisher
+	 */
 	@Override
 	public synchronized void addLicenceSpec(LicenceSpecification licenceSpec) {
 		if (licenceSpec==null) throw new IllegalArgumentException("licenceSpec cannot be null");
@@ -40,7 +43,7 @@ public class LicencePublisherImpl implements LicencePublisher {
 	/**
 	 * @param productId
 	 * @return  the LicenceSpecification stored for productId 
-	 * returns null of no LicenceSpecification found for productId 
+	 * returns null if no LicenceSpecification found for productId 
 	 */
 	@Override
 	public synchronized LicenceSpecification getLicenceSpec(String productId) {

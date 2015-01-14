@@ -1,49 +1,212 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
 <title>Licence Manager Test Page</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<!-- https://code.google.com/p/javascriptbase64/ MIT licence -->
+<script src="../test/base64.js"></script>
+<script>
+	function onLoad() {
+		// default values for test page
+		var user = "admin";
+		var password = "admin";
+				
+		var addLicenceSpec ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+		+ "<LicenceSpecification>\n"
+		+ " <productId>org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT</productId>\n"
+		+ " <aesSecretKeyStr>0009AA12B0AB63C9B5760361FADC990D</aesSecretKeyStr>\n"
+		+ " <publicKeyStr>885ffe7c62e1cfa8dca02332d025ad3f9dcc7a08d4882a760ee22a8f71aa5337f9ef60087fddc45c9af2dfd458423119775885d7e4891e2e8be6746d5e037405f92a7c32396c76c868639a81fd553aa896052ca9fc3d0f66627c9cd6fd728931b4b46ec939174ddcec2b60b100339bc4bc37fb2e8fc25e581c128d5cd406d775d26158b66a4e6b80db7e48ccf0ab1a05812840c2d1704861f00cbc42f79482fd35b4f75cd64833e358265592892d65e6d230d078e8b52ef98b5b67e7e14b230f3135579b83953bd11f8b1f433121b47da1513449f27bb06c1ed80cd4d7864fbad5e562f50ff8f36c5e778ec0195628ed56c0daa64985a6a1c3ff96c1dfea99a7-10001</publicKeyStr>\n"
+		+ " <licenceMetadataSpec>\n"
+		+ "   <productId>org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT</productId>\n"
+		+ "   <licensee>Mr Craig Gallen</licensee>\n"
+		+ "   <licensor>OpenNMS UK</licensor>\n"
+		//+ "   <systemId>4ad72a34e3635c1b-99da3323</systemId>\n"
+		//+ "   <startDate>2015-01-07T15:10:45.138Z</startDate>\n"
+		//+ "   <expiryDate>2015-01-07T15:10:45.138Z</expiryDate>\n"
+		+ "   <options>\n"
+		+ "     <option>\n"
+		+ "       <description>this is the description</description>\n"
+		+ "       <name>newname</name>\n"
+		+ "       <value>newvalue</value>\n"
+		+ "     </option>\n"
+		+ "   </options>\n"
+		+ " </licenceMetadataSpec>\n"
+		+ "</LicenceSpecification>\n";
+
+		var addproductMetadata ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+		+ "<product>\n"
+		+ "	<organization>OpenNMS Project</organization>\n"
+		+ "	<productDescription>Test product description</productDescription>\n"
+		+ "	<productId>org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT</productId>\n"
+		+ "	<productName>test Bundle</productName>\n"
+		+ "	<productUrl>http:\\opennms.co.uk</productUrl>\n"
+		+ " <licenceKeyRequired>true</licenceKeyRequired>\n"
+		+ " <licenceType>OpenNMS EULA See http:\\opennms.co.uk\EULA</licenceType>\n"
+		+ "</product>\n"
+		
+		var createlicenceMetadata ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
+			+ "<LicenceMetadata>\n"
+			+ "<productId>org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT</productId>\n"
+			+ "<licensee>Mr Craig Gallen</licensee>\n"
+			+ "<licensor>OpenNMS UK</licensor>\n"
+			+ "<systemId>4ad72a34e3635c1b-99da3323</systemId>\n"
+			+ "<startDate>2015-01-07T15:10:45.138Z</startDate>\n"
+			+ "<expiryDate>2015-01-07T15:10:45.138Z</expiryDate>\n"
+			+ "<options>\n" 
+			+ "  <option>\n"
+			+ "    <description>this is the description</description>\n"
+			+ "    <name>newname</name>\n"
+			+ "    <value>newvalue</value>\n" 
+			+ "  </option>\n"
+			+ " </options>\n" + "</LicenceMetadata>\n";
+
+		document.getElementById('user').value = user;
+		document.getElementById('password').value = password;
+		document.getElementById('createlicenceMetadata').value = createlicenceMetadata;
+		document.getElementById('publishProductMetadata').value = addproductMetadata;
+		document.getElementById('registerProductMetadata').value = addproductMetadata;
+		document.getElementById('addLicenceSpec').value = addLicenceSpec;
+	}
+
+	function sendXMLDoc(postRequest, xmlMessage) {
+
+		//clear response panel
+		document.getElementById("eventResponse").value = "";
+		document.getElementById("httpresponsecode").value = "";
+
+		var user = document.getElementById('user').value;
+		var password = document.getElementById('password').value;
+
+		var xmlhttp;
+		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		} else {// code for IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				document.getElementById("httpresponsecode").value = xmlhttp.status;
+				document.getElementById("eventResponse").value = xmlhttp.responseText;
+			} else if (xmlhttp.readyState == 4) {
+				document.getElementById("httpresponsecode").value = xmlhttp.status;
+				document.getElementById("eventResponse").value = xmlhttp.responseText;
+			}
+		};
+
+		xmlhttp.open("POST", postRequest, true);
+		xmlhttp.setRequestHeader("Content-type", "application/xml");
+		xmlhttp.setRequestHeader("Authorization", "Basic "
+				+ Base64.encode(user + ":" + password));
+		xmlhttp.send(xmlMessage);
+	}
+
+	function publishProductspec() {
+		var postRequest = "../rest/product-pub/addproductspec"
+		var xmlMessage = document.getElementById('publishProductMetadata').value;
+		sendXMLDoc(postRequest, xmlMessage);
+	}
+	
+	function registerProductspec() {
+		var postRequest = "../rest/product-reg/addproductspec"
+		var xmlMessage = document.getElementById('registerProductMetadata').value;
+		sendXMLDoc(postRequest, xmlMessage);
+	}
+
+	function createlicence() { 
+		var postRequest = "../rest/licence-pub/createlicence"
+		var xmlMessage = document.getElementById('createlicenceMetadata').value;
+		sendXMLDoc(postRequest, xmlMessage);
+	}
+
+	function addlicencespec() {
+		var postRequest = "../rest/licence-pub/addlicencespec"
+		var xmlMessage = document.getElementById('addLicenceSpec').value;
+		sendXMLDoc(postRequest, xmlMessage);
+	} 
+</script>
 </head>
-<body>
+<body onload="onLoad()">
 	<h1>Licence Manager Test Page</h1>
 	<p>This page provides very simple tests for the licence manager</p>
 
+	<form name="usrform">
+		<input type="text" id="user"> user (http basic authentication
+		user name)<BR>
+		<input type="text" id="password"> password
+		(http basic authentication password)<BR>
+	</form>
+
+
 	<h2>Product Publisher</h2>
+	<p>The Product Publisher service is used to publish the
+		availability and description of a list of products It is intended to
+		be integrated with a shopping cart or similar web site for publishing
+		product modules</p>
 
 	<table border=1>
+
 		<tr>
-			<td>Command</td>
-			<td>Example</td>
+			<th style="width: 500px">Command</th>
+			<th style="width: 500px">Example</th>
 		</tr>
 		<tr>
-			<td>/addproductspec (POST productMetadata)</td>
-			<td></td>
+			<td>/addproductspec (POST productMetadata)
+				<p>Post command to add a new product specification. Adds a new
+					product specification to the product publisher. Looks for the
+					productId in the product specification and adds an entry in the
+					licence table under that productId. Replaces any previous licence
+					entry</p>
+			</td>
+			<td>
+				<p>Product Specification</p> 
+				<textarea rows="15" cols="100"
+					id="publishProductMetadata" form="usrform" style="resize: none;"></textarea>
+				<button type="button" onclick="publishProductspec()">Publish Product Specification</button>
+			</td>
 		</tr>
 		<tr>
-			<td>/removeproductspec (GET productId)</td>
-			<td></td>
+			<td>/removeproductspec (GET productId)
+				<p>Checks the productId removes any entry for productId</p>
+			</td>
+			<td><a href="../rest/product-pub/removeproductspec?productId=">[baseUrl:port]/pluginmgr/rest/product-pub/removeproductspec?productId=</a>
+			</td>
 		</tr>
 		<tr>
-			<td>/getproductspec (GET productId)</td>
-			<td></td>
-		</tr>
-		<tr>
-			<td>/getproductspec (GET productId)</td>
+			<td>/getproductspec (GET productId)
+				<p>returns product description for productId if found</p>
+			</td>
 			<td><a href="../rest/product-pub/getproductspec?productId=">[baseUrl:port]/pluginmgr/rest/product-pub/getproductspec?productId=</a>
 			</td>
 		</tr>
 		<tr>
-			<td>/list (GET )</td>
+			<td>/list (GET )
+				<p>returns a map of product description entries with
+					key=productId</p>
+			</td>
 			<td><a href="../rest/product-pub/list">[baseUrl:port]/pluginmgr/rest/product-pub/list</a>
 			</td>
 		</tr>
 		<tr>
-			<td>/clearproductspecs (GET )</td>
-			<td></td>
+			<td>/clearproductspecs (GET )
+				<p>Deletes all product descriptions</p>
+			</td>
+			<td><a href="../rest/product-pub/clearproductspecs">[baseUrl:port]/pluginmgr/rest/product-pub/clearproductspecs</a>
+			</td>
 		</tr>
 	</table>
 
 	<h2>Licence Publisher</h2>
+	<p>The Licence Publisher service is used to publish the
+		availability and description of a list of product licence
+		specifications. A licence specification contains the licence metadata
+		and the keys used to create a new licence. A client must first read
+		the licence metadata for a productId and add additional information
+		(systemId, client name etc) before submitting it to create a new
+		licence string The Licence Publisher is intended to be integrated with
+		a shopping cart or similar web site for publishing product modules</p>
 
 	<table border=1>
 		<tr>
@@ -51,50 +214,102 @@
 			<td>Example</td>
 		</tr>
 		<tr>
-			<td>/createlicence (POST licenceMetadata)</td>
-			<td></td>
+			<td>/createlicence (POST licenceMetadata)
+				<p>
+					Creates an encoded String instance of a licence from the supplied
+					licenceMetadata in xml form. Creates an encoded String instance of
+					a licence from the LicenceSecification corresponding to the
+					productId in the supplied createLicenceMetadata throws an exception
+					if the corresponding LicenceSecification cannot be found or the
+					names of options or licencee are different from the specification<BR>
+					Parameter createLicenceMetadata should be created from a copy of
+					the LicenceMetadata in the LicenceSpecfication i.e. it must contain
+					the productId and the options must correspond to the options in the
+					LicenceSpecification
+				</p>
+			</td>
+			<td>
+			<p>Create Licence Metadata</p> 
+				<textarea rows="15" cols="100"
+					id="createlicenceMetadata" form="usrform" style="resize: none;"></textarea>
+				<button type="button" onclick="createlicence()">Create Licence</button>
+			</td>
 		</tr>
 		<tr>
-			<td>/addlicencespec (POST licenceMetadata)</td>
-			<td></td>
+			<td>/addlicencespec (POST LicenceSpecification)
+				<p>Adds a new licence specification to the licence publisher.
+					Looks for the productId in the licence specification and adds an
+					entry in the licence table under that productId. Replaces any
+					previous licence entry</p>
+			</td>
+			<td>
+				<p>licence specification</p> 
+				<textarea rows="15" cols="100"
+					id="addLicenceSpec" form="usrform" style="resize: none;"></textarea>
+				<button type="button" onclick="addlicencespec()">Add Licence Specification</button>
+			</td>
 		</tr>
 		<tr>
-			<td>/removelicencespec (GET productId)</td>
-			<td></td>
+			<td>/removelicencespec (GET productId)
+				<p>removes the entry for productId from the licenceSpecMap</p>
+			</td>
+			<td><a href="../rest/licence-pub/removelicencespec?productId=">[baseUrl:port]/pluginmgr/rest/licence-pub/removelicencespec?productId=</a></td>
 		</tr>
 		<tr>
-			<td>/getlicencespec (GET productId)</td>
+			<td>/getlicencespec (GET productId)
+				<p>the LicenceSpecification stored for productId. returns error
+					message if no LicenceSpecification found for productId</p>
+			</td>
 			<td><a href="../rest/licence-pub/getlicencespec?productId=">[baseUrl:port]/pluginmgr/rest/licence-pub/getlicencespec?productId=</a>
 			</td>
 		</tr>
 		<tr>
-			<td>/list (GET )</td>
+			<td>/list (GET )
+				<p>returns a copy of the map of the LicenceSpecifications
+					ordered by productId</p>
+			</td>
 			<td><a href="../rest/licence-pub/list">[baseUrl:port]/pluginmgr/rest/licence-pub/list</a>
 			</td>
 		</tr>
 		<tr>
-			<td>/clearlicencespecs (GET )</td>
-			<td></td>
+			<td>/clearlicencespecs (GET )
+				<p>deletes all values of the licenceSpecMap</p>
+			</td>
+			<td><a href="../rest/licence-pub/clearlicencespecs">[baseUrl:port]/pluginmgr/rest/licence-pub/clearlicencespecs</a></td>
 		</tr>
 	</table>
 
 	<h2>Product Register</h2>
-
+	<p>The Product Register service is used to list the product modules
+		which have been installed in a given OSGi system. Each newly installed
+		product module registers its product description (productmetadata)
+		with this service</p>
 	<table border=1>
 		<tr>
-			<td>Command</td>
-			<td>Example</td>
+			<th style="width: 500px">Command</th>
+			<th style="width: 500px">Example</th>
 		</tr>
 		<tr>
-			<td>/addproductspec (POST productMetadata)</td>
-			<td></td>
+			<td>/addproductspec (POST productMetadata)
+				<p>Same as command in Product Publisher</p>
+			</td>
+			<td>
+				<p>Product Specification</p> 
+				<textarea rows="15" cols="100"
+					id="registerProductMetadata" form="usrform" style="resize: none;"></textarea>
+				<button type="button" onclick="registerProductspec()">Register Product Specification</button>
+			</td>
 		</tr>
 		<tr>
-			<td>/removeproductspec (GET productId)</td>
-			<td></td>
+			<td>/removeproductspec (GET productId)
+				<p>Same as command in Product Publisher</p>
+			</td>
+			<td><a href="../rest/product-reg/removeproductspec?productId=">[baseUrl:port]/pluginmgr/rest/product-reg/removeproductspec?productId=</a></td>
 		</tr>
 		<tr>
-			<td>/getproductspec (GET productId)</td>
+			<td>/getproductspec (GET productId)
+				<p>Same as command in Product Publisher</p>
+			</td>
 			<td><a href="../rest/product-reg/getproductspec?productId=">[baseUrl:port]/pluginmgr/rest/product-reg/getproductspec?productId=</a>
 			</td>
 		</tr>
@@ -104,58 +319,109 @@
 			</td>
 		</tr>
 		<tr>
-			<td>/clearproductspecs (GET productId)</td>
-			<td></td>
+			<td>/clearproductspecs (GET )
+				<p>Same as command in Product Publisher</p>
+			</td>
+			<td><a href="../rest/product-reg/clearproductspecs">[baseUrl:port]/pluginmgr/rest/product-reg/clearproductspecs</a></td>
 	</table>
 
 	<h2>Licence Manager</h2>
-
+	<p>The Licence Manager service stores the list of licences
+		installed in a given OSGi system. If a product module requires a
+		licence, it must request it from the licence manager service and then
+		verify it using its internal private keys. A product module should not
+		activate if it cannot verify the licence. Licence strings are
+		installed by user clients using the addlicence service. Clients can
+		perform CRUD operations on the licences installed.</p>
+	<p>In addition the Licence manager allows the creation and
+		retrieval of the systemId for the OSGi system. The Licence metadata
+		may specify that a licence is only applicable to a specific systemId</p>
 	<table border=1>
 		<tr>
-			<td>Command</td>
-			<td>Example</td>
+			<th style="width: 500px">Command</th>
+			<th style="width: 500px">Example</th>
 		</tr>
 		<tr>
-			<td>/addlicence (GET licence)</td>
-			<td></td>
+			<td>/addlicence (GET licence)
+				<p>adds a licence to the licence service. throws error if
+					licence string incorrectly formatted licence string must have
+					correct checksum and readable LicenceMetadata the licence is added
+					for productId corresponding to the productId in the LicenceMetadata
+					previous entries for that productId are overwritten</p>
+			</td>
+			<td><a href="../rest/licence-mgr/addlicence?licence=">[baseUrl:port]/pluginmgr/rest/licence-mgr/addlicence?licence=</a></td>
+			</td>
 		</tr>
 		<tr>
-			<td>/removelicence (GET productId)</td>
-			<td></td>
+			<td>/removelicence (GET productId)
+				<p>removes any licence corresponding to productId.</p>
+			</td>
+			<td><a href="../rest/licence-mgr/removelicence?productId=">[baseUrl:port]/pluginmgr/rest/licence-mgr/removelicence?productId=</a></td>
 		</tr>
 		<tr>
-			<td>/getlicence (GET productId)</td>
+			<td>/getlicence (GET productId)
+				<p>gets the licence corresponding to the productId</p>
+			</td>
 			<td><a href="../rest/licence-mgr/getlicence?productId=">[baseUrl:port]/pluginmgr/rest/licence-mgr/getlicence?productId=</a>
 			</td>
 		</tr>
 		<tr>
-			<td>/list (GET )</td>
+			<td>/list (GET )
+				<p>returns a map of all installed licences with key=productId
+					and value = licence string</p>
+			</td>
 			<td><a href="../rest/licence-mgr/list">[baseUrl:port]/pluginmgr/rest/licence-mgr/list</a>
 			</td>
 		</tr>
 		<tr>
-			<td>/clearlicences (GET )</td>
-			<td></td>
+			<td>/clearlicences (GET )
+				<p>deletes all licence entries
+				<p>
+			</td>
+			<td><a href="../rest/licence-mgr/clearlicences">[baseUrl:port]/pluginmgr/rest/licence-mgr/clearlicences</a></td>
 		</tr>
 		<tr>
-			<td>/getsystemid (GET )</td>
-			<td></td>
+			<td>/getsystemid (GET )
+				<p>gets the systemId for this system</p>
+			</td>
+			<td><a href="../rest/licence-mgr/getsystemid">[baseUrl:port]/pluginmgr/rest/licence-mgr/getsystemid</a></td>
 		</tr>
 		<tr>
-			<td>/setsystemid (GET systemId)</td>
-			<td></td>
+			<td>/setsystemid (GET systemId)
+				<p>sets the systemId. Note that the checksum for the systemId
+					must be correct</p>
+			</td>
+			<td><a href="../rest/licence-mgr/setsystemid?systemId=">[baseUrl:port]/pluginmgr/rest/licence-mgr/setsystemid?systemId=</a></td>
 		</tr>
 		<tr>
-			<td>/makesystemid (GET )</td>
-			<td></td>
+			<td>/makesystemid (GET )
+				<p>Makes a new systemId with a random identifier and checksum.
+					Sets the systemId to the newly generated value</p>
+			</td>
+			<td><a href="../rest/licence-mgr/makesystemid">[baseUrl:port]/pluginmgr/rest/licence-mgr/makesystemid</a></td>
 		</tr>
 		<tr>
-			<td>/checksumforstring (GET string)</td>
-			<td></td>
+			<td>/checksumforstring (GET string)
+				<p>
+					Generates a checksum for the supplied string<br> Adds a CRC32
+					encoded string to supplied string separated by '-' resulting in
+					string of form 'valueString'-'CRC32 in Hex'. Paramater string -
+					string to have checkum added. returns original string plus checksum
+					in form 'valueString'-'CRC32 in Hex'
+				</p>
+			</td>
+			<td><a href="../rest/licence-mgr/checksumforstring?string=">[baseUrl:port]/pluginmgr/rest/licence-mgr/checksumforstring?string=</a></td>
 		</tr>
 
 	</table>
 
 
+	<h2>Event Response</h2>
+	<h3>Http response code</h3>
+	<textarea rows="1" cols="10" id="httpresponsecode"
+		style="resize: none;"></textarea>
+	<h3>Http response content</h3>
+	<textarea rows="15" cols="100" id="eventResponse" style="resize: none;"></textarea>
+	<BR>
 </body>
 </html>

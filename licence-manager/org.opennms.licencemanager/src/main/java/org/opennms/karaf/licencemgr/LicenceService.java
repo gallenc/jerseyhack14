@@ -56,7 +56,7 @@ public interface LicenceService {
 	/**
 	 * Makes a new systemId with a random identifier and checksum
 	 * sets the systemId to the newly generated value
-	 * @return
+	 * @return new systemId
 	 */
 	public String makeSystemInstance();
 	
@@ -64,7 +64,7 @@ public interface LicenceService {
 	 * Generates a checksum for the supplied string
 	 * Adds a CRC32 encoded string to supplied string separated by '-' resulting in string of form 
 	 * form 'valueString'-'CRC32 in Hex'
-	 * @param string
+	 * @param string - string to have checkum added
 	 * @return original string plus checksum in form 'valueString'-'CRC32 in Hex'
 	 */
 	public String checksumForString(String string);
