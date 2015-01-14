@@ -1,0 +1,63 @@
+Licence Manager - project completion
+
+test page
+create GET buttons for test page and monitor response to get in window at bottom of page
+get should include form fields for productId etc
+create side window to show response to pressing buttons - presently you need to scroll screen
+
+advanced test page
+page - list products installed (product pub / product reg)
+page - list licences installed (licence pub / licence reg)
+
+page - licence publisher - create licence for licence metadata page
+(1. list licences
+(2. load licence metadata for productid
+(3. create licence for productid - with form for metadata not just xml
+licence manager - install licence for product page
+
+rest interface
+make error messages show stack trace of problems in REST error response message - to see why request failed
+create a licence-pub:get licence metadata (dont want to get the licence spec just metadata)
+make list responses show full type of response message - to make select / cut paste easier
+create renewal time field in licence metadata - to that new licence is created with expiry date = start date + time
+look at licence options - change to numbers - and possibly add value constants or range
+replace rest interface delete GET with DELETE command/ and or ?areyousure=true
+
+command interface
+mirror all commands - delete all commands not mirrored
+
+product installer service
+download foreign published product list (url)
+list foreign published products
+install foreign published products - must install licence first
+list installed products (with licence)
+
+changes to licence keys
+change licence keys to use ClientKeys/ManagerKeys classes (simplifies understanding of api)
+change encryption of licence private key to also use public / private key
+change verification of licence to use signature on metadata not encryption of metadata CRC
+change to use Base64 instead of hex for encoding (shorter licences)
+
+project completion
+create maven licence generator archetype
+add product specific challenge response code for multiple bundle products
+create quality pages for licence installation and product listing - possibly with Vaadin
+see if project can be seperately licenced - APACHE - possibly pax4j - use with multiple OSGi containers
+create public / private repo for licences and modules
+create shopping cart to generate licences
+allow lazy loading of licence manager / product manager interface ( so project can register product spec if able to)
+licence manager shutting down message on removal of manager
+system property for location of licence file ( for OpenNMS / etc )
+
+project
+check project works in windows and unix environment ( encoding)
+sort out jersey bundles - include in Kar or something
+check project works in OpenNMS
+sort out logging - not just System.out
+
+Also to do
+create a module 
+
+
+
+
