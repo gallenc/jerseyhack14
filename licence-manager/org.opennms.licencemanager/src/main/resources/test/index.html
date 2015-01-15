@@ -191,9 +191,9 @@
 		</tr>
 		<tr>
 			<td>/clearproductspecs (GET )
-				<p>Deletes all product descriptions</p>
+				<p>Deletes all product descriptions. Will only delete descriptions if paramater confirm=true</p>
 			</td>
-			<td><a href="../rest/product-pub/clearproductspecs">[baseUrl:port]/pluginmgr/rest/product-pub/clearproductspecs</a>
+			<td><a href="../rest/product-pub/clearproductspecs?confirm=false">[baseUrl:port]/pluginmgr/rest/product-pub/clearproductspecs?confirm=false</a>
 			</td>
 		</tr>
 	</table>
@@ -257,25 +257,39 @@
 		</tr>
 		<tr>
 			<td>/getlicencespec (GET productId)
-				<p>the LicenceSpecification stored for productId. returns error
+				<p>the LicenceSpecification stored for productId. Returns error
 					message if no LicenceSpecification found for productId</p>
 			</td>
 			<td><a href="../rest/licence-pub/getlicencespec?productId=">[baseUrl:port]/pluginmgr/rest/licence-pub/getlicencespec?productId=</a>
 			</td>
 		</tr>
 		<tr>
+			<td>/getlicencemetadataspec (GET productId)
+				<p>the LicenceSpecification stored for productId. Returns error
+					message if no LicenceSpecification found for productId</p>
+			</td>
+			<td><a href="../rest/licence-pub/getlicencemetadataspec?productId=">[baseUrl:port]/pluginmgr/rest/licence-pub/getlicencemetadataspec?productId=</a>
+			</td>
+		</tr>
+		<tr>
+			<td>/listspecs (GET )
+				<p>returns a list of the LicenceSpecifications (including the keys)</p>
+			</td>
+			<td><a href="../rest/licence-pub/listspecs">[baseUrl:port]/pluginmgr/rest/licence-pub/listspecs</a>
+			</td>
+		</tr>
+		<tr>
 			<td>/list (GET )
-				<p>returns a copy of the map of the LicenceSpecifications
-					ordered by productId</p>
+				<p>returns a list of the LicenceMetadata specifications (not the full licence specs with keys)</p>
 			</td>
 			<td><a href="../rest/licence-pub/list">[baseUrl:port]/pluginmgr/rest/licence-pub/list</a>
 			</td>
 		</tr>
 		<tr>
 			<td>/clearlicencespecs (GET )
-				<p>deletes all values of the licenceSpecMap</p>
+				<p>deletes all values of the licenceSpecMap. Will only delete specs if paramater confirm=true</p>
 			</td>
-			<td><a href="../rest/licence-pub/clearlicencespecs">[baseUrl:port]/pluginmgr/rest/licence-pub/clearlicencespecs</a></td>
+			<td><a href="../rest/licence-pub/clearlicencespecs?confirm=false">[baseUrl:port]/pluginmgr/rest/licence-pub/clearlicencespecs?confirm=false</a></td>
 		</tr>
 	</table>
 
@@ -320,9 +334,9 @@
 		</tr>
 		<tr>
 			<td>/clearproductspecs (GET )
-				<p>Same as command in Product Publisher</p>
+				<p>Same as command in Product Publisher.  Will only delete licences if paramater confirm=true</p>
 			</td>
-			<td><a href="../rest/product-reg/clearproductspecs">[baseUrl:port]/pluginmgr/rest/product-reg/clearproductspecs</a></td>
+			<td><a href="../rest/product-reg/clearproductspecs?confirm=false">[baseUrl:port]/pluginmgr/rest/product-reg/clearproductspecs?confirm=false</a></td>
 	</table>
 
 	<h2>Licence Manager</h2>
@@ -350,7 +364,6 @@
 					previous entries for that productId are overwritten</p>
 			</td>
 			<td><a href="../rest/licence-mgr/addlicence?licence=">[baseUrl:port]/pluginmgr/rest/licence-mgr/addlicence?licence=</a></td>
-			</td>
 		</tr>
 		<tr>
 			<td>/removelicence (GET productId)
@@ -375,10 +388,10 @@
 		</tr>
 		<tr>
 			<td>/clearlicences (GET )
-				<p>deletes all licence entries
+				<p>deletes all licence entries. Will only delete licences if paramater confirm=true
 				<p>
 			</td>
-			<td><a href="../rest/licence-mgr/clearlicences">[baseUrl:port]/pluginmgr/rest/licence-mgr/clearlicences</a></td>
+			<td><a href="../rest/licence-mgr/clearlicences?confirm=false">[baseUrl:port]/pluginmgr/rest/licence-mgr/clearlicences?confirm=false</a></td>
 		</tr>
 		<tr>
 			<td>/getsystemid (GET )

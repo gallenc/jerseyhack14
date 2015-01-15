@@ -1,7 +1,9 @@
 Licence Manager - project completion
 
+http://localhost:8181/pluginmgr/test/index.html
+
 test page
-create GET buttons for test page and monitor response to get in window at bottom of page
+* create GET buttons for test page and monitor response to get in window at bottom of page
 get should include form fields for productId etc
 create side window to show response to pressing buttons - presently you need to scroll screen
 
@@ -17,14 +19,15 @@ licence manager - install licence for product page
 
 rest interface
 make error messages show stack trace of problems in REST error response message - to see why request failed
-create a licence-pub:get licence metadata (dont want to get the licence spec just metadata)
-make list responses show full type of response message - to make select / cut paste easier
+DONE * create a licence-pub:get licence metadata (dont want to get the licence spec just metadata)
+* make list responses show full type of response message - to make select / cut paste easier
 create renewal time field in licence metadata - to that new licence is created with expiry date = start date + time
 look at licence options - change to numbers - and possibly add value constants or range
 replace rest interface delete GET with DELETE command/ and or ?areyousure=true
+check licence metadata includes / does not include licencee info etc
 
 command interface
-mirror all commands - delete all commands not mirrored
+mirror all commands - 'delete all' commands not mirrored
 
 product installer service
 download foreign published product list (url)
@@ -39,15 +42,19 @@ change verification of licence to use signature on metadata not encryption of me
 change to use Base64 instead of hex for encoding (shorter licences)
 
 project completion
-create maven licence generator archetype
+* create maven licence generator archetype
 add product specific challenge response code for multiple bundle products
 create quality pages for licence installation and product listing - possibly with Vaadin
 see if project can be seperately licenced - APACHE - possibly pax4j - use with multiple OSGi containers
-create public / private repo for licences and modules
-create shopping cart to generate licences
+* add licence headers
+
 allow lazy loading of licence manager / product manager interface ( so project can register product spec if able to)
 licence manager shutting down message on removal of manager
-system property for location of licence file ( for OpenNMS / etc )
+* system property for location of licence file ( for OpenNMS / etc )
+
+proof of concept
+create public / private repo for licences and modules
+create shopping cart to generate licences
 
 project
 check project works in windows and unix environment ( encoding)
@@ -56,7 +63,7 @@ check project works in OpenNMS
 sort out logging - not just System.out
 
 Also to do
-create a module 
+create a module - ideally config extension module / add reports module
 
 
 

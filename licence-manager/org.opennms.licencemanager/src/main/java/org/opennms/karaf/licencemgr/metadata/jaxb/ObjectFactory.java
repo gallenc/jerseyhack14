@@ -30,17 +30,17 @@ public class ObjectFactory {
     }
     
     /**
-     * Create an instance of {@link ProductSpecMap }
+     * Create an instance of {@link ProductSpecList }
      */
-    public ProductSpecMap createProductSpecMap() {
-        return new ProductSpecMap();
+    public ProductSpecList createProductSpecList() {
+        return new ProductSpecList();
     }
     
     /**
-     * Create an instance of {@link LicenceMap }
+     * Create an instance of {@link LicenceList }
      */
-    public LicenceMap createLicenceMap() {
-        return new LicenceMap();
+    public LicenceList createLicenceList() {
+        return new LicenceList();
     }
     
     /**
@@ -51,10 +51,17 @@ public class ObjectFactory {
     }
     
     /**
-     * Create an instance of {@link LicenceSpecMap }
+     * Create an instance of {@link LicenceSpecList }
      */
-    public LicenceSpecMap createLicenceSpecMap() {
-        return new LicenceSpecMap();
+    public LicenceSpecList createLicenceSpecList() {
+        return new LicenceSpecList();
+    }
+    
+    /**
+     * Create an instance of {@link LicenceSpecList }
+     */
+    public LicenceMetadataList createLicenceMetadataList() {
+        return new LicenceMetadataList();
     }
     
     /**
@@ -62,6 +69,20 @@ public class ObjectFactory {
      */
     public ErrorMessage createErrorMessage() {
         return new ErrorMessage();
+    }
+    
+    /**
+     * Create an instance of {@link ReplyMessage }
+     */
+    public ReplyMessage createReplyMessage() {
+        return new ReplyMessage();
+    }
+    
+    /**
+     * Create an instance of {@link LicenceEntry }
+     */
+    public LicenceEntry createLicenceEntry() {
+        return new LicenceEntry();
     }
     
 }

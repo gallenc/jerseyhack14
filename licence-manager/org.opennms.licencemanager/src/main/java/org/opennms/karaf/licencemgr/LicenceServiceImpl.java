@@ -1,7 +1,6 @@
 package org.opennms.karaf.licencemgr;
 
 import java.io.File;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
 import java.util.SortedMap;
@@ -121,6 +120,11 @@ public class LicenceServiceImpl implements LicenceService {
 		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
 		return stringCrc32Checksum.addCRC(valueString);
 	}
+	
+	@Override
+	public synchronized void deleteLicences() {
+		licenceMap.clear();
+	}
 
 	public synchronized void persist(){
 		if (fileUri==null) throw new RuntimeException("fileUri must be set for licence manager");
@@ -142,9 +146,14 @@ public class LicenceServiceImpl implements LicenceService {
 		}
 	}
 
+	/**
+	 * blueprint init-method
+	 */
 	public synchronized void load(){
 		if (fileUri==null) throw new RuntimeException("fileUri must be set for licence manager");
+		System.out.println("Licence Manager Starting");
 
+		//TODO CREATE ROLLING FILE TO AVOID CORRUPTED LICENCES
 		try {
 
 			File licenceManagerFile = new File(fileUri);
@@ -164,15 +173,19 @@ public class LicenceServiceImpl implements LicenceService {
 			}
 			System.out.println("Licence Manager Started");
 		} catch (JAXBException e) {
+			System.out.println("Licence Manager Problem Starting: "+ e.getMessage());
 			throw new RuntimeException("Problem loading Licence Manager Data",e);
 		}
 	}
-
-	@Override
-	public synchronized void deleteLicences() {
-		licenceMap.clear();
-		
+	
+	/**
+	 * blueprint destroy-method
+	 */
+	public synchronized void close() {
+		System.out.println("Licence Manager Shutting Down ");
 	}
+
+
 
 
 

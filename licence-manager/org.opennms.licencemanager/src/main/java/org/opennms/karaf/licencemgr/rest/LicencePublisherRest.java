@@ -1,5 +1,6 @@
 package org.opennms.karaf.licencemgr.rest;
 
+import java.util.Collection;
 import java.util.Map;
 
 import javax.ws.rs.Consumes;
@@ -13,7 +14,8 @@ import javax.ws.rs.core.Response;
 
 import org.opennms.karaf.licencemgr.metadata.jaxb.ErrorMessage;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
-import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceSpecMap;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadataList;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceSpecList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceSpecification;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ReplyMessage;
 import org.opennms.karaf.licencepub.LicencePublisher;
@@ -33,9 +35,9 @@ public class LicencePublisherRest {
 		try{
 			if (licenceSpec == null) throw new RuntimeException("licenceSpec cannot be null.");
 			licencePublisher.addLicenceSpec(licenceSpec);
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to add licence specification", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to add licence specification", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
@@ -59,9 +61,9 @@ public class LicencePublisherRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			removed = licencePublisher.removeLicenceSpec(productId);
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to remove licence specification", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to remove licence specification", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
@@ -89,9 +91,9 @@ public class LicencePublisherRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			licenceSpec = licencePublisher.getLicenceSpec(productId);
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get licence specification", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get licence specification", null, exception)).build();
 		}
 		
 		ReplyMessage reply= new ReplyMessage();
@@ -105,13 +107,45 @@ public class LicencePublisherRest {
 		
 		return Response
 				.status(200).entity(reply).build();
+	}
+	
+	/**
+	 * @return licence metadata spec (not the full license spec)
+	 */
+	@GET
+	@Path("/getlicencemetadataspec")
+	@Produces(MediaType.APPLICATION_XML)
+	public Response getLicenceMetadata(@QueryParam("productId") String productId){
 
+		LicencePublisher licencePublisher= ServiceLoader.getLicencePublisher();
+		if (licencePublisher == null) throw new RuntimeException("ServiceLoader.getLicencePublisher() cannot be null.");
+
+		LicenceSpecification licenceSpec=null;
+		try{
+			if (productId == null) throw new RuntimeException("productId cannot be null.");
+			licenceSpec = licencePublisher.getLicenceSpec(productId);
+		} catch (Exception exception){
+			//return status 400 Error
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get licence specification", null, exception)).build();
+		}
+		
+		ReplyMessage reply= new ReplyMessage();
+		if (licenceSpec==null) {
+			reply.setReplyComment("Licence Metadata Spec not found for productId="+productId);
+			reply.setLicenceMetadata(null);
+		} else {
+			reply.setReplyComment("Licence Metadata Spec found for productId="+productId);
+			reply.setLicenceMetadata(licenceSpec.getLicenceMetadataSpec());
+		}
+		
+		return Response
+				.status(200).entity(reply).build();
 	}
 	
 	@GET
-	@Path("/list")
+	@Path("/listspecs")
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getLicenceSpecMap(){
+	public Response getLicenceSpecList(){
 
 		LicencePublisher licencePublisher= ServiceLoader.getLicencePublisher();
 		if (licencePublisher == null) throw new RuntimeException("ServiceLoader.getLicencePublisher() cannot be null.");
@@ -119,16 +153,49 @@ public class LicencePublisherRest {
 		Map<String, LicenceSpecification> lcnceSpecMap=null;
 		try{
 			lcnceSpecMap = licencePublisher.getLicenceSpecMap();
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get licence specification map", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get licence specification map", null, exception)).build();
 		}
 		
-		LicenceSpecMap licenceSpecMap= new LicenceSpecMap();
-		licenceSpecMap.getLicenceSpecMap().putAll(lcnceSpecMap);
+		LicenceSpecList licenceSpecList= new LicenceSpecList();
+		licenceSpecList.getLicenceSpecList().addAll(lcnceSpecMap.values());
 		
 		return Response
-				.status(200).entity(licenceSpecMap).build();
+				.status(200).entity(licenceSpecList).build();
+
+	}
+
+	
+	/**
+	 * @return list of licence metadata specs (not the full license spec)
+	 */
+	@GET
+	@Path("/list")
+	@Produces(MediaType.APPLICATION_XML)
+	public Response getLicenceMetadataList(){
+
+		LicencePublisher licencePublisher= ServiceLoader.getLicencePublisher();
+		if (licencePublisher == null) throw new RuntimeException("ServiceLoader.getLicencePublisher() cannot be null.");
+
+		Map<String, LicenceSpecification> lcnceSpecMap=null;
+		try{
+			lcnceSpecMap = licencePublisher.getLicenceSpecMap();
+		} catch (Exception exception){
+			//return status 400 Error
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get licence specification map", null, exception)).build();
+		}
+		
+		LicenceMetadataList licenceMetadataList= new LicenceMetadataList();
+		
+		Collection<LicenceSpecification> licenceSpecs = lcnceSpecMap.values();
+		for(LicenceSpecification lspec:licenceSpecs){
+			LicenceMetadata licenceMetadataSpec = lspec.getLicenceMetadataSpec();
+			licenceMetadataList.getLicenceMetadataList().add(licenceMetadataSpec);
+		}
+		
+		return Response
+				.status(200).entity(licenceMetadataList).build();
 
 	}
 	
@@ -136,16 +203,17 @@ public class LicencePublisherRest {
 	@GET
 	@Path("/clearlicencespecs")
 	@Produces(MediaType.APPLICATION_XML)
-	public Response deleteLicenceSpecifications(){
+	public Response deleteLicenceSpecifications(@QueryParam("confirm") String confirm){
 
 		LicencePublisher licencePublisher= ServiceLoader.getLicencePublisher();
 		if (licencePublisher == null) throw new RuntimeException("ServiceLoader.getLicencePublisher() cannot be null.");
 
 		try{
+			if (!"true".equals(confirm)) throw new IllegalArgumentException("Will only delete specs if paramater confirm=true");
 			licencePublisher.deleteLicenceSpecifications();
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to delete licence specifications", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to delete licence specifications", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
@@ -169,9 +237,9 @@ public class LicencePublisherRest {
 		try{
 			if (licenceMetadata == null) throw new RuntimeException("licenceMetadata cannot be null.");
 			licenceInstanceStr = licencePublisher.createLicenceInstanceStr(licenceMetadata);
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to create licence instance", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to create licence instance", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();

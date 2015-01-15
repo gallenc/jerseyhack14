@@ -1,6 +1,5 @@
 package org.opennms.karaf.licencepub;
 
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -128,5 +127,6 @@ public class LicencePublisherImpl implements LicencePublisher {
         licenceMetadata.fromXml(licenceMetadataXml);
         return createLicenceInstanceStr(licenceMetadata);
 	}
+
 
 }

@@ -33,13 +33,16 @@ public class ListProductSpecsCommand extends OsgiCommandSupport {
 			System.out.println("list of product specifications");
 
 			Map<String, ProductMetadata> productSpecMap = getProductPublisher().getProductDescriptionMap();
+			
 			for (Entry<String, ProductMetadata> entry : productSpecMap.entrySet()){
 				
 				ProductMetadata productSpecification = entry.getValue();
 				
-				System.out.println("  productId='"+entry.getKey()+"'\n"
-						+ "      productMetadata='"+productSpecification.toXml()+"'\n");
+				System.out.println("***********\n"
+						+ "  productId='"+entry.getKey()+"'\n"
+						+ "  productMetadata='"+productSpecification.toXml()+"'\n");
 				}
+			System.out.println("***********\n");
 		} catch (Exception e) {
 			System.out.println("Error getting list of installed licence specifications. Exception="+e);
 		}

@@ -3,7 +3,7 @@
   <!-- licence manager -->
   <service ref="licenceServiceImpl" interface="org.opennms.karaf.licencemgr.LicenceService" />
 
-  <bean id="licenceServiceImpl" class="org.opennms.karaf.licencemgr.LicenceServiceImpl" init-method="load">
+  <bean id="licenceServiceImpl" class="org.opennms.karaf.licencemgr.LicenceServiceImpl" init-method="load" destroy-method="close">
     <property name="fileUri" value="./licenceService.xml" /> <!-- TODO replace with properties loader -->
   </bean>
 
@@ -71,17 +71,27 @@
     </command>
 
     <!-- licence publisher service commands -->
-    <command name="licence-pub/createLicence">
+    <command name="licence-pub/createlicence">
       <action class="org.opennms.karaf.licencepub.cmd.CreateLicenceCommand">
         <property name="licencePublisher" ref="licencePublisherImpl" />
       </action>
     </command>
-    <command name="licence-pub/list">
+    <command name="licence-pub/listspecs">
       <action class="org.opennms.karaf.licencepub.cmd.ListLicenceSpecsCommand">
         <property name="licencePublisher" ref="licencePublisherImpl" />
       </action>
     </command>
-    <command name="licence-pub/getLicenceSpec">
+    <command name="licence-pub/list">
+      <action class="org.opennms.karaf.licencepub.cmd.ListLicenceMetadataCommand">
+        <property name="licencePublisher" ref="licencePublisherImpl" />
+      </action>
+    </command>
+    <command name="licence-pub/getlicencemetadata">
+      <action class="org.opennms.karaf.licencepub.cmd.GetLicenceMetadataCommand">
+        <property name="licencePublisher" ref="licencePublisherImpl" />
+      </action>
+    </command>
+    <command name="licence-pub/getlicencespec">
       <action class="org.opennms.karaf.licencepub.cmd.GetLicenceSpecCommand">
         <property name="licencePublisher" ref="licencePublisherImpl" />
       </action>
@@ -152,7 +162,7 @@
     <argument ref="productPublisherImpl" />
     <argument ref="productRegisterImpl" />
   </bean>
-  
+
   <!-- Maps in the test resource files for serving basic test pages -->
   <bean id="testResourceMapping" class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
     <property name="alias" value="/pluginmgr/test" />

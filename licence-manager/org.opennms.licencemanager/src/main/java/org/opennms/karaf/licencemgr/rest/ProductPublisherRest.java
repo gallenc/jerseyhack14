@@ -12,8 +12,9 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.opennms.karaf.licencemgr.metadata.jaxb.ErrorMessage;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceSpecList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
-import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecMap;
+import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ReplyMessage;
 import org.opennms.karaf.productpub.ProductPublisher;
 
@@ -32,9 +33,9 @@ public class ProductPublisherRest {
 		try{
 			if (productMetadata == null) throw new RuntimeException("productMetadata cannot be null.");
 			productPublisher.addProductDescription(productMetadata);
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to add product description", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to add product description", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
@@ -60,9 +61,9 @@ public class ProductPublisherRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			removed = productPublisher.removeProductDescription(productId);
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to remove product description", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to remove product description", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
@@ -90,9 +91,9 @@ public class ProductPublisherRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			productDescription = productPublisher.getProductDescription(productId);
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get product description", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get product description", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
@@ -113,7 +114,7 @@ public class ProductPublisherRest {
 	@GET
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_XML)
-	public Response getProductDescriptionMap(){
+	public Response getProductDescriptionList(){
 
 		ProductPublisher productPublisher= ServiceLoader.getProductPublisher();
 		if (productPublisher == null) throw new RuntimeException("ServiceLoader.getProductPublisher cannot be null.");
@@ -121,32 +122,33 @@ public class ProductPublisherRest {
 		Map<String, ProductMetadata> productDescrMap=null;
 		try{
 			productDescrMap = productPublisher.getProductDescriptionMap();
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get product description map", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get product description map", null, exception)).build();
 		}
 
-		ProductSpecMap productDescriptionMap = new ProductSpecMap();
-		productDescriptionMap.getProductSpecMap().putAll(productDescrMap);
+		ProductSpecList productSpecList= new ProductSpecList();
+		productSpecList.getProductSpecList().addAll(productDescrMap.values());
 
 		return Response
-				.status(200).entity(productDescriptionMap).build();
+				.status(200).entity(productSpecList).build();
 
 	}
 
 	@GET
 	@Path("/clearproductspecs")
 	@Produces(MediaType.APPLICATION_XML)
-	public Response deleteProductDescriptions(){
+	public Response deleteProductDescriptions(@QueryParam("confirm") String confirm){
 
 		ProductPublisher productPublisher= ServiceLoader.getProductPublisher();
 		if (productPublisher == null) throw new RuntimeException("ServiceLoader.getProductPublisher cannot be null.");
 
 		try{
+			if (!"true".equals(confirm)) throw new IllegalArgumentException("Will only delete specs if paramater confirm=true");
 			productPublisher.deleteProductDescriptions();
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to delete product descriptions", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to delete product descriptions", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();

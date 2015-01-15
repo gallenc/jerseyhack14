@@ -37,9 +37,11 @@ public class ListRegProductSpecsCommand extends OsgiCommandSupport {
 				
 				ProductMetadata productSpecification = entry.getValue();
 				
-				System.out.println("  productId='"+entry.getKey()+"'\n"
-						+ "      productMetadata='"+productSpecification.toXml()+"'\n");
+				System.out.println("***********\n"
+						+ "  productId='"+entry.getKey()+"'\n"
+						+ "  productMetadata='"+productSpecification.toXml()+"'\n");
 				}
+			System.out.println("***********\n");
 		} catch (Exception e) {
 			System.out.println("Error getting list of installed licence specifications. Exception="+e);
 		}

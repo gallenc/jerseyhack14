@@ -2,6 +2,7 @@ package org.opennms.karaf.licencemgr.rest;
 
 
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
@@ -14,7 +15,8 @@ import javax.ws.rs.core.Response;
 import org.opennms.karaf.licencemgr.LicenceService;
 import org.opennms.karaf.licencemgr.metadata.Licence;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ErrorMessage;
-import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMap;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceEntry;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ReplyMessage;
 
 
@@ -38,9 +40,9 @@ public class LicenceServiceRest {
 		try{
 			if (licence == null) throw new RuntimeException("Licence cannot be null.");
 			licenceService.addLicence(licence);
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to add licence", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to add licence", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
@@ -65,9 +67,9 @@ public class LicenceServiceRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			removed = licenceService.removeLicence(productId);
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to remove licence", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to remove licence", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
@@ -94,9 +96,9 @@ public class LicenceServiceRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			licence = licenceService.getLicence(productId);
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot get licence", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot get licence", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
@@ -124,16 +126,22 @@ public class LicenceServiceRest {
 		Map<String, String> licenceMap=null;
 		try{
 			licenceMap = licenceService.getLicenceMap();
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot get licence map", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot get licence map", null, exception)).build();
 		}
 
-		LicenceMap licenceMapResponse= new LicenceMap();
-		licenceMapResponse.getLicenceMap().putAll(licenceMap);
+		LicenceList licenceListResponse= new LicenceList();
+		
+		for (Entry<String, String> entry:licenceMap.entrySet()){
+			LicenceEntry licenceEntry = new LicenceEntry();
+			licenceEntry.setProductId(entry.getKey());
+			licenceEntry.setLicenceStr(entry.getValue());
+			licenceListResponse.getLicenceList().add(licenceEntry);
+		}
 		
 		return Response
-				.status(200).entity(licenceMapResponse).build();
+				.status(200).entity(licenceListResponse).build();
 
 	}
 
@@ -141,16 +149,17 @@ public class LicenceServiceRest {
 	@GET
 	@Path("/clearlicences")
 	@Produces(MediaType.APPLICATION_XML)
-	public Response deleteLicences(){
+	public Response deleteLicences(@QueryParam("confirm") String confirm){
 
 		LicenceService licenceService= ServiceLoader.getLicenceService();
 		if (licenceService == null)	throw new RuntimeException("ServiceLoader.getLicenceService() cannot be null.");
 
 		try{
+			if (!"true".equals(confirm)) throw new IllegalArgumentException("Will only delete licences if paramater confirm=true");
 			licenceService.deleteLicences();
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot delete licences", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot delete licences", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
@@ -174,9 +183,9 @@ public class LicenceServiceRest {
 		String systemId=null;
 		try{
 			systemId = licenceService.getSystemId();
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot get systemId", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot get systemId", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
@@ -200,9 +209,9 @@ public class LicenceServiceRest {
 		try{
 			if (systemId == null) throw new RuntimeException("systemId cannot be null.");
 			licenceService.setSystemId(systemId);
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot set systemId", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot set systemId", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
@@ -225,9 +234,9 @@ public class LicenceServiceRest {
 		String systemId=null;
 		try{
 			systemId= licenceService.makeSystemInstance();
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot make system instance", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot make system instance", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
@@ -241,8 +250,7 @@ public class LicenceServiceRest {
 
 	@GET
 	@Path("/checksumforstring")
-	@Produces(MediaType.TEXT_PLAIN)
-	@Consumes(MediaType.TEXT_PLAIN)
+	@Produces(MediaType.APPLICATION_XML)
 	public Response checksumForString(@QueryParam("string") String string){
 		
 		LicenceService licenceService= ServiceLoader.getLicenceService();
@@ -252,9 +260,9 @@ public class LicenceServiceRest {
 		try{
 			if (string == null) throw new RuntimeException("string cannot be null.");
 			checksum= licenceService.checksumForString(string);
-		} catch (Exception e){
+		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot generate checksum for string", null, e.getMessage())).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot generate checksum for string", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
