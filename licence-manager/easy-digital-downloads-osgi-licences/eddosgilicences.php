@@ -28,6 +28,9 @@ require_once( 'includes/lib/class-eddosgilicences-admin-api.php' );
 require_once( 'includes/lib/class-eddosgilicences-post-type.php' );
 require_once( 'includes/lib/class-eddosgilicences-taxonomy.php' );
 
+// load page templates
+require_once( 'includes/lib/class-eddosgilicences-page-templates.php' );
+
 /**
  * Returns the main instance of eddOsgiLicences to prevent the need to use globals.
  *
