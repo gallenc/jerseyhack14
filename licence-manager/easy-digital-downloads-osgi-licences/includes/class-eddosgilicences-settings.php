@@ -5,7 +5,7 @@ class eddOsgiLicences_Settings {
 	
 	/**
 	 * The single instance of eddOsgiLicences_Settings.
-	 * 
+	 *
 	 * @var object
 	 * @access private
 	 * @since 1.0.0
@@ -14,7 +14,7 @@ class eddOsgiLicences_Settings {
 	
 	/**
 	 * The main plugin object.
-	 * 
+	 *
 	 * @var object
 	 * @access public
 	 * @since 1.0.0
@@ -23,7 +23,7 @@ class eddOsgiLicences_Settings {
 	
 	/**
 	 * Prefix for plugin settings.
-	 * 
+	 *
 	 * @var string
 	 * @access public
 	 * @since 1.0.0
@@ -32,7 +32,7 @@ class eddOsgiLicences_Settings {
 	
 	/**
 	 * Available settings for plugin.
-	 * 
+	 *
 	 * @var array
 	 * @access public
 	 * @since 1.0.0
@@ -70,7 +70,7 @@ class eddOsgiLicences_Settings {
 	
 	/**
 	 * Initialise settings
-	 * 
+	 *
 	 * @return void
 	 */
 	public function init_settings() {
@@ -79,7 +79,7 @@ class eddOsgiLicences_Settings {
 	
 	/**
 	 * Add settings page to admin menu
-	 * 
+	 *
 	 * @return void
 	 */
 	public function add_menu_item() {
@@ -95,7 +95,7 @@ class eddOsgiLicences_Settings {
 	
 	/**
 	 * Load settings JS & CSS
-	 * 
+	 *
 	 * @return void
 	 */
 	public function settings_assets() {
@@ -118,7 +118,7 @@ class eddOsgiLicences_Settings {
 	
 	/**
 	 * Add settings link to plugin list table
-	 * 
+	 *
 	 * @param array $links
 	 *        	Existing links
 	 * @return array Modified links
@@ -131,7 +131,7 @@ class eddOsgiLicences_Settings {
 	
 	/**
 	 * Build settings fields
-	 * 
+	 *
 	 * @return array Fields to be displayed on settings page
 	 */
 	private function settings_fields() {
@@ -141,132 +141,142 @@ class eddOsgiLicences_Settings {
 				'fields' => array (
 						array (
 								'id' => 'osgi_username',
-								'label' => __ ( 'Some Text', 'eddosgilicences' ),
-								'description' => __ ( 'Username (basic authentication) for sending ReST request to OSGi licence manager.', 'eddosgilicences' ),
+								'label' => __ ( 'username', 'eddosgilicences' ),
+								'description' => __ ( 'Username (basic authentication) for sending ReST request to OSGi Licence Publisher Service (default=admin).', 'eddosgilicences' ),
 								'type' => 'text',
-								'default' => '',
+								'default' => 'admin',
 								'placeholder' => __ ( 'admin', 'eddosgilicences' ) 
 						),
 						array (
-								'id' => 'osgi_password_field',
+								'id' => 'osgi_password',
 								'label' => __ ( 'password', 'eddosgilicences' ),
-								'description' => __ ( 'Password (basic authentication) for sending ReST request to OSGi licence manager.', 'eddosgilicences' ),
+								'description' => __ ( 'Password (basic authentication) for sending ReST request to OSGi Licence Publisher Service (default=admin).', 'eddosgilicences' ),
 								'type' => 'password',
-								'default' => '',
+								'default' => 'admin',
 								'placeholder' => __ ( 'admin', 'eddosgilicences' ) 
 						),
 						array (
-								'id' => 'osgi_licence-pub_url',
+								'id' => 'osgi_licence_pub_url',
 								'label' => __ ( 'OSGi Licence Publisher URL', 'eddosgilicences' ),
-								'description' => __ ( 'URL for OSGi Licence Publisher. (http://domain_name:port)', 'eddosgilicences' ),
+								'description' => __ ( 'URL for OSGi Licence Publisher Service. (http://domain_name:port)', 'eddosgilicences' ),
 								'type' => 'text',
-								'default' => '',
-								'placeholder' => __ ( 'http://', 'eddosgilicences' ) 
-						)
-				)
-				// array(
-				// 'id' => 'text_field',
-				// 'label' => __( 'Some Text' , 'eddosgilicences' ),
-				// 'description' => __( 'This is a standard text field.', 'eddosgilicences' ),
-				// 'type' => 'text',
-				// 'default' => '',
-				// 'placeholder' => __( 'Placeholder text', 'eddosgilicences' )
-				// ),
-				// array(
-				// 'id' => 'password_field',
-				// 'label' => __( 'A Password' , 'eddosgilicences' ),
-				// 'description' => __( 'This is a standard password field.', 'eddosgilicences' ),
-				// 'type' => 'password',
-				// 'default' => '',
-				// 'placeholder' => __( 'Placeholder text', 'eddosgilicences' )
-				// ),
-				// array(
-				// 'id' => 'secret_text_field',
-				// 'label' => __( 'Some Secret Text' , 'eddosgilicences' ),
-				// 'description' => __( 'This is a secret text field - any data saved here will not be displayed after the page has reloaded, but it will be saved.', 'eddosgilicences' ),
-				// 'type' => 'text_secret',
-				// 'default' => '',
-				// 'placeholder' => __( 'Placeholder text', 'eddosgilicences' )
-				// ),
-				// array(
-				// 'id' => 'text_block',
-				// 'label' => __( 'A Text Block' , 'eddosgilicences' ),
-				// 'description' => __( 'This is a standard text area.', 'eddosgilicences' ),
-				// 'type' => 'textarea',
-				// 'default' => '',
-				// 'placeholder' => __( 'Placeholder text for this textarea', 'eddosgilicences' )
-				// ),
-				// array(
-				// 'id' => 'single_checkbox',
-				// 'label' => __( 'An Option', 'eddosgilicences' ),
-				// 'description' => __( 'A standard checkbox - if you save this option as checked then it will store the option as \'on\', otherwise it will be an empty string.', 'eddosgilicences' ),
-				// 'type' => 'checkbox',
-				// 'default' => ''
-				// ),
-				// array(
-				// 'id' => 'select_box',
-				// 'label' => __( 'A Select Box', 'eddosgilicences' ),
-				// 'description' => __( 'A standard select box.', 'eddosgilicences' ),
-				// 'type' => 'select',
-				// 'options' => array( 'drupal' => 'Drupal', 'joomla' => 'Joomla', 'wordpress' => 'WordPress' ),
-				// 'default' => 'wordpress'
-				// ),
-				// array(
-				// 'id' => 'radio_buttons',
-				// 'label' => __( 'Some Options', 'eddosgilicences' ),
-				// 'description' => __( 'A standard set of radio buttons.', 'eddosgilicences' ),
-				// 'type' => 'radio',
-				// 'options' => array( 'superman' => 'Superman', 'batman' => 'Batman', 'ironman' => 'Iron Man' ),
-				// 'default' => 'batman'
-				// ),
-				// array(
-				// 'id' => 'multiple_checkboxes',
-				// 'label' => __( 'Some Items', 'eddosgilicences' ),
-				// 'description' => __( 'You can select multiple items and they will be stored as an array.', 'eddosgilicences' ),
-				// 'type' => 'checkbox_multi',
-				// 'options' => array( 'square' => 'Square', 'circle' => 'Circle', 'rectangle' => 'Rectangle', 'triangle' => 'Triangle' ),
-				// 'default' => array( 'circle', 'triangle' )
-				// )
-				 
-		);
+								'default' => 'http://localhost:8181',
+								'placeholder' => __ ( 'http://localhost:8181', 'eddosgilicences' ) 
+						),
+						array (
+						       // if you save this option as checked then it will store the option as \'on\', otherwise it will be an empty string.
+								'id' => 'osgi_debug',
+								'label' => __ ( 'Enable Plugin Debugging', 'eddosgilicences' ),
+								'description' => __ ( 'Turning on this setting will allow you to see debug messages when licence pages are being displayed', 'eddosgilicences' ),
+								'type' => 'checkbox',
+								'default' => '' 
+						) 
+				) 
+		)
+		// array(
+		// 'id' => 'text_field',
+		// 'label' => __( 'Some Text' , 'eddosgilicences' ),
+		// 'description' => __( 'This is a standard text field.', 'eddosgilicences' ),
+		// 'type' => 'text',
+		// 'default' => '',
+		// 'placeholder' => __( 'Placeholder text', 'eddosgilicences' )
+		// ),
+		// array(
+		// 'id' => 'password_field',
+		// 'label' => __( 'A Password' , 'eddosgilicences' ),
+		// 'description' => __( 'This is a standard password field.', 'eddosgilicences' ),
+		// 'type' => 'password',
+		// 'default' => '',
+		// 'placeholder' => __( 'Placeholder text', 'eddosgilicences' )
+		// ),
+		// array(
+		// 'id' => 'secret_text_field',
+		// 'label' => __( 'Some Secret Text' , 'eddosgilicences' ),
+		// 'description' => __( 'This is a secret text field - any data saved here will not be displayed after the page has reloaded, but it will be saved.', 'eddosgilicences' ),
+		// 'type' => 'text_secret',
+		// 'default' => '',
+		// 'placeholder' => __( 'Placeholder text', 'eddosgilicences' )
+		// ),
+		// array(
+		// 'id' => 'text_block',
+		// 'label' => __( 'A Text Block' , 'eddosgilicences' ),
+		// 'description' => __( 'This is a standard text area.', 'eddosgilicences' ),
+		// 'type' => 'textarea',
+		// 'default' => '',
+		// 'placeholder' => __( 'Placeholder text for this textarea', 'eddosgilicences' )
+		// ),
+		// array( // osgipub_osgi_debug
+		// 'id' => 'single_checkbox',
+		// 'label' => __( 'An Option', 'eddosgilicences' ),
+		// 'description' => __( 'A standard checkbox - if you save this option as checked then it will store the option as \'on\', otherwise it will be an empty string.', 'eddosgilicences' ),
+		// 'type' => 'checkbox',
+		// 'default' => ''
+		// ),
+		// array(
+		// 'id' => 'select_box',
+		// 'label' => __( 'A Select Box', 'eddosgilicences' ),
+		// 'description' => __( 'A standard select box.', 'eddosgilicences' ),
+		// 'type' => 'select',
+		// 'options' => array( 'drupal' => 'Drupal', 'joomla' => 'Joomla', 'wordpress' => 'WordPress' ),
+		// 'default' => 'wordpress'
+		// ),
+		// array(
+		// 'id' => 'radio_buttons',
+		// 'label' => __( 'Some Options', 'eddosgilicences' ),
+		// 'description' => __( 'A standard set of radio buttons.', 'eddosgilicences' ),
+		// 'type' => 'radio',
+		// 'options' => array( 'superman' => 'Superman', 'batman' => 'Batman', 'ironman' => 'Iron Man' ),
+		// 'default' => 'batman'
+		// ),
+		// array(
+		// 'id' => 'multiple_checkboxes',
+		// 'label' => __( 'Some Items', 'eddosgilicences' ),
+		// 'description' => __( 'You can select multiple items and they will be stored as an array.', 'eddosgilicences' ),
+		// 'type' => 'checkbox_multi',
+		// 'options' => array( 'square' => 'Square', 'circle' => 'Circle', 'rectangle' => 'Rectangle', 'triangle' => 'Triangle' ),
+		// 'default' => array( 'circle', 'triangle' )
+		// )
+		
+		;
 		
 		$settings ['extra'] = array (
 				'title' => __ ( 'Extra', 'eddosgilicences' ),
 				'description' => __ ( 'Extra settings are not used.', 'eddosgilicences' ),
-				'fields' => array ()
-				// array(
-				// 'id' => 'number_field',
-				// 'label' => __( 'A Number' , 'eddosgilicences' ),
-				// 'description' => __( 'This is a standard number field - if this field contains anything other than numbers then the form will not be submitted.', 'eddosgilicences' ),
-				// 'type' => 'number',
-				// 'default' => '',
-				// 'placeholder' => __( '42', 'eddosgilicences' )
-				// ),
-				// array(
-				// 'id' => 'colour_picker',
-				// 'label' => __( 'Pick a colour', 'eddosgilicences' ),
-				// 'description' => __( 'This uses WordPress\' built-in colour picker - the option is stored as the colour\'s hex code.', 'eddosgilicences' ),
-				// 'type' => 'color',
-				// 'default' => '#21759B'
-				// ),
-				// array(
-				// 'id' => 'an_image',
-				// 'label' => __( 'An Image' , 'eddosgilicences' ),
-				// 'description' => __( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'eddosgilicences' ),
-				// 'type' => 'image',
-				// 'default' => '',
-				// 'placeholder' => ''
-				// ),
-				// array(
-				// 'id' => 'multi_select_box',
-				// 'label' => __( 'A Multi-Select Box', 'eddosgilicences' ),
-				// 'description' => __( 'A standard multi-select box - the saved data is stored as an array.', 'eddosgilicences' ),
-				// 'type' => 'select_multi',
-				// 'options' => array( 'linux' => 'Linux', 'mac' => 'Mac', 'windows' => 'Windows' ),
-				// 'default' => array( 'linux' )
-				// )
-				 
-		);
+				'fields' => array () 
+		)
+		// array(
+		// 'id' => 'number_field',
+		// 'label' => __( 'A Number' , 'eddosgilicences' ),
+		// 'description' => __( 'This is a standard number field - if this field contains anything other than numbers then the form will not be submitted.', 'eddosgilicences' ),
+		// 'type' => 'number',
+		// 'default' => '',
+		// 'placeholder' => __( '42', 'eddosgilicences' )
+		// ),
+		// array(
+		// 'id' => 'colour_picker',
+		// 'label' => __( 'Pick a colour', 'eddosgilicences' ),
+		// 'description' => __( 'This uses WordPress\' built-in colour picker - the option is stored as the colour\'s hex code.', 'eddosgilicences' ),
+		// 'type' => 'color',
+		// 'default' => '#21759B'
+		// ),
+		// array(
+		// 'id' => 'an_image',
+		// 'label' => __( 'An Image' , 'eddosgilicences' ),
+		// 'description' => __( 'This will upload an image to your media library and store the attachment ID in the option field. Once you have uploaded an imge the thumbnail will display above these buttons.', 'eddosgilicences' ),
+		// 'type' => 'image',
+		// 'default' => '',
+		// 'placeholder' => ''
+		// ),
+		// array(
+		// 'id' => 'multi_select_box',
+		// 'label' => __( 'A Multi-Select Box', 'eddosgilicences' ),
+		// 'description' => __( 'A standard multi-select box - the saved data is stored as an array.', 'eddosgilicences' ),
+		// 'type' => 'select_multi',
+		// 'options' => array( 'linux' => 'Linux', 'mac' => 'Mac', 'windows' => 'Windows' ),
+		// 'default' => array( 'linux' )
+		// )
+		
+		;
 		
 		$settings = apply_filters ( $this->parent->_token . '_settings_fields', $settings );
 		
@@ -275,7 +285,7 @@ class eddOsgiLicences_Settings {
 	
 	/**
 	 * Register plugin settings
-	 * 
+	 *
 	 * @return void
 	 */
 	public function register_settings() {
@@ -336,7 +346,7 @@ class eddOsgiLicences_Settings {
 	
 	/**
 	 * Load settings page content
-	 * 
+	 *
 	 * @return void
 	 */
 	public function settings_page() {

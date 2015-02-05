@@ -71,6 +71,8 @@ class eddOsgiLicences_PageTemplater {
                 // Add your templates to this array.
                 $this->templates = array(
                         '../templates/goodtobebad-template.php'     => 'It\'s Good to Be Bad',
+                		'../templates/eddosgilicences-template.php'     => 'OSGi Licences',
+                		'../templates/eddosgilicences1-template.php'     => 'OSGi Licences 2',
                 );
 				
         } 

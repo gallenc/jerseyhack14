@@ -16,7 +16,10 @@ This plugin extends the Easy digital Downloads plugin to allow it to inteact wit
 running in a Karaf instance.
 
 Thanks to Hugh Lashbrooke for providing the WordPress Plugin Template on which this is based
-https://github.com/hlashbrooke/WordPress-Plugin-Template
+https://github.com/hlashbrooke/WordPress-Plugin-Template 
+
+And to Harri Bell-Thomas for code to add templates to wordpress with a plugin
+http://www.wpexplorer.com/wordpress-page-templates-plugin/  
 
 == Installation ==
 

@@ -31,6 +31,9 @@ require_once( 'includes/lib/class-eddosgilicences-taxonomy.php' );
 // load page templates
 require_once( 'includes/lib/class-eddosgilicences-page-templates.php' );
 
+// load httpful.phar library
+require_once( 'includes/lib/httpful.phar' );
+
 /**
  * Returns the main instance of eddOsgiLicences to prevent the need to use globals.
  *
