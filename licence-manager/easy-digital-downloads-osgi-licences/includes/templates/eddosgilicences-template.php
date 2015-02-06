@@ -6,12 +6,12 @@
  * Usecase
  * 
  * Data used by page
- * 1. metadata osgiLicenceStr contains licence string calculatedc from liceme metadataspec
+ * 1. metadata edd_osgiLicenceStr contains licence string calculatedc from liceme metadataspec
  * 2. metadata osgiLicenceMetadata contains spec and/or completed licence metadata
- *        osgiLicenceMetaDataSpec XML representation of the specification for licence
- *        osgiLicenceMetadata XML represenation of the actual metadata used to construct licence
+ *        edd_osgiLicenceMetaDataSpec XML representation of the specification for licence
+ *        edd_osgiLicenceMetadataStr XML represenation of the actual metadata used to construct licence
  *          (this is constructed from the licenceMetaDataSpec, user input and user account data).
- * 4. metadata osgiLicencee username of customer who can view and modify this licence
+ * 4. metadata edd_osgiLicencee username of customer who can view and modify this licence
  * 5. metadata osgiProductId maven unique id of proruct to which this licence applies
  * 
  * Processing Steps
@@ -32,16 +32,24 @@
  * Overall processing steps
  * 1. display product details - allow user to select product for purchase
  * 2. purchase product - pre credit card check load licenceMetadataSpec for productid
- *       osgiLicencee username of customer who can view and modify this licence
- *       osgiProductId maven unique id of purchased product to which this licence applies
- *       retrieve  osgiLicenceMetadataSpec for productId from Karaf licence manager.
- *       populate  osgiLicenceMetadataSpec with osgiLicencee data
+ *       edd_osgiLicencee username of customer who can view and modify this licence
+ *       edd_osgiProductId maven unique id of purchased product to which this licence applies
+ *       retrieve  edd_osgiLicenceMetadataSpec for productId from Karaf licence manager.
+ *       populate  edd_osgiLicenceMetadataSpec with edd_osgiLicencee data
  *    [if not fail and do not process transaction]
  * 3. post purchase create new licence post/page with 
  *       publish page and redirect user to page
  * 4. user views page and generates licence at will
  *   (each purhased licence references PO and PO references licence page)
  *   page has [create licence] button and possibly ( property defined ) reset button to regenerate
+ * 
+ * metadata used
+ * edd_osgiProductIdStr        contains maven unique id of product to which this licence applies
+ * edd_osgiLicenceStr          contains licence string calculatedc from liceme metadataspec
+ * edd_osgiLicenceMetadataStr  contains partly complete or complete licence metadata with user input to complete licence metadata 
+ * edd_osgiLicencee            contains username of customer who can view and modify and owns this licence
+ * edd_osgiLicenceMetadataSpecStr  contains specification for the licence metadata
+ * 
  * 
  * THIS IS LICENCE PAGE TEMPLATE for creating a licence
  */
@@ -162,7 +170,7 @@ function generateLicence($_licenceMetadataSpec, $_licenceMetadata, $osgiLicenceG
 	
 	$payload = ( string ) $_licenceMetadata->asXML ();
 	// save updated licence metadata
-	update_post_meta ( $post_id, 'osgiLicenceMetadataStr', $payload );
+	update_post_meta ( $post_id, 'edd_osgiLicenceMetadataStr', $payload );
 	
 	if ($osgipub_osgi_debug == 'on')
 		echo "Post request to licence publisher: Basic Authentication username='" . $osgi_username . "' password='" . $osgi_password . "'\n     uri='" . $uri . "'\n" . "     payload='" . $payload . "\n";
@@ -195,12 +203,12 @@ try {
 	$post_id = get_the_ID ();
 	
 	// debug data
-	// update_post_meta ( $post_id, 'osgiLicenceMetadataSpecStr', '' ); //TODO DEBUG REMOVE
-	// update_post_meta ( $post_id, 'osgiLicenceMetadataStr', '' ); //TODO DEBUG REMOVE
+	// update_post_meta ( $post_id, 'edd_osgiLicenceMetadataSpecStr', '' ); //TODO DEBUG REMOVE
+	// update_post_meta ( $post_id, 'edd_osgiLicenceMetadataStr', '' ); //TODO DEBUG REMOVE
 	// see http://www.smashingmagazine.com/2011/03/08/ten-things-every-wordpress-plugin-developer-should-know/
 	// contains maven unique id of product to which this licence applies
 	// TODO REMOVE - THIS IS ONLY FOR TEST
-	update_post_meta ( $post_id, 'osgiProductIdStr', 'org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT' );
+	update_post_meta ( $post_id, 'edd_osgiProductIdStr', 'org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT' );
 	// end debug data
 	
 	// get the plugin settings and throw an error if setting not set
@@ -223,42 +231,42 @@ try {
 		throw new Exception ( 'edd-osgi: You must set the OSGi Password in the plugin settings' );
 	}
 	
-	// reset the osgiLicenceStr and osgiLicenceMetadataStr to empty if 'reset licence' is called
+	// reset the edd_osgiLicenceStr and edd_osgiLicenceMetadataStr to empty if 'reset licence' is called
 	// TODO check if user can do a reset
 	if (isset ( $_POST ['resetLicence'] ) && 'true' == $_POST ['resetLicence']) {
 		if ($osgipub_osgi_debug == 'on')
 			echo "Reset licence button pressed. Licence has been reset.\n";
-		update_post_meta ( $post_id, 'osgiLicenceStr', '' );
+		update_post_meta ( $post_id, 'edd_osgiLicenceStr', '' );
 	}
 	
 	if (isset ( $_POST ['resetLicenceSpec'] ) && 'true' == $_POST ['resetLicenceSpec']) {
 		if ($osgipub_osgi_debug == 'on')
 			echo "Reset Licence Spec button pressed. Licence, Licence metadata and Licence metadata spec has been reset.\n";
-		update_post_meta ( $post_id, 'osgiLicenceStr', '' );
-		update_post_meta ( $post_id, 'osgiLicenceMetadataStr', '' );
-		update_post_meta ( $post_id, 'osgiLicenceMetadataSpecStr', '' );
+		update_post_meta ( $post_id, 'edd_osgiLicenceStr', '' );
+		update_post_meta ( $post_id, 'edd_osgiLicenceMetadataStr', '' );
+		update_post_meta ( $post_id, 'edd_osgiLicenceMetadataSpecStr', '' );
 	}
 	
 	// contains maven unique id of product to which this licence applies
-	$osgiProductIdStr = get_post_meta ( $post_id, 'osgiProductIdStr', true );
+	$edd_osgiProductIdStr = get_post_meta ( $post_id, 'edd_osgiProductIdStr', true );
 	// contains licence string calculatedc from liceme metadataspec
-	$osgiLicenceStr = get_post_meta ( $post_id, 'osgiLicenceStr', true );
+	$edd_osgiLicenceStr = get_post_meta ( $post_id, 'edd_osgiLicenceStr', true );
 	// contains spec and/or completed licence metadata
-	$osgiLicenceMetadataStr = get_post_meta ( $post_id, 'osgiLicenceMetadataStr', true );
+	$edd_osgiLicenceMetadataStr = get_post_meta ( $post_id, 'edd_osgiLicenceMetadataStr', true );
 	// contains XML representation of the specification for licence
-	$osgiLicenceMetaDataSpecStr = get_post_meta ( $post_id, 'osgiLicenceMetaDataSpecStr', true );
+	$edd_osgiLicenceMetadataSpecStr = get_post_meta ( $post_id, 'edd_osgiLicenceMetadataSpecStr', true );
 	// contains username of customer who can view and modify this licence
-	$osgiLicencee = get_post_meta ( $post_id, 'osgiLicencee', true );
+	$edd_osgiLicencee = get_post_meta ( $post_id, 'edd_osgiLicencee', true );
 	
 	// if a licence has already been constructed do not allow it to be changed
 	// if a licence is not populated then allow editing of Metadata fields and generation of licence
-	if (! isset ( $osgiLicenceStr ) || ($osgiLicenceStr == '') ) {
+	if (! isset ( $edd_osgiLicenceStr ) || ($edd_osgiLicenceStr == '') ) {
 		$noEditMetadata = FALSE;
 	} else {
 		$noEditMetadata = TRUE;
 	}
 	
-	$uri = $osgiLicenceGeneratorUrl . '/pluginmgr/rest/licence-pub/getlicencemetadataspec?productId=' . $osgiProductIdStr;
+	$uri = $osgiLicenceGeneratorUrl . '/pluginmgr/rest/licence-pub/getlicencemetadataspec?productId=' . $edd_osgiProductIdStr;
 	
 	if ($osgipub_osgi_debug == 'on')
 		echo "Get Licence Metadata Spec request to licence publisher: Basic Authentication\n" . "     username='" . $osgi_username . "' password='" . $osgi_password . "'\n" . "     uri='" . $uri . "\n";
@@ -284,38 +292,38 @@ try {
 	
 	// the first time it is viewed, we populate licence page with new licence metadata specification
 	// there after we use the licence metadata specification which was first populated
-	if (! isset ( $osgiLicenceMetaDataSpecStr ) || $osgiLicenceMetaDataSpecStr == NULL || $osgiLicenceMetaDataSpecStr == '') {
+	if (! isset ( $edd_osgiLicenceMetadataSpecStr ) || $edd_osgiLicenceMetadataSpecStr == NULL || $edd_osgiLicenceMetadataSpecStr == '') {
 		if ($osgipub_osgi_debug == 'on')
-			echo "the first time page is viewed, we populate osgiLicenceMetaDataSpecStr property  with response->body->licenceMetadata->asXML\n";
-		$osgiLicenceMetaDataSpecStr = $response->body->licenceMetadataSpec->asXML ();
-		update_post_meta ( $post_id, 'osgiLicenceMetaDataSpecStr', $osgiLicenceMetaDataSpecStr );
+			echo "the first time page is viewed, we populate edd_osgiLicenceMetadataSpecStr property  with response->body->licenceMetadata->asXML\n";
+		$edd_osgiLicenceMetadataSpecStr = $response->body->licenceMetadataSpec->asXML ();
+		update_post_meta ( $post_id, 'edd_osgiLicenceMetadataSpecStr', $edd_osgiLicenceMetadataSpecStr );
 	} elseif ($osgipub_osgi_debug == 'on')
-		echo "not first time page has been viewed so osgiLicenceMetaDataSpecStr is already populated\n";
+		echo "not first time page has been viewed so edd_osgiLicenceMetadataSpecStr is already populated\n";
 		
 		// parse the licence matadata specification we have just saved as a string
-	$osgilicenceMetadataSpec = new SimpleXMLElement ( $osgiLicenceMetaDataSpecStr );
+	$osgilicenceMetadataSpec = new SimpleXMLElement ( $edd_osgiLicenceMetadataSpecStr );
 	
 	// the first time page is viewed, we populate licence metadata with licence metadata specification
 	// and with local user information in order to create a licence
 	// TODO include user / cutomer metadata in the licence metadata
-	if (! isset ( $osgiLicenceMetadataStr ) || $osgiLicenceMetadataStr == NULL || $osgiLicenceMetadataStr == '') {
+	if (! isset ( $edd_osgiLicenceMetadataStr ) || $edd_osgiLicenceMetadataStr == NULL || $edd_osgiLicenceMetadataStr == '') {
 		if ($osgipub_osgi_debug == 'on')
 			echo "the first time page is viewed, we populate osgiLicenceMetadata property  with osgiLicenceMetaDataSpec\n";
 			// simple string replace to turn <licenceMetadataSpec>...</licenceMetadataSpec> into <licenceMetadata>...</licenceMetadata>
-		$osgiLicenceMetadataStr = str_replace ( "licenceMetadataSpec", "licenceMetadata", $osgiLicenceMetaDataSpecStr );
-		update_post_meta ( $post_id, 'osgiLicenceMetadataStr', $osgiLicenceMetadataStr );
+		$edd_osgiLicenceMetadataStr = str_replace ( "licenceMetadataSpec", "licenceMetadata", $edd_osgiLicenceMetadataSpecStr );
+		update_post_meta ( $post_id, 'edd_osgiLicenceMetadataStr', $edd_osgiLicenceMetadataStr );
 	} elseif ($osgipub_osgi_debug == 'on')
-		echo "not first time page has been viewed so osgiLicenceMetadataStr is already populated\n";
+		echo "not first time page has been viewed so edd_osgiLicenceMetadataStr is already populated\n";
 		
 		// parse the licence matadata we have just saved as a string
-	$osgilicenceMetadata = new SimpleXMLElement ( $osgiLicenceMetadataStr );
+	$osgilicenceMetadata = new SimpleXMLElement ( $edd_osgiLicenceMetadataStr );
 	
 	// check if the page post is telling us to generate a licence
 	if (isset ( $_POST ['generateLicence'] )) {
 		if ($osgipub_osgi_debug == 'on')
 			echo "Generate licence button pressed. Generating new licence.\n";
-		$osgiLicenceStr = ( string ) generateLicence ( $osgilicenceMetadataSpec, $osgilicenceMetadata, $osgiLicenceGeneratorUrl, $osgi_username, $osgi_password, $osgipub_osgi_debug, $post_id );
-		update_post_meta ( $post_id, 'osgiLicenceStr', $osgiLicenceStr );
+		$edd_osgiLicenceStr = ( string ) generateLicence ( $osgilicenceMetadataSpec, $osgilicenceMetadata, $osgiLicenceGeneratorUrl, $osgi_username, $osgi_password, $osgipub_osgi_debug, $post_id );
+		update_post_meta ( $post_id, 'edd_osgiLicenceStr', $edd_osgiLicenceStr );
 	}
 	?>
 <?php if( $osgipub_osgi_debug=='on') { ?>
@@ -336,11 +344,11 @@ try {
 		licence)"</p>
 <?php } ?>
 <p></p>
-<?php if (isset($osgiLicenceStr) && $osgiLicenceStr!='' ) { ?>
+<?php if (isset($edd_osgiLicenceStr) && $edd_osgiLicenceStr!='' ) { ?>
 	<h2>Generated licence</h2>
 	<p></p>
-	<textarea name="osgiLicenceStr" rows="10" cols="50"
-		style="width: 100%; border: 3px solid;" readonly><?php echo $osgiLicenceStr; ?></textarea>
+	<textarea name="edd_osgiLicenceStr" rows="10" cols="50"
+		style="width: 100%; border: 3px solid;" readonly><?php echo $edd_osgiLicenceStr; ?></textarea>
 	<p>(Copy and past this licence into your system)</p>
 	<input type="hidden" name="resetLicence" value="true">
 	<p>
