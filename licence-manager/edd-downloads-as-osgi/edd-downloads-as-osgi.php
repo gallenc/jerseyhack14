@@ -184,12 +184,12 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 								                              // /'post_excerpt' => [ <string> ] // For all your post excerpt needs.
 								                              // 'post_date' => [ Y-m-d H:i:s ] // The time post was made.
 								                              // 'post_date_gmt' => [ Y-m-d H:i:s ] // The time post was made, in GMT.
-								'comment_status' => 'closed', 
+								'comment_status' => 'closed' 
 						 // Default is the option 'default_comment_status', or 'closed'.
 						                             // 'post_category' => [ array(<category id>, ...) ] // Default empty.
 						                             // 'tags_input' => [ '<tag>, <tag>, ...' | array ] // Default empty.
 						                             // 'tax_input' => [ array( <taxonomy> => <array | string> ) ] // For custom taxonomies. Default empty.
-						        'page_template' => '../edd-downloads-as-osgi.php' // Requires name of template file, eg template.php. Default empty.
+						        //'page_template' => '../edd-downloads-as-osgi.php' // Requires name of template file, eg template.php. Default empty.
 						);
 						
 						$newpost_id = wp_insert_post ( $post );
