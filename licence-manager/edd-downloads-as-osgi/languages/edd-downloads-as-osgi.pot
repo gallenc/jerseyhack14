@@ -1,6 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: Easy Digital Downloads - Downloads As Services\n"
+"Project-Id-Version: Easy Digital Downloads - Downloads As OSGi\n"
 "POT-Creation-Date: 2014-01-09 16:25+1200\n"
 "PO-Revision-Date: 2014-01-09 16:25+1200\n"
 "Last-Translator: \n"
@@ -15,24 +15,24 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SearchPath-0: ..\n"
 
-#: ../edd-downloads-as-services.php:61
+#: ../edd-downloads-as-osgi.php:61
 msgid "Downloads As Services"
 msgstr ""
 
-#: ../edd-downloads-as-services.php:138
+#: ../edd-downloads-as-osgi.php:138
 #, php-format
 msgid "%s As Service:"
 msgstr ""
 
-#: ../edd-downloads-as-services.php:142
+#: ../edd-downloads-as-osgi.php:142
 #, php-format
 msgid "This %s is a service"
 msgstr ""
 
-#: ../edd-downloads-as-services.php:270
+#: ../edd-downloads-as-osgi.php:270
 msgid "Select Service Categories"
 msgstr ""
 
-#: ../edd-downloads-as-services.php:271
+#: ../edd-downloads-as-osgi.php:271
 msgid "Select the categories that contain \"services\""
 msgstr ""
