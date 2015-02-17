@@ -297,7 +297,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 				$edd_payment_purchase_key = ( string ) $meta ['_edd_payment_purchase_key'] [0];
 				
 				// see easy-digital-downloads/templates/history-downloads.php
-				//add_query_arg( 'payment_key', edd_get_payment_key( $post->ID ), edd_get_success_page_uri() )
+				// add_query_arg( 'payment_key', edd_get_payment_key( $post->ID ), edd_get_success_page_uri() )
 				if ($downloads) {
 					foreach ( $downloads as $download ) {
 						
@@ -305,27 +305,40 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 						if (edd_is_bundled_product ( $download ['id'] ))
 							continue;
 						
-						$price_id 		= edd_get_cart_item_price_id( $download );
-						$download_files = edd_get_download_files( $download['id'], $price_id );
-						$name           = get_the_title( $download['id'] );
+						$price_id = edd_get_cart_item_price_id ( $download );
+						$download_files = edd_get_download_files ( $download ['id'], $price_id );
+						$name = get_the_title ( $download ['id'] );
+						
+						// product id string from download
+						// contains maven unique id of product to which this licence applies
+						echo "<p> download [id]=" . $download ['id'] . '</p>';
+						$edd_osgiProductIdStr = get_post_meta ( $download ['id'], '_edd_osgiProductIdStr', true );
+						
+						if (! isset ( $edd_osgiProductIdStr )) {
+							echo "<p>from download edd_osgiProductIdStr not set for download [id]=" . $download ['id'] . '</p>';
+						} else {
+							echo "<p>from download edd_osgiProductIdStr=";
+							echo $edd_osgiProductIdStr;
+							echo "</P>";
+						}
 						
 						// Retrieve and append the price option name
-						if ( ! empty( $price_id ) ) {
-							$name .= ' - ' . edd_get_price_option_name( $download['id'], $price_id, $payment->ID );
+						if (! empty ( $price_id )) {
+							$name .= ' - ' . edd_get_price_option_name ( $download ['id'], $price_id, $payment->ID );
 						}
 						
 						echo "<p>payment name=";
 						echo $name;
 						echo "</P>";
 						
-						$licence_post_title=$name .' - ' . $edd_payment_number ;
+						$licence_post_title = $name . ' - ' . $edd_payment_number;
 						
 						echo "<p>licence_post_title=";
 						echo $licence_post_title;
 						echo "</P>";
 						
-						//remove whitepsace
-						$licence_post_name=preg_replace('/\s+/', '', $licence_post_title);
+						// remove whitepsace
+						$licence_post_name = preg_replace ( '/\s+/', '', $licence_post_title );
 						
 						echo "<p>licence_post_name=";
 						echo $licence_post_name;
@@ -350,7 +363,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 							if (! is_null ( $found_post )) {
 								echo "<p>we found the licence post=";
 								echo $found_post->ID;
-								echo '<BR><a href="' . get_post_permalink ( $found_post->ID ) . '" >Link to Licence: ' . $licence_post_title .'</a>';
+								echo '<BR><a href="' . get_post_permalink ( $found_post->ID ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
 								echo "</P>";
 							} else {
 								
@@ -386,7 +399,10 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 								// 'page_template' => '../edd-downloads-as-osgi.php' // Requires name of template file, eg template.php. Default empty.
 								
 								$newpost_id = wp_insert_post ( $post );
-								update_post_meta ( $newpost_id, 'edd_osgiProductIdStr', 'org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT' );
+								
+								// setting product id for licence
+								//update_post_meta ( $newpost_id, 'edd_osgiProductIdStr', 'org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT' );
+								update_post_meta ( $newpost_id, 'edd_osgiProductIdStr', $edd_osgiProductIdStr );
 								
 								// setting customer metadata - not yet used in the template
 								update_post_meta ( $newpost_id, 'edd_payment_customer_id', $edd_payment_customer_id );
@@ -399,12 +415,12 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 								$l_name = ( string ) get_user_meta ( $edd_payment_user_id, 'last_name', true );
 								$last_name = (isset ( $l_name ) ? $l_name : "");
 								
-								$address="";
+								$address = "";
 								$addr = edd_get_customer_address ( $edd_payment_user_id );
-								if (isset ($addr)) {
-								$address = implode(", ", $addr);
+								if (isset ( $addr )) {
+									$address = implode ( ", ", $addr );
 								}
-																
+								
 								$edd_osgiLicencee = $first_name . ", " . $last_name . ", " . $address;
 								update_post_meta ( $newpost_id, 'edd_osgiLicencee', $edd_osgiLicencee );
 								
@@ -418,8 +434,8 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 								
 								echo "<p>we created a new licence post=";
 								echo $newpost_id;
-								echo '<BR><a href="' . get_post_permalink ( $newpost_id ) . '" >Link to Licence: ' .$licence_post_title .'</a>';
-									
+								echo '<BR><a href="' . get_post_permalink ( $newpost_id ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
+								
 								echo "</P>";
 							}
 						}
@@ -548,7 +564,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 	<strong>Enter OSGi Product Id</strong>
 </p>
 <p>
-	<input type="text" name="edd_osgiProductIdStr"
+	<input type="text" name="_edd_osgiProductIdStr"
 		id="_edd_osgiProductIdStr"
 		value="<?php echo $edd_osgiProductIdStr; ?>" />
 </p>

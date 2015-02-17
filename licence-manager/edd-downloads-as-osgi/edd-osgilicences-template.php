@@ -346,7 +346,7 @@ try {
 <?php
 	}
 	?>
-<h1>Generate OSGi Licence</h1>
+<h2>Generate OSGi Licence</h2>
 
 <?php 
 if(isset($edd_payment_post_id)){
