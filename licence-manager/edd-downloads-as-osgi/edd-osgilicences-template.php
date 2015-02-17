@@ -57,15 +57,23 @@
 get_header ();
 
 // check if OSGi licence generator debugging is enabled
-//$osgipub_osgi_debug = get_option ( 'osgipub_osgi_debug' );
-//TODO MAKE A VARIABLE IN START
-$osgipub_osgi_debug = 'on';
-if ($osgipub_osgi_debug == 'on') {
+$osgipub_osgi_debug = edd_get_option ( 'osgipub_osgi_debug');
+if ($osgipub_osgi_debug) {
 	?>
 <h2>OSGi Licence Publisher debugging enabled</h2>
 <textarea name="osgipluggindebug" rows="10" cols="50" noedit>
 <?php
-	echo 'OSGi Licence Publisher debugging start';
+	echo "Easy Digital Downloads OSGi publisher plugin debugging start\n";
+	echo "************************\n";
+	echo "EDD OSGi Plugin settings\n";
+	echo "   Debug osgipub_osgi_debug:" . edd_get_option ( 'osgipub_osgi_debug') . "\n";
+ 	echo "   Username osgipub_osgi_username:" . edd_get_option ( 'osgipub_osgi_username'). "\n";
+
+ 	echo "   Password osgipub_osgi_password:" . edd_get_option ( 'osgipub_osgi_password' ). "\n";
+
+ 	echo "   Licence pUblisher URL osgipub_osgi_licence_pub_url:" . edd_get_option ( 'osgipub_osgi_licence_pub_url' ). "\n\n";
+	echo "************************\n";
+	echo "Page debug messages:\n";
 }
 ?>
 <?php
@@ -174,12 +182,12 @@ function generateLicence($_licenceMetadataSpec, $_licenceMetadata, $osgiLicenceG
 	// save updated licence metadata
 	update_post_meta ( $post_id, 'edd_osgiLicenceMetadataStr', $payload );
 	
-	if ($osgipub_osgi_debug == 'on')
+	if ($osgipub_osgi_debug)
 		echo "Post request to licence publisher: Basic Authentication username='" . $osgi_username . "' password='" . $osgi_password . "'\n     uri='" . $uri . "'\n" . "     payload='" . $payload . "\n";
 	
 	$response = \Httpful\Request::post ( $uri, $payload, 'application/xml' )->authenticateWith ( $osgi_username, $osgi_password )->expectsXml ()->send ();
 	
-	if ($osgipub_osgi_debug == 'on')
+	if ($osgipub_osgi_debug)
 		echo "response code='" . $response->code . "' reply payload='" . var_dump ( $response->body ) . "\n";
 		
 		// if we cant talk to the licence generator error and leave page
@@ -216,19 +224,19 @@ try {
 	// get the plugin settings and throw an error if setting not set
 	
 	// get the base url URL of the OSGi licence generator service from settings
-	$osgiLicenceGeneratorUrl = get_option ( 'osgipub_osgi_licence_pub_url' );
+	$osgiLicenceGeneratorUrl = edd_get_option ( 'osgipub_osgi_licence_pub_url' );
 	if (! isset ( $osgiLicenceGeneratorUrl ) || '' == $osgiLicenceGeneratorUrl) {
 		throw new Exception ( 'edd-osgi: You must set the OSGi Licence Publisher URL in the plugin settings' );
 	}
 	
 	// get the username to access the OSGi licence generator service from settings
-	$osgi_username = get_option ( 'osgipub_osgi_username' );
+	$osgi_username = edd_get_option ( 'osgipub_osgi_username' );
 	if (! isset ( $osgi_username )) {
 		throw new Exception ( 'edd-osgi: You must set the OSGi User Name in the plugin settings' );
 	}
 	
 	// get the password to access of the OSGi licence generator service from settings
-	$osgi_password = get_option ( 'osgipub_osgi_password' );
+	$osgi_password = edd_get_option ( 'osgipub_osgi_password' );
 	if (! isset ( $osgi_password )) {
 		throw new Exception ( 'edd-osgi: You must set the OSGi Password in the plugin settings' );
 	}
@@ -236,13 +244,13 @@ try {
 	// reset the edd_osgiLicenceStr and edd_osgiLicenceMetadataStr to empty if 'reset licence' is called
 	// TODO check if user can do a reset
 	if (isset ( $_POST ['resetLicence'] ) && 'true' == $_POST ['resetLicence']) {
-		if ($osgipub_osgi_debug == 'on')
+		if ($osgipub_osgi_debug)
 			echo "Reset licence button pressed. Licence has been reset.\n";
 		update_post_meta ( $post_id, 'edd_osgiLicenceStr', '' );
 	}
 	
 	if (isset ( $_POST ['resetLicenceSpec'] ) && 'true' == $_POST ['resetLicenceSpec']) {
-		if ($osgipub_osgi_debug == 'on')
+		if ($osgipub_osgi_debug)
 			echo "Reset Licence Spec button pressed. Licence, Licence metadata and Licence metadata spec has been reset.\n";
 		update_post_meta ( $post_id, 'edd_osgiLicenceStr', '' );
 		update_post_meta ( $post_id, 'edd_osgiLicenceMetadataStr', '' );
@@ -274,12 +282,12 @@ try {
 	
 	$uri = $osgiLicenceGeneratorUrl . '/pluginmgr/rest/licence-pub/getlicencemetadataspec?productId=' . $edd_osgiProductIdStr;
 	
-	if ($osgipub_osgi_debug == 'on')
+	if ($osgipub_osgi_debug)
 		echo "Get Licence Metadata Spec request to licence publisher: Basic Authentication\n" . "     username='" . $osgi_username . "' password='" . $osgi_password . "'\n" . "     uri='" . $uri . "\n";
 	
 	$response = \Httpful\Request::get ( $uri )->authenticateWith ( $osgi_username, $osgi_password )->expectsXml ()->send ();
 	
-	if ($osgipub_osgi_debug == 'on') {
+	if ($osgipub_osgi_debug) {
 		// var_dump($response);
 		echo "\nResponse from licence publisher: Http response code='" . $response->code . "' response body='" . $response->body->asXML () . "'\n";
 	}
@@ -299,11 +307,11 @@ try {
 	// the first time it is viewed, we populate licence page with new licence metadata specification
 	// there after we use the licence metadata specification which was first populated
 	if (! isset ( $edd_osgiLicenceMetadataSpecStr ) || $edd_osgiLicenceMetadataSpecStr == NULL || $edd_osgiLicenceMetadataSpecStr == '') {
-		if ($osgipub_osgi_debug == 'on')
+		if ($osgipub_osgi_debug)
 			echo "the first time page is viewed, we populate edd_osgiLicenceMetadataSpecStr property  with response->body->licenceMetadata->asXML\n";
 		$edd_osgiLicenceMetadataSpecStr = $response->body->licenceMetadataSpec->asXML ();
 		update_post_meta ( $post_id, 'edd_osgiLicenceMetadataSpecStr', $edd_osgiLicenceMetadataSpecStr );
-	} elseif ($osgipub_osgi_debug == 'on')
+	} elseif ($osgipub_osgi_debug)
 		echo "not first time page has been viewed so edd_osgiLicenceMetadataSpecStr is already populated\n";
 		
 		// parse the licence matadata specification we have just saved as a string
@@ -313,7 +321,7 @@ try {
 	// and with local user information in order to create a licence
 	// TODO include user / cutomer metadata in the licence metadata
 	if (! isset ( $edd_osgiLicenceMetadataStr ) || $edd_osgiLicenceMetadataStr == NULL || $edd_osgiLicenceMetadataStr == '') {
-		if ($osgipub_osgi_debug == 'on')
+		if ($osgipub_osgi_debug)
 			echo "the first time page is viewed, we populate osgiLicenceMetadata property  with osgiLicenceMetaDataSpec\n";
 			// simple string replace to turn <licenceMetadataSpec>...</licenceMetadataSpec> into <licenceMetadata>...</licenceMetadata>
 		$edd_osgiLicenceMetadataStr = str_replace ( "licenceMetadataSpec", "licenceMetadata", $edd_osgiLicenceMetadataSpecStr );
@@ -327,7 +335,7 @@ try {
 		$edd_osgiLicenceMetadataStr = ( string ) $osgilicenceMetadata->asXML ();
 
 		update_post_meta ( $post_id, 'edd_osgiLicenceMetadataStr', $edd_osgiLicenceMetadataStr );
-	} elseif ($osgipub_osgi_debug == 'on')
+	} elseif ($osgipub_osgi_debug)
 		echo "not first time page has been viewed so edd_osgiLicenceMetadataStr is already populated\n";
 		
 		// parse the licence matadata we have just saved as a string
@@ -335,13 +343,13 @@ try {
 	
 	// check if the page post is telling us to generate a licence
 	if (isset ( $_POST ['generateLicence'] )) {
-		if ($osgipub_osgi_debug == 'on')
+		if ($osgipub_osgi_debug)
 			echo "Generate licence button pressed. Generating new licence.\n";
 		$edd_osgiLicenceStr = ( string ) generateLicence ( $osgilicenceMetadataSpec, $osgilicenceMetadata, $osgiLicenceGeneratorUrl, $osgi_username, $osgi_password, $osgipub_osgi_debug, $post_id );
 		update_post_meta ( $post_id, 'edd_osgiLicenceStr', $edd_osgiLicenceStr );
 	}
 	?>
-<?php if( $osgipub_osgi_debug=='on') { ?>
+<?php if( $osgipub_osgi_debug) { ?>
 </textarea>
 <?php
 	}

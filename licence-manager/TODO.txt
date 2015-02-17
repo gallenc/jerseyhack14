@@ -55,7 +55,14 @@ DONE *** system property for location of licence file ( for OpenNMS / etc )
 
 proof of concept
 create public / private repo for licences and modules
-create shopping cart to generate licences
+DONE create shopping cart to generate licences
+TODO shopping cart
+	*** check only showing licence page when payment complete
+	*** check only showing licences for user or for admin
+	allow admin to update metadata / generate licence only
+	documentation / help page on the plugin
+	readme page for the plugin
+	more then one licence for a module per page
 
 project
 check project works in windows and unix environment ( encoding)

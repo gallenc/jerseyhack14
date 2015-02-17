@@ -19,6 +19,9 @@ require_once ('/lib/httpful.phar');
 
 if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 	class EDD_Downloads_As_Osgi {
+		
+		// check if OSGi licence generator debugging is enabled
+		private $osgipub_osgi_debug = false;
 		private static $instance;
 		
 		/**
@@ -50,6 +53,9 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		 * @return void
 		 */
 		public function __construct() {
+			// check if OSGi licence generator debugging is enabled
+			$this->osgipub_osgi_debug = edd_get_option ( 'osgipub_osgi_debug' );
+			
 			$this->setup_globals ();
 			$this->setup_actions ();
 			$this->load_textdomain ();
@@ -88,7 +94,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		// shortcodes [osgi_licence_list]
 		// shortcodes [osgi_licence_list user_filter="current_user"]
 		public function osgi_licence_list_shortcode($atts) {
-			$content = "<p>THIS IS A test return licences</p>\n";
+			$content = "";
 			
 			// default return all values
 			$args = array (
@@ -114,7 +120,6 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 			// The Loop
 			
 			if ($the_query->have_posts ()) {
-				$content .= "<TABLE>\n";
 				$content .= "<TABLE>\n";
 				$content .= "<TR>\n";
 				$content .= "<TH>Licence</TH>\n";
@@ -252,16 +257,16 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		public function my_custom_template($single) {
 			global $post;
 			
-			error_log ( "CGALLEN CHECKING debug post_type == osgi_licence_post\n", 3, "C:\Bitnami\wordpress-4.1-0\apps\wordpress\my-errors.log" );
-			error_log ( "CGALLEN CHECKING debug post_type == osgi_licence_post", 0 );
+			// error_log ( "CGALLEN CHECKING debug post_type == osgi_licence_post\n", 3, "C:\Bitnami\wordpress-4.1-0\apps\wordpress\my-errors.log" );
+			// error_log ( "CGALLEN CHECKING debug post_type == osgi_licence_post", 0 );
 			;
 			/* Checks for single template by post type */
 			if ($post->post_type == "osgi_licence_post") {
 				// echo 'CGALLEN debug post_type == osgi_licence_post';
-				error_log ( "CGALLEN true debug post_type == osgi_licence_post\n", 3, "C:\Bitnami\wordpress-4.1-0\apps\wordpress\my-errors.log" );
+				// error_log ( "CGALLEN true debug post_type == osgi_licence_post\n", 3, "C:\Bitnami\wordpress-4.1-0\apps\wordpress\my-errors.log" );
 				
-				if (file_exists ( dirname ( __FILE__ ) . '/edd-osgilicences-template.php' ))
-					error_log ( "CGALLEN file exists\n", 3, "C:\Bitnami\wordpress-4.1-0\apps\wordpress\my-errors.log" );
+				// if (file_exists ( dirname ( __FILE__ ) . '/edd-osgilicences-template.php' ))
+				// error_log ( "CGALLEN file exists\n", 3, "C:\Bitnami\wordpress-4.1-0\apps\wordpress\my-errors.log" );
 				
 				return dirname ( __FILE__ ) . '/edd-osgilicences-template.php';
 			}
@@ -274,15 +279,20 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		 * @param string $edd_receipt_args        	
 		 */
 		public function edd_osgi_action_payment_receipt_after_table($payment, $edd_receipt_args = null) {
-			echo "<P>CGALLEN this is the action after table</P>";
+			if ($this->osgipub_osgi_debug)
+				echo "<p>DEBUG this is the action after table</p>\n";
 			if (isset ( $payment )) {
-				echo "<p>Payment vardump=";
-				var_dump ( $payment );
-				echo "</P>";
-				echo "<p>Payment metadata vardump=";
+				
 				$meta = get_post_meta ( $payment->ID );
-				var_dump ( $meta );
-				echo "</P>";
+				
+				if ($this->osgipub_osgi_debug) {
+					echo "<p>Payment vardump=";
+					var_dump ( $payment );
+					echo "</p>\n";
+					echo "<p>Payment metadata vardump=";
+					var_dump ( $meta );
+					echo "</p>\n";
+				}
 				
 				$downloads = edd_get_payment_meta_cart_details ( $payment->ID, true );
 				
@@ -309,17 +319,22 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 						$download_files = edd_get_download_files ( $download ['id'], $price_id );
 						$name = get_the_title ( $download ['id'] );
 						
-						// product id string from download
-						// contains maven unique id of product to which this licence applies
-						echo "<p> download [id]=" . $download ['id'] . '</p>';
+						if ($this->osgipub_osgi_debug)
+							echo "<p> download [id]=" . $download ['id'] . '</p>\n';
+							
+							// product id string from download
+							// contains maven unique id of product to which this licence applies
 						$edd_osgiProductIdStr = get_post_meta ( $download ['id'], '_edd_osgiProductIdStr', true );
 						
-						if (! isset ( $edd_osgiProductIdStr )) {
-							echo "<p>from download edd_osgiProductIdStr not set for download [id]=" . $download ['id'] . '</p>';
-						} else {
-							echo "<p>from download edd_osgiProductIdStr=";
-							echo $edd_osgiProductIdStr;
-							echo "</P>";
+						if ($this->osgipub_osgi_debug) {
+							if (! isset ( $edd_osgiProductIdStr )) {
+								
+								echo "<p>from download edd_osgiProductIdStr not set for download [id]=" . $download ['id'] . '</p>\n';
+							} else {
+								echo "<p>from download edd_osgiProductIdStr=";
+								echo $edd_osgiProductIdStr;
+								echo "</p>\n";
+							}
 						}
 						
 						// Retrieve and append the price option name
@@ -327,27 +342,36 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 							$name .= ' - ' . edd_get_price_option_name ( $download ['id'], $price_id, $payment->ID );
 						}
 						
-						echo "<p>payment name=";
-						echo $name;
-						echo "</P>";
+						if ($this->osgipub_osgi_debug) {
+							echo "<p>payment name=";
+							echo $name;
+							echo "</p>\n";
+						}
 						
 						$licence_post_title = $name . ' - ' . $edd_payment_number;
 						
-						echo "<p>licence_post_title=";
-						echo $licence_post_title;
-						echo "</P>";
+						if ($this->osgipub_osgi_debug) {
+							echo "<p>licence_post_title=";
+							echo $licence_post_title;
+							echo "</p>\n";
+						}
 						
 						// remove whitepsace
 						$licence_post_name = preg_replace ( '/\s+/', '', $licence_post_title );
 						
-						echo "<p>licence_post_name=";
-						echo $licence_post_name;
-						echo "</P>";
+						if ($this->osgipub_osgi_debug) {
+							echo "<p>licence_post_name=";
+							echo $licence_post_name;
+							echo "</p>\n";
+						}
 						
 						if (isset ( $edd_payment_number )) {
-							echo "<p>edd_payment_number=";
-							echo $edd_payment_number;
-							echo "</P>";
+							
+							if ($this->osgipub_osgi_debug) {
+								echo "<p>edd_payment_number=";
+								echo $edd_payment_number;
+								echo "</p>\n";
+							}
 							
 							$found_post = null;
 							
@@ -361,10 +385,13 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 								
 								// Now, we can do something with $found_post
 							if (! is_null ( $found_post )) {
-								echo "<p>we found the licence post=";
-								echo $found_post->ID;
-								echo '<BR><a href="' . get_post_permalink ( $found_post->ID ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
-								echo "</P>";
+								if ($this->osgipub_osgi_debug) {
+									echo "<p>we found the licence post=";
+									echo $found_post->ID;
+									echo "</p>\n";
+								}
+								echo '<p><a href="' . get_post_permalink ( $found_post->ID ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
+								echo "</p>\n";
 							} else {
 								
 								// get post with payment number metadata OR create post with metadata
@@ -401,7 +428,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 								$newpost_id = wp_insert_post ( $post );
 								
 								// setting product id for licence
-								//update_post_meta ( $newpost_id, 'edd_osgiProductIdStr', 'org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT' );
+								// update_post_meta ( $newpost_id, 'edd_osgiProductIdStr', 'org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT' );
 								update_post_meta ( $newpost_id, 'edd_osgiProductIdStr', $edd_osgiProductIdStr );
 								
 								// setting customer metadata - not yet used in the template
@@ -427,91 +454,91 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 								// for reverse lookup of post id of the associated payment
 								update_post_meta ( $newpost_id, 'edd_payment_post_id', $edd_payment_post_id );
 								
-								echo "<p>link to this post";
-								echo $edd_payment_post_id;
-								echo '<BR><a href="' . get_post_permalink ( $edd_payment_post_id ) . '" >My link to edd_payment_post_id</a>';
-								echo "</p>";
-								
-								echo "<p>we created a new licence post=";
-								echo $newpost_id;
-								echo '<BR><a href="' . get_post_permalink ( $newpost_id ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
-								
-								echo "</P>";
+								if ($this->osgipub_osgi_debug) {
+									echo "<p>we created a new licence post=";
+									echo $newpost_id;
+									echo "</p>\n";
+								}
+								echo '<p><a href="' . get_post_permalink ( $newpost_id ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
+								echo "</p>\n";
 							}
 						}
 					}
 				}
 			} else
-				echo '<P>payment not set</P>';
+				echo '<p>payment not set</p>\n';
 			
-			if (isset ( $edd_receipt_args )) {
-				echo "<p>edd_receipt_args vardump=";
-				var_dump ( $edd_receipt_args );
-				echo "</P>";
-			} else
-				echo '<P>edd_receipt_args not set</P>';
+			if ($this->osgipub_osgi_debug) {
+				if (isset ( $edd_receipt_args )) {
+					echo "<p>edd_receipt_args vardump=";
+					var_dump ( $edd_receipt_args );
+					echo "</p>\n";
+				} else
+					echo '<p>edd_receipt_args not set</p>\n';
+			}
 		}
 		
 		/**
 		 * TODO REMOVE
 		 */
-		public function edd_osgi_filter_success_page_osgi($content) {
-			global $edd_options, $edd_receipt_args;
-			
-			if (isset ( $edd_options ['success_page'] )) {
-				$content = $content . "<p>CRAIG TEST success_page</p>";
-			}
-			if (isset ( $_GET ['payment-confirmation'] )) {
-				$content = $content . "<p>CRAIG TEST payment-confirmation</p>";
-			}
-			if (is_page ( $edd_options ['success_page'] )) {
-				$content = $content . "<p>CRAIG TEST is_page success_page</p>";
-			}
-			
-			if (isset ( $edd_options ['success_page'] ) && isset ( $_GET ['payment-confirmation'] ) && is_page ( $edd_options ['success_page'] )) {
-				// if ( has_filter( 'edd_payment_confirm_' . $_GET['payment-confirmation'] ) ) {
-				// $content = apply_filters( 'edd_payment_confirm_' . $_GET['payment-confirmation'], $content );
-				// }
-				$content = $content . "<p>CRAIG TEST ADDTIONAL CONTENT CHECKOUT</p>";
-			}
-			
-			$anID = $edd_receipt_args ['id'];
-			$content = $content . "<p>CRAIG TEST edd_receipt_args[id]={$anID}</p>";
-			
-			$the_payment = get_post ( $edd_receipt_args ['id'] );
-			$id = $the_payment->ID;
-			$content = $content . "<p>CRAIG TEST the_payment->ID={$the_payment->ID}</p>";
-			
-			$my_value = get_post_meta ( $id, '_edd_payment_number', 1 );
-			
-			$content = $content . "<p>CRAIG TEST my_value->$my_value</p>";
-			
-			$sw_args = array (
-					'meta_query' => array (
-							array (
-									'key' => 'edd_osgi_licence',
-									'value' => $my_value,
-									'compare' => 'LIKE' 
-							) 
-					) 
-			);
-			$query = new WP_Query ( $sw_args );
-			// if ( $the_query->have_posts() ) {
-			// echo '<h2>Films By Star Wards Directors</h2>';
-			// echo '<ul>';
-			// while ( $the_query->have_posts() ) {
-			// $the_query->the_post();
-			// echo '<li>' . get_the_title() . '</li>';
-			// }
-			// echo '</ul>';
-			// }
-			// /* Restore original Post Data */
-			// wp_reset_postdata();
-			
-			return $content;
-		}
+		// public function edd_osgi_filter_success_page_osgi($content) {
+		// global $edd_options, $edd_receipt_args;
+		
+		// if (isset ( $edd_options ['success_page'] )) {
+		// $content = $content . "<p>CRAIG TEST success_page</p>";
+		// }
+		// if (isset ( $_GET ['payment-confirmation'] )) {
+		// $content = $content . "<p>CRAIG TEST payment-confirmation</p>";
+		// }
+		// if (is_page ( $edd_options ['success_page'] )) {
+		// $content = $content . "<p>CRAIG TEST is_page success_page</p>";
+		// }
+		
+		// if (isset ( $edd_options ['success_page'] ) && isset ( $_GET ['payment-confirmation'] ) && is_page ( $edd_options ['success_page'] )) {
+		// // if ( has_filter( 'edd_payment_confirm_' . $_GET['payment-confirmation'] ) ) {
+		// // $content = apply_filters( 'edd_payment_confirm_' . $_GET['payment-confirmation'], $content );
+		// // }
+		// $content = $content . "<p>CRAIG TEST ADDTIONAL CONTENT CHECKOUT</p>";
+		// }
+		
+		// $anID = $edd_receipt_args ['id'];
+		// $content = $content . "<p>CRAIG TEST edd_receipt_args[id]={$anID}</p>";
+		
+		// $the_payment = get_post ( $edd_receipt_args ['id'] );
+		// $id = $the_payment->ID;
+		// $content = $content . "<p>CRAIG TEST the_payment->ID={$the_payment->ID}</p>";
+		
+		// $my_value = get_post_meta ( $id, '_edd_payment_number', 1 );
+		
+		// $content = $content . "<p>CRAIG TEST my_value->$my_value</p>";
+		
+		// $sw_args = array (
+		// 'meta_query' => array (
+		// array (
+		// 'key' => 'edd_osgi_licence',
+		// 'value' => $my_value,
+		// 'compare' => 'LIKE'
+		// )
+		// )
+		// );
+		// $query = new WP_Query ( $sw_args );
+		// // if ( $the_query->have_posts() ) {
+		// // echo '<h2>Films By Star Wards Directors</h2>';
+		// // echo '<ul>';
+		// // while ( $the_query->have_posts() ) {
+		// // $the_query->the_post();
+		// // echo '<li>' . get_the_title() . '</li>';
+		// // }
+		// // echo '</ul>';
+		// // }
+		// // /* Restore original Post Data */
+		// // wp_reset_postdata();
+		
+		// return $content;
+		// }
 		
 		/**
+		 * TODO ADD LANGUAGE FILES ETC
 		 * Loads the plugin language files
 		 *
 		 * @access public
@@ -542,7 +569,8 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		}
 		
 		/**
-		 * Add Metabox if per download email attachments are enabled
+		 * TODO MOVE METABOX ENTRIES TO MAIN PANEL - TOO SMALL
+		 * Add Metabox 
 		 *
 		 * @since 1.0
 		 */
@@ -717,6 +745,37 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 							'desc' => __ ( 'Select the categories that contain "OSGi Licences"', 'edd-osgi' ),
 							'type' => 'multicheck',
 							'options' => $this->get_terms () 
+					),
+					array (
+							'id' => 'osgipub_osgi_licence_pub_url',
+							'name' => __ ( 'Licence Publisher URL', 'edd' ),
+							'desc' => __ ( 'Set the base url URL of the OSGi licence publisher service', 'edd-osgi' ),
+							'type' => 'text',
+							'size' => 'regular',
+							'std' => 'http://localhost:8181' 
+					),
+					array (
+							'id' => 'osgipub_osgi_username',
+							'name' => __ ( 'Licence Publisher Username', 'edd' ),
+							'desc' => __ ( 'Set the username to access the OSGi licence publisher service', 'edd-osgi' ),
+							'type' => 'text',
+							'size' => 'regular',
+							'std' => 'admin' 
+					),
+					array (
+							'id' => 'osgipub_osgi_password',
+							'name' => __ ( 'Licence Publisher Password', 'edd' ),
+							'desc' => __ ( 'Set the password to access the OSGi licence publisher service', 'edd-osgi' ),
+							'type' => 'text',
+							'size' => 'regular',
+							'std' => 'admin' 
+					),
+					array (
+							'id' => 'osgipub_osgi_debug',
+							'name' => __ ( 'Debug OSGI Plugin', 'edd' ),
+							'desc' => __ ( 'Check this box to enable debugging messages for OSGi plugin.', 'edd-osgi' ),
+							'type' => 'checkbox',
+							'std' => '0' 
 					) 
 			);
 			
