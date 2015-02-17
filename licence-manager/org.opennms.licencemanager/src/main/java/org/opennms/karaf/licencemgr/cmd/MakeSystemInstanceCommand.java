@@ -6,7 +6,7 @@ import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.opennms.karaf.licencemgr.LicenceService;
 
 
-@Command(scope = "licence-mgr", name = "makesysteminstance", description="Make and install a new SystemInstance id for licence manager")
+@Command(scope = "licence-mgr", name = "makesysteminstance", description="Make and install a new System Instance (systemId) for licence manager")
 public class MakeSystemInstanceCommand extends OsgiCommandSupport {
 
 	private LicenceService _licenceService;
@@ -24,9 +24,9 @@ public class MakeSystemInstanceCommand extends OsgiCommandSupport {
 	protected Object doExecute() throws Exception {
 		try{
 			String systemId = getLicenceService().makeSystemInstance();
-			System.out.println("Made new Licence System Instance set to='"+systemId+"'");
+			System.out.println("New local systemId created and set to='"+systemId+"'");
 		} catch (Exception e) {
-			System.out.println("Error making system instance. Exception="+e);
+			System.out.println("Error making new systemId. Exception="+e);
 		}
 		return null;
 	}

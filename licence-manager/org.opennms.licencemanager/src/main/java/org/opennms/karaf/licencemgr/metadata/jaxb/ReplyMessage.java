@@ -33,6 +33,9 @@ public class ReplyMessage {
 	private LicenceMetadata licenceMetadata=null;
 	
 	@XmlElement()
+	private LicenceMetadata licenceMetadataSpec=null;
+	
+	@XmlElement()
 	private ProductMetadata productMetadata=null;
 	
 	@XmlElement()
@@ -120,6 +123,20 @@ public class ReplyMessage {
 	 */
 	public void setLicenceMetadata(LicenceMetadata licenceMetadata) {
 		this.licenceMetadata = licenceMetadata;
+	}
+
+	/**
+	 * @return the licenceMetadataSpec
+	 */
+	public LicenceMetadata getLicenceMetadataSpec() {
+		return licenceMetadataSpec;
+	}
+
+	/**
+	 * @param licenceMetadataSpec the licenceMetadataSpec to set
+	 */
+	public void setLicenceMetadataSpec(LicenceMetadata licenceMetadataSpec) {
+		this.licenceMetadataSpec = licenceMetadataSpec;
 	}
 
 	/**

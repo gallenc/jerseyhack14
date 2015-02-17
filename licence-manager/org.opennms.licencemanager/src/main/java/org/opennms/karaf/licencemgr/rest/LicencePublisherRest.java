@@ -132,10 +132,10 @@ public class LicencePublisherRest {
 		ReplyMessage reply= new ReplyMessage();
 		if (licenceSpec==null) {
 			reply.setReplyComment("Licence Metadata Spec not found for productId="+productId);
-			reply.setLicenceMetadata(null);
+			reply.setLicenceMetadataSpec(null);
 		} else {
 			reply.setReplyComment("Licence Metadata Spec found for productId="+productId);
-			reply.setLicenceMetadata(licenceSpec.getLicenceMetadataSpec());
+			reply.setLicenceMetadataSpec(licenceSpec.getLicenceMetadataSpec());
 		}
 		
 		return Response

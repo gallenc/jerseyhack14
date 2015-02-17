@@ -7,7 +7,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import org.opennms.karaf.licencemgr.PublisherKeys;
 
-@XmlRootElement(name="LicenceSpecification")
+@XmlRootElement(name="licenceSpecification")
 @XmlAccessorType(XmlAccessType.NONE)
 public class LicenceSpecification {
 

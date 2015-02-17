@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 
 
-@XmlRootElement(name="LicenceMetadata")
+@XmlRootElement(name="licenceMetadata")
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType (propOrder={"productId","licensee","licensor","systemId","startDate","expiryDate","options"})
 public class LicenceMetadata {

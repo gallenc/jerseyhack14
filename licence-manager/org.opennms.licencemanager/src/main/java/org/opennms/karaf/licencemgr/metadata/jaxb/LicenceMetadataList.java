@@ -11,12 +11,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 
 
-@XmlRootElement(name="licenceMetadata")
+@XmlRootElement(name="licenceMetadataSpecs")
 @XmlAccessorType(XmlAccessType.NONE)
 public class LicenceMetadataList  {
 
-	@XmlElementWrapper(name="licenceMetadataList")
-	@XmlElement(name="licenceMetadata")
+	@XmlElementWrapper(name="licenceMetadataSpecList")
+	@XmlElement(name="licenceMetadataSpec")
 	private List<LicenceMetadata> licenceMetadataList = new ArrayList<LicenceMetadata>();
 
 	/**

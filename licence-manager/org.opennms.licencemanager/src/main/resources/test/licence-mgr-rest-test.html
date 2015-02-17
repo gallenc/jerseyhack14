@@ -14,7 +14,7 @@
 		var password = "admin";
 				
 		var addLicenceSpec ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-		+ "<LicenceSpecification>\n"
+		+ "<licenceSpecification>\n"
 		+ " <productId>org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT</productId>\n"
 		+ " <aesSecretKeyStr>0009AA12B0AB63C9B5760361FADC990D</aesSecretKeyStr>\n"
 		+ " <publicKeyStr>885ffe7c62e1cfa8dca02332d025ad3f9dcc7a08d4882a760ee22a8f71aa5337f9ef60087fddc45c9af2dfd458423119775885d7e4891e2e8be6746d5e037405f92a7c32396c76c868639a81fd553aa896052ca9fc3d0f66627c9cd6fd728931b4b46ec939174ddcec2b60b100339bc4bc37fb2e8fc25e581c128d5cd406d775d26158b66a4e6b80db7e48ccf0ab1a05812840c2d1704861f00cbc42f79482fd35b4f75cd64833e358265592892d65e6d230d078e8b52ef98b5b67e7e14b230f3135579b83953bd11f8b1f433121b47da1513449f27bb06c1ed80cd4d7864fbad5e562f50ff8f36c5e778ec0195628ed56c0daa64985a6a1c3ff96c1dfea99a7-10001</publicKeyStr>\n"
@@ -33,7 +33,7 @@
 		+ "     </option>\n"
 		+ "   </options>\n"
 		+ " </licenceMetadataSpec>\n"
-		+ "</LicenceSpecification>\n";
+		+ "</licenceSpecification>\n";
 
 		var addproductMetadata ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 		+ "<product>\n"
@@ -47,7 +47,7 @@
 		+ "</product>\n"
 		
 		var createlicenceMetadata ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
-			+ "<LicenceMetadata>\n"
+			+ "<licenceMetadata>\n"
 			+ "<productId>org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT</productId>\n"
 			+ "<licensee>Mr Craig Gallen</licensee>\n"
 			+ "<licensor>OpenNMS UK</licensor>\n"
@@ -60,7 +60,8 @@
 			+ "    <name>newname</name>\n"
 			+ "    <value>newvalue</value>\n" 
 			+ "  </option>\n"
-			+ " </options>\n" + "</LicenceMetadata>\n";
+			+ " </options>\n" 
+			+ "</licenceMetadata>\n";
 			
 		var defaultProductId="org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT";
 		//product publisher
@@ -315,7 +316,7 @@
 				</p>
 			</td>
 			<td>
-			<p>Create Licence Metadata</p> 
+			<p>Create Licence from Licence Metadata</p> 
 				<textarea rows="15" cols="75"
 					id="createlicenceMetadata" form="usrform" style="resize: none;"></textarea>
 				<button type="button" onclick="createlicence()">Create Licence</button>

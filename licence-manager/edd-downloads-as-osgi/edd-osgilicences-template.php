@@ -57,7 +57,9 @@
 get_header ();
 
 // check if OSGi licence generator debugging is enabled
-$osgipub_osgi_debug = get_option ( 'osgipub_osgi_debug' );
+//$osgipub_osgi_debug = get_option ( 'osgipub_osgi_debug' );
+//TODO MAKE A VARIABLE IN START
+$osgipub_osgi_debug = 'on';
 if ($osgipub_osgi_debug == 'on') {
 	?>
 <h2>OSGi Licence Publisher debugging enabled</h2>
@@ -208,7 +210,7 @@ try {
 	// see http://www.smashingmagazine.com/2011/03/08/ten-things-every-wordpress-plugin-developer-should-know/
 	// contains maven unique id of product to which this licence applies
 	// TODO REMOVE - THIS IS ONLY FOR TEST
-	update_post_meta ( $post_id, 'edd_osgiProductIdStr', 'org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT' );
+	//update_post_meta ( $post_id, 'edd_osgiProductIdStr', 'org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT' );
 	// end debug data
 	
 	// get the plugin settings and throw an error if setting not set
@@ -255,8 +257,12 @@ try {
 	$edd_osgiLicenceMetadataStr = get_post_meta ( $post_id, 'edd_osgiLicenceMetadataStr', true );
 	// contains XML representation of the specification for licence
 	$edd_osgiLicenceMetadataSpecStr = get_post_meta ( $post_id, 'edd_osgiLicenceMetadataSpecStr', true );
+	
+	// THESE ARE POPULATED BY EDD
 	// contains username of customer who can view and modify this licence
 	$edd_osgiLicencee = get_post_meta ( $post_id, 'edd_osgiLicencee', true );
+	// post id of the associated payment (used to cross link back to payment)
+	$edd_payment_post_id = (int) get_post_meta ( $post_id, 'edd_payment_post_id', true );
 	
 	// if a licence has already been constructed do not allow it to be changed
 	// if a licence is not populated then allow editing of Metadata fields and generation of licence
@@ -311,6 +317,15 @@ try {
 			echo "the first time page is viewed, we populate osgiLicenceMetadata property  with osgiLicenceMetaDataSpec\n";
 			// simple string replace to turn <licenceMetadataSpec>...</licenceMetadataSpec> into <licenceMetadata>...</licenceMetadata>
 		$edd_osgiLicenceMetadataStr = str_replace ( "licenceMetadataSpec", "licenceMetadata", $edd_osgiLicenceMetadataSpecStr );
+		
+		// add user information for licencee
+		$osgilicenceMetadata = new SimpleXMLElement ( $edd_osgiLicenceMetadataStr );
+		// this is complex because xpath appears to be only way to set value in SimpleXMLElement
+		$keyNodes = $osgilicenceMetadata->xpath ( '//licensee' );
+		$keyNode = $keyNodes [0];
+		$keyNode->{0} = htmlspecialchars ( $edd_osgiLicencee );
+		$edd_osgiLicenceMetadataStr = ( string ) $osgilicenceMetadata->asXML ();
+
 		update_post_meta ( $post_id, 'edd_osgiLicenceMetadataStr', $edd_osgiLicenceMetadataStr );
 	} elseif ($osgipub_osgi_debug == 'on')
 		echo "not first time page has been viewed so edd_osgiLicenceMetadataStr is already populated\n";
@@ -332,6 +347,14 @@ try {
 	}
 	?>
 <h1>Generate OSGi Licence</h1>
+
+<?php 
+if(isset($edd_payment_post_id)){
+?>
+<p><a href="<?php echo add_query_arg( 'payment_key', edd_get_payment_key( $edd_payment_post_id ), edd_get_success_page_uri() );?>" >Link to Payment Receipt: <?php echo edd_get_payment_number( $edd_payment_post_id ); ?></a><p>
+<?php 
+}
+?>
 
 <h2>Licence Metadata</h2>
 

@@ -79,10 +79,12 @@ public class LicenceAuthenticatorImpl implements LicenceAuthenticator {
 			throw new ServiceException("licence productId='"+licenceMetadata.getProductId()+"' does not match expected productId:'"+productId+"'");
 		}
 
-		// check system id. If systemID == ALL_SYSTEM_IDS then this test is passed
+		// check system id. If systemID == ALL_SYSTEM_IDS then this test is passed because any systemId is allowed
 		if (! systemId.equals(licenceMetadata.getSystemId()) && ! "ALL_SYSTEM_IDS".equals(licenceMetadata.getSystemId())) {
-			System.out.println("licence systemId='"+licenceMetadata.getSystemId()+"' does not match expected systemId:'"+productId+"'");
-			throw new ServiceException("licence systemId='"+licenceMetadata.getSystemId()+"' does not match expected systemId:'"+productId+"'");
+			System.out.println("licence systemId='"+licenceMetadata.getSystemId()+"' does not match local systemId='"+systemId
+					+ "' in installed licence for productId='"+productId+"'");
+			throw new ServiceException("licence systemId='"+licenceMetadata.getSystemId()+"' does not match local systemId='"+systemId
+					+ "' in installed licence for productId='"+productId+"'");
 		}
 
 		// TODO licenceService.authenticated licence 
