@@ -1,0 +1,13 @@
+#set( $symbol_pound = '#' )
+#set( $symbol_dollar = '$' )
+#set( $symbol_escape = '\' )
+<?xml version="1.0" encoding="UTF-8"?>
+<product>
+	<organization>OpenNMS Project</organization>
+	<productDescription>Test product description</productDescription>
+	<productId>${package}/${package}.newfeature/${version}</productId>
+	<productName>test Bundle</productName>
+	<productUrl>http:${symbol_escape}${symbol_escape}opennms.co.uk</productUrl>
+    <licenceKeyRequired>true</licenceKeyRequired>
+    <licenceType>OpenNMS EULA See http:${symbol_escape}${symbol_escape}opennms.co.uk${symbol_escape}EULA</licenceType>
+</product>

@@ -26,6 +26,7 @@ create renewal time field in licence metadata - to that new licence is created w
 look at licence options - change to numbers - and possibly add value constants or range
 DONE replace rest interface delete GET with DELETE command/ and or ?confirm=true
 check licence metadata includes / does not include licencee info etc
+check 400 incorrect reponse from product spec generates an error message not comment
 
 command interface
 mirror all commands - 'delete all' commands not mirrored
