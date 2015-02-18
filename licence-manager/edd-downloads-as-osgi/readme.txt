@@ -1,48 +1,50 @@
 === EDD Downloads As Services ===
-Contributors: sumobi
-Donate link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=EFUPMPEZPGW7L
-Tags: easy digital downloads, digital downloads, e-downloads, edd, services, e-commerce, ecommerce, sumobi
+Contributors: C Gallen OpenNMS / Entimoss
+Donate link: 
+Tags: easy digital downloads, digital downloads, e-downloads, edd, services, e-commerce, ecommerce, cgallen, osgi
 Requires at least: 3.3
-Tested up to: 3.9 alpha
-Stable tag: 1.0.4
+Tested up to: 4.1
+Stable tag: 0.9.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Mark Downloads As Services in Easy Digital Downloads
+Allow OSGi Licence Bundles to be sold by Easy Digital Downloads
 
 == Description ==
 
 This plugin requires [Easy Digital Downloads](http://wordpress.org/extend/plugins/easy-digital-downloads/ "Easy Digital Downloads") v1.9 or greater. 
 
-Many customers use Easy Digital Downloads to sell "services" rather than "downloads". We get many requests to remove the "no downloadable files" on the purchase confirmation page, because their services do not have/need files attached. This plugin fixes that.
+It also requires an OSGi licence manager to be running in a separate karaf instance
 
-It will allow you to select individual downloads which are services, or an entire category which houses your services. If a download is marked as a service, or belongs to one of the categories you selected, the the purchase confirmation page will not show "no downloadable files" for that particular download. If your service does have a file attached, it will still show the file. It also slightly modifies the email receipt so it does not include a dash next to the name.
+The plugin creates a new download and post type for OSGi licences and links purchases to licences.
 
-So far, this plugin allows you to:
+Settings for this plugin are provided in the Easy Digital Downloads Settings Extensions page
+This allows you to specify the URL, username and password for the OSGi licence generator
+A Debug option is provided to help identifying problems with this plugin communicating with the OSGi licence generator
 
-1. Hide the "no downloadable files found" message on the purchase confirmation page when your service has no download files attached to it
-1. Hide the extra dash in the purchase receipt email when your service has no download files attached to it
-1. Select categories from the plugin settings that house your "services". Any download within the selected categories will be marked as a service
-1. Mark downloads as services on a per-download level. A checkbox is added to the download configuration metabox
+To view the licences owned by a user, you should create a My Licences page and include the
+\[osgi_licence_list\] shortcode
 
-Suggestions welcome for future features. Developers can take advantage of the _edd_das_enabled meta_key and extend the plugin to suit their needs.
+To make a download generate a licence page you should click 'This download is an OSGi licenced module'
+and enter the OSGi Product Id for the download in the field
 
-**Looking for the perfect Easy Digital Downloads theme?**
+To see the product metadata for a product you should add the following shortcode to your download page
+\[osgi_product_description\]
+
+This will upload the product metadata once. If you want to refresh the metadata every time the page is loaded use
+\[osgi_product_description retrieve == "always"\]
+
+Suggestions welcome for future features. 
+
+(Thanks to Andrew Munro, Sumobi for the downloads as a service plugin which acted as a template for this work)
+
+**Easy Digital Downloads theme**
+This plugin has been tested with the following Shop Front theme from Andrew Munro, Sumobi
 
 [http://wordpress.org/themes/shop-front/](http://wordpress.org/themes/shop-front/ "Shop Front")
 
-Shop Front is a simple, responsive & easily extensible theme for the Easy Digital Downloads plugin. It also functions perfectly without the plugin as a standard WordPress blog. A free child theme for modifications can be downloaded from [http://sumobi.com/shop/shop-front-child-theme](http://sumobi.com/shop/shop-front-child-theme "Shop Front Child Theme") as well as other free and paid add-ons to enhance the functionality and styling.
-
 **Stay up to date**
-
-*Subscribe to updates* 
-[http://sumobi.com](http://sumobi.com "Sumobi")
-
-*Become a fan on Facebook* 
-[http://www.facebook.com/sumobicom](http://www.facebook.com/sumobicom "Facebook")
-
-*Follow me on Twitter* 
-[http://twitter.com/sumobi_](http://twitter.com/sumobi_ "Twitter")
+TBD
 
 == Installation ==
 
@@ -51,33 +53,20 @@ Shop Front is a simple, responsive & easily extensible theme for the Easy Digita
 1. Navigate to `wp-admin/plugins.php` on your site (your WP Admin plugin page)
 1. Activate this plugin
 
-OR you can just install it with WordPress by going to Plugins >> Add New >> and type this plugin's name
+(this plugin has not yet been contributed to word press so cannot be installed using the 'add new' plugin feature)
 
 == Screenshots ==
-
-1. Select a category to make all downloads within it a service
-1. Mark downloads as services on a per-download level
+TBD
 
 == Upgrade Notice ==
 
-= 1.0.4 =
-Spanish translations
+= 0.9.0 =
+Initial Release
 
 == Changelog ==
 
-= 1.0.4 =
-* New: Spanish translations courtesy of Andrew Kurtis
+= 0.9.0 =
+* Initial Release
 
-= 1.0.3 =
-* Fix: Fatal error that could occur
-
-= 1.0.2 =
-* Fix: PHP notice
-* Fix: PHP warning
-
-= 1.0.1 =
-* Fix: If a download is marked as a service but has downloadable files attached, the files will be still shown as normal 
-* Fix: Moved the checkbox option to the "Download Settings" metabox
-
-= 1.0 =
+= 0.9 =
 * Initial release
