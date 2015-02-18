@@ -90,9 +90,13 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		// return $query;
 		// }
 		
-		// // [footag foo="bar"] function footag_func( $atts ) { return "foo = { $atts[foo] }"; }
-		// shortcodes [osgi_licence_list]
-		// shortcodes [osgi_licence_list user_filter="current_user"]
+		/**
+		 * provides shortcodes for listing set of licences
+		 * shortcodes [osgi_licence_list] lists all licences
+		 * shortcodes [osgi_licence_list user_filter="current_user"] lists ontly licences for current logged in user
+		 *
+		 * @param unknown $atts        	
+		 */
 		public function osgi_licence_list_shortcode($atts) {
 			$content = "";
 			
@@ -146,6 +150,148 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 			
 			return $content;
 		}
+		
+		/**
+		 * provides shortcodes for retrieving product description from licence generator
+		 * shortcodes [osgi_product_description] retrieving product description from licence generator every time page viewed
+		 * shortcodes [osgi_licence_list retrieve="if_new"] only retreives a new product descriptino the first time page is viewed
+		 *
+		 * @param unknown $atts        	
+		 */
+		public function osgi_product_description_shortcode($atts) {
+			$content = "";
+			$content .="<div id=\"osgi_product_description_shortcode\" class=\"osgi_metadata\">\n";
+			
+			if ($this->osgipub_osgi_debug) {
+				$content .= "<p>debug: Running osgi_product_description shortcode </p>\n";
+				$content .= "<p>debug: Attributes:";
+				if ("" != $atts)
+					foreach ( $atts as $key => $value ) {
+						$content .= "   " . $key . "=" . $value . "<br>\n";
+					}
+				else
+					$content .= " Not Set";
+				$content .= "</p>\n";
+			}
+			
+			try {
+				// get the base url URL of the OSGi licence generator service from settings
+				$osgiLicenceGeneratorUrl = edd_get_option ( 'osgipub_osgi_licence_pub_url' );
+				if (! isset ( $osgiLicenceGeneratorUrl ) || '' == $osgiLicenceGeneratorUrl) {
+					throw new Exception ( 'edd-osgi: You must set the OSGi Licence Publisher URL in the plugin settings' );
+				}
+				
+				// get the username to access the OSGi licence generator service from settings
+				$osgi_username = edd_get_option ( 'osgipub_osgi_username' );
+				if (! isset ( $osgi_username )) {
+					throw new Exception ( 'edd-osgi: You must set the OSGi User Name in the plugin settings' );
+				}
+				
+				// get the password to access of the OSGi licence generator service from settings
+				$osgi_password = edd_get_option ( 'osgipub_osgi_password' );
+				if (! isset ( $osgi_password )) {
+					throw new Exception ( 'edd-osgi: You must set the OSGi Password in the plugin settings' );
+				}
+				
+				$edd_osgiProductIdStr = get_post_meta ( get_the_ID (), '_edd_osgiProductIdStr', true );
+				if (! isset ( $osgi_password )) {
+					throw new Exception ( 'edd-osgi: You must set productId in the download metadata settings' );
+				}
+				
+				// product descriptor string conteins previously retreived product description but may not be set
+				$edd_osgiProductMetadataStr = get_post_meta ( get_the_ID (), '_edd_osgiProductMetadataStr', true );
+				
+				// update time string is tiem when matadata last updated
+				$edd_osgiProductMetadataStrUpdateTime = get_post_meta ( get_the_ID (), '_edd_osgiProductMetadataStrUpdateTime', true );
+				
+				if ($this->osgipub_osgi_debug) {
+					$content .= "<p>";
+					$content .= "debug: osgiLicenceGeneratorUrl=" . $osgiLicenceGeneratorUrl . "<br>\n";
+					$content .= "debug: osgi_username=" . $osgi_username . "<br>\n";
+					$content .= "debug: osgi_password=" . $osgi_password . "<br>\n";
+					$content .= "debug: edd_osgiProductIdStr=" . $edd_osgiProductIdStr . "<br>\n";
+					$content .= "debug: edd_osgiProductMetadataStrUpdateTimer=" . $edd_osgiProductMetadataStrUpdateTime . "<br>\n";
+					$content .= "debug: edd_osgiProductMetadataStr=" . $edd_osgiProductMetadataStr . "<br>\n";
+					$content .= "</p>";
+				}
+				
+				$retrieve = false;
+				
+				// retrieve matadata from OSGI publisher if edd_osgiProductMetadataStr not populated
+				if (! isset ( $edd_osgiProductMetadataStr ) || "" == $edd_osgiProductMetadataStr) {
+					$retrieve = true;
+				}
+				
+				// retrieve matadata from OSGI publisher if retrieve set to if_new (default)
+				if (isset ( $atts['retrieve'] ) && ($atts['retrieve'] == "if_new")) {
+                     // do nothing - already set to retrieve once
+				}
+				
+				// retrieve matadata from OSGI publisher if retrieve set to always
+				if (isset ( $atts['retrieve'] ) && ($atts['retrieve'] == "always")) {
+					$retrieve = true;
+				}
+
+				// only update product metadata in this product description if $retreive is true
+				if ($retrieve) {
+					if ($this->osgipub_osgi_debug) $content .= "<p>debug: retrieving product matadata</p>";
+						
+					$uri = $osgiLicenceGeneratorUrl . '/pluginmgr/rest/product-pub/getproductspec?productId=' . $edd_osgiProductIdStr;
+					
+					if ($this->osgipub_osgi_debug)
+						$content .= "<p>Get Product Spec request to licence publisher: Basic Authentication\n" . "     username='" . $osgi_username . "' password='" . $osgi_password . "'\n" . "     uri='" . $uri . "</p>\n";
+					
+					$response = \Httpful\Request::get ( $uri )->authenticateWith ( $osgi_username, $osgi_password )->expectsXml ()->send ();
+					
+					if ($this->osgipub_osgi_debug) {
+						$content .= "<p>Response from licence publisher: Http response code='" . $response->code . "' response body:</p>\n";
+						$content .= "<textarea>" . $response->body->asXML () . "</textarea>\n";
+					}
+					
+					// if we cant talk to the licence generator error and leave page
+					if ($response->code != 200) {
+						$msg = 'null';
+						$devmsg = 'null';
+						$code = $response->code;
+						if (isset ( $response->errorMessage )) {
+							$devmsg = ( string ) $response->errorMessage->developerMessage;
+							$msg = ( string ) $response->errorMessage->message;
+						}
+						throw new Exception ( "edd-osgi: Http error code='" . $code . "\n" . "     Cannot retrieve product specification from OSGi licence publisher url=' . $uri . '\n" . "     Reason=' . $msg . '\n" . "     Developer Message='" . $devmsg . "'\n" );
+					}
+					
+					$edd_osgiProductMetadataStr = $response->body->productMetadata->asXML ();
+					update_post_meta ( get_the_ID (), '_edd_osgiProductMetadataStr', $edd_osgiProductMetadataStr );
+					
+					//set time metadata uploaded
+					$objDateTime = new DateTime('NOW');
+					$edd_osgiProductMetadataStrUpdateTime = $objDateTime->format(DateTime::COOKIE);
+					update_post_meta ( get_the_ID (), '_edd_osgiProductMetadataStrUpdateTime', $edd_osgiProductMetadataStrUpdateTime );
+				}
+				
+				// parse the product matadata specification we have just saved as a string
+				$osgiProductMetadataSpec = new SimpleXMLElement ( $edd_osgiProductMetadataStr );
+				
+				$content .= "<table id=\"edd-osgi-productMetadata\" style=\"width: 100%;border: 3px solid;\" >\n";
+				$content .= "<caption>Product Metadata (Last Updated: ". $edd_osgiProductMetadataStrUpdateTime .")</caption>\n";
+				foreach ( $osgiProductMetadataSpec->children () as $key => $value ) {
+					$content .= "    <tr>\n";
+					$content .= "    <td>" . $key . "</td>\n";
+					$content .= "        <td>" . $value . "</td>\n";
+					$content .= "    </tr>\n";
+				}
+				$content .= "</table>\n";
+			} catch ( Exception $e ) {
+				$content .= "<p>" . "osgi_product_description shortcode problem loading page: Exception: " . $e->getMessage () . "</p>\n";
+			}
+			
+			$content .="</div> <!-- id=\"osgi_product_description_shortcode\" -->\n";
+			return $content;
+		}
+		
+		/**
+		 * register post type for osgi_licence_post
+		 */
 		public function reg_post_type() {
 			$args = array (
 					'public' => true,
@@ -165,14 +311,20 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		private function setup_actions() {
 			global $edd_options;
 			
-			error_log ( "CGALLEN CHECKING setupactions\n", 3, "C:\Bitnami\wordpress-4.1-0\apps\wordpress\my-errors.log" );
-			error_log ( "CGALLEN CHECKING setupactions", 0 );
-			;
+// 			error_log ( "CGALLEN CHECKING setupactions\n", 3, "C:\Bitnami\wordpress-4.1-0\apps\wordpress\my-errors.log" );
+// 			error_log ( "CGALLEN CHECKING setupactions", 0 );
+// 			;
 			
 			// shortcodes [osgi_licence_list]
 			add_shortcode ( 'osgi_licence_list', array (
 					$this,
 					'osgi_licence_list_shortcode' 
+			) );
+			
+			// shortcodes [osgi_product_description]
+			add_shortcode ( 'osgi_product_description', array (
+					$this,
+					'osgi_product_description_shortcode' 
 			) );
 			
 			add_action ( 'init', array (
@@ -570,7 +722,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		
 		/**
 		 * TODO MOVE METABOX ENTRIES TO MAIN PANEL - TOO SMALL
-		 * Add Metabox 
+		 * Add Metabox
 		 *
 		 * @since 1.0
 		 */
