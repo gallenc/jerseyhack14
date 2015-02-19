@@ -74,6 +74,6 @@ sort out logging - not just System.out
 Also to do
 create a module - ideally config extension module / add reports module
 
-
+mvn archetype:generate -DarchetypeCatalog=local -DarchetypeGroupId=org.opennms -DarchetypeArtifactId=org.opennms.co.uk.newfeature-archetype  -DarchetypeVersion=0.0.1-SNAPSHOT  -DgroupId=org.opennms.project  -DartifactId=myproject
 
 
