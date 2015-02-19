@@ -3,15 +3,16 @@
 #set( $symbol_escape = '\' )
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <groupId>${package}</groupId>
-    <artifactId>${package}.newfeature</artifactId>
+    <groupId>${groupId}</groupId>
+    <artifactId>${rootArtifactId}</artifactId>
     <version>${version}</version>
   </parent>
 
+  <!-- Licence Generator -->
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>${package}.newfeature.LicenceGenerator</artifactId>
-  <name>LicenceGenerator for New Feature</name>
-  <description>Licence Generator for New Feature</description>
+  <artifactId>${artifactId}</artifactId>
+  <name>${artifactId}</name>
+  <description>Licence Generator for ${rootArtifactId}</description>
   <packaging>jar</packaging>
 
   <build>
@@ -106,7 +107,7 @@
         </executions>
       </plugin>
 
-      <!-- this is a transient artifact and should NEVER be deployed to a repository-->
+      <!-- this is a transient artifact and should NEVER be deployed to a repository -->
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-deploy-plugin</artifactId>

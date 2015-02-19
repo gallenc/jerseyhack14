@@ -1,13 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+## Note the velocity directives have to start after the xml definition line because they
+## create a new line before the xml definition which effects XML parsing
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-<?xml version="1.0" encoding="UTF-8"?>
 <product>
-	<organization>OpenNMS Project</organization>
-	<productDescription>Test product description</productDescription>
-	<productId>${package}/${package}.newfeature/${version}</productId>
-	<productName>test Bundle</productName>
-	<productUrl>http:${symbol_escape}${symbol_escape}opennms.co.uk</productUrl>
-    <licenceKeyRequired>true</licenceKeyRequired>
-    <licenceType>OpenNMS EULA See http:${symbol_escape}${symbol_escape}opennms.co.uk${symbol_escape}EULA</licenceType>
+  <productId>${groupId}/${rootArtifactId}/${version}</productId>
+  <organization>OpenNMS Project</organization>
+  <productDescription>Test product description</productDescription>
+  <productName>test Bundle</productName>
+  <productUrl>http:${symbol_escape}${symbol_escape}opennms.co.uk</productUrl>
+  <licenceKeyRequired>true</licenceKeyRequired>
+  <licenceType>OpenNMS EULA See http:${symbol_escape}${symbol_escape}opennms.co.uk${symbol_escape}EULA</licenceType>
 </product>

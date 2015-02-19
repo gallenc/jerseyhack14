@@ -1,19 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+## Note the velocity directives have to start after the xml definition line because they
+## create a new line before the xml definition which effects XML parsing
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
-<?xml version="1.0" encoding="UTF-8"?>
 <licenceMetadata>
-  <productId>${package}/${package}.newfeature/${version}</productId>
+  <productId>${groupId}/${rootArtifactId}/${version}</productId>
   <licensee></licensee>
   <licensor>OpenNMS UK</licensor>
-  <systemId>4ad72a34e3635c1b-99da3323</systemId>
-  <startDate>2015-01-07T15:10:45.138Z</startDate>
-  <expiryDate>2015-01-07T15:10:45.138Z</expiryDate>
+  <systemId></systemId>
+  <startDate></startDate>
+  <expiryDate></expiryDate>
   <options>
     <option>
       <description>this is the description of option 1</description>
       <name>option1</name>
-      <value>true</value>
+      <value></value>
     </option>
   </options>
 </licenceMetadata>

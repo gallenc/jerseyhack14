@@ -3,15 +3,16 @@
 #set( $symbol_escape = '\' )
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <groupId>${package}</groupId>
-    <artifactId>${package}.newfeature</artifactId>
+    <groupId>${groupId}</groupId>
+    <artifactId>${rootArtifactId}</artifactId>
     <version>${version}</version>
   </parent>
 
+  <!-- LicenceSpec -->
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>${package}.newfeature.LicenceSpec</artifactId>
-  <name>LicenceSpec for New Feature</name>
-  <description>Licence Specification for New Feature</description>
+  <artifactId>${artifactId}</artifactId>
+  <name>${artifactId}</name>
+  <description>LicenceSpec for ${rootArtifactId}</description>
   <packaging>bundle</packaging>
 
   <build>
@@ -32,7 +33,7 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>${symbol_dollar}{project.groupId}</groupId>
-                  <artifactId>${package}.newfeature.LicenceGenerator</artifactId>
+                  <artifactId>${rootArtifactId}.LicenceGenerator</artifactId>
                   <version>${symbol_dollar}{project.version}</version>
                   <type>jar</type>
                   <classifier>sources</classifier>
@@ -43,7 +44,7 @@
                 </artifactItem>
                 <artifactItem>
                   <groupId>${symbol_dollar}{project.groupId}</groupId>
-                  <artifactId>${package}.newfeature.LicenceGenerator</artifactId>
+                  <artifactId>${rootArtifactId}.LicenceGenerator</artifactId>
                   <version>${symbol_dollar}{project.version}</version>
                   <type>jar</type>
                   <classifier>sources</classifier>
@@ -114,10 +115,10 @@
             <Import-Package>
               *
             </Import-Package>
-<!--             <Import-Package> -->
-<!--               org.apache.felix.service.command, -->
-<!--               * -->
-<!--             </Import-Package> -->
+            <!-- <Import-Package> -->
+            <!-- org.apache.felix.service.command, -->
+            <!-- * -->
+            <!-- </Import-Package> -->
           </instructions>
         </configuration>
       </plugin>
