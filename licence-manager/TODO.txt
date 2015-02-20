@@ -87,5 +87,7 @@ mvn archetype:generate -DarchetypeCatalog=local -DarchetypeGroupId=org.opennms \
 -DartifactId=myproject is the artifact id of your generated project
 -Dpackage=org.opennms.project.package is the route package in which the generated licence artifacts will be placed
  
- 
+ setting up Karaf
+  features:install http-whiteboard
+  features:install http
  
