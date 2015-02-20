@@ -14,9 +14,9 @@ public class AesSymmetricKeyCipherTest {
         aesCipher.generateKey();
         
         String sourceStr="Craig is very tall.";
-		System.out.println("sourceStr="+sourceStr);
+		System.out.println("sourceStr (length="+sourceStr.length()+")="+sourceStr);
         String encrypted = aesCipher.aesEncryptStr(sourceStr);
-        System.out.println("encrypted="+encrypted);
+		System.out.println("encrypted= (length="+encrypted.length()+")="+encrypted);
         
         String secretKeyStr = aesCipher.getEncodedSecretKeyStr();
         System.out.println("secretKeyStr="+secretKeyStr);
@@ -25,7 +25,8 @@ public class AesSymmetricKeyCipherTest {
         aesCipher.setEncodedSecretKeyStr(secretKeyStr);
         
         String decrypted = aesCipher.aesDecryptStr(encrypted);
-        System.out.println("decrypted="+decrypted);
+		System.out.println("decrypted= (length="+decrypted.length()+")="+decrypted);
+		
         Assert.assertEquals(decrypted, sourceStr); 
     }
 }

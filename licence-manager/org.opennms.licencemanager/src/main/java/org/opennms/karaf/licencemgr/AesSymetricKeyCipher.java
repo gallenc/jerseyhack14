@@ -1,5 +1,6 @@
 package org.opennms.karaf.licencemgr;
 
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -92,7 +93,7 @@ public class AesSymetricKeyCipher {
 	        AlgorithmParameterSpec algorithmParameterSpec = new IvParameterSpec(seed);
 
 	        cipher.init(Cipher.ENCRYPT_MODE, secretKey, algorithmParameterSpec);
-	        byte[] encryptedMessageBytes = cipher.doFinal(src.getBytes());
+	        byte[] encryptedMessageBytes = cipher.doFinal(src.getBytes("UTF-8"));
 	        
 	        byte[] bytesToEncode = new byte[seed.length + encryptedMessageBytes.length];
 	        System.arraycopy(seed, 0, bytesToEncode, 0, seed.length);
@@ -110,6 +111,8 @@ public class AesSymetricKeyCipher {
 		} catch (IllegalBlockSizeException e) {
 			throw new RuntimeException("problem encrypting AesSymetricKey",e);
 		} catch (BadPaddingException e) {
+			throw new RuntimeException("problem encrypting AesSymetricKey",e);
+		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("problem encrypting AesSymetricKey",e);
 		}
 		
@@ -142,7 +145,8 @@ public class AesSymetricKeyCipher {
 	        byte[] messageDecryptedBytes = new byte[messageDecryptedBytesLength];
 	        System.arraycopy(bytesToDecode, initializationVectorSeedLength, messageDecryptedBytes, 0, messageDecryptedBytesLength);
 
-	        aesDecryptStr = new String(cipher.doFinal(messageDecryptedBytes));
+	        byte[] decodedBytes = cipher.doFinal(messageDecryptedBytes);
+	        aesDecryptStr = new String(decodedBytes, "UTF-8" );
 		} catch (NoSuchAlgorithmException e) {
 			throw new RuntimeException("problem decrypting AesSymetricKey",e);
 		} catch (NoSuchPaddingException e) {
@@ -154,6 +158,8 @@ public class AesSymetricKeyCipher {
 		} catch (IllegalBlockSizeException e) {
 			throw new RuntimeException("problem decrypting AesSymetricKey",e);
 		} catch (BadPaddingException e) {
+			throw new RuntimeException("problem decrypting AesSymetricKey",e);
+		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException("problem decrypting AesSymetricKey",e);
 		}
 
