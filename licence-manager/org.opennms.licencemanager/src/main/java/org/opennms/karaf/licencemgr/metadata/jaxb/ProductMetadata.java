@@ -168,7 +168,7 @@ public class ProductMetadata {
 			this.licenceKeyRequired=productMetadata.licenceKeyRequired;
 			this.licenceType=productMetadata.licenceType;
 		} catch (JAXBException e) {
-			throw new RuntimeException("Problem unmarshalling LicenceMetadata:",e);
+			throw new RuntimeException("Problem unmarshalling ProductMetadata:",e);
 		}
 	}
 

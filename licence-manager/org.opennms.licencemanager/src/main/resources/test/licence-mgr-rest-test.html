@@ -199,7 +199,7 @@
 }
 #right-column {
     position: fixed;
-	left: 900px;
+	left: 850px;
     top:  50px;
 }
 
@@ -479,7 +479,9 @@
 			</td>
 			<td>URL Command Example:<BR><a href="../rest/licence-mgr/addlicence?licence=">[baseUrl:port]/pluginmgr/rest/licence-mgr/addlicence?licence=</a>
 			<BR><BR>Button command Example:<BR>
-			<input type="text" id="addlicence" form="usrform" style="width: 500px; "> Licence String<BR><BR>
+<!-- 			<input type="textarea" id="addlicence" form="usrform" style="width: 500px; "> Licence String<BR><BR> -->
+			 Licence String<BR><BR>
+			<textarea rows="25" cols="60" id="addlicence" form="usrform"></textarea>
 			<button type="button" onclick="sendGETXMLDoc('../rest/licence-mgr/addlicence?licence='+document.getElementById('addlicence').value)">Licence Manager Add Licence</button>
              </td>
 		</tr>
