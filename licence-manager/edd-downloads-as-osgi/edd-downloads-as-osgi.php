@@ -160,7 +160,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		 */
 		public function osgi_product_description_shortcode($atts) {
 			$content = "";
-			$content .="<div id=\"osgi_product_description_shortcode\" class=\"osgi_metadata\">\n";
+			$content .= "<div id=\"osgi_product_description_shortcode\" class=\"osgi_metadata\">\n";
 			
 			if ($this->osgipub_osgi_debug) {
 				$content .= "<p>debug: Running osgi_product_description shortcode </p>\n";
@@ -223,28 +223,29 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 				}
 				
 				// retrieve matadata from OSGI publisher if retrieve set to if_new (default)
-				if (isset ( $atts['retrieve'] ) && ($atts['retrieve'] == "if_new")) {
-                     // do nothing - already set to retrieve once
+				if (isset ( $atts ['retrieve'] ) && ($atts ['retrieve'] == "if_new")) {
+					// do nothing - already set to retrieve once
 				}
 				
 				// retrieve matadata from OSGI publisher if retrieve set to always
-				if (isset ( $atts['retrieve'] ) && ($atts['retrieve'] == "always")) {
+				if (isset ( $atts ['retrieve'] ) && ($atts ['retrieve'] == "always")) {
 					$retrieve = true;
 				}
-
+				
 				// only update product metadata in this product description if $retreive is true
 				if ($retrieve) {
-					if ($this->osgipub_osgi_debug) $content .= "<p>debug: retrieving product matadata</p>";
-						
+					if ($this->osgipub_osgi_debug)
+						$content .= "<p>debug: retrieving product matadata</p>";
+					
 					$uri = $osgiLicenceGeneratorUrl . '/pluginmgr/rest/product-pub/getproductspec?productId=' . $edd_osgiProductIdStr;
 					
 					if ($this->osgipub_osgi_debug)
-						$content .= "<p>Get Product Spec request to licence publisher: Basic Authentication\n" . "     username='" . $osgi_username . "' password='" . $osgi_password . "'\n" . "     uri='" . $uri . "</p>\n";
+						$content .= "<p>debug: Get Product Spec request to licence publisher: Basic Authentication\n" . "     username='" . $osgi_username . "' password='" . $osgi_password . "'\n" . "     uri='" . $uri . "</p>\n";
 					
 					$response = \Httpful\Request::get ( $uri )->authenticateWith ( $osgi_username, $osgi_password )->expectsXml ()->send ();
 					
 					if ($this->osgipub_osgi_debug) {
-						$content .= "<p>Response from licence publisher: Http response code='" . $response->code . "' response body:</p>\n";
+						$content .= "<p>debug: Response from licence publisher: Http response code='" . $response->code . "' response body:</p>\n";
 						$content .= "<textarea>" . $response->body->asXML () . "</textarea>\n";
 					}
 					
@@ -263,9 +264,9 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 					$edd_osgiProductMetadataStr = $response->body->productMetadata->asXML ();
 					update_post_meta ( get_the_ID (), '_edd_osgiProductMetadataStr', $edd_osgiProductMetadataStr );
 					
-					//set time metadata uploaded
-					$objDateTime = new DateTime('NOW');
-					$edd_osgiProductMetadataStrUpdateTime = $objDateTime->format(DateTime::COOKIE);
+					// set time metadata uploaded
+					$objDateTime = new DateTime ( 'NOW' );
+					$edd_osgiProductMetadataStrUpdateTime = $objDateTime->format ( DateTime::COOKIE );
 					update_post_meta ( get_the_ID (), '_edd_osgiProductMetadataStrUpdateTime', $edd_osgiProductMetadataStrUpdateTime );
 				}
 				
@@ -273,7 +274,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 				$osgiProductMetadataSpec = new SimpleXMLElement ( $edd_osgiProductMetadataStr );
 				
 				$content .= "<table id=\"edd-osgi-productMetadata\" style=\"width: 100%;border: 3px solid;\" >\n";
-				$content .= "<caption>Product Metadata (Last Updated: ". $edd_osgiProductMetadataStrUpdateTime .")</caption>\n";
+				$content .= "<caption>Product Metadata (Last Updated: " . $edd_osgiProductMetadataStrUpdateTime . ")</caption>\n";
 				foreach ( $osgiProductMetadataSpec->children () as $key => $value ) {
 					$content .= "    <tr>\n";
 					$content .= "    <td>" . $key . "</td>\n";
@@ -285,7 +286,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 				$content .= "<p>" . "osgi_product_description shortcode problem loading page: Exception: " . $e->getMessage () . "</p>\n";
 			}
 			
-			$content .="</div> <!-- id=\"osgi_product_description_shortcode\" -->\n";
+			$content .= "</div> <!-- id=\"osgi_product_description_shortcode\" -->\n";
 			return $content;
 		}
 		
@@ -311,9 +312,9 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		private function setup_actions() {
 			global $edd_options;
 			
-// 			error_log ( "CGALLEN CHECKING setupactions\n", 3, "C:\Bitnami\wordpress-4.1-0\apps\wordpress\my-errors.log" );
-// 			error_log ( "CGALLEN CHECKING setupactions", 0 );
-// 			;
+			// error_log ( "CGALLEN CHECKING setupactions\n", 3, "C:\Bitnami\wordpress-4.1-0\apps\wordpress\my-errors.log" );
+			// error_log ( "CGALLEN CHECKING setupactions", 0 );
+			// ;
 			
 			// shortcodes [osgi_licence_list]
 			add_shortcode ( 'osgi_licence_list', array (
@@ -432,20 +433,22 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		 */
 		public function edd_osgi_action_payment_receipt_after_table($payment, $edd_receipt_args = null) {
 			if ($this->osgipub_osgi_debug)
-				echo "<p>DEBUG this is the action after table</p>\n";
+				echo "<p>debug: this is the action after table</p>\n";
+			
 			if (isset ( $payment )) {
 				
 				$meta = get_post_meta ( $payment->ID );
 				
 				if ($this->osgipub_osgi_debug) {
-					echo "<p>Payment vardump=";
+					echo "<p>debug: Payment vardump=";
 					var_dump ( $payment );
 					echo "</p>\n";
-					echo "<p>Payment metadata vardump=";
+					echo "<p>debug: Payment metadata vardump=";
 					var_dump ( $meta );
 					echo "</p>\n";
 				}
 				
+				// same $cart = edd_get_payment_meta_cart_details( $payment->ID, true );
 				$downloads = edd_get_payment_meta_cart_details ( $payment->ID, true );
 				
 				$edd_payment_post_id = $payment->ID;
@@ -461,172 +464,189 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 				// see easy-digital-downloads/templates/history-downloads.php
 				// add_query_arg( 'payment_key', edd_get_payment_key( $post->ID ), edd_get_success_page_uri() )
 				if ($downloads) {
+					
+					$display_licence_table = false;
+					
+					// check if any downloads are osgi licenced
 					foreach ( $downloads as $download ) {
-						
+						if ($this->is_osgi ( $download ['id'] ))
+							$display_licence_table = true;
+					}
+					
+					if ($display_licence_table) {
+						echo "<h3>OSGi Licences</h3>\n";
+						echo "<table>\n";
+					}
+					
+					// used to set change licence name for multiple downloads
+					$download_no = 0;
+					foreach ( $downloads as $download ) {
 						// Skip over Bundles. Products included with a bundle will be displayed individually
 						if (edd_is_bundled_product ( $download ['id'] ))
 							continue;
+						
+						$download_no ++;
 						
 						$price_id = edd_get_cart_item_price_id ( $download );
 						$download_files = edd_get_download_files ( $download ['id'], $price_id );
 						$name = get_the_title ( $download ['id'] );
 						
-						if ($this->osgipub_osgi_debug)
-							echo "<p> download [id]=" . $download ['id'] . '</p>\n';
+						// quantity used to handle multiple licences per download
+						for($quantity = 1; $quantity <= $download ['quantity']; $quantity ++) {
 							
-							// product id string from download
-							// contains maven unique id of product to which this licence applies
-						$edd_osgiProductIdStr = get_post_meta ( $download ['id'], '_edd_osgiProductIdStr', true );
-						
-						if ($this->osgipub_osgi_debug) {
-							if (! isset ( $edd_osgiProductIdStr )) {
+							if (isset ( $edd_payment_number )) {
+								// start of table row
+								echo "<tr>\n";
+								echo "<td>\n";
 								
-								echo "<p>from download edd_osgiProductIdStr not set for download [id]=" . $download ['id'] . '</p>\n';
-							} else {
-								echo "<p>from download edd_osgiProductIdStr=";
-								echo $edd_osgiProductIdStr;
-								echo "</p>\n";
-							}
-						}
-						
-						// Retrieve and append the price option name
-						if (! empty ( $price_id )) {
-							$name .= ' - ' . edd_get_price_option_name ( $download ['id'], $price_id, $payment->ID );
-						}
-						
-						if ($this->osgipub_osgi_debug) {
-							echo "<p>payment name=";
-							echo $name;
-							echo "</p>\n";
-						}
-						
-						$licence_post_title = $name . ' - ' . $edd_payment_number;
-						
-						if ($this->osgipub_osgi_debug) {
-							echo "<p>licence_post_title=";
-							echo $licence_post_title;
-							echo "</p>\n";
-						}
-						
-						// remove whitepsace
-						$licence_post_name = preg_replace ( '/\s+/', '', $licence_post_title );
-						
-						if ($this->osgipub_osgi_debug) {
-							echo "<p>licence_post_name=";
-							echo $licence_post_name;
-							echo "</p>\n";
-						}
-						
-						if (isset ( $edd_payment_number )) {
-							
-							if ($this->osgipub_osgi_debug) {
-								echo "<p>edd_payment_number=";
-								echo $edd_payment_number;
-								echo "</p>\n";
-							}
-							
-							$found_post = null;
-							
-							if ($posts = get_posts ( array (
-									'name' => $licence_post_name,
-									'post_type' => 'osgi_licence_post',
-									'post_status' => 'publish',
-									'posts_per_page' => 1 
-							) ))
-								$found_post = $posts [0];
+								// product id string from download
+								// contains maven unique id of product to which this licence applies
+								$edd_osgiProductIdStr = get_post_meta ( $download ['id'], '_edd_osgiProductIdStr', true );
+								
+								// Retrieve and append the price option name
+								if (! empty ( $price_id )) {
+									$name .= ' - ' . edd_get_price_option_name ( $download ['id'], $price_id, $payment->ID );
+								}
+								
+								// product name - payment number - download number
+								$licence_post_title = $name . ' - ' . $edd_payment_number . '-' . $download_no . '-' . $quantity;
+								
+								// remove whitepsace
+								$licence_post_name = preg_replace ( '/\s+/', '', $licence_post_title );
+								
+								if ($this->osgipub_osgi_debug) {
+									echo "<p>debug: download [id]=" . $download ['id'] . '</p>\n';
+									if (! isset ( $edd_osgiProductIdStr )) {
+										echo "<p>debug: from download edd_osgiProductIdStr not set for download [id]=" . $download ['id'] . '</p>\n';
+									} else {
+										echo "<p>debug: from download edd_osgiProductIdStr=";
+										echo $edd_osgiProductIdStr;
+										echo "</p>\n";
+									}
+									echo "<p>debug: payment name=";
+									echo $name;
+									echo "</p>\n";
+									echo "<p>debug: licence_post_title=";
+									echo $licence_post_title;
+									echo "</p>\n";
+									echo "<p>debug: licence_post_name=";
+									echo $licence_post_name;
+									echo "</p>\n";
+									echo "<p>debug: edd_payment_number=";
+									echo $edd_payment_number;
+									echo "</p>\n";
+								}
+								
+								$found_post = null;
+								
+								if ($posts = get_posts ( array (
+										'name' => $licence_post_name,
+										'post_type' => 'osgi_licence_post',
+										'post_status' => 'publish',
+										'posts_per_page' => 1 
+								) )) {
+									$found_post = $posts [0];
+								}
 								
 								// Now, we can do something with $found_post
-							if (! is_null ( $found_post )) {
-								if ($this->osgipub_osgi_debug) {
-									echo "<p>we found the licence post=";
-									echo $found_post->ID;
+								if (! is_null ( $found_post )) {
+									if ($this->osgipub_osgi_debug) {
+										echo "<p>debug: we found the licence post=";
+										echo $found_post->ID;
+										echo "</p>\n";
+									}
+									echo '<p><a href="' . get_post_permalink ( $found_post->ID ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
+									echo "</p>\n";
+								} else {
+									// get post with payment number metadata OR create post with metadata
+									
+									$post = array (
+											// 'ID' => [ <post id> ] // Are you updating an existing post?
+											'post_content' => '<p>post content</p>', // The full text of the post.
+											'post_name' => $licence_post_name, // The name (slug) for your post
+											'post_title' => $licence_post_title, // The title of your post.
+											                                     // 'post_status' => [ 'draft' | 'publish' | 'pending'| 'future' | 'private' | custom registered status ] // Default 'draft'.
+											'post_status' => 'publish', // Default 'draft'.
+											'post_type' => 'osgi_licence_post',
+											// 'post_type' => [ 'post' | 'page' | 'link' | 'nav_menu_item' | custom post type ] // Default 'post'.
+											// 'post_author' => [ <user ID> ] // The user ID number of the author. Default is the current user ID.
+											'ping_status' => 'closed', // Pingbacks or trackbacks allowed. Default is the option 'default_ping_status'.
+											                           // 'post_parent' => [ <post ID> ] // Sets the parent of the new post, if any. Default 0.
+											                           // 'menu_order' => [ <order> ] // If new post is a page, sets the order in which it should appear in supported menus. Default 0.
+											                           // 'to_ping' => // Space or carriage return-separated list of URLs to ping. Default empty string.
+											                           // 'pinged' => // Space or carriage return-separated list of URLs that have been pinged. Default empty string.
+											                           // 'post_password' => [ <string> ] // Password for post, if any. Default empty string.
+											                           // 'guid' => // Skip this and let Wordpress handle it, usually.
+											                           // /'post_content_filtered' => // Skip this and let Wordpress handle it, usually.
+											                           // /'post_excerpt' => [ <string> ] // For all your post excerpt needs.
+											                           // 'post_date' => [ Y-m-d H:i:s ] // The time post was made.
+											                           // 'post_date_gmt' => [ Y-m-d H:i:s ] // The time post was made, in GMT.
+											'comment_status' => 'closed' 
+									);
+									// Default is the option 'default_comment_status', or 'closed'.
+									// 'post_category' => [ array(<category id>, ...) ] // Default empty.
+									// 'tags_input' => [ '<tag>, <tag>, ...' | array ] // Default empty.
+									// 'tax_input' => [ array( <taxonomy> => <array | string> ) ] // For custom taxonomies. Default empty.
+									// 'page_template' => '../edd-downloads-as-osgi.php' // Requires name of template file, eg template.php. Default empty.
+									
+									$newpost_id = wp_insert_post ( $post );
+									
+									// setting product id for licence
+									// update_post_meta ( $newpost_id, 'edd_osgiProductIdStr', 'org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT' );
+									update_post_meta ( $newpost_id, 'edd_osgiProductIdStr', $edd_osgiProductIdStr );
+									
+									// setting customer metadata - not yet used in the template
+									update_post_meta ( $newpost_id, 'edd_payment_customer_id', $edd_payment_customer_id );
+									update_post_meta ( $newpost_id, 'edd_payment_user_id', $edd_payment_user_id );
+									
+									// setting edd_osgiLicencee information
+									$f_name = ( string ) get_user_meta ( $edd_payment_user_id, 'first_name', true );
+									$first_name = (isset ( $f_name ) ? $f_name : "");
+									
+									$l_name = ( string ) get_user_meta ( $edd_payment_user_id, 'last_name', true );
+									$last_name = (isset ( $l_name ) ? $l_name : "");
+									
+									$address = "";
+									$addr = edd_get_customer_address ( $edd_payment_user_id );
+									if (isset ( $addr )) {
+										$address = implode ( ", ", $addr );
+									}
+									
+									$edd_osgiLicencee = $first_name . ", " . $last_name . ", " . $address;
+									update_post_meta ( $newpost_id, 'edd_osgiLicencee', $edd_osgiLicencee );
+									
+									// for reverse lookup of post id of the associated payment
+									update_post_meta ( $newpost_id, 'edd_payment_post_id', $edd_payment_post_id );
+									
+									if ($this->osgipub_osgi_debug) {
+										echo "<p>debug: we created a new licence post=";
+										echo $newpost_id;
+										echo "</p>\n";
+									}
+									echo '<p><a href="' . get_post_permalink ( $newpost_id ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
 									echo "</p>\n";
 								}
-								echo '<p><a href="' . get_post_permalink ( $found_post->ID ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
-								echo "</p>\n";
-							} else {
-								
-								// get post with payment number metadata OR create post with metadata
-								
-								$post = array (
-										// 'ID' => [ <post id> ] // Are you updating an existing post?
-										'post_content' => '<p>post content</p>', // The full text of the post.
-										'post_name' => $licence_post_name, // The name (slug) for your post
-										'post_title' => $licence_post_title, // The title of your post.
-										                                     // 'post_status' => [ 'draft' | 'publish' | 'pending'| 'future' | 'private' | custom registered status ] // Default 'draft'.
-										'post_status' => 'publish', // Default 'draft'.
-										'post_type' => 'osgi_licence_post',
-										// 'post_type' => [ 'post' | 'page' | 'link' | 'nav_menu_item' | custom post type ] // Default 'post'.
-										// 'post_author' => [ <user ID> ] // The user ID number of the author. Default is the current user ID.
-										'ping_status' => 'closed', // Pingbacks or trackbacks allowed. Default is the option 'default_ping_status'.
-										                           // 'post_parent' => [ <post ID> ] // Sets the parent of the new post, if any. Default 0.
-										                           // 'menu_order' => [ <order> ] // If new post is a page, sets the order in which it should appear in supported menus. Default 0.
-										                           // 'to_ping' => // Space or carriage return-separated list of URLs to ping. Default empty string.
-										                           // 'pinged' => // Space or carriage return-separated list of URLs that have been pinged. Default empty string.
-										                           // 'post_password' => [ <string> ] // Password for post, if any. Default empty string.
-										                           // 'guid' => // Skip this and let Wordpress handle it, usually.
-										                           // /'post_content_filtered' => // Skip this and let Wordpress handle it, usually.
-										                           // /'post_excerpt' => [ <string> ] // For all your post excerpt needs.
-										                           // 'post_date' => [ Y-m-d H:i:s ] // The time post was made.
-										                           // 'post_date_gmt' => [ Y-m-d H:i:s ] // The time post was made, in GMT.
-										'comment_status' => 'closed' 
-								);
-								// Default is the option 'default_comment_status', or 'closed'.
-								// 'post_category' => [ array(<category id>, ...) ] // Default empty.
-								// 'tags_input' => [ '<tag>, <tag>, ...' | array ] // Default empty.
-								// 'tax_input' => [ array( <taxonomy> => <array | string> ) ] // For custom taxonomies. Default empty.
-								// 'page_template' => '../edd-downloads-as-osgi.php' // Requires name of template file, eg template.php. Default empty.
-								
-								$newpost_id = wp_insert_post ( $post );
-								
-								// setting product id for licence
-								// update_post_meta ( $newpost_id, 'edd_osgiProductIdStr', 'org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT' );
-								update_post_meta ( $newpost_id, 'edd_osgiProductIdStr', $edd_osgiProductIdStr );
-								
-								// setting customer metadata - not yet used in the template
-								update_post_meta ( $newpost_id, 'edd_payment_customer_id', $edd_payment_customer_id );
-								update_post_meta ( $newpost_id, 'edd_payment_user_id', $edd_payment_user_id );
-								
-								// setting edd_osgiLicencee information
-								$f_name = ( string ) get_user_meta ( $edd_payment_user_id, 'first_name', true );
-								$first_name = (isset ( $f_name ) ? $f_name : "");
-								
-								$l_name = ( string ) get_user_meta ( $edd_payment_user_id, 'last_name', true );
-								$last_name = (isset ( $l_name ) ? $l_name : "");
-								
-								$address = "";
-								$addr = edd_get_customer_address ( $edd_payment_user_id );
-								if (isset ( $addr )) {
-									$address = implode ( ", ", $addr );
-								}
-								
-								$edd_osgiLicencee = $first_name . ", " . $last_name . ", " . $address;
-								update_post_meta ( $newpost_id, 'edd_osgiLicencee', $edd_osgiLicencee );
-								
-								// for reverse lookup of post id of the associated payment
-								update_post_meta ( $newpost_id, 'edd_payment_post_id', $edd_payment_post_id );
-								
-								if ($this->osgipub_osgi_debug) {
-									echo "<p>we created a new licence post=";
-									echo $newpost_id;
-									echo "</p>\n";
-								}
-								echo '<p><a href="' . get_post_permalink ( $newpost_id ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
-								echo "</p>\n";
+								echo "</td>\n";
+								echo "</tr>\n";
 							}
 						}
 					}
+					
+					if ($display_licence_table) {
+						echo "</table>\n";
+					}
+					;
 				}
 			} else
 				echo '<p>payment not set</p>\n';
 			
 			if ($this->osgipub_osgi_debug) {
 				if (isset ( $edd_receipt_args )) {
-					echo "<p>edd_receipt_args vardump=";
+					echo "<p>debug: edd_receipt_args vardump=";
 					var_dump ( $edd_receipt_args );
 					echo "</p>\n";
 				} else
-					echo '<p>edd_receipt_args not set</p>\n';
+					echo '<p>debug: edd_receipt_args not set</p>\n';
 			}
 		}
 		
@@ -806,7 +826,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		 *
 		 * @param int $item_id
 		 *        	ID of download
-		 * @return boolean true if service, false otherwise
+		 * @return boolean true if osgi licenced module, false otherwise
 		 * @return boolean
 		 */
 		public function is_osgi($item_id) {

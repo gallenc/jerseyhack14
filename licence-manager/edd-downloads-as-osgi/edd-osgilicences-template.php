@@ -378,7 +378,7 @@ if(isset($edd_payment_post_id)){
 <?php if (isset($edd_osgiLicenceStr) && $edd_osgiLicenceStr!='' ) { ?>
 	<h2>Generated licence</h2>
 	<p></p>
-	<textarea name="edd_osgiLicenceStr" rows="10" cols="50"
+	<textarea name="edd_osgiLicenceStr" rows="15" cols="50"
 		style="width: 100%; border: 3px solid;" readonly><?php echo $edd_osgiLicenceStr; ?></textarea>
 	<p>(Copy and past this licence into your system)</p>
 	<input type="hidden" name="resetLicence" value="true">
