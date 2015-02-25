@@ -92,29 +92,34 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		
 		/**
 		 * provides shortcodes for listing set of licences
-		 * shortcodes [osgi_licence_list] lists all licences
-		 * shortcodes [osgi_licence_list user_filter="current_user"] lists ontly licences for current logged in user
+		 * shortcodes [osgi_licence_list] lists only licences for current logged in user
+		 * shortcodes [osgi_licence_list user_filter="all_users"] lists licences for all users
 		 *
 		 * @param unknown $atts        	
 		 */
 		public function osgi_licence_list_shortcode($atts) {
 			$content = "";
 			
-			// default return all values
+			// default return only values for current user
 			$args = array (
-					'post_type' => 'osgi_licence_post' 
+					'post_type' => 'osgi_licence_post',
+					'meta_query' => array (
+							array (
+									'key' => 'edd_payment_user_id',
+									'value' => get_current_user_id (),
+									'compare' => '=' 
+							) 
+					) 
 			);
 			
-			if (isset ( $atts->user_filter ) && ($atts->user_filter == "current_user")) {
+			if ($this->osgipub_osgi_debug) {
+				echo "debug: osgi_licence_list_shortcode var_dump (atts )</p>\n" . var_dump ( $atts );
+			}
+			
+			// return all users licences if set to 'all_users'
+			if (isset ( $atts ['user_filter'] ) && ($atts ['user_filter'] == "all_users")) {
 				$args = array (
-						'post_type' => 'osgi_licence_post',
-						'meta_query' => array (
-								array (
-										'key' => 'edd_payment_user_id',
-										'value' => get_current_user_id (),
-										'compare' => '=' 
-								) 
-						) 
+						'post_type' => 'osgi_licence_post' 
 				);
 			}
 			
@@ -175,6 +180,17 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 			}
 			
 			try {
+				
+				$edd_osgi_enabled = get_post_meta ( get_the_ID (), '_edd_osgi_enabled', true );
+				if (! isset ( $edd_osgi_enabled ) || $edd_osgi_enabled != "1") {
+					throw new Exception ( "edd-osgi: You must tick 'This download is an OSGi module on the download definition'" );
+				}
+				
+				$edd_osgiProductIdStr = get_post_meta ( get_the_ID (), '_edd_osgiProductIdStr', true );
+				if (! isset ( $edd_osgiProductIdStr )) {
+					throw new Exception ( 'edd-osgi: You must set productId on the download definition' );
+				}
+				
 				// get the base url URL of the OSGi licence generator service from settings
 				$osgiLicenceGeneratorUrl = edd_get_option ( 'osgipub_osgi_licence_pub_url' );
 				if (! isset ( $osgiLicenceGeneratorUrl ) || '' == $osgiLicenceGeneratorUrl) {
@@ -193,11 +209,6 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 					throw new Exception ( 'edd-osgi: You must set the OSGi Password in the plugin settings' );
 				}
 				
-				$edd_osgiProductIdStr = get_post_meta ( get_the_ID (), '_edd_osgiProductIdStr', true );
-				if (! isset ( $osgi_password )) {
-					throw new Exception ( 'edd-osgi: You must set productId in the download metadata settings' );
-				}
-				
 				// product descriptor string conteins previously retreived product description but may not be set
 				$edd_osgiProductMetadataStr = get_post_meta ( get_the_ID (), '_edd_osgiProductMetadataStr', true );
 				
@@ -206,6 +217,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 				
 				if ($this->osgipub_osgi_debug) {
 					$content .= "<p>";
+					$content .= "debug: edd_osgi_enabled=" . $edd_osgi_enabled . "<br>\n";
 					$content .= "debug: osgiLicenceGeneratorUrl=" . $osgiLicenceGeneratorUrl . "<br>\n";
 					$content .= "debug: osgi_username=" . $osgi_username . "<br>\n";
 					$content .= "debug: osgi_password=" . $osgi_password . "<br>\n";
@@ -283,7 +295,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 				}
 				$content .= "</table>\n";
 			} catch ( Exception $e ) {
-				$content .= "<p>" . "osgi_product_description shortcode problem loading page: Exception: " . $e->getMessage () . "</p>\n";
+				$content .= "<p>" . "Exception in osgi_product_description shortcode: Exception: " . $e->getMessage () . "</p>\n";
 			}
 			
 			$content .= "</div> <!-- id=\"osgi_product_description_shortcode\" -->\n";
@@ -435,7 +447,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 			if ($this->osgipub_osgi_debug)
 				echo "<p>debug: this is the action after table</p>\n";
 			
-			if (isset ( $payment )) {
+			if (isset ( $payment ) && edd_is_payment_complete ( $payment->ID )) {
 				
 				$meta = get_post_meta ( $payment->ID );
 				
@@ -469,7 +481,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 					
 					// check if any downloads are osgi licenced
 					foreach ( $downloads as $download ) {
-						if ($this->is_osgi ( $download ['id'] ))
+						if ($this->is_osgi_licenced ( $download ['id'] ))
 							$display_licence_table = true;
 					}
 					
@@ -483,6 +495,10 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 					foreach ( $downloads as $download ) {
 						// Skip over Bundles. Products included with a bundle will be displayed individually
 						if (edd_is_bundled_product ( $download ['id'] ))
+							continue;
+							
+							// if not osgi licenced bundle skip
+						if (! ($this->is_osgi_licenced ( $download ['id'] )))
 							continue;
 						
 						$download_no ++;
@@ -555,8 +571,8 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 										echo $found_post->ID;
 										echo "</p>\n";
 									}
-									echo '<p><a href="' . get_post_permalink ( $found_post->ID ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
-									echo "</p>\n";
+									echo '<a href="' . get_post_permalink ( $found_post->ID ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
+									echo "\n";
 								} else {
 									// get post with payment number metadata OR create post with metadata
 									
@@ -623,8 +639,8 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 										echo $newpost_id;
 										echo "</p>\n";
 									}
-									echo '<p><a href="' . get_post_permalink ( $newpost_id ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
-									echo "</p>\n";
+									echo '<a href="' . get_post_permalink ( $newpost_id ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
+									echo "\n";
 								}
 								echo "</td>\n";
 								echo "</tr>\n";
@@ -747,16 +763,24 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		 * @since 1.0
 		 */
 		public function add_metabox($post_id) {
-			$checked = ( boolean ) get_post_meta ( $post_id, '_edd_osgi_enabled', true );
+			$is_osgi_enabled = ( boolean ) get_post_meta ( $post_id, '_edd_osgi_enabled', true );
+			$is_osgi_licence = ( boolean ) get_post_meta ( $post_id, '_edd_osgi_islicenced', true );
 			$edd_osgiProductIdStr = ( string ) get_post_meta ( $post_id, '_edd_osgiProductIdStr', true );
 			?>
 <p>
 	<strong><?php apply_filters( 'edd_osgi_header', printf( __( '%s As OSGi Licence:', 'edd-osgi' ), edd_get_label_singular() ) ); ?></strong>
 </p>
 <p>
-	<label for="edd_download_as_osgi"> <input type="checkbox"
-		name="_edd_osgi_enabled" id="edd_download_as_osgi" value="1"
-		<?php checked( true, $checked ); ?> />
+	<label for="edd_download_as_osgi_enabled"> <input type="checkbox"
+		name="_edd_osgi_enabled" id="edd_download_as_osgi_enabled" value="1"
+		<?php checked( true, $is_osgi_enabled ); ?> />
+					<?php apply_filters( 'edd_osgi_header_label', printf( __( 'This %s is an OSGi module', 'edd-osgi' ), strtolower( edd_get_label_singular() ) ) ); ?>
+				</label>
+</p>
+<p>
+	<label for="edd_download_as_osgi_licence"> <input type="checkbox"
+		name="_edd_osgi_islicenced" id="edd_download_as_osgi_licence"
+		value="1" <?php checked( true, $is_osgi_licence ); ?> />
 					<?php apply_filters( 'edd_osgi_header_label', printf( __( 'This %s is an OSGi licenced module', 'edd-osgi' ), strtolower( edd_get_label_singular() ) ) ); ?>
 				</label>
 </p>
@@ -781,7 +805,8 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		 */
 		public function save_metabox($fields) {
 			$fields [0] = '_edd_osgi_enabled';
-			$fields [1] = '_edd_osgiProductIdStr';
+			$fields [1] = '_edd_osgi_islicenced';
+			$fields [2] = '_edd_osgiProductIdStr';
 			return $fields;
 		}
 		
@@ -796,7 +821,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		 * @return boolean
 		 */
 		public function receipt($enabled, $item_id) {
-			if ($this->is_osgi ( $item_id )) {
+			if ($this->is_osgi_licenced ( $item_id )) {
 				return false;
 			}
 			
@@ -810,7 +835,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		 */
 		// TODO CHANGE
 		public function email_receipt($title, $item_id, $price_id) {
-			if ($this->is_osgi ( $item_id )) {
+			if ($this->is_osgi_licenced ( $item_id )) {
 				$title = get_the_title ( $item_id );
 				
 				if ($price_id !== false) {
@@ -829,41 +854,45 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		 * @return boolean true if osgi licenced module, false otherwise
 		 * @return boolean
 		 */
-		public function is_osgi($item_id) {
+		public function is_osgi_licenced($item_id) {
 			global $edd_receipt_args, $edd_options;
 			
 			// get array of osgi categories
-			$osgi_categories = isset ( $edd_options ['edd_osgi_osgi_categories'] ) ? $edd_options ['edd_osgi_osgi_categories'] : '';
+			// $osgi_categories = isset ( $edd_options ['edd_osgi_osgi_categories'] ) ? $edd_options ['edd_osgi_osgi_categories'] : '';
 			
-			$term_ids = array ();
+			// $term_ids = array ();
 			
-			if ($osgi_categories) {
-				foreach ( $osgi_categories as $term_id => $term_name ) {
-					$term_ids [] = $term_id;
-				}
-			}
+			// if ($osgi_categories) {
+			// foreach ( $osgi_categories as $term_id => $term_name ) {
+			// $term_ids [] = $term_id;
+			// }
+			// }
 			
-			$is_osgi = get_post_meta ( $item_id, '_edd_osgi_enabled', true );
+			$is_osgi_licenced = get_post_meta ( $item_id, '_edd_osgi_islicenced', true );
 			
 			// get payment
-			$payment = get_post ( $edd_receipt_args ['id'] );
-			$meta = isset ( $payment ) ? edd_get_payment_meta ( $payment->ID ) : '';
-			$cart = isset ( $payment ) ? edd_get_payment_meta_cart_details ( $payment->ID, true ) : '';
+			// $payment = get_post ( $edd_receipt_args ['id'] );
+			// $meta = isset ( $payment ) ? edd_get_payment_meta ( $payment->ID ) : '';
+			// $cart = isset ( $payment ) ? edd_get_payment_meta_cart_details ( $payment->ID, true ) : '';
 			
-			if ($cart) {
-				foreach ( $cart as $key => $item ) {
-					$price_id = edd_get_cart_item_price_id ( $item );
-					
-					$download_files = edd_get_download_files ( $item_id, $price_id );
-					
-					// if the service has a file attached, we still want to show it
-					if ($download_files)
-						return;
-				}
-			}
+			// if ($cart) {
+			// foreach ( $cart as $key => $item ) {
+			// $price_id = edd_get_cart_item_price_id ( $item );
+			
+			// $download_files = edd_get_download_files ( $item_id, $price_id );
+			
+			// // if the service has a file attached, we still want to show it
+			// if ($download_files)
+			// return;
+			// }
+			// }
 			
 			// check if download has meta key or has a service term assigned to it
-			if ($is_osgi || has_term ( $term_ids, 'download_category', $item_id )) {
+			// if ($is_osgi_licenced || has_term ( $term_ids, 'download_category', $item_id )) {
+			// return true;
+			// }
+			
+			if ($is_osgi_licenced) {
 				return true;
 			}
 			
@@ -876,28 +905,28 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		 * @return array
 		 * @since 1.0
 		 */
-		public function get_terms() {
-			$args = array (
-					'hide_empty' => false,
-					'hierarchical' => false 
-			);
-			
-			$terms = get_terms ( 'download_category', apply_filters ( 'edd_osgi_get_terms', $args ) );
-			
-			$terms_array = array ();
-			
-			foreach ( $terms as $term ) {
-				$term_id = $term->term_id;
-				$term_name = $term->name;
-				
-				$terms_array [$term_id] = $term_name;
-			}
-			
-			if ($terms)
-				return $terms_array;
-			
-			return false;
-		}
+		// public function get_terms() {
+		// $args = array (
+		// 'hide_empty' => false,
+		// 'hierarchical' => false
+		// );
+		
+		// $terms = get_terms ( 'download_category', apply_filters ( 'edd_osgi_get_terms', $args ) );
+		
+		// $terms_array = array ();
+		
+		// foreach ( $terms as $term ) {
+		// $term_id = $term->term_id;
+		// $term_name = $term->name;
+		
+		// $terms_array [$term_id] = $term_name;
+		// }
+		
+		// if ($terms)
+		// return $terms_array;
+		
+		// return false;
+		// }
 		
 		/**
 		 * Settings
@@ -911,13 +940,13 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 							'name' => '<strong>' . __ ( 'Downloads As OSGi Licenced Bundles', 'edd-osgi' ) . '</strong>',
 							'type' => 'header' 
 					),
-					array (
-							'id' => 'edd_osgi_service_categories',
-							'name' => __ ( 'Select OSGi licence Categories', 'edd-osgi' ),
-							'desc' => __ ( 'Select the categories that contain "OSGi Licences"', 'edd-osgi' ),
-							'type' => 'multicheck',
-							'options' => $this->get_terms () 
-					),
+					// array (
+					// 'id' => 'edd_osgi_service_categories',
+					// 'name' => __ ( 'Select OSGi licence Categories', 'edd-osgi' ),
+					// 'desc' => __ ( 'Select the categories that contain "OSGi Licences"', 'edd-osgi' ),
+					// 'type' => 'multicheck',
+					// 'options' => $this->get_terms ()
+					// ),
 					array (
 							'id' => 'osgipub_osgi_licence_pub_url',
 							'name' => __ ( 'Licence Publisher URL', 'edd' ),
@@ -929,7 +958,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 					array (
 							'id' => 'osgipub_osgi_username',
 							'name' => __ ( 'Licence Publisher Username', 'edd' ),
-							'desc' => __ ( 'Set the username to access the OSGi licence publisher service', 'edd-osgi' ),
+							'desc' => __ ( 'Set the username for the OSGi licence publisher service', 'edd-osgi' ),
 							'type' => 'text',
 							'size' => 'regular',
 							'std' => 'admin' 
@@ -937,7 +966,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 					array (
 							'id' => 'osgipub_osgi_password',
 							'name' => __ ( 'Licence Publisher Password', 'edd' ),
-							'desc' => __ ( 'Set the password to access the OSGi licence publisher service', 'edd-osgi' ),
+							'desc' => __ ( 'Set the password for the OSGi licence publisher service', 'edd-osgi' ),
 							'type' => 'text',
 							'size' => 'regular',
 							'std' => 'admin' 

@@ -57,7 +57,7 @@
 get_header ();
 
 // check if OSGi licence generator debugging is enabled
-$osgipub_osgi_debug = edd_get_option ( 'osgipub_osgi_debug');
+$osgipub_osgi_debug = edd_get_option ( 'osgipub_osgi_debug' );
 if ($osgipub_osgi_debug) {
 	?>
 <h2>OSGi Licence Publisher debugging enabled</h2>
@@ -66,12 +66,12 @@ if ($osgipub_osgi_debug) {
 	echo "Easy Digital Downloads OSGi publisher plugin debugging start\n";
 	echo "************************\n";
 	echo "EDD OSGi Plugin settings\n";
-	echo "   Debug osgipub_osgi_debug:" . edd_get_option ( 'osgipub_osgi_debug') . "\n";
- 	echo "   Username osgipub_osgi_username:" . edd_get_option ( 'osgipub_osgi_username'). "\n";
-
- 	echo "   Password osgipub_osgi_password:" . edd_get_option ( 'osgipub_osgi_password' ). "\n";
-
- 	echo "   Licence pUblisher URL osgipub_osgi_licence_pub_url:" . edd_get_option ( 'osgipub_osgi_licence_pub_url' ). "\n\n";
+	echo "   Debug osgipub_osgi_debug:" . edd_get_option ( 'osgipub_osgi_debug' ) . "\n";
+	echo "   Username osgipub_osgi_username:" . edd_get_option ( 'osgipub_osgi_username' ) . "\n";
+	
+	echo "   Password osgipub_osgi_password:" . edd_get_option ( 'osgipub_osgi_password' ) . "\n";
+	
+	echo "   Licence pUblisher URL osgipub_osgi_licence_pub_url:" . edd_get_option ( 'osgipub_osgi_licence_pub_url' ) . "\n\n";
 	echo "************************\n";
 	echo "Page debug messages:\n";
 }
@@ -110,28 +110,28 @@ function licenceMetadataForm($_licenceMetadata, $_licenceMetadataSpec, $noinput)
 		}
 	}
 	// TODO options
-	//$specOptions = ( array ) $licenceMetadataSpec->options->children ();
-// 	echo "debug XXXXvar_dump=" . var_dump($specOptions );
-// 	foreach ( $_licenceMetadata->options->children () as $option ) {
-// 		$name = $option->name;
-// 		$value = $option->value;
-// 		$description = $option->description;
-// 		$MetadataFormStr .= "    <tr>\n";
-// 		if (('' != $specOptions [$key]) || $noinput) {
-// 			$MetadataFormStr .= "      <td>" . $name . "</td>\n";
-// 		} else {
-// 			$MetadataFormStr .= "      <td>" . $name . " <bold>**</bold></td>\n"; // ** indicates editable field
-// 		}
-// 		$MetadataFormStr .= "      <td>\n";
-// 		$MetadataFormStr .= "            <input type=\"text\" name=\"" . $name . "\" value=\"" . $value . "\"";
-// 		if ('' != $specOptions [$key] || $noinput) {
-// 			$MetadataFormStr .= " readonly";
-// 		}
-// 		$MetadataFormStr .= ">\n";
-// 		$MetadataFormStr .= "        </td>\n";
-// 		$MetadataFormStr .= "        <td>" . $description . "</td>\n";
-// 		$MetadataFormStr .= "    </tr>\n";
-// 	}
+	// $specOptions = ( array ) $licenceMetadataSpec->options->children ();
+	// echo "debug XXXXvar_dump=" . var_dump($specOptions );
+	// foreach ( $_licenceMetadata->options->children () as $option ) {
+	// $name = $option->name;
+	// $value = $option->value;
+	// $description = $option->description;
+	// $MetadataFormStr .= " <tr>\n";
+	// if (('' != $specOptions [$key]) || $noinput) {
+	// $MetadataFormStr .= " <td>" . $name . "</td>\n";
+	// } else {
+	// $MetadataFormStr .= " <td>" . $name . " <bold>**</bold></td>\n"; // ** indicates editable field
+	// }
+	// $MetadataFormStr .= " <td>\n";
+	// $MetadataFormStr .= " <input type=\"text\" name=\"" . $name . "\" value=\"" . $value . "\"";
+	// if ('' != $specOptions [$key] || $noinput) {
+	// $MetadataFormStr .= " readonly";
+	// }
+	// $MetadataFormStr .= ">\n";
+	// $MetadataFormStr .= " </td>\n";
+	// $MetadataFormStr .= " <td>" . $description . "</td>\n";
+	// $MetadataFormStr .= " </tr>\n";
+	// }
 	$MetadataFormStr .= "</table>\n";
 	return $MetadataFormStr;
 }
@@ -162,19 +162,19 @@ function generateLicence($_licenceMetadataSpec, $_licenceMetadata, $osgiLicenceG
 			}
 		}
 	}
-	//TODO options
-// 	$specOptions = ( array ) $_licenceMetadataSpec->options;
-// 	$options = ( array ) $_licenceMetadata->options;
-// 	foreach ( $_licenceMetadata->options->children () as $key => $value ) {
-// 		// this prevents accepting post of fields already populated in licence metadata spec
-// 		if (isset ( $_POST [$key] )) {
-// 			if ('' == ( string ) $specOptions [$key]) {
-// 				$keyNodes = $_licenceMetadata->options->xpath ( '//' . $key );
-// 				$keyNode = $keyNodes [0];
-// 				$keyNode->{0} = htmlspecialchars ( $_POST [$key] );
-// 			}
-// 		}
-// 	}
+	// TODO options
+	// $specOptions = ( array ) $_licenceMetadataSpec->options;
+	// $options = ( array ) $_licenceMetadata->options;
+	// foreach ( $_licenceMetadata->options->children () as $key => $value ) {
+	// // this prevents accepting post of fields already populated in licence metadata spec
+	// if (isset ( $_POST [$key] )) {
+	// if ('' == ( string ) $specOptions [$key]) {
+	// $keyNodes = $_licenceMetadata->options->xpath ( '//' . $key );
+	// $keyNode = $keyNodes [0];
+	// $keyNode->{0} = htmlspecialchars ( $_POST [$key] );
+	// }
+	// }
+	// }
 	
 	$uri = $osgiLicenceGeneratorUrl . '/pluginmgr/rest/licence-pub/createlicence';
 	
@@ -218,7 +218,7 @@ try {
 	// see http://www.smashingmagazine.com/2011/03/08/ten-things-every-wordpress-plugin-developer-should-know/
 	// contains maven unique id of product to which this licence applies
 	// TODO REMOVE - THIS IS ONLY FOR TEST
-	//update_post_meta ( $post_id, 'edd_osgiProductIdStr', 'org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT' );
+	// update_post_meta ( $post_id, 'edd_osgiProductIdStr', 'org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT' );
 	// end debug data
 	
 	// get the plugin settings and throw an error if setting not set
@@ -270,11 +270,11 @@ try {
 	// contains username of customer who can view and modify this licence
 	$edd_osgiLicencee = get_post_meta ( $post_id, 'edd_osgiLicencee', true );
 	// post id of the associated payment (used to cross link back to payment)
-	$edd_payment_post_id = (int) get_post_meta ( $post_id, 'edd_payment_post_id', true );
+	$edd_payment_post_id = ( int ) get_post_meta ( $post_id, 'edd_payment_post_id', true );
 	
 	// if a licence has already been constructed do not allow it to be changed
 	// if a licence is not populated then allow editing of Metadata fields and generation of licence
-	if (! isset ( $edd_osgiLicenceStr ) || ($edd_osgiLicenceStr == '') ) {
+	if (! isset ( $edd_osgiLicenceStr ) || ($edd_osgiLicenceStr == '')) {
 		$noEditMetadata = FALSE;
 	} else {
 		$noEditMetadata = TRUE;
@@ -333,7 +333,7 @@ try {
 		$keyNode = $keyNodes [0];
 		$keyNode->{0} = htmlspecialchars ( $edd_osgiLicencee );
 		$edd_osgiLicenceMetadataStr = ( string ) $osgilicenceMetadata->asXML ();
-
+		
 		update_post_meta ( $post_id, 'edd_osgiLicenceMetadataStr', $edd_osgiLicenceMetadataStr );
 	} elseif ($osgipub_osgi_debug)
 		echo "not first time page has been viewed so edd_osgiLicenceMetadataStr is already populated\n";
@@ -354,15 +354,34 @@ try {
 <?php
 	}
 	?>
+	
+<?php
+	/*
+	 * Check if the user has permission to view the licence
+	 * If user is logged in, user ID is compared to user ID of ID stored in payment meta
+	 * Or if user is logged in and the user can view sensitive shop data
+	 */
+	// userid of customer who created licence
+	$edd_payment_user_id = get_post_meta ( $post_id, 'edd_payment_user_id', true );
+	$user_can_view = ((is_user_logged_in () && $edd_payment_user_id == get_current_user_id ()) || current_user_can ( 'view_shop_sensitive_data' ));
+	if (! $user_can_view) {
+		?>
+<h2>You do not have permission to view this licence</h2>
+<?php
+	} else {
+		?>
 <h2>Generate OSGi Licence</h2>
 
-<?php 
-if(isset($edd_payment_post_id)){
-?>
-<p><a href="<?php echo add_query_arg( 'payment_key', edd_get_payment_key( $edd_payment_post_id ), edd_get_success_page_uri() );?>" >Link to Payment Receipt: <?php echo edd_get_payment_number( $edd_payment_post_id ); ?></a><p>
-<?php 
-}
-?>
+<?php
+		if (isset ( $edd_payment_post_id )) {
+			?>
+<p>
+	<a
+		href="<?php echo add_query_arg( 'payment_key', edd_get_payment_key( $edd_payment_post_id ), edd_get_success_page_uri() );?>">Link to Payment Receipt: <?php echo edd_get_payment_number( $edd_payment_post_id ); ?></a>
+<p>
+<?php
+		}
+		?>
 
 <h2>Licence Metadata</h2>
 
@@ -402,6 +421,7 @@ if(isset($edd_payment_post_id)){
 	specification from the licence manager and allows editing.<BR>
 </form>
 <?php
+	} // end of if user can view licence
 } catch ( Exception $e ) {
 	echo 'Problem loading page: Exception: ', $e->getMessage (), "\n";
 }
