@@ -1,0 +1,46 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    tools:context="com.example.test1.MainActivity"
+    >
+    
+    <TextView android:id="@+id/textView1"
+        	android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="User Name: "/>
+    
+    <EditText android:id="@+id/openNMSUserName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"/>
+    
+    <TextView android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Server: "/>
+    
+    <EditText android:id="@+id/openNMSServer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"/>
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Port: "
+        />
+    <EditText android:id="@+id/openNMSPort"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dip"/>
+    <Button android:id="@+id/btnSaveSettings"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Save Settings"
+            android:layout_marginTop="15dip"/>
+    <Button android:id="@+id/btnClearAllSettings"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Clear All Settings"
+            android:layout_marginTop="15dip"/>
+</LinearLayout>
