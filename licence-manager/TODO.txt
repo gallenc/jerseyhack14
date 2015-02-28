@@ -44,7 +44,7 @@ change verification of licence to use signature on metadata not encryption of me
 change to use Base64 instead of hex for encoding (shorter licences)
 
 project completion
-* create maven licence generator archetype
+DONE * create maven licence generator archetype
 add product specific challenge response code for multiple bundle products
 create quality pages for licence installation and product listing - possibly with Vaadin
 see if project can be seperately licenced - APACHE - possibly pax4j - use with multiple OSGi containers
@@ -58,12 +58,12 @@ proof of concept
 create public / private repo for licences and modules
 DONE create shopping cart to generate licences
 TODO shopping cart
-	*** check only showing licence page when payment complete
-	*** check only showing licences for user or for admin
+DONE	*** check only showing licence page when payment complete
+DONE *** check only showing licences for user or for admin
 	allow admin to update metadata / generate licence only
 	documentation / help page on the plugin
-	readme page for the plugin
-	more then one licence for a module per page
+DONE readme page for the plugin
+DONE more then one licence for a module per page
 
 project
 check project works in windows and unix environment ( encoding)
