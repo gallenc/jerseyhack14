@@ -93,7 +93,7 @@ public class LicenceArtifactsGenerator {
 
 		// generates package of form spec.base.package.licence.FFAA2233AA
 		String licenceSpecPackage=basePackage+".licence."+productIdHash;
-		String licenceSpecFileDirectory=licenceSpecPackage.replace('.', '\\');
+		String licenceSpecFileDirectory=licenceSpecPackage.replace('.', File.separatorChar);
 
 		// Generate licence specification artifacts
 		String licenceSpecClassStr=""
@@ -187,7 +187,7 @@ public class LicenceArtifactsGenerator {
 
 		// generates package of form spec.base.package.licence.FFAA2233AA
 		String licenceAuthenticatorPackage=basePackage+".authenticator."+productIdHash;
-		String licenceAuthenticatorFileDirectory=licenceAuthenticatorPackage.replace('.', '\\');
+		String licenceAuthenticatorFileDirectory=licenceAuthenticatorPackage.replace('.', File.separatorChar);
 
 		// Generate licence authenticator artifacts
 		String licenceAuthenticatorClassStr= ""
