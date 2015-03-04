@@ -23,9 +23,35 @@ public class LicenceAuthenticatorImpl implements LicenceAuthenticator {
 
 	private String productId;
 	private String privateKeyEnryptedStr;
+	private LicenceMetadata licenceMetadata=null;
+	private String licencewithCRC=null;
 
 	private LicenceService licenceService= null;
+	
+	/**
+	 * Simply authenticates the supplied licencewithCRC string  against the local keys without looking up the licence manager service or
+	 * authenticating the systemid
+	 * @param licencewithCRC
+	 * @param productId
+	 * @param privateKeyEnryptedStr
+	 */
+	public LicenceAuthenticatorImpl(String licencewithCRC, String productId, String privateKeyEnryptedStr ){
+		if (licencewithCRC==null) throw new RuntimeException("LicenceAuthenticatoImpl: licencewithCRC cannot be null");
+		if (productId==null) throw new RuntimeException("LicenceAuthenticatoImpl: productId cannot be null");
+		if (privateKeyEnryptedStr==null) throw new RuntimeException("LicenceAuthenticatoImpl: privateKeyEnryptedStr cannot be null");
+		
+		licenceAuthenticatorImpl(licencewithCRC, productId, privateKeyEnryptedStr );
+		
+	}
 
+
+	/**
+	 * Uses the licence manager service to find an installed licence for the productId and then authenticates it against the
+	 * system id and the local keys
+	 * @param licenceService
+	 * @param productId
+	 * @param privateKeyEnryptedStr
+	 */
 	public LicenceAuthenticatorImpl(LicenceService licenceService, String productId, String privateKeyEnryptedStr ){
 		
 		if (licenceService==null) throw new RuntimeException("LicenceAuthenticatoImpl: licenceService cannot be null");
@@ -37,15 +63,42 @@ public class LicenceAuthenticatorImpl implements LicenceAuthenticator {
 
 		this.licenceService=licenceService;
 
-		String systemId =licenceService.getSystemId();
-		if (systemId==null) throw new ServiceException("systemId cannot be null");
-		
-		String licencewithCRC = licenceService.getLicence(productId);
+		this.licencewithCRC = licenceService.getLicence(productId);
 
 		if (licencewithCRC==null) {
 			System.out.println("No licence installed for productId:'"+productId+"'");
 			throw new ServiceException("No licence installed for productId:'"+productId+"'");
 		}
+
+		licenceAuthenticatorImpl(licencewithCRC, productId, privateKeyEnryptedStr );
+
+		String systemId =licenceService.getSystemId();
+		if (systemId==null) throw new ServiceException("systemId cannot be null");
+
+		// check system id. If systemID == ALL_SYSTEM_IDS then this test is passed because any systemId is allowed
+		if (! systemId.equals(licenceMetadata.getSystemId()) && ! "ALL_SYSTEM_IDS".equals(licenceMetadata.getSystemId())) {
+			System.out.println("licence systemId='"+licenceMetadata.getSystemId()+"' does not match local systemId='"+systemId
+					+ "' in installed licence for productId='"+productId+"'");
+			throw new ServiceException("licence systemId='"+licenceMetadata.getSystemId()+"' does not match local systemId='"+systemId
+					+ "' in installed licence for productId='"+productId+"'");
+		}
+
+		// TODO licenceService.authenticated licence 
+		System.out.println("BundleLicenceAuthenticator authenticated licence for productId="+productId);
+		System.out.println("Licence Metadata xml="+licenceMetadata.toXml());
+
+	}
+	
+	/**
+	 * checks the encoding of the licence and that the licence productId matches the local product id
+	 * @param licencewithCRC
+	 * @param productId
+	 * @param privateKeyEnryptedStr
+	 */
+	private void licenceAuthenticatorImpl(String licencewithCRC, String productId, String privateKeyEnryptedStr ){
+		if (licencewithCRC==null) throw new RuntimeException("LicenceAuthenticatoImpl: licencewithCRC cannot be null");
+		if (productId==null) throw new RuntimeException("LicenceAuthenticatoImpl: productId cannot be null");
+		if (privateKeyEnryptedStr==null) throw new RuntimeException("LicenceAuthenticatoImpl: privateKeyEnryptedStr cannot be null");
 
 		// check and remove checksum
 		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
@@ -79,7 +132,7 @@ public class LicenceAuthenticatorImpl implements LicenceAuthenticator {
 		String decriptedHashStr= rsaAsymetricKeyCipher.rsaDecryptString(receivedEncryptedHashStr);
 
 		// verify hash of licence metadata matches decrypted hash
-		LicenceMetadata licenceMetadata= new LicenceMetadata();
+		this.licenceMetadata= new LicenceMetadata();
 		licenceMetadata.fromHexString(receivedLicenceMetadataHexStr);
 		String sha256Hash = licenceMetadata.sha256Hash();
 
@@ -93,19 +146,25 @@ public class LicenceAuthenticatorImpl implements LicenceAuthenticator {
 			System.out.println("licence productId='"+licenceMetadata.getProductId()+"' does not match expected productId:'"+productId+"'");
 			throw new ServiceException("licence productId='"+licenceMetadata.getProductId()+"' does not match expected productId:'"+productId+"'");
 		}
-
-		// check system id. If systemID == ALL_SYSTEM_IDS then this test is passed because any systemId is allowed
-		if (! systemId.equals(licenceMetadata.getSystemId()) && ! "ALL_SYSTEM_IDS".equals(licenceMetadata.getSystemId())) {
-			System.out.println("licence systemId='"+licenceMetadata.getSystemId()+"' does not match local systemId='"+systemId
-					+ "' in installed licence for productId='"+productId+"'");
-			throw new ServiceException("licence systemId='"+licenceMetadata.getSystemId()+"' does not match local systemId='"+systemId
-					+ "' in installed licence for productId='"+productId+"'");
-		}
-
-		// TODO licenceService.authenticated licence 
-		System.out.println("BundleLicenceAuthenticator authenticated licence for productId="+productId);
-		System.out.println("Licence Metadata xml="+licenceMetadata.toXml());
-
+		
 	}
+
+
+	/**
+	 * if the class authenticates the licence then the metadata will be available
+	 * @return the licenceMetadata
+	 */
+	public LicenceMetadata getLicenceMetadata() {
+		return licenceMetadata;
+	}
+	
+	/**
+	 * If the class authenticates the licence then the licence string will be available
+	 * @return the licencewithCRC
+	 */
+	public String getLicencewithCRC() {
+		return licencewithCRC;
+	}
+
 
 }

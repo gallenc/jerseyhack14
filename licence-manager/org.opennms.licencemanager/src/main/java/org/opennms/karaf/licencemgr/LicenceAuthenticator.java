@@ -15,6 +15,20 @@
 
 package org.opennms.karaf.licencemgr;
 
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
+
 public interface LicenceAuthenticator {
+	
+	/**
+	 * if the class authenticates the licence then the metadata will be available
+	 * @return the licenceMetadata
+	 */
+	public LicenceMetadata getLicenceMetadata() ;
+	
+	/**
+	 * If the class authenticates the licence then the licence string will be available
+	 * @return the licencewithCRC
+	 */
+	public String getLicencewithCRC();
 
 }
