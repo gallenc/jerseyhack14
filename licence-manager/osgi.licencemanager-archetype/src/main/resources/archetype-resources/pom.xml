@@ -25,6 +25,7 @@
   </properties>
 
   <build>
+      
     <pluginManagement>
       <plugins>
         <!--This plugin's configuration is used to store Eclipse m2e settings only. It has no influence on the Maven build itself. -->
@@ -114,4 +115,17 @@
 
     </profile>
   </profiles>
+
+  <!-- Change this to match your repo for the licenced product modules (i.e. containing the authenticator) -->
+  <distributionManagement>
+    <repository>
+      <id>osgi-licenced-products</id>
+      <url>http://devel2.entimoss.org:8081/nexus/content/repositories/osgi-licenced-products</url>
+    </repository>
+    <snapshotRepository>
+      <id>osgi-licenced-products-snapshots</id>
+      <url>http://devel2.entimoss.org:8081/nexus/content/repositories/osgi-licenced-products-snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+
 </project>

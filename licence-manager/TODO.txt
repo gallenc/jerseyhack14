@@ -91,3 +91,6 @@ mvn archetype:generate -DarchetypeCatalog=local -DarchetypeGroupId=org.opennms \
   features:install http-whiteboard
   features:install http
  
+ you must set wordpress posts permalink as default
+ settings - Common Settings
+Default 	http://devel2.entimoss.org:8080/wordpress/?p=123

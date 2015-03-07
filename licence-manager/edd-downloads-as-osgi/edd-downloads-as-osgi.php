@@ -15,7 +15,7 @@ if (! defined ( 'ABSPATH' ))
 	exit ();
 	
 	// load httpful.phar library
-require_once ('/lib/httpful.phar');
+require_once ('lib/httpful.phar');
 
 if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 	class EDD_Downloads_As_Osgi {

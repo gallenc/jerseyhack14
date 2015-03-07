@@ -8,6 +8,7 @@
   <packaging>maven-archetype</packaging>
 
   <name>osgi.licencemanager-archetype</name>
+  <description>Architype to create new licence bundles for OSGi Licence Manager</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,5 +34,15 @@
     </pluginManagement>
   </build>
 
-  <description>Architype to create new licence bundles for OSGi Licence Manager</description>
+  <distributionManagement>
+    <repository>
+      <id>osgi-licenced-products</id>
+      <url>http://devel2.entimoss.org:8081/nexus/content/repositories/osgi-licenced-products</url>
+    </repository>
+    <snapshotRepository>
+      <id>osgi-licenced-products-snapshots</id>
+      <url>http://devel2.entimoss.org:8081/nexus/content/repositories/osgi-licenced-products-snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+  
 </project>
