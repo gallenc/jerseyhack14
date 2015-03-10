@@ -157,6 +157,34 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		}
 		
 		/**
+		 * Provides shortcodes for retrieving licence metadata from licence generator for use in product definition
+		 * shortcodes [osgi_licence_metadata] retrieving product description from licence generator every time page viewed
+		 * shortcodes [osgi_licence_metadata retrieve="if_new"] only retreives a new product descriptino the first time page is viewed
+		 *
+		 * @param unknown $atts        	
+		 */
+		public function osgi_licence_metadata_shortcode($atts) {
+			$content = "";
+			$content .= "<div id=\"osgi_product_metadata_shortcode\" class=\"osgi_metadata\">\n";
+			
+			$content .= "<P>[osgi_licence_metadata] SHORTCODE IS HERE - NEED TO ADD</p>\n";
+			// TODO COMPLETE THIS CLASS
+			if ($this->osgipub_osgi_debug) {
+				$content .= "<p>debug: Running osgi_product_description shortcode </p>\n";
+				$content .= "<p>debug: Attributes:";
+				if ("" != $atts)
+					foreach ( $atts as $key => $value ) {
+						$content .= "   " . $key . "=" . $value . "<br>\n";
+					}
+				else
+					$content .= " Not Set";
+				$content .= "</p>\n";
+			}
+			$content .= "</div> <!-- id=\"osgi_product_metadata_shortcode\" -->\n";
+			return $content;
+		}
+		
+		/**
 		 * provides shortcodes for retrieving product description from licence generator
 		 * shortcodes [osgi_product_description] retrieving product description from licence generator every time page viewed
 		 * shortcodes [osgi_licence_list retrieve="if_new"] only retreives a new product descriptino the first time page is viewed
@@ -338,6 +366,12 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 			add_shortcode ( 'osgi_product_description', array (
 					$this,
 					'osgi_product_description_shortcode' 
+			) );
+			
+			// shortcodes [osgi_licence_metadata]
+			add_shortcode ( 'osgi_licence_metadata', array (
+					$this,
+					'osgi_licence_metadata_shortcode' 
 			) );
 			
 			add_action ( 'init', array (
@@ -995,5 +1029,9 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
  */
 function edd_downloads_as_osgi() {
 	$edd_downloads_as_osgi = new EDD_Downloads_As_Osgi ();
+	
+	// Load plugin class files
+	require_once ('class-edd-osgilicences.php');
+	$eddOsgiLicences = new EddOsgiLicences ();
 }
 add_action ( 'plugins_loaded', 'edd_downloads_as_osgi' );
