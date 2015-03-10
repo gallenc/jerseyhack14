@@ -91,17 +91,18 @@ function licenceMetadataForm($_licenceMetadata, $_licenceMetadataSpec, $noinput)
 	$MetadataFormStr = "";
 	$MetadataFormStr .= "<table id=\"edd-osgi-licenceMetadata\" style=\"width: 100%;border: 3px solid;\" >\n";
 	$metadataspec = ( array ) $_licenceMetadataSpec->children ();
+	$licenceMetadataSpec_xpath = new DOMXPath ( dom_import_simplexml ( $_licenceMetadataSpec )->ownerDocument );
 	foreach ( $_licenceMetadata->children () as $key => $value ) {
 		if ($key != "options") {
 			$MetadataFormStr .= "    <tr>\n";
-			if (('' !== ( string ) $metadataspec [$key]) || $noinput) {
+			if (('' != ( string ) $metadataspec [$key]) || $noinput) {
 				$MetadataFormStr .= "    <td>" . $key . "</td>\n";
 			} else {
 				$MetadataFormStr .= "    <td>" . $key . " <bold>**</bold></td>\n"; // ** indicates editable field
 			}
 			$MetadataFormStr .= "        <td>\n";
 			$MetadataFormStr .= "            <input type=\"text\" name=\"" . $key . "\" value=\"" . $value . "\" ";
-			if ('' !== ( string ) $metadataspec [$key] || $noinput) {
+			if ($noinput || ('' != ( string ) $metadataspec [$key])) {
 				$MetadataFormStr .= " readonly";
 			}
 			$MetadataFormStr .= ">\n";
@@ -109,29 +110,38 @@ function licenceMetadataForm($_licenceMetadata, $_licenceMetadataSpec, $noinput)
 			$MetadataFormStr .= "    </tr>\n";
 		}
 	}
-	// TODO options
-	// $specOptions = ( array ) $licenceMetadataSpec->options->children ();
-	// echo "debug XXXXvar_dump=" . var_dump($specOptions );
-	// foreach ( $_licenceMetadata->options->children () as $option ) {
-	// $name = $option->name;
-	// $value = $option->value;
-	// $description = $option->description;
-	// $MetadataFormStr .= " <tr>\n";
-	// if (('' != $specOptions [$key]) || $noinput) {
-	// $MetadataFormStr .= " <td>" . $name . "</td>\n";
-	// } else {
-	// $MetadataFormStr .= " <td>" . $name . " <bold>**</bold></td>\n"; // ** indicates editable field
-	// }
-	// $MetadataFormStr .= " <td>\n";
-	// $MetadataFormStr .= " <input type=\"text\" name=\"" . $name . "\" value=\"" . $value . "\"";
-	// if ('' != $specOptions [$key] || $noinput) {
-	// $MetadataFormStr .= " readonly";
-	// }
-	// $MetadataFormStr .= ">\n";
-	// $MetadataFormStr .= " </td>\n";
-	// $MetadataFormStr .= " <td>" . $description . "</td>\n";
-	// $MetadataFormStr .= " </tr>\n";
-	// }
+	$MetadataFormStr .= "    <tr>\n";
+	$MetadataFormStr .= "        <td><u><bold>Options</bold></u></td>\n";
+	$MetadataFormStr .= "    </tr>\n";
+	foreach ( $_licenceMetadata->xpath ( '//options' ) as $item ) {
+		// check if field can be edited
+		// do not allow user to change field if populated in metadata spec
+		$name = ( string ) $item->option->name;
+		$keyNodesMs = $licenceMetadataSpec_xpath->evaluate ( "//option[name='" . $name . "']/value" );
+		$keyNodeMs = $keyNodesMs->item ( 0 );
+		$editfield = true;
+		if ('' != ( string ) $keyNodeMs->nodeValue) {
+			$editfield = false;
+		}
+		
+		$MetadataFormStr .= "    <tr>\n";
+		if ($noinput || ! $editfield) {
+			$MetadataFormStr .= "        <td>" . $item->option->name . "</td>\n";
+		} else {
+			$MetadataFormStr .= "    <td>" . $item->option->name . " <bold>**</bold></td>\n"; // ** indicates editable field
+		}
+		$MetadataFormStr .= "        <td>\n";
+		$MetadataFormStr .= "            <input type=\"text\" name=\"" . $item->option->name . "\" value=\"" . $item->option->value . "\" ";
+		
+		// do not allow user to change field if populated in metadata spec
+		if ($noinput || ! $editfield) {
+			$MetadataFormStr .= " readonly";
+		}
+		$MetadataFormStr .= ">\n";
+		$MetadataFormStr .= "        </td>\n";
+		$MetadataFormStr .= "        <td>" . $item->option->description . "</td>\n";
+		$MetadataFormStr .= "    </tr>\n";
+	}
 	$MetadataFormStr .= "</table>\n";
 	return $MetadataFormStr;
 }
@@ -162,19 +172,28 @@ function generateLicence($_licenceMetadataSpec, $_licenceMetadata, $osgiLicenceG
 			}
 		}
 	}
-	// TODO options
-	// $specOptions = ( array ) $_licenceMetadataSpec->options;
-	// $options = ( array ) $_licenceMetadata->options;
-	// foreach ( $_licenceMetadata->options->children () as $key => $value ) {
-	// // this prevents accepting post of fields already populated in licence metadata spec
-	// if (isset ( $_POST [$key] )) {
-	// if ('' == ( string ) $specOptions [$key]) {
-	// $keyNodes = $_licenceMetadata->options->xpath ( '//' . $key );
-	// $keyNode = $keyNodes [0];
-	// $keyNode->{0} = htmlspecialchars ( $_POST [$key] );
-	// }
-	// }
-	// }
+	
+	// populate options fields of licenceMetadata with data from the form
+	// this is complex because xpath appears to be only way to set value in SimpleXMLElement
+	// and DOMXPath implements xpath more correctly than simpleXMLElement
+	$licenceMetadata_xpath = new DOMXPath ( dom_import_simplexml ( $_licenceMetadata )->ownerDocument );
+	$licenceMetadataSpec_xpath = new DOMXPath ( dom_import_simplexml ( $_licenceMetadataSpec )->ownerDocument );
+	$metadataOptionNames = $licenceMetadata_xpath->evaluate ( "//option/name" );
+	foreach ( $metadataOptionNames as $metOptionName ) {
+		$name = ( string ) $metOptionName->nodeValue;
+		// check if post contains an update for the options
+		if (isset ( $_POST [$name] )) {
+			// this prevents accepting post of fields already populated in licence metadata spec
+			$keyNodesMs = $licenceMetadataSpec_xpath->evaluate ( "//option[name='" . $name . "']/value" );
+			$keyNodeMs = $keyNodesMs->item ( 0 );
+			if ('' == ( string ) $keyNodeMs->nodeValue) {
+				// update value if not set in metadata spec
+				$keyNodes = $licenceMetadata_xpath->evaluate ( "//option[name='" . $name . "']/value" );
+				$keyNode = $keyNodes->item ( 0 );
+				$keyNode->nodeValue = htmlspecialchars ( $_POST [$name] );
+			}
+		}
+	}
 	
 	$uri = $osgiLicenceGeneratorUrl . '/pluginmgr/rest/licence-pub/createlicence';
 	
@@ -347,6 +366,7 @@ try {
 			echo "Generate licence button pressed. Generating new licence.\n";
 		$edd_osgiLicenceStr = ( string ) generateLicence ( $osgilicenceMetadataSpec, $osgilicenceMetadata, $osgiLicenceGeneratorUrl, $osgi_username, $osgi_password, $osgipub_osgi_debug, $post_id );
 		update_post_meta ( $post_id, 'edd_osgiLicenceStr', $edd_osgiLicenceStr );
+		$noEditMetadata = TRUE; // prevents editing of metadata after licence generated
 	}
 	?>
 <?php if( $osgipub_osgi_debug) { ?>
