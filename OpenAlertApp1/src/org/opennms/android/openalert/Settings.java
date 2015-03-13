@@ -1,4 +1,6 @@
-package com.example.test1;
+package org.opennms.android.openalert;
+
+import org.opennms.android.openalert.R;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
