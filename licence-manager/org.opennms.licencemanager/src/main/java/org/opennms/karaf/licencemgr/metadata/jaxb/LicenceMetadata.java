@@ -40,7 +40,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name="licenceMetadata")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType (propOrder={"productId","licensee","licensor","systemId","startDate","expiryDate","options"})
+@XmlType (propOrder={"productId","licensee","licensor","systemId","startDate","expiryDate","duration","options"})
 public class LicenceMetadata {
 
 	/**
@@ -61,9 +61,15 @@ public class LicenceMetadata {
 	Date startDate=new Date();
 	
 	/**
-	 * expiryDate - the date on which teh licencce will expire. If Null there is no expiry date.
+	 * expiryDate - the date on which the licence will expire. If Null (and duration is null) there is no expiry date.
 	 */
 	Date expiryDate=null;
+	
+	/**
+	 * duration - alternative to expiry date. Duration of licence in days. If null (and expiryDate is null) there is no expiry date.
+	 * If duration =0, there is no expiry date. If both defined, duration has precidence over expiryDate.
+	 */
+	Integer duration=null;
 
 	/**
 	 * (Definition licensee n. a person (organisation) given a license by 
@@ -96,6 +102,7 @@ public class LicenceMetadata {
 		this.systemId=licenceMetadata.systemId;
 		this.startDate=licenceMetadata.startDate;
 		this.expiryDate=licenceMetadata.expiryDate;
+		this.duration=licenceMetadata.duration;
 		this.licensee=licenceMetadata.licensee;
 		this.licensor=licenceMetadata.licensor;
 		this.options.clear();
@@ -162,6 +169,23 @@ public class LicenceMetadata {
 	public void setExpiryDate(Date expiryDate) {
 		this.expiryDate = expiryDate;
 	}
+
+	/**
+	 * @return the duration
+	 */
+	public Integer getDuration() {
+		return duration;
+	}
+
+
+	/**
+	 * @param duration the duration to set
+	 */
+	@XmlElement(name="duration")
+	public void setDuration(Integer duration) {
+		this.duration = duration;
+	}
+
 
 	/**
 	 * @return the licensee
@@ -308,6 +332,8 @@ public class LicenceMetadata {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result
+				+ ((duration == null) ? 0 : duration.hashCode());
+		result = prime * result
 				+ ((expiryDate == null) ? 0 : expiryDate.hashCode());
 		result = prime * result
 				+ ((licensee == null) ? 0 : licensee.hashCode());
@@ -336,6 +362,11 @@ public class LicenceMetadata {
 		if (getClass() != obj.getClass())
 			return false;
 		LicenceMetadata other = (LicenceMetadata) obj;
+		if (duration == null) {
+			if (other.duration != null)
+				return false;
+		} else if (!duration.equals(other.duration))
+			return false;
 		if (expiryDate == null) {
 			if (other.expiryDate != null)
 				return false;
@@ -373,5 +404,7 @@ public class LicenceMetadata {
 			return false;
 		return true;
 	}
+
+
 
 }
