@@ -612,7 +612,9 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 					}
 					
 					if ($display_licence_table) {
+						echo "<div id=\"osgi_licence_list_table\" class=\"osgi_licence_list\">\n";
 						echo "<h3>OSGi Licences</h3>\n";
+						echo "<p>One of more of your purchased downloads have associated OSGi Licences.<BR>To generate your licences select the links below.</p>\n";
 						echo "<table>\n";
 					}
 					
@@ -638,8 +640,8 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 							
 							if (isset ( $edd_payment_number )) {
 								// start of table row
-								echo "<tr>\n";
-								echo "<td>\n";
+								echo "  <tr>\n";
+								echo "    <td>\n";
 								
 								// product id string from download
 								// contains maven unique id of product to which this licence applies
@@ -774,14 +776,15 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 									echo '<a href="' . get_post_permalink ( $newpost_id ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
 									echo "\n";
 								}
-								echo "</td>\n";
-								echo "</tr>\n";
+								echo "    </td>\n";
+								echo "  </tr>\n";
 							}
 						}
 					}
 					
 					if ($display_licence_table) {
 						echo "</table>\n";
+						echo "</div> <!-- div id=osgi_licence_list_table -->";
 					}
 					;
 				}
