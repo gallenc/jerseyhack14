@@ -100,6 +100,11 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		public function osgi_licence_list_shortcode($atts) {
 			$content = "";
 			
+			if(! is_user_logged_in ()){
+				$content = "<p>You need to be logged in to see your licence list.</p>";
+				return $content;
+			}
+			
 			// default return only values for current user
 			$args = array (
 					'post_type' => 'osgi_licence_post',
@@ -417,7 +422,14 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 			$args = array (
 					'public' => true,
 					'label' => 'osgi_licence_post',
-					'menu_position' => null 
+					'description' => 'osgi licence posts which generate purchased licences',
+					'menu_position' => null,
+ 					'capability_type' => 'post',
+ 					'capabilities' => array(
+ 							'create_posts' => 'do_not_allow', // Removes support for the "Add New" function, including Super Admin's in dashboard
+ 							//'edit_posts' => 'do_not_allow'    // too drastic - prevents admin listing any post of this type 
+ 					),
+ 					'map_meta_cap' => true // Set to false, if users are not allowed to edit/delete existing posts
 			);
 			register_post_type ( 'osgi_licence_post', $args );
 		}
@@ -695,7 +707,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 									
 									$post = array (
 											// 'ID' => [ <post id> ] // Are you updating an existing post?
-											'post_content' => '<p>post content</p>', // The full text of the post.
+											'post_content' => '<p>DO NOT EDIT: You can only view or change this licence post by using View Post.</p>', // The full text of the post.
 											'post_name' => $licence_post_name, // The name (slug) for your post
 											'post_title' => $licence_post_title, // The title of your post.
 											                                     // 'post_status' => [ 'draft' | 'publish' | 'pending'| 'future' | 'private' | custom registered status ] // Default 'draft'.

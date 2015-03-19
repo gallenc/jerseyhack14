@@ -14,6 +14,8 @@ Allow OSGi Licence Bundles to be sold by Easy Digital Downloads
 
 This plugin requires [Easy Digital Downloads](http://wordpress.org/extend/plugins/easy-digital-downloads/ "Easy Digital Downloads") v1.9 or greater. 
 
+(Tested to Easy Digital Downloads version Version 2.3.3)
+
 It also requires an OSGi licence manager to be running in a separate karaf instance
 
 The plugin creates a new download and post type for OSGi licences and links purchases to licences.
