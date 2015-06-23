@@ -132,3 +132,21 @@ START LEVEL 100 , List Threshold: 50
 Navigate to http://localhost:8181/pluginmgr/test/licence-mgr-rest-test.html
 to see a list of commands
 
+5. Other notes 
+When compiling this module, the tests can run very slow if there is not enough entropy in the build machine. 
+This became apparent when switching to java 8 on a centos 7 VM
+
+Java tries to start the Cypher packages using the settings in 
+'${java.home}/jre/lib/security/java.security' 
+
+which point to the linux random source
+'securerandom.source=file:/dev/./urandom'
+
+Unfortunately on a virtual machine, this may not generate enough random data. 
+Entropy levels can be seen using 
+'cat /proc/sys/kernel/random/entropy_avail' 
+
+The problem can be solved by installing and starting the havegrd package from EPEL
+See instructions here: https://www.digitalocean.com/community/tutorials/how-to-setup-additional-entropy-for-cloud-servers-using-haveged
+
+
