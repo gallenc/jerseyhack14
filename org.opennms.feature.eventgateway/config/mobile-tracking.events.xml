@@ -1,0 +1,104 @@
+<!-- mobile-tracking.events.xml for mobile tracking app - jersey hackathon -->
+<events xmlns="http://xmlns.opennms.org/xsd/eventconf">
+<event>
+	<uei>uei.opennms.org/application/mobilelocation</uei>
+	<event-label>Mobile Location event</event-label>
+	<descr>
+&lt;p&gt;This event is a mobile location update event from device asset number='%parm[assetnumber]%'  latitude='%parm[latitude]%'  longitude='%parm[longitude]% location valid='%parm[locationvalid]%'&lt;/p&gt;
+	</descr>
+		<logmsg dest='logndisplay'>&lt;p&gt;Mobile location update event from 
+       Reported from device asset number='%parm[assetnumber]%'&lt;BR&gt;
+       latitude='%parm[latitude]%'
+       longitude='%parm[longitude]%
+       location valid='%parm[locationvalid]%' (the device thinks it has accurate location information)&lt;/p&gt;
+		</logmsg>
+	<severity>Indeterminate</severity>
+</event>
+
+<event>
+  <uei>uei.opennms.org/application/mobilelocation/single-working</uei>
+  <event-label>Single Mobile Worker on site</event-label>
+  <descr>
+&lt;p&gt;Worker name='%parm[workerid]%' has reported working alone on site. Reported from device asset number='%parm[assetnumber]%'  latitude='%parm[latitude]%'  longitude='%parm[longitude]% location valid='%parm[locationvalid]%'&lt;/p&gt;
+  </descr>
+    <logmsg dest='logndisplay'>&lt;p&gt;&lt;b&gt;Worker name='%parm[workerid]%' has reported working alone on site.&lt;/b&gt; &lt;BR&gt;
+       Reported from device asset number='%parm[assetnumber]%' &lt;BR&gt;
+       latitude='%parm[latitude]%' &lt;BR&gt;
+       longitude='%parm[longitude]%' &lt;BR&gt;
+       location valid='%parm[locationvalid]%' (if true the device thinks it has accurate location information)&lt;/p&gt;
+    </logmsg>
+  <operinstruct>This event indicates that worker '%parm[workerid]%' is working alone. The worker should regularly report they are OK. If this escalates above normal severity they haven't 
+  reported in on time and you should check that '%parm[workerid]%' is OK</operinstruct>
+  <severity>Minor</severity>
+  <alarm-data reduction-key="%uei%:%parm[workerid]%" alarm-type="1" auto-clean="false" >
+      <update-field field-name="severity" update-on-reduction="true"/>
+      <update-field field-name="logmsg" update-on-reduction="true"/>
+  </alarm-data>
+</event>
+
+<event>
+  <uei>uei.opennms.org/application/mobilelocation/single-working-end</uei>
+  <event-label>Single Mobile Worker leaving site</event-label>
+  <descr>
+&lt;p&gt;Worker name='%parm[workerid]%' has reported leaving site. Reported from device asset number='%parm[assetnumber]%'  latitude='%parm[latitude]%'  longitude='%parm[longitude]% location valid='%parm[locationvalid]%'&lt;/p&gt;
+  </descr>
+    <logmsg dest='logndisplay'>&lt;p&gt;&lt;b&gt;Worker name='%parm[workerid]%' has reported leaving site..&lt;/b&gt; &lt;BR&gt; 
+       Reported from device asset number='%parm[assetnumber]%' &lt;BR&gt;
+       latitude='%parm[latitude]%' &lt;BR&gt;
+       longitude='%parm[longitude]%' &lt;BR&gt;
+       location valid='%parm[locationvalid]%' (if true the device thinks it has accurate location information)&lt;/p&gt;
+    </logmsg>
+  <severity>Cleared</severity>
+  <alarm-data reduction-key="%uei%:%parm[workerid]%"
+    clear-key="uei.opennms.org/application/mobilelocation/single-working:%parm[workerid]%"
+    alarm-type="2" 
+    auto-clean="false" />
+</event>
+
+<event>
+  <uei>uei.opennms.org/application/mobilelocation/single-working-panic</uei>
+  <event-label>Single Mobile Worker on site reporting panic situation</event-label>
+  <descr>
+&lt;p&gt;Worker name='%parm[workerid]%' has requested PANIC help while working alone on site. Reported from device asset number='%parm[assetnumber]%'  latitude='%parm[latitude]%'  longitude='%parm[longitude]% location valid='%parm[locationvalid]%'&lt;/p&gt;
+  </descr>
+    <logmsg dest='logndisplay'>&lt;p&gt;&lt;b&gt;Worker name='%parm[workerid]%' has requested PANIC help while working alone on site.&lt;/b&gt; &lt;BR&gt;
+       Reported from device asset number='%parm[assetnumber]%' &lt;BR&gt;
+       latitude='%parm[latitude]%' &lt;BR&gt;
+       longitude='%parm[longitude]%' &lt;BR&gt;
+       location valid='%parm[locationvalid]%' (if true the device thinks it has accurate location information)&lt;/p&gt;
+    </logmsg>
+  <operinstruct>This event indicates that worker '%parm[workerid]%' HAS A PANIC SITUATION. You MUST check that '%parm[workerid]%' is OK</operinstruct>
+  <severity>Critical</severity>
+  <alarm-data reduction-key="%uei%:%parm[workerid]%" alarm-type="1" auto-clean="false" >
+      <update-field field-name="severity" update-on-reduction="true"/>
+      <update-field field-name="logmsg" update-on-reduction="true"/>
+  </alarm-data>
+</event>
+
+
+<event>
+  <uei>uei.opennms.org/application/mobilelocation/new-user-authentication</uei>
+  <event-label>Mobile Location New User Authentication Event</event-label>
+  <descr>
+&lt;p&gt;This event is a Mobile Location New User Authentication Event for Worker name='%parm[workerid]%' Address='%parm[address]%' Phone Number='%parm[phone-no]%'
+  from device asset number='%parm[assetnumber]%'&lt;/p&gt;
+  </descr>
+  <logmsg dest='logndisplay'>&lt;p&gt;Mobile Location New User Authentication Event&lt;BR&gt;
+       Worker name='%parm[workerid]%' 
+       Address='%parm[address]%' 
+       Phone Number='%parm[phone-no]%'&lt;BR&gt;
+       Reported from device asset number='%parm[assetnumber]%'&lt;BR&gt;
+       latitude='%parm[latitude]%'
+       longitude='%parm[longitude]%
+       location valid='%parm[locationvalid]%' (the device thinks it has accurate location information)&lt;/p&gt;
+   </logmsg>
+   <operinstruct>This event indicates that worker '%parm[workerid]%' has registered their device for sending lone worker messages. The asset number for the device
+       '%parm[assetnumber]%' should be added to the OpenNMS inventory if you also want to track its location.</operinstruct>
+  <severity>Minor</severity>
+</event>
+
+</events>
+<!-- http://developer.samsung.com/android/technical-docs/How-to-retrieve-the-Device-Unique-ID-from-android-device -->
+<!-- IMSI:4600013511078690 -->
+<!-- End of mobile-tracking.events.xml for mobile tracking app - jersey hackathon -->
+

@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.opennms</groupId>
+  <artifactId>org.opennms.features.eventgateway</artifactId>
+  <version>0.1-SNAPSHOT</version>
+  <packaging>bundle</packaging>
+
+  <name>org.opennms.features.eventgateway Blueprint Bundle</name>
+  <description>org.opennms.features.eventgateway OSGi blueprint bundle project.</description>
+
+  <properties>
+    <updatePolicy>daily</updatePolicy>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- this is the version of OpenNMS which this project has been built against -->
+    <opennmsVersion>14.0.0</opennmsVersion>
+
+    <junitVersion>4.10</junitVersion>
+    <maven.surefire.plugin.version>2.15</maven.surefire.plugin.version>
+    <slf4jVersion>1.7.2</slf4jVersion>
+    <log4j2Version>2.0-beta9</log4j2Version>
+  </properties>
+
+  <build>
+    <plugins>
+
+      <plugin>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.1</version>
+        <configuration>
+          <source>1.7</source>
+          <target>1.7</target>
+          <encoding>UTF-8</encoding>
+          <optimize>true</optimize>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.felix</groupId>
+        <artifactId>maven-bundle-plugin</artifactId>
+        <version>2.3.7</version>
+        <extensions>true</extensions>
+        <configuration>
+          <instructions>
+            <!-- <Bundle-Activator>org.opennms.eventgateway.Activator</Bundle-Activator> -->
+            <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
+            <Bundle-Version>${project.version}</Bundle-Version>
+            <Export-Package>
+              org.opennms.features.eventgateway*;version=${project.version}
+            </Export-Package>
+            <Import-Package>
+              *
+            </Import-Package>
+            <!-- <Embed-Dependency>dependencies</Embed-Dependency> -->
+          </instructions>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven.surefire.plugin.version}</version>
+        <configuration>
+          <excludes>
+            <!-- prevent tests running in this package. These are one off development tests -->
+            <exclude>**/org/opennms/features/vaadin/pmatrix/manual/*.java</exclude>
+          </excludes>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+  
+  <!-- opennms dependencies -->
+          <dependency>
+            <groupId>org.opennms.osgi</groupId>
+            <artifactId>opennms-osgi-core</artifactId>
+            <version>${opennmsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.opennms</groupId>
+            <artifactId>opennms-dao</artifactId>
+            <version>${opennmsVersion}</version>
+            <scope>provided</scope>
+        </dependency>
+        
+        <!-- other dependencies -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4jVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+      <version>2.5</version>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <scope>provided</scope>
+      <version>4.0.0</version>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <version>4.0.0</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- opennms Jersey implementation in Lib directory -->
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-server</artifactId>
+      <version>1.18.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-servlet</artifactId>
+      <!-- <version>1.18.1</version> NOTE the version in OpenNMS 14.0.0.0 is 1.18-->
+      <version>1.18</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>${junitVersion}</version>
+    </dependency>
+ 
+  </dependencies>
+
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+        <updatePolicy>${updatePolicy}</updatePolicy>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+        <updatePolicy>${updatePolicy}</updatePolicy>
+      </releases>
+      <id>opennms-repo</id>
+      <name>OpenNMS Repository</name>
+      <url>http://maven.opennms.org/content/groups/opennms.org-release</url>
+    </repository>
+  </repositories>
+
+</project>
+

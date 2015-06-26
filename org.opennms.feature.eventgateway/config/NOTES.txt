@@ -1,0 +1,3 @@
+These files have been modified from OpenNMS 14.0.1
+If you are using a later version of OpenNMS you should check for differences
+In particular check the API versions in custom.properties

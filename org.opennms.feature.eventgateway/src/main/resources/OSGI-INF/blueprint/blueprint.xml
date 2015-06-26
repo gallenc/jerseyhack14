@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+  <reference id="eventProxy" interface="org.opennms.netmgt.model.events.EventProxy" availability="mandatory" />
+
+  <service interface="javax.servlet.http.HttpServlet">
+    <service-properties>
+      <entry key="alias" value="/eventgateway" />
+    </service-properties>
+    <bean class="com.sun.jersey.spi.container.servlet.ServletContainer">
+      <argument ref="eventGatewayApplication" />
+    </bean>
+  </service>
+
+  <bean id="eventGatewayApplication" class="org.opennms.features.eventgateway.EventGatewayApplication" />
+
+  <bean id="configLoader" class="org.opennms.features.eventgateway.ConfigLoader">
+    <argument ref="eventProxy" />
+  </bean>
+
+  <!-- Maps in the static resource files for serving -->
+  <bean id="resourceMapping" class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
+    <property name="alias" value="/eventgateway/static" />
+    <property name="path" value="/static" />
+  </bean>
+
+  <service id="resources" ref="resourceMapping" interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping" />
+  
+  <!-- Maps in the test resource files for serving -->
+  <bean id="testResourceMapping" class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
+    <property name="alias" value="/eventgateway/test" />
+    <property name="path" value="/test" />
+  </bean>
+
+  <service id="testResources" ref="testResourceMapping" interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping" />
+  
+
+  <!-- receives events from OpenNMS -->
+
+  <reference id="eventSubscriptionService" interface="org.opennms.netmgt.model.events.EventSubscriptionService" availability="mandatory" />
+
+  <!-- note init and destroy methods specified because OSGi and not a Spring environment -->
+  <bean id="eventGatewayEventListenerAdapter" class="org.opennms.netmgt.model.events.AnnotationBasedEventListenerAdapter" init-method="afterPropertiesSet"
+    destroy-method="destroy">
+    <property name="annotatedListener" ref="configLoader" />
+    <property name="eventSubscriptionService" ref="eventSubscriptionService" />
+  </bean>
+
+</blueprint>

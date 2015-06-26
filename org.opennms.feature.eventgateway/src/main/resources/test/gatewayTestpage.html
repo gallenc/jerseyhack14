@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>OpenNMS Event Gateway Test Page</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<link rel="stylesheet" type="text/css" href="/opennms/css/styles.css"
+	media="screen" />
+<!-- https://code.google.com/p/javascriptbase64/ MIT licence -->
+<script src="../static/base64.js"></script>
+<script>
+	function onLoad() {
+		var user = "loneworkeruser";
+		var password = "loneworkergwpass1";
+		var gatewayid = "loneworkergw";
+		var eventRequest = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+				+ "<restEventMessage xmlns:ns2=\"http://xmlns.opennms.org/xsd/event\">\n"
+				+ "    <eventList>\n"
+				+ "      <event>\n"
+				+ "          <ns2:uei>uei.opennms.org/internal/linkd/nodeLinkDiscoveryCompleted</ns2:uei>\n"
+				+ "      </event>\n"
+				+ "      <event>\n"
+				+ "          <ns2:uei>testUEI:1</ns2:uei>\n"
+				+ "      </event>\n"
+				+ "  </eventList>\n"
+				+ "  <sentValues>\n"
+				+ "      <valuePair name=\"username\" value=\""+user+"\"/>\n"
+				+ "  </sentValues>\n" + "</restEventMessage>\n";
+
+		document.getElementById('user').value = user;
+		document.getElementById('password').value = password;
+		document.getElementById('gatewayid').value = gatewayid;
+		document.getElementById('eventRequest').value = eventRequest;
+	}
+	
+	function sendXMLDoc() {
+
+		//clear response panel
+		document.getElementById("eventResponse").value = "";
+		document.getElementById("httpresponsecode").value="";
+		
+		var user = document.getElementById('user').value;
+		var password = document.getElementById('password').value;
+		var gatewayid = document.getElementById('gatewayid').value;
+		var eventRequest = document.getElementById('eventRequest').value;
+
+		var xmlhttp;
+		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		} else {// code for IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				document.getElementById("httpresponsecode").value=xmlhttp.status;
+				document.getElementById("eventResponse").value = xmlhttp.responseText;
+			} else if (xmlhttp.readyState == 4 ) {
+				document.getElementById("httpresponsecode").value=xmlhttp.status;
+				document.getElementById("eventResponse").value = xmlhttp.responseText;
+			}
+		};
+		
+		xmlhttp.open("POST", "/opennms/eventgateway/gw/" + gatewayid, true);
+		xmlhttp.setRequestHeader("Content-type", "application/xml");
+		xmlhttp.setRequestHeader("Authorization", "Basic "
+				+ Base64.encode(user + ":" + password));
+		xmlhttp.send(eventRequest);
+	}
+	
+	function loadMobileLocationMessage() {
+	
+	    eventRequest = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"		
+		+"<restEventMessage xmlns:ns2=\"http://xmlns.opennms.org/xsd/event\">\n"
+		+"  <eventList>\n"
+		+"    <event>\n"
+		+"      <ns2:uei>uei.opennms.org/application/mobilelocation</ns2:uei>\n"
+		+"      <ns2:source>gatewayTestPage</ns2:source>\n"
+		+"      <ns2:time>Wednesday, 3 December 2014 14:21:07 o'clock GMT</ns2:time>\n"
+		+"      <ns2:host>li712-91.members.linode.com</ns2:host>\n"
+		+"      <ns2:parms>\n"
+		+"        <ns2:parm>\n"
+		+"          <ns2:parmName><![CDATA[locationvalid]]></ns2:parmName>\n"
+		+"          <ns2:value type=\"string\" encoding=\"text\"><![CDATA[true]]></ns2:value>\n"
+		+"        </ns2:parm>\n"
+		+"        <ns2:parm>\n"
+		+"          <ns2:parmName><![CDATA[longitude]]></ns2:parmName>\n"
+		+"          <ns2:value type=\"string\" encoding=\"text\"><![CDATA[-0.276250034570695]]></ns2:value>\n"
+		+"        </ns2:parm>\n"
+		+"        <ns2:parm>\n"
+		+"          <ns2:parmName><![CDATA[latitude]]></ns2:parmName>\n"
+		+"          <ns2:value type=\"string\" encoding=\"text\"><![CDATA[51.50336456298828]]></ns2:value>\n"
+		+"        </ns2:parm>\n"
+		+"        <ns2:parm>\n"
+		+"          <ns2:parmName><![CDATA[assetnumber]]></ns2:parmName>\n"
+		+"          <ns2:value type=\"string\" encoding=\"text\"><![CDATA[353973051721703]]></ns2:value>\n"
+		+"        </ns2:parm>\n"
+		+"      </ns2:parms>\n"
+		+"    </event>\n"
+		+"  </eventList>\n"
+		+"</restEventMessage>\n";
+
+		document.getElementById('eventRequest').value = eventRequest;
+	}
+	
+	function loadSingleWorkingMessage() {
+		
+		eventRequest = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+			+"  <restEventMessage xmlns:ns2=\"http://xmlns.opennms.org/xsd/event\">\n"
+			+"    <eventList>\n"
+			+"      <event>\n"
+			+"        <ns2:uei>uei.opennms.org/application/mobilelocation/single-working</ns2:uei>\n"
+			+"        <ns2:source>gatewayTestPage</ns2:source>\n"
+			+"        <ns2:time>Wednesday, 3 December 2014 14:37:01 o'clock GMT</ns2:time>\n"
+			+"        <ns2:host>li712-91.members.linode.com</ns2:host>\n"
+			+"        <ns2:parms>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[longitude]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[-0.276250034570695]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[latitude]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[51.50336456298828]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[assetnumber]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[353973051721703]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[workerid]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[fred]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"        </ns2:parms>\n"
+			+"        <ns2:severity>Warning</ns2:severity>\n"
+			+"      </event>\n"
+			+"    </eventList>\n"
+			+"  </restEventMessage> \n";
+			
+		document.getElementById('eventRequest').value = eventRequest;
+	}
+
+	function loadSingleWorkingEndMessage() {
+		
+		eventRequest = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+			+"  <restEventMessage xmlns:ns2=\"http://xmlns.opennms.org/xsd/event\">\n"
+			+"    <eventList>\n"
+			+"     <event>\n"
+			+"        <ns2:uei>uei.opennms.org/application/mobilelocation/single-working-end</ns2:uei>\n"
+			+"        <ns2:source>gatewayTestPage</ns2:source>\n"
+			+"        <ns2:time>Wednesday, 3 December 2014 14:23:05 o'clock GMT</ns2:time>\n"
+			+"        <ns2:host>li712-91.members.linode.com</ns2:host>\n"
+			+"        <ns2:parms>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[workerid]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[fred]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[longitude]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[-0.276250034570695]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[latitude]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[51.50336456298828]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[assetnumber]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[4600013511078690]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[workerid]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[fred]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"        </ns2:parms>\n"
+			+"        <ns2:severity>Warning</ns2:severity>\n"
+			+"      </event>\n"
+			+"    </eventList>\n"
+			+"  </restEventMessage>\n";
+			
+			document.getElementById('eventRequest').value = eventRequest;
+	}
+	
+	function loadSingleWorkingPanicMessage() {
+		
+		eventRequest = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+			+"  <restEventMessage xmlns:ns2=\"http://xmlns.opennms.org/xsd/event\">\n"
+			+"    <eventList>\n"
+			+"      <event>\n"
+			+"        <ns2:uei>uei.opennms.org/application/mobilelocation/single-working-panic</ns2:uei>\n"
+			+"        <ns2:source>gatewayTestPage</ns2:source>\n"
+			+"        <ns2:time>Wednesday, 3 December 2014 14:21:46 o'clock GMT</ns2:time>\n"
+			+"        <ns2:host>li712-91.members.linode.com</ns2:host>\n"
+			+"        <ns2:parms>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[locationvalid]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[true]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[longitude]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[-0.276250034570695]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[latitude]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[51.50336456298828]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[assetnumber]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[4600013511078690]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[workerid]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[fred]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"        </ns2:parms>\n"
+			+"      </event>\n"
+			+"    </eventList>\n"
+			+"  </restEventMessage>\n";
+
+		document.getElementById('eventRequest').value = eventRequest;
+	}
+	
+	function loadNewUserAuthenticationMessage() {
+		
+		eventRequest = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n"
+			+"  <restEventMessage xmlns:ns2=\"http://xmlns.opennms.org/xsd/event\">\n"
+			+"    <eventList>\n"
+			+"      <event>\n"
+			+"        <ns2:uei>uei.opennms.org/application/mobilelocation/new-user-authentication</ns2:uei>\n"
+			+"        <ns2:source>gatewayTestPage</ns2:source>\n"
+			+"        <ns2:time>Wednesday, 3 December 2014 14:21:46 o'clock GMT</ns2:time>\n"
+			+"        <ns2:host>li712-91.members.linode.com</ns2:host>\n"
+			+"        <ns2:parms>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[locationvalid]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[true]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[longitude]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[-0.276250034570695]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[latitude]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[51.50336456298828]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[assetnumber]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[4600013511078690]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[workerid]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[fred]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[address]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[220 Chatham Business Drive, Pittsboro, NC27312, United States]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"          <ns2:parm>\n"
+			+"            <ns2:parmName><![CDATA[phone]]></ns2:parmName>\n"
+			+"            <ns2:value type=\"string\" encoding=\"text\"><![CDATA[+1 919 553 0160]]></ns2:value>\n"
+			+"          </ns2:parm>\n"
+			+"        </ns2:parms>\n"
+			+"      </event>\n"
+			+"    </eventList>\n"
+			+"  </restEventMessage>\n";
+
+		document.getElementById('eventRequest').value = eventRequest;
+	}
+
+</script>
+</head>
+<body onload="onLoad()">
+	<div id="header">
+		<h1 id="headerlogo">
+			<a href="/opennms/index.jsp"><img src="/opennms/images/logo.png"
+				alt="OpenNMS Web Console Home" /></a>
+		</h1>
+		<div id="headerinfo">
+			<h2>Event Gateway Test Page</h2>
+			<p align="right"></p>
+		</div>
+		<hr />
+		<div id="headernavbarright">
+			<div class="navbar">
+				<ul>
+					<li class="last"><a
+						href="http://www.opennms.org/index.php/FAQ">FAQs</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="spacer">
+			<!-- -->
+		</div>
+	</div>
+
+	<div id="content">
+	<div class="onms">
+       <h2>
+          <a href="/opennms/index.jsp">Home</a>
+       </h2>
+     </div>
+		<p>This is a test page for the OpenNMS event gateway.</p>
+		<h2>Event Message</h2>
+		<p>Modify the message in the Event message box and use the 'Send
+			Event Data' button to post to the url using the http POST method</p>
+		<form name="usrform">
+			<input type="text" id="user"> user (http basic authentication
+			user name)<BR> 
+			<input type="text" id="password">
+			password (http basic authentication password)<BR> 
+			<input
+				type="text" id="gatewayid"> 
+			gatewayid (gateway identifier appends the rest call post url
+			'&lt;opennms_home&gt;/eventgateway/id/&lt;gatewayid&gt;<BR>
+		</form>
+		
+		<h2>Event Request</h2>
+		<table border=0 >
+            <tr>
+               <td>
+                 <h3>Message to be sent</h3>
+		         <textarea rows="15" cols="100" id="eventRequest" form="usrform" style="resize: none;"></textarea>
+		         <button type="button" onclick="sendXMLDoc()">Send Event Data</button>
+               </td>
+               <td>
+                 <h3>Single working app test messages</h3>
+                 <p>These messages simulate the messages sent by the single working android app</p>
+                 <button type="button" onclick="loadMobileLocationMessage()">Load Mobile Location Message</button><BR>
+                 <button type="button" onclick="loadSingleWorkingMessage()">Load Single Working Message</button><BR>
+                 <button type="button" onclick="loadSingleWorkingEndMessage()">Load Single Working End Message</button><BR>
+		         <button type="button" onclick="loadSingleWorkingPanicMessage()">Load Panic Message</button><BR>
+		         <button type="button" onclick="loadNewUserAuthenticationMessage()">Load New User Authentication Message</button><BR>
+               </td>
+            </tr>
+        </table> 
+		<BR>
+
+		<h2>Event Response</h2>
+        <h3>Http response code</h3>
+        <textarea rows="1" cols="10" id="httpresponsecode" style="resize: none;"></textarea>
+        <h3>Http response content</h3>
+		<textarea rows="15" cols="100" id="eventResponse" style="resize: none;"></textarea><BR>
+
+		<h2>Authorisation key rest interface test URLs</h2>
+
+		<p>ReST interface to access the authentication key interfaces for
+			event gateway. GET urls are used to access interface.</p>
+
+		<p>Note that in all cases, only gateways configured to have an
+			auto-authentication athKey will have information accessible through
+			this interface</p>
+
+		<table border=1>
+			<tr>
+				<th>command</th>
+				<th>url</th>
+			</tr>
+			<tr>
+				<td>
+					<p>Create a new Authorization key</p>
+					<p>Create a new AuthKey for supplied gateway reference. This
+						becomes the current AuthKey and the previous authKey remains in
+						the cache until it times out.</p>
+				</td>
+				<td> 
+				    <a href="/opennms/eventgateway/authkey/newAuthKey?reference=xxxx">/opennms/eventgateway/authkey/newAuthKey?reference=xxxx</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>Get the current Authorisation key</p>
+					<p>Returns the latest generated authorisation key</p>
+				</td>
+				<td>
+				    <a href="/opennms/eventgateway/authkey/currentAuthKey?reference=xxxx">/opennms/eventgateway/authkey/currentAuthKey?reference=xxxx</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>Get the maximum age of a current authKey before it is replaced with a new current key (in milliseconds)</p>
+				</td>
+				<td>
+				    <a href="/opennms/eventgateway/authkey/maxCurrentAuthKeyAge?reference=xxxx">/opennms/eventgateway/authkey/maxCurrentAuthKeyAge?reference=xxxx</a>
+				</td>
+			</tr>
+			<tr>
+				<td>Get the maximum age of an authKey before it is deleted from
+					the cache (in milliseconds)</td>
+				<td>
+				   <a href="/opennms/eventgateway/authkey/maxTimeKeepOldAuthKeys?reference=xxxx">/opennms/eventgateway/authkey/maxTimeKeepOldAuthKeys?reference=xxxx</a>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<p>Get Valid Authkeys</p>
+					<p>Get a list of valid authorisation keys in the cache with their time of creation</p>
+				</td>
+				<td>
+				   <a href="/opennms/eventgateway/authkey/validAuthKeys?reference=xxxx">/opennms/eventgateway/authkey/validAuthKeys?reference=xxxx</a>
+				</td>
+			</tr>
+			<tr>
+				<td>Reset the authKey cache and create a new current key.</td>
+				<td>
+				   <a href="/opennms/eventgateway/authkey/resetAuthKeys?reference=xxxx">/opennms/eventgateway/authkey/resetAuthKeys?reference=xxxx</a>
+				</td>
+			</tr>
+		</table>
+
+		<!-- End of Content -->
+		<div class="spacer">
+			<!-- -->
+		</div>
+
+	</div>
+	<!-- id="content" -->
+	<!-- Footer -->
+
+	<div id="prefooter"></div>
+
+	<div id="footer">
+		<p>
+			OpenNMS <a href="support/about.jsp">Copyright</a> &copy; 2002-2014 <a
+				href="http://www.opennms.com/">The OpenNMS Group, Inc.</a>
+			OpenNMS&reg; is a registered trademark of <a
+				href="http://www.opennms.com">The OpenNMS Group, Inc.</a>
+		</p>
+	</div>
+</body>
+</html>

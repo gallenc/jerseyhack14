@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<eventGatewayConfigurations xmlns:ns2="http://xmlns.opennms.org/xsd/event">
+  <eventGatewayConfigsList>
+      
+    <!-- this is the gateway for sending lone working and location events -->
+    <!-- it has a fixed password                                          -->
+    <eventGatewayConfig password="loneworkergwpass1" reference="loneworkergw" username="loneworkeruser">
+      <staticReplyValues>
+        <nameValuePair name="loneworker-logo" value="value:0" />
+        <nameValuePair name="loneworker-text" value="value:0" />
+        <nameValuePair name="loneworker-reporting-delay" value="60" />
+      </staticReplyValues>
+      <ueiList>
+        <uei>uei.opennms.org/application/mobilelocation</uei>
+        <uei>uei.opennms.org/application/mobilelocation/single-working</uei>
+        <uei>uei.opennms.org/application/mobilelocation/single-working-end</uei>
+        <uei>uei.opennms.org/application/mobilelocation/single-working-panic</uei>
+      </ueiList>
+    </eventGatewayConfig>
+    
+    <!-- this is the gateway for sending new user authentication events -->
+    <!-- users can only be authenticated if they posess valid authkey   -->
+    <!-- if password set to NO_FIXED_PASSWORD_AUTHENTICATION then no simple authentication is possible -->
+    <eventGatewayConfig password="NO_FIXED_PASSWORD_AUTHENTICATION" reference="loneworkerauthentication" username="loneworkeruser">
+      <authKeyConfig>
+        <authKeylength>5</authKeylength>
+        <maxCurrentAuthKeyAge>3600000</maxCurrentAuthKeyAge>
+        <maxTimeKeepOldAuthKeys>5400000</maxTimeKeepOldAuthKeys>
+      </authKeyConfig>
+      <staticReplyValues>
+        <nameValuePair name="loneworker-logo" value="value:0" />
+        <nameValuePair name="loneworker-text" value="value:0" />
+        <nameValuePair name="loneworker-reporting-delay" value="60" />
+        <nameValuePair name="loneworker-reporting-url" value="/opennms/eventgateway/loneworkergw" />
+        <nameValuePair name="loneworker-password" value="loneworkergwpass1" />
+        <nameValuePair name="loneworker-username" value="loneworkeruser" />
+      </staticReplyValues>
+      <ueiList>
+        <uei>uei.opennms.org/application/mobilelocation/new-user-authentication</uei>
+      </ueiList>
+    </eventGatewayConfig>
+    
+    <eventGatewayConfig password="username1pass" reference="gateway2" username="username1">
+      <staticReplyValues>
+        <nameValuePair name="name:0" value="value:0" />
+        <nameValuePair name="name:1" value="value:1" />
+        <nameValuePair name="name:2" value="value:2" />
+      </staticReplyValues>
+      <ueiList>
+        <uei>uei.opennms.org/internal/linkd/nodeLinkDiscoveryCompleted</uei>
+        <uei>uei:1</uei>
+        <uei>uei:2</uei>
+        <uei>uei:3</uei>
+        <uei>uei:4</uei>
+        <uei>uei:5</uei>
+      </ueiList>
+    </eventGatewayConfig>
+  </eventGatewayConfigsList>
+</eventGatewayConfigurations>
