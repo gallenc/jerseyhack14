@@ -31,19 +31,48 @@ package org.opennms.features.vaadin.config;
 //import org.opennms.features.vaadin.datacollection.SnmpCollectionPanel;
 //import org.opennms.netmgt.config.api.DataCollectionConfigDao;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+
+import org.opennms.features.vaadin.pluginmanager.PluginManagerUIMainPanel;
+import org.opennms.features.vaadin.pluginmanager.internal.HttpServletRequestVaadinImpl;
+import org.opennms.web.api.OnmsHeaderProvider;
+
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
+import com.vaadin.server.Page;
 import com.vaadin.server.VaadinRequest;
-import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.Alignment;
+import com.vaadin.ui.CustomComponent;
+import com.vaadin.ui.CustomLayout;
+import com.vaadin.ui.Label;
 import com.vaadin.ui.UI;
+import com.vaadin.ui.VerticalLayout;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
- * The Class SNMP Collection Administration Application.
+ * Plugin Manager Administration Application.
  */
 @Theme("opennms")
 @Title("Plugin Manager Administration")
 @SuppressWarnings("serial")
 public class PluginManagerAdminApplication extends UI {
+    private static final Logger LOG = LoggerFactory.getLogger(PluginManagerAdminApplication.class);
+	
+	/*- VaadinEditorProperties={"grid":"RegularGrid,20","showGrid":true,"snapToGrid":true,"snapToObject":true,"movingGuides":false,"snappingDistance":10} */
+
+
+
+    
+    
+    private OnmsHeaderProvider m_headerProvider;
+    private String m_headerHtml;
+	private VaadinRequest m_request;
+	private VerticalLayout m_rootLayout;
 
 //    /** The OpenNMS Data Collection Configuration DAO. */
 //    private DataCollectionConfigDao dataCollectionDao;
@@ -57,20 +86,79 @@ public class PluginManagerAdminApplication extends UI {
 //        this.dataCollectionDao = dataCollectionDao;
 //    }
 
-    /* (non-Javadoc)
+    
+    // imported ideas from org.opennms.features.vaadin.nodemaps.internal.NodeMapsApplication
+    
+    public OnmsHeaderProvider getHeaderProvider() {
+		return m_headerProvider;
+	}
+
+	public void setHeaderProvider(OnmsHeaderProvider headerProvider) {
+		this.m_headerProvider = headerProvider;
+	}
+	
+    public void setHeaderHtml(final String headerHtml) {
+        m_headerHtml = headerHtml;
+    }
+	
+	   private void addHeader() {
+	        if (m_headerProvider != null) {
+	            try {
+	                URL pageUrl = Page.getCurrent().getLocation().toURL();
+	                setHeaderHtml(m_headerProvider.getHeaderHtml(new HttpServletRequestVaadinImpl(m_request, pageUrl)));
+	            } catch (final Exception e) {
+	                LOG.error("failed to get header HTML for request " + m_request.getPathInfo(), e.getCause());
+	            }
+	        }
+	        if (m_headerHtml != null) {
+	            InputStream is = null;
+	            try {
+	                is = new ByteArrayInputStream(m_headerHtml.getBytes());
+	                final CustomLayout headerLayout = new CustomLayout(is);
+	                headerLayout.setWidth("100%");
+	                headerLayout.addStyleName("onmsheader");
+	                m_rootLayout.addComponent(headerLayout);
+	            } catch (final IOException e) {
+	                closeQuietly(is);
+	                LOG.debug("failed to get header layout data", e);
+	            }
+	        }
+	    }
+
+	    private void closeQuietly(InputStream is) {
+	        if (is != null) {
+	            try {
+	                is.close();
+	            } catch (final IOException closeE) {
+	                LOG.debug("failed to close HTML input stream", closeE);
+	            }
+	        }
+	    }
+	    
+
+
+	/* (non-Javadoc)
      * @see com.vaadin.ui.UI#init(com.vaadin.server.VaadinRequest)
      */
     @Override
     public void init(VaadinRequest request) {
-//        if (dataCollectionDao == null)
-//            throw new RuntimeException("dataCollectionDao cannot be null.");
+    	
+    	m_request = request;
 
-        TabSheet tabs = new TabSheet();
-        tabs.addStyleName("light");
-        tabs.setSizeFull();
-//        tabs.addTab(new SnmpCollectionPanel(dataCollectionDao, new SimpleLogger()));
-//        tabs.addTab(new DataCollectionGroupAdminPanel(dataCollectionDao));
+    	m_rootLayout= new VerticalLayout();
+    	
+    	CustomComponent pluginManagerUIMainPanel = new PluginManagerUIMainPanel();
+    	
+        m_rootLayout = new VerticalLayout();
+        m_rootLayout.setSizeFull();
+        m_rootLayout.addStyleName("root-layout");
+        setContent(m_rootLayout);
+        addHeader();
+        
+        m_rootLayout.addComponent(pluginManagerUIMainPanel);
+        
+        // this forces the UI panel to use up all the available space below the header
+        m_rootLayout.setExpandRatio(pluginManagerUIMainPanel, 1.0f);
 
-        setContent(tabs);
     }
 }

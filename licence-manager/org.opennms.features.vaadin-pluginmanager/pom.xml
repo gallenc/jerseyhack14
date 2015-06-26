@@ -201,6 +201,16 @@
 			<scope>test</scope>
 		</dependency>
 
+
+		<!-- to allow us to import opennms header -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>org.opennms.features.topology</groupId> -->
+<!-- 			<artifactId>app</artifactId> -->
+<!-- 			<version>16.0.0</version> -->
+<!--             <scope>provided</scope>  -->
+<!-- 		</dependency> -->
+
+
 	</dependencies>
 
 </project>

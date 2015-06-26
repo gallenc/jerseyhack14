@@ -9,6 +9,8 @@
 	<!-- <reference id="eventProxy" interface="org.opennms.netmgt.events.api.EventProxy" availability="mandatory" /> -->
 	<!-- <reference id="eventConfDao" interface="org.opennms.netmgt.config.api.EventConfDao" availability="mandatory" /> -->
 	<!-- <reference id="dataCollectionConfigDao" interface="org.opennms.netmgt.config.api.DataCollectionConfigDao" availability="mandatory" /> -->
+	
+	<reference id="onmsHeaderProvider" interface="org.opennms.web.api.OnmsHeaderProvider" availability="optional" />
 
 	<!-- <bean id="mibParser" class="org.opennms.features.vaadin.mibcompiler.services.JsmiMibParser" /> -->
 
@@ -26,12 +28,13 @@
 
 	<bean id="pluginManagerAdminApplicationFactory" class="org.opennms.features.vaadin.config.PluginManagerAdminApplicationFactory">
 		<!-- <property name="dataCollectionDao" ref="dataCollectionConfigDao" /> -->
+		<property name="headerProvider" ref="onmsHeaderProvider" />
 	</bean>
 
 
 	<service id="pluginManagerService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="pluginManagerAdminApplicationFactory">
 		<service-properties>
-			<entry key="alias" value="/plugin-manager" />
+			<entry key="alias" value="/admin/plugin-manager" />
 		</service-properties>
 	</service>
 
@@ -54,7 +57,8 @@
 	<!-- </service> -->
 
 	<bean id="pluginManagerAdminUiLink" class="org.opennms.features.vaadin.pluginmanager.AdminPageNavEntry">
-		<property name="url" value="admin/pluginManager.jsp" />
+<!-- 		<property name="url" value="admin/pluginManager.jsp" /> -->
+		<property name="url" value="admin/plugin-manager" />
 		<property name="name" value="OpenNMS Plugin Manager" />
 	</bean>
 	

@@ -28,8 +28,9 @@
 
 package org.opennms.features.vaadin.config;
 
-import org.opennms.netmgt.config.api.DataCollectionConfigDao;
+
 import org.opennms.vaadin.extender.AbstractApplicationFactory;
+import org.opennms.web.api.OnmsHeaderProvider;
 
 import com.vaadin.ui.UI;
 
@@ -37,18 +38,16 @@ import com.vaadin.ui.UI;
  * A factory for creating SNMP Collection Administration Application objects.
  */
 public class PluginManagerAdminApplicationFactory extends AbstractApplicationFactory {
+	
+    private OnmsHeaderProvider m_headerProvider;
 
-//    /** The OpenNMS Data Collection Configuration DAO. */
-//    private DataCollectionConfigDao dataCollectionDao;
-//
-//    /**
-//     * Sets the OpenNMS Data Collection Configuration DAO.
-//     *
-//     * @param dataCollectionDao the new data collection DAO
-//     */
-//    public void setDataCollectionDao(DataCollectionConfigDao dataCollectionDao) {
-//        this.dataCollectionDao = dataCollectionDao;
-//    }
+	public OnmsHeaderProvider getHeaderProvider() {
+		return m_headerProvider;
+	}
+
+	public void setHeaderProvider(OnmsHeaderProvider headerProvider) {
+		this.m_headerProvider = headerProvider;
+	}
 
     /* (non-Javadoc)
      * @see org.opennms.vaadin.extender.AbstractApplicationFactory#getUI()
@@ -56,6 +55,7 @@ public class PluginManagerAdminApplicationFactory extends AbstractApplicationFac
     @Override
     public UI createUI() {
         PluginManagerAdminApplication app = new PluginManagerAdminApplication();
+        app.setHeaderProvider(m_headerProvider);
 //        app.setDataCollectionDao(dataCollectionDao);
         return app;
     }
