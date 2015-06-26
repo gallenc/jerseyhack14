@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
 
-  <reference id="eventProxy" interface="org.opennms.netmgt.model.events.EventProxy" availability="mandatory" />
+  <reference id="eventProxy" interface="org.opennms.netmgt.events.api.EventProxy" availability="mandatory" />
 
   <service interface="javax.servlet.http.HttpServlet">
     <service-properties>
@@ -37,10 +37,10 @@
 
   <!-- receives events from OpenNMS -->
 
-  <reference id="eventSubscriptionService" interface="org.opennms.netmgt.model.events.EventSubscriptionService" availability="mandatory" />
+  <reference id="eventSubscriptionService" interface="org.opennms.netmgt.events.api.EventSubscriptionService" availability="mandatory" />
 
   <!-- note init and destroy methods specified because OSGi and not a Spring environment -->
-  <bean id="eventGatewayEventListenerAdapter" class="org.opennms.netmgt.model.events.AnnotationBasedEventListenerAdapter" init-method="afterPropertiesSet"
+  <bean id="eventGatewayEventListenerAdapter" class="org.opennms.netmgt.events.api.AnnotationBasedEventListenerAdapter" init-method="afterPropertiesSet"
     destroy-method="destroy">
     <property name="annotatedListener" ref="configLoader" />
     <property name="eventSubscriptionService" ref="eventSubscriptionService" />

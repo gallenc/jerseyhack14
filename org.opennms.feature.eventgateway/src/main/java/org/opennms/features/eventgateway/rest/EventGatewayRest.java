@@ -27,8 +27,9 @@ import org.opennms.features.eventgateway.jaxb.NameValuePair;
 import org.opennms.features.eventgateway.jaxb.RestEventMessage;
 import org.opennms.features.eventgateway.jaxb.RestEventReplyMessage;
 import org.opennms.netmgt.model.events.EventBuilder;
-import org.opennms.netmgt.model.events.EventProxy;
-import org.opennms.netmgt.model.events.EventProxyException;
+
+import org.opennms.netmgt.events.api.EventProxy;
+import org.opennms.netmgt.events.api.EventProxyException;
 import org.opennms.netmgt.xml.event.Event;
 import org.opennms.netmgt.xml.event.Parm;
 

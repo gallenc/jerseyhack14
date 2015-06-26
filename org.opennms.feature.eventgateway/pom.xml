@@ -17,7 +17,7 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
     <!-- this is the version of OpenNMS which this project has been built against -->
-    <opennmsVersion>14.0.0</opennmsVersion>
+    <opennmsVersion>16.0.0</opennmsVersion>
 
     <junitVersion>4.10</junitVersion>
     <maven.surefire.plugin.version>2.15</maven.surefire.plugin.version>
