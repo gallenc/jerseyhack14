@@ -100,6 +100,11 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		public function osgi_licence_list_shortcode($atts) {
 			$content = "";
 			
+			if(! is_user_logged_in ()){
+				$content = "<p>You need to be logged in to see your licence list.</p>";
+				return $content;
+			}
+			
 			// default return only values for current user
 			$args = array (
 					'post_type' => 'osgi_licence_post',
@@ -159,28 +164,108 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		/**
 		 * Provides shortcodes for retrieving licence metadata from licence generator for use in product definition
 		 * shortcodes [osgi_licence_metadata] retrieving product description from licence generator every time page viewed
-		 * shortcodes [osgi_licence_metadata retrieve="if_new"] only retreives a new product descriptino the first time page is viewed
 		 *
 		 * @param unknown $atts        	
 		 */
 		public function osgi_licence_metadata_shortcode($atts) {
+			// set time metadata uploaded
+			$objDateTime = new DateTime ( 'NOW' );
 			$content = "";
-			$content .= "<div id=\"osgi_product_metadata_shortcode\" class=\"osgi_metadata\">\n";
+			$content .= "<div id=\"osgi_licence_metadata_shortcode\" class=\"osgi_metadata\">\n";
 			
-			$content .= "<P>[osgi_licence_metadata] SHORTCODE IS HERE - NEED TO ADD</p>\n";
-			// TODO COMPLETE THIS CLASS
-			if ($this->osgipub_osgi_debug) {
-				$content .= "<p>debug: Running osgi_product_description shortcode </p>\n";
-				$content .= "<p>debug: Attributes:";
-				if ("" != $atts)
-					foreach ( $atts as $key => $value ) {
-						$content .= "   " . $key . "=" . $value . "<br>\n";
+			try {
+				$edd_osgiProductIdStr = get_post_meta ( get_the_ID (), '_edd_osgiProductIdStr', true );
+				if (! isset ( $edd_osgiProductIdStr )) {
+					throw new Exception ( 'edd-osgi: You must set productId on the download definition' );
+				}
+				
+				$user_can_modify_metadata = (is_user_logged_in () && current_user_can ( 'view_shop_sensitive_data' ));
+				
+				if ($this->osgipub_osgi_debug) {
+					$content .= "<p>debug: Running osgi_product_description shortcode </p>\n";
+					if ($user_can_modify_metadata) {
+						$content .= "<p>debug: osgi_product_description shortcode: user permitted to modify licence metadata</p>\n";
+					} else
+						$content .= "<p>debug: osgi_product_description shortcode: user NOT permitted to modify licence metadata</p>";
+					$content .= "<p>debug: Attributes:";
+					if ("" != $atts)
+						foreach ( $atts as $key => $value ) {
+							$content .= "   " . $key . "=" . $value . "<br>\n";
+						}
+					else
+						$content .= " Not Set";
+					$content .= "</p>\n";
+				}
+				
+				// If user can modify shop data then they will see licence metadata and can edit it
+				// load supporting class
+				$eddOsgiLicences = new EddOsgiLicences ();
+				
+				if ($user_can_modify_metadata) {
+					
+					// load unmodified metadata spec from licence manager
+					$licenceMetadataSpecStr = $eddOsgiLicences->getLicenceMetadataSpec ( $edd_osgiProductIdStr );
+					$osgiLicenceMetadataSpec = new SimpleXMLElement ( $licenceMetadataSpecStr );
+					
+					// try loading modified LicenceMetadataSpecStr from this post
+					$edd_modified_osgiLicenceMetadataSpecStr = get_post_meta ( get_the_ID (), '_edd_modified_osgiLicenceMetadataSpecStr', true );
+					// if no modified LicenceMetadataSpecStr in post then create new one
+					if (! isset ( $edd_modified_osgiLicenceMetadataSpecStr ) || '' == $edd_modified_osgiLicenceMetadataSpecStr) {
+						$edd_modified_osgiLicenceMetadataSpecStr = $licenceMetadataSpecStr;
+						// set the update time
+						$edd_osgiLicenceMetadataStrUpdateTime = $objDateTime->format ( DateTime::COOKIE );
+						update_post_meta ( get_the_ID (), '_edd_osgiLicenceMetadataStrUpdateTime', $edd_osgiLicenceMetadataStrUpdateTime );
 					}
-				else
-					$content .= " Not Set";
-				$content .= "</p>\n";
+					$edd_modified_osgiLicenceMetadataSpec = new SimpleXMLElement ( $edd_modified_osgiLicenceMetadataSpecStr );
+					
+					// check if request asks to reset the modified Licence Metadata Spec
+					if (isset ( $_POST ['_resetLicenceMetadataSpec'] ) && $_POST ['_resetLicenceMetadataSpec']=='true') {
+						// if reset then load unmodified metadata spec from licence manager
+						$licenceMetadataSpecStr = $eddOsgiLicences->getLicenceMetadataSpec ( $edd_osgiProductIdStr );
+						$osgiLicenceMetadataSpec = new SimpleXMLElement ( $licenceMetadataSpecStr );
+						$edd_modified_osgiLicenceMetadataSpec=$osgiLicenceMetadataSpec;
+						$payload = ( string ) $edd_modified_osgiLicenceMetadataSpec->asXML ();
+						update_post_meta ( get_the_ID (), '_edd_modified_osgiLicenceMetadataSpecStr', $payload );
+						// set the update time
+						$edd_osgiLicenceMetadataStrUpdateTime = $objDateTime->format ( DateTime::COOKIE );
+						update_post_meta ( get_the_ID (), '_edd_osgiLicenceMetadataStrUpdateTime', $edd_osgiProductMetadataStrUpdateTime );
+					} elseif (isset ( $_POST ['_modifyLicenceMetadataSpec'] ) && $_POST ['_modifyLicenceMetadataSpec']=='true') {
+						// check if request asks to modify the Licence Metadata Spec
+			            // parse post data into modified licene metadata spec an update the post
+						$edd_modified_osgiLicenceMetadataSpec =  $eddOsgiLicences->modifyLicenceMetadataFromPost($osgiLicenceMetadataSpec, $edd_modified_osgiLicenceMetadataSpec,  $_POST);
+						$payload = ( string ) $edd_modified_osgiLicenceMetadataSpec->asXML ();
+						update_post_meta ( get_the_ID (), '_edd_modified_osgiLicenceMetadataSpecStr', $payload );
+						// set the update time
+						$edd_osgiLicenceMetadataStrUpdateTime = $objDateTime->format ( DateTime::COOKIE );
+						update_post_meta ( get_the_ID (), '_edd_osgiLicenceMetadataStrUpdateTime', $edd_osgiLicenceMetadataStrUpdateTime );
+					}
+
+					$noinput = false;
+
+					// update time string is time when matadata last updated
+					$edd_osgiLicenceMetadataStrUpdateTime = get_post_meta ( get_the_ID (), '_edd_osgiLicenceMetadataStrUpdateTime', true );
+					if(isset($edd_osgiLicenceMetadataStrUpdateTime)){
+						$content .= "<div style=\" line-height: 80%;\">Licence Metadata (Last Updated: " . $edd_osgiLicenceMetadataStrUpdateTime . ")</div>\n";
+					}
+					$content .="<form method=\"post\" action=\"\" enctype=\"multipart/form-data\">\n";
+					$content .= $eddOsgiLicences->licenceMetadataForm ( $edd_modified_osgiLicenceMetadataSpec, $osgiLicenceMetadataSpec, $noinput );
+					// set up form to update licence metadata
+					$content .="<p>As a privileged user you can modify the standard metadata spec for this product instance</p>\n";
+					$content .="<p>(e.g. you can change the options or duration of the licence)</p>\n";
+					$content .="<input type=\"hidden\" name=\"_modifyLicenceMetadataSpec\" value=\"true\">\n";
+					$content .="<button type=\"submit\">Update Licence Metadata Spec</button>\n";
+					$content .="</form>\n";
+					$content .="<form method=\"post\" action=\"\" enctype=\"multipart/form-data\">\n";
+					$content .="<input type=\"hidden\" name=\"_resetLicenceMetadataSpec\" value=\"true\">\n";
+					$content .="<button type=\"submit\">Reset Licence Metadata Spec</button>\n";
+					$content .="</form>\n";
+					
+				}
+			} catch ( Exception $e ) {
+				$content .= "<p>" . "Exception in osgi_licence_metadata shortcode: Exception: " . $e->getMessage () . "</p>\n";
 			}
-			$content .= "</div> <!-- id=\"osgi_product_metadata_shortcode\" -->\n";
+			$content .= "</div> <!-- id=\"osgi_licence_metadata_shortcode\" -->\n";
+			
 			return $content;
 		}
 		
@@ -237,10 +322,10 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 					throw new Exception ( 'edd-osgi: You must set the OSGi Password in the plugin settings' );
 				}
 				
-				// product descriptor string conteins previously retreived product description but may not be set
+				// product descriptor string contains previously retreived product description but may not be set
 				$edd_osgiProductMetadataStr = get_post_meta ( get_the_ID (), '_edd_osgiProductMetadataStr', true );
 				
-				// update time string is tiem when matadata last updated
+				// update time string is time when matadata last updated
 				$edd_osgiProductMetadataStrUpdateTime = get_post_meta ( get_the_ID (), '_edd_osgiProductMetadataStrUpdateTime', true );
 				
 				if ($this->osgipub_osgi_debug) {
@@ -337,7 +422,14 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 			$args = array (
 					'public' => true,
 					'label' => 'osgi_licence_post',
-					'menu_position' => null 
+					'description' => 'osgi licence posts which generate purchased licences',
+					'menu_position' => null,
+ 					'capability_type' => 'post',
+ 					'capabilities' => array(
+ 							'create_posts' => 'do_not_allow', // Removes support for the "Add New" function, including Super Admin's in dashboard
+ 							//'edit_posts' => 'do_not_allow'    // too drastic - prevents admin listing any post of this type 
+ 					),
+ 					'map_meta_cap' => true // Set to false, if users are not allowed to edit/delete existing posts
 			);
 			register_post_type ( 'osgi_licence_post', $args );
 		}
@@ -520,7 +612,9 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 					}
 					
 					if ($display_licence_table) {
+						echo "<div id=\"osgi_licence_list_table\" class=\"osgi_licence_list\">\n";
 						echo "<h3>OSGi Licences</h3>\n";
+						echo "<p>One of more of your purchased downloads have associated OSGi Licences.<BR>To generate your licences select the links below.</p>\n";
 						echo "<table>\n";
 					}
 					
@@ -546,12 +640,15 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 							
 							if (isset ( $edd_payment_number )) {
 								// start of table row
-								echo "<tr>\n";
-								echo "<td>\n";
+								echo "  <tr>\n";
+								echo "    <td>\n";
 								
 								// product id string from download
 								// contains maven unique id of product to which this licence applies
 								$edd_osgiProductIdStr = get_post_meta ( $download ['id'], '_edd_osgiProductIdStr', true );
+								
+								// try loading modified LicenceMetadataSpecStr from this product efinition and apply to licence post
+								$edd_modified_osgiLicenceMetadataSpecStr = get_post_meta ( $download ['id'], '_edd_modified_osgiLicenceMetadataSpecStr', true );
 								
 								// Retrieve and append the price option name
 								if (! empty ( $price_id )) {
@@ -612,7 +709,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 									
 									$post = array (
 											// 'ID' => [ <post id> ] // Are you updating an existing post?
-											'post_content' => '<p>post content</p>', // The full text of the post.
+											'post_content' => '<p>DO NOT EDIT: You can only view or change this licence post by using View Post.</p>', // The full text of the post.
 											'post_name' => $licence_post_name, // The name (slug) for your post
 											'post_title' => $licence_post_title, // The title of your post.
 											                                     // 'post_status' => [ 'draft' | 'publish' | 'pending'| 'future' | 'private' | custom registered status ] // Default 'draft'.
@@ -645,6 +742,9 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 									// update_post_meta ( $newpost_id, 'edd_osgiProductIdStr', 'org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT' );
 									update_post_meta ( $newpost_id, 'edd_osgiProductIdStr', $edd_osgiProductIdStr );
 									
+                                    // apply modified metadata to this licence post
+									update_post_meta ( $newpost_id, '_edd_modified_osgiLicenceMetadataSpecStr', $edd_modified_osgiLicenceMetadataSpecStr );
+									
 									// setting customer metadata - not yet used in the template
 									update_post_meta ( $newpost_id, 'edd_payment_customer_id', $edd_payment_customer_id );
 									update_post_meta ( $newpost_id, 'edd_payment_user_id', $edd_payment_user_id );
@@ -676,14 +776,15 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 									echo '<a href="' . get_post_permalink ( $newpost_id ) . '" >Link to Licence: ' . $licence_post_title . '</a>';
 									echo "\n";
 								}
-								echo "</td>\n";
-								echo "</tr>\n";
+								echo "    </td>\n";
+								echo "  </tr>\n";
 							}
 						}
 					}
 					
 					if ($display_licence_table) {
 						echo "</table>\n";
+						echo "</div> <!-- div id=osgi_licence_list_table -->";
 					}
 					;
 				}

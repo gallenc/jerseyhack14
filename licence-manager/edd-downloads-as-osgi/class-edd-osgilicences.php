@@ -106,38 +106,18 @@ class EddOsgiLicences {
 		$MetadataFormStr .= "</table>\n";
 		return $MetadataFormStr;
 	}
+	
 	/**
-	 *
-	 * @param SimpleXMLElement $_licenceMetadata        	
-	 * @param string $osgiLicenceGeneratorUrl        	
-	 * @param string $osgi_username        	
-	 * @param string $osgi_password        	
-	 * @param string $osgipub_osgi_debug        	
-	 * @param int $post_id        	
-	 * @param  $POST_ used to pass the calling pages $_POST object
-	 * @return string licence string 
+	 * Updates LicenceMetadata based upon POST message contents and licenceMetadataSpec.
+	 * If licence metadata spec is already populated, then update not allowed 
+	 * @param unknown $_licenceMetadataSpec
+	 * @param unknown $_licenceMetadata
+	 * @param unknown $POST_
 	 */
-	function generateLicence($_licenceMetadataSpec, $_licenceMetadata, $post_id, $POST_) {
+	function modifyLicenceMetadataFromPost($_licenceMetadataSpec, $_licenceMetadata,  $POST_){
 		// check if OSGi licence generator debugging is enabled
 		$osgipub_osgi_debug = edd_get_option ( 'osgipub_osgi_debug' );
 		
-		// get the base url URL of the OSGi licence generator service from settings
-		$osgiLicenceGeneratorUrl = edd_get_option ( 'osgipub_osgi_licence_pub_url' );
-		if (! isset ( $osgiLicenceGeneratorUrl ) || '' == $osgiLicenceGeneratorUrl) {
-			throw new Exception ( 'edd-osgi-class: You must set the OSGi Licence Publisher URL in the plugin settings' );
-		}
-		
-		// get the username to access the OSGi licence generator service from settings
-		$osgi_username = edd_get_option ( 'osgipub_osgi_username' );
-		if (! isset ( $osgi_username )) {
-			throw new Exception ( 'edd-osgi-class: You must set the OSGi User Name in the plugin settings' );
-		}
-		
-		// get the password to access of the OSGi licence generator service from settings
-		$osgi_password = edd_get_option ( 'osgipub_osgi_password' );
-		if (! isset ( $osgi_password )) {
-			throw new Exception ( 'edd-osgi-class: You must set the OSGi Password in the plugin settings' );
-		}
 		
 		$metadataspec = ( array ) $_licenceMetadataSpec->children ();
 		$metadata = ( array ) $_licenceMetadata->children ();
@@ -177,7 +157,47 @@ class EddOsgiLicences {
 				}
 			}
 		}
+		return $_licenceMetadata;
+	}
+	
+	
+	
+	
+	/**
+	 *
+	 * @param SimpleXMLElement $_licenceMetadata        	
+	 * @param string $osgiLicenceGeneratorUrl        	
+	 * @param string $osgi_username        	
+	 * @param string $osgi_password        	
+	 * @param string $osgipub_osgi_debug        	
+	 * @param int $post_id        	
+	 * @param  $POST_ used to pass the calling pages $_POST object
+	 * @return string licence string 
+	 */
+	function generateLicence($_licenceMetadataSpec, $_licenceMetadata, $post_id, $POST_) {
+		// check if OSGi licence generator debugging is enabled
+		$osgipub_osgi_debug = edd_get_option ( 'osgipub_osgi_debug' );
 		
+		$_licenceMetadata =  $this->modifyLicenceMetadataFromPost($_licenceMetadataSpec, $_licenceMetadata,  $POST_);
+		
+		// get the base url URL of the OSGi licence generator service from settings
+		$osgiLicenceGeneratorUrl = edd_get_option ( 'osgipub_osgi_licence_pub_url' );
+		if (! isset ( $osgiLicenceGeneratorUrl ) || '' == $osgiLicenceGeneratorUrl) {
+			throw new Exception ( 'edd-osgi-class: You must set the OSGi Licence Publisher URL in the plugin settings' );
+		}
+		
+		// get the username to access the OSGi licence generator service from settings
+		$osgi_username = edd_get_option ( 'osgipub_osgi_username' );
+		if (! isset ( $osgi_username )) {
+			throw new Exception ( 'edd-osgi-class: You must set the OSGi User Name in the plugin settings' );
+		}
+		
+		// get the password to access of the OSGi licence generator service from settings
+		$osgi_password = edd_get_option ( 'osgipub_osgi_password' );
+		if (! isset ( $osgi_password )) {
+			throw new Exception ( 'edd-osgi-class: You must set the OSGi Password in the plugin settings' );
+		}
+
 		$uri = $osgiLicenceGeneratorUrl . '/pluginmgr/rest/licence-pub/createlicence';
 		
 		$payload = ( string ) $_licenceMetadata->asXML ();
