@@ -201,14 +201,31 @@
 			<scope>test</scope>
 		</dependency>
 
+		<!-- to allow us to import features mbean -->
+		<dependency>
+			<groupId>org.apache.karaf.features</groupId>
+			<artifactId>org.apache.karaf.features.management</artifactId>
+			<version>${karafVersion}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.aries.jmx</groupId>
+			<artifactId>org.apache.aries.jmx</artifactId>
+			<version>0.3</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.karaf.management.mbeans</groupId>
+			<artifactId>org.apache.karaf.management.mbeans.bundles</artifactId>
+			<version>${karafVersion}</version>
+		</dependency>
 
 		<!-- to allow us to import opennms header -->
-<!-- 		<dependency> -->
-<!-- 			<groupId>org.opennms.features.topology</groupId> -->
-<!-- 			<artifactId>app</artifactId> -->
-<!-- 			<version>16.0.0</version> -->
-<!--             <scope>provided</scope>  -->
-<!-- 		</dependency> -->
+		<!-- <dependency> -->
+		<!-- <groupId>org.opennms.features.topology</groupId> -->
+		<!-- <artifactId>app</artifactId> -->
+		<!-- <version>16.0.0</version> -->
+		<!-- <scope>provided</scope> -->
+		<!-- </dependency> -->
 
 
 	</dependencies>
