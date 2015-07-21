@@ -120,10 +120,10 @@ you should see
 karaf@root> list
 START LEVEL 100 , List Threshold: 50
    ID   State         Blueprint      Level  Name
-[  54] [Active     ] [            ] [   80] jersey-core (1.18.0)
-[  55] [Active     ] [            ] [   80] jersey-server (1.18.1)
-[  56] [Active     ] [            ] [   80] jersey-servlet (1.18.0)
-[  86] [Active     ] [Created     ] [   80] org.opennms.licencemanager (1.0.0.SNAPSHOT)
+ 54   Active                            80  jersey-core (1.18.0)
+   55   Active                          80  jersey-server (1.18.1)
+   56   Active                          80  jersey-servlet (1.18.0)
+   86   Active        Created           80  org.opennms.licencemanager (1.0.0.SNAPSHOT)
 
 ```
 

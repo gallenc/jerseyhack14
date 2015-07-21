@@ -45,6 +45,7 @@
 					</features>
 				</configuration>
 			</plugin>
+
 		</plugins>
 	</build>
 
@@ -216,6 +217,12 @@
 		<dependency>
 			<groupId>org.apache.karaf.management.mbeans</groupId>
 			<artifactId>org.apache.karaf.management.mbeans.bundles</artifactId>
+			<version>${karafVersion}</version>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.karaf.management.mbeans</groupId>
+			<artifactId>org.apache.karaf.management.mbeans.config</artifactId>
 			<version>${karafVersion}</version>
 		</dependency>
 

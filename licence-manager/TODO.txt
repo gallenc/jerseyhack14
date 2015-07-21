@@ -57,7 +57,7 @@ DONE *** system property for location of licence file ( for OpenNMS / etc )
 proof of concept
 create public / private repo for licences and modules
 DONE create shopping cart to generate licences
-TODO shopping cart
+DONE shopping cart
 DONE	*** check only showing licence page when payment complete
 DONE *** check only showing licences for user or for admin
 	allow admin to update metadata / generate licence only

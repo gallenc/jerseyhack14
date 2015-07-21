@@ -9,7 +9,7 @@
 	<!-- <reference id="eventProxy" interface="org.opennms.netmgt.events.api.EventProxy" availability="mandatory" /> -->
 	<!-- <reference id="eventConfDao" interface="org.opennms.netmgt.config.api.EventConfDao" availability="mandatory" /> -->
 	<!-- <reference id="dataCollectionConfigDao" interface="org.opennms.netmgt.config.api.DataCollectionConfigDao" availability="mandatory" /> -->
-	
+
 	<reference id="onmsHeaderProvider" interface="org.opennms.web.api.OnmsHeaderProvider" availability="optional" />
 
 	<!-- <bean id="mibParser" class="org.opennms.features.vaadin.mibcompiler.services.JsmiMibParser" /> -->
@@ -57,11 +57,11 @@
 	<!-- </service> -->
 
 	<bean id="pluginManagerAdminUiLink" class="org.opennms.features.vaadin.pluginmanager.AdminPageNavEntry">
-<!-- 		<property name="url" value="admin/pluginManager.jsp" /> -->
+		<!-- <property name="url" value="admin/pluginManager.jsp" /> -->
 		<property name="url" value="admin/plugin-manager" />
 		<property name="name" value="OpenNMS Plugin Manager" />
 	</bean>
-	
+
 	<service id="pluginManagerAdminUiService" interface="org.opennms.web.navigate.PageNavEntry" ref="pluginManagerAdminUiLink">
 		<service-properties>
 			<entry key="Page" value="admin" />
@@ -69,5 +69,13 @@
 			<entry key="registration.export" value="true" />
 		</service-properties>
 	</service>
+
+	<cm:property-placeholder persistent-id="org.opennms.features.licencemgr.config" update-strategy="reload">
+		<cm:default-properties>
+			<cm:property name="licenceServerURL","notSet" />
+			<cm:property name="licenceServerUserName","notSet" />
+			<cm:property name="licenceServerPassword","notSet" />
+		</cm:default-properties>
+	</cm:property-placeholder>
 
 </blueprint>
