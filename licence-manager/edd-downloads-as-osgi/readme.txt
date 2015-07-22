@@ -36,6 +36,8 @@ To see the product metadata for a product you should add the following shortcode
 This will upload the product metadata once. If you want to refresh the metadata every time the page is loaded use
 \[osgi_product_description retrieve == "always"\]
 
+In the wordpress settings>Permalink Settings you must choose 'Default http://localhost:8080/wordpress/?p=123'
+
 Suggestions welcome for future features. 
 
 (Thanks to Andrew Munro, Sumobi for the downloads as a service plugin which acted as a template for this work)

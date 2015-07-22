@@ -43,7 +43,7 @@ This plugin allows users to purchase the right to generate software licences for
 in the same way they can purchase downloads. By extending this great EDD plugin, we benifit from using 
 a well supported commercial gateway which integrates with paypal and has a lot of theme support in Wordpress.
 
-The edd-downloads-as-osgi plugin uses the web services (ReST) inteface from the OSGi licence manager running in Karaf
+The edd-downloads-as-osgi plugin uses the web services (ReST) interface from the OSGi licence manager running in Karaf
 as a backend to generate the licences.
 
 # Licence Project Archetype osgi.licencemanager-archetype

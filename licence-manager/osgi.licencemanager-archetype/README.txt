@@ -10,8 +10,8 @@ mvn archetype:generate -DarchetypeCatalog=local -DarchetypeGroupId=org.opennms \
 -DarchetypeVersion=0.0.1-SNAPSHOT \
 -DgroupId=org.opennms.project \
 -DartifactId=myproject \
--Dpackage=org.opennms.project.package
+-Dpackage=org.opennms.project.packagename
  
  Where -DgroupId=org.opennms.project  is the group id of your generated project
 -DartifactId=myproject is the artifact id of your generated project
--Dpackage=org.opennms.project.package is the route package in which the generated licence artifacts will be placed
+-Dpackage=org.opennms.project.packagename is the route package in which the generated licence artifacts will be placed
