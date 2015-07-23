@@ -39,6 +39,7 @@ public class LicenceMetadataTest {
     	metadata.setLicensor("OpenNMS UK");
     	metadata.setProductId("product id");
     	metadata.setSystemId("system id");
+    	metadata.setFeatureRepository("mvn:org.opennms.licencemgr/licence.manager.example/2.10.0/xml/features");
     	
     	
     	OptionMetadata option1 = new OptionMetadata("newname1", "newvalue1", "this is the description1");

@@ -18,7 +18,7 @@
     <!-- Note must set project.artifactId explicitly as ${project.artifactId}expression is re-evaluated in each sub module !! -->
     <!-- <productId>${project.groupId}/${project.artifactId}/${project.version}</productId> -->
     <!-- <productId>${project.groupId}/org.opennms.co.uk.newfeature/${project.version}</productId> -->
-    <productId>${symbol_dollar}{project.groupId}/${artifactId}/${symbol_dollar}{project.version}</productId>
+    <productId>${artifactId}/${symbol_dollar}{project.version}</productId>
     <!-- <licenceClassPath>org.opennms.co.uk.newfeature</licenceClassPath> -->
     <licenceClassPath>${package}</licenceClassPath>
 

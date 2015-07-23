@@ -27,12 +27,13 @@ public class LicencePublisherTest {
 		String publicKeyStr=generatedKeys.getPublicKeyStr();
 
 		//generate licence metadata
-		
 		String productId="org.opennms/org.opennms.karaf.licencemanager.testbundle/1.0-SNAPSHOT";
+		String featureRepository="mvn:org.opennms.licencemgr/licence.manager.example/2.10.0/xml/features";
 		
 		LicenceMetadata licenceMetadataSpec= new LicenceMetadata();
 		licenceMetadataSpec.setLicensor("OpenNMS UK");
 		licenceMetadataSpec.setProductId(productId);
+		licenceMetadataSpec.setFeatureRepository(featureRepository);
 		OptionMetadata option1 = new OptionMetadata("newname", "false", "this is the description");
 		licenceMetadataSpec.getOptions().add(option1);
 		

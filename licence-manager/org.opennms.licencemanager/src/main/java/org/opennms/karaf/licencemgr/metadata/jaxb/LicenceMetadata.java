@@ -40,14 +40,33 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name="licenceMetadata")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType (propOrder={"productId","licensee","licensor","systemId","startDate","expiryDate","duration","options"})
+@XmlType (propOrder={"productId","featureRepository","licensee","licensor","systemId","startDate","expiryDate","duration","options"})
 public class LicenceMetadata {
 
+	//NOTE IF YOU MODIFY THIS CLASS YOU MUST REGENERATE THE equals and hashCode methods
+	//AND change the fromXml() method
+	
 	/**
-	 * productId is expected to contain the concatenated <groupId>/<artifactId>/<version>
-     * such that mvn:<groupId>/<artifactId>/<version> will resolve an object
+	 * productId is expected to contain the name of the product in the form <name>/<version>
+	 * The productId is used as the feature name for installing into Karaf the top level feature 
+	 * definition of the licensed product such that the feature can be installed using 
+	 * features:install name/version (version is optional) (Karaf 2.4.0)
+	 * 
+	 * Karaf features can reference dependent features with a range of versions 
+	 * e.g. <feature version="[2.5.6,4)">spring</feature>
+	 * so this allows us to have a single licence which can cover a range of releases of the
+	 * feature which implements the product.
 	 */
 	String productId=null;
+	
+	/**
+	 * featureRepository is expected to contain the url of the features repository 
+	 * which describes the Karaf feature using the concatenated form
+	 * <groupId>/<artifactId>/<version>/xml/features
+	 * such that the repository can be installed using features:addurl (Karaf 2.4.0)
+	 * e.g. features:addurl mvn:org.apache.camel/camel-example-osgi/2.10.0/xml/features
+	 */
+	String featureRepository=null;
 	
 	/**
 	 * systemId is expected to contain the unique identifier of the system on which which the licensed artifact 
@@ -67,7 +86,7 @@ public class LicenceMetadata {
 	
 	/**
 	 * duration - alternative to expiry date. Duration of licence in days. If null (and expiryDate is null) there is no expiry date.
-	 * If duration =0, there is no expiry date. If both defined, duration has precidence over expiryDate.
+	 * If duration =0, there is no expiry date. If both defined, duration has precedence over expiryDate.
 	 */
 	Integer duration=null;
 
@@ -99,6 +118,7 @@ public class LicenceMetadata {
 	 */
 	public void setLicenceMetadata(LicenceMetadata licenceMetadata){
 		this.productId=licenceMetadata.productId;
+		this.featureRepository=licenceMetadata.featureRepository;
 		this.systemId=licenceMetadata.systemId;
 		this.startDate=licenceMetadata.startDate;
 		this.expiryDate=licenceMetadata.expiryDate;
@@ -123,6 +143,21 @@ public class LicenceMetadata {
 	@XmlElement(name="productId")
 	public void setProductId(String productId) {
 		this.productId = productId;
+	}
+	
+	/**
+	 * @return the featureRepository
+	 */
+	public String getFeatureRepository() {
+		return featureRepository;
+	}
+
+	/**
+	 * @param featureRepository the featureRepository to set
+	 */
+	@XmlElement(name="featureRepository")
+	public void setFeatureRepository(String featureRepository) {
+		this.featureRepository = featureRepository;
 	}
 
 	/**
@@ -264,9 +299,11 @@ public class LicenceMetadata {
 			StringReader reader = new StringReader(xmlStr);
 			LicenceMetadata licenceMetadata= (LicenceMetadata) jaxbUnmarshaller.unmarshal(reader);
 			this.productId=licenceMetadata.productId;
+			this.featureRepository=licenceMetadata.featureRepository;
 			this.systemId=licenceMetadata.systemId;
 			this.startDate=licenceMetadata.startDate;
 			this.expiryDate=licenceMetadata.expiryDate;
+			this.duration=licenceMetadata.duration;
 			this.licensee=licenceMetadata.licensee;
 			this.licensor=licenceMetadata.licensor;
 			this.options.clear();
@@ -335,6 +372,10 @@ public class LicenceMetadata {
 				+ ((duration == null) ? 0 : duration.hashCode());
 		result = prime * result
 				+ ((expiryDate == null) ? 0 : expiryDate.hashCode());
+		result = prime
+				* result
+				+ ((featureRepository == null) ? 0 : featureRepository
+						.hashCode());
 		result = prime * result
 				+ ((licensee == null) ? 0 : licensee.hashCode());
 		result = prime * result
@@ -372,6 +413,11 @@ public class LicenceMetadata {
 				return false;
 		} else if (!expiryDate.equals(other.expiryDate))
 			return false;
+		if (featureRepository == null) {
+			if (other.featureRepository != null)
+				return false;
+		} else if (!featureRepository.equals(other.featureRepository))
+			return false;
 		if (licensee == null) {
 			if (other.licensee != null)
 				return false;
@@ -404,7 +450,6 @@ public class LicenceMetadata {
 			return false;
 		return true;
 	}
-
 
 
 }

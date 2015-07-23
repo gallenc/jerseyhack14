@@ -13,6 +13,7 @@ public class ProductMetadataTest {
 		ProductMetadata pmeta= new ProductMetadata();
 		pmeta.setOrganization("OpenNMS Project");
 		pmeta.setProductDescription("Test product description");
+		pmeta.setFeatureRepository("mvn:org.opennms.licencemgr/licence.manager.example/2.10.0/xml/features");
 		pmeta.setProductId("org.opennms/org.opennms.karaf.licencemanager.testbundle/1.0-SNAPSHOT");
 		pmeta.setProductName("test Bundle");
 		pmeta.setProductUrl("http:\\\\opennms.co.uk");

@@ -53,6 +53,7 @@ public class LicenceTest {
 		createLicenceMetadata.setLicensee("Mr Craig Gallen");
 		createLicenceMetadata.setLicensor("OpenNMS UK");
 		createLicenceMetadata.setProductId("org.opennms/org.opennms.karaf.licencemanager.testbundle/1.0-SNAPSHOT");
+		createLicenceMetadata.setFeatureRepository("mvn:org.opennms.licencemgr/licence.manager.example/2.10.0/xml/features");
 		createLicenceMetadata.setSystemId("4ad72a34e3635c1b-99da3323");
 
 		OptionMetadata option1 = new OptionMetadata("newname", "newvalue", "this is the description");

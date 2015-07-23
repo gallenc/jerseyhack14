@@ -28,20 +28,38 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name="product")
 @XmlAccessorType(XmlAccessType.NONE)
+@XmlType (propOrder={"productId","featureRepository","productName","productDescription","productUrl","organization","licenceType","licenceKeyRequired"})
 public class ProductMetadata {
 
 	//NOTE IF YOU MODIFY THIS CLASS YOU MUST REGENERATE THE equals and hashCode methods
 	//AND change the fromXml() method
 	
 	/**
-	 * productId is expected to contain the concatenated groupId/artifactId/version
-	 * such that mvn:<groupId>/<artifactId>/<version> will resolve an object
+	 * productId is expected to contain the name of the product in the form <name>/<version>
+	 * The productId is used as the feature name for installing into Karaf the top level feature 
+	 * definition of the licensed product such that the feature can be installed using 
+	 * features:install name/version (version is optional) (Karaf 2.4.0)
+	 * 
+	 * Karaf features can reference dependent features with a range of versions 
+	 * e.g. <feature version="[2.5.6,4)">spring</feature>
+	 * so this allows us to have a single licence which can cover a range of releases of the
+	 * feature which implements the product.
 	 */
-	private String productId=null;
+	String productId=null;
 	
+	/**
+	 * featureRepository is expected to contain the url of the features repository 
+	 * which describes the Karaf feature using the concatenated form
+	 * <groupId>/<artifactId>/<version>/xml/features
+	 * such that the repository can be installed using features:addurl (Karaf 2.4.0)
+	 * e.g. features:addurl mvn:org.apache.camel/camel-example-osgi/2.10.0/xml/features
+	 */
+	String featureRepository=null;
+
 	/**
 	 * product name - plain text name of product- usually maven name field
 	 */
@@ -85,6 +103,21 @@ public class ProductMetadata {
 	@XmlElement(name="productId")
 	public void setProductId(String productId) {
 		this.productId = productId;
+	}
+	
+	/**
+	 * @return the featureRepository
+	 */
+	public String getFeatureRepository() {
+		return featureRepository;
+	}
+
+	/**
+	 * @param featureRepository the featureRepository to set
+	 */
+	@XmlElement(name="featureRepository")
+	public void setFeatureRepository(String featureRepository) {
+		this.featureRepository = featureRepository;
 	}
 
 	/**
@@ -147,6 +180,37 @@ public class ProductMetadata {
 		this.organization = organization;
 	}
 	
+
+	/**
+	 * @return the licence
+	 */
+	public String getLicenceType() {
+		return licenceType;
+	}
+
+	/**
+	 * @param licenceType the licenceType to set
+	 */
+	@XmlElement(name="licenceType")
+	public void setLicenceType(String licenceType) {
+		this.licenceType = licenceType;
+	}
+
+	/**
+	 * @return the licenceKeyRequired
+	 */
+	public Boolean getLicenceKeyRequired() {
+		return licenceKeyRequired;
+	}
+
+	/**
+	 * @param licenceKeyRequired the licenceKeyRequired to set
+	 */
+	@XmlElement(name="licenceKeyRequired")
+	public void setLicenceKeyRequired(Boolean licenceKeyRequired) {
+		this.licenceKeyRequired = licenceKeyRequired;
+	}
+	
 	/**
 	 * @return XML encoded version of ProductMetadata
 	 */
@@ -176,6 +240,7 @@ public class ProductMetadata {
 			StringReader reader = new StringReader(xmlStr);
 			ProductMetadata productMetadata= (ProductMetadata) jaxbUnmarshaller.unmarshal(reader);
 			this.productId=productMetadata.productId;
+			this.featureRepository=productMetadata.featureRepository;
 			this.productDescription=productMetadata.productDescription;
 			this.organization=productMetadata.organization;
 			this.productName=productMetadata.productName;
@@ -217,35 +282,6 @@ public class ProductMetadata {
 	}
 
 
-	/**
-	 * @return the licence
-	 */
-	public String getLicenceType() {
-		return licenceType;
-	}
-
-	/**
-	 * @param licenceType the licenceType to set
-	 */
-	@XmlElement(name="licenceType")
-	public void setLicenceType(String licenceType) {
-		this.licenceType = licenceType;
-	}
-
-	/**
-	 * @return the licenceKeyRequired
-	 */
-	public Boolean getLicenceKeyRequired() {
-		return licenceKeyRequired;
-	}
-
-	/**
-	 * @param licenceKeyRequired the licenceKeyRequired to set
-	 */
-	@XmlElement(name="licenceKeyRequired")
-	public void setLicenceKeyRequired(Boolean licenceKeyRequired) {
-		this.licenceKeyRequired = licenceKeyRequired;
-	}
 
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
@@ -254,6 +290,10 @@ public class ProductMetadata {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime
+				* result
+				+ ((featureRepository == null) ? 0 : featureRepository
+						.hashCode());
 		result = prime
 				* result
 				+ ((licenceKeyRequired == null) ? 0 : licenceKeyRequired
@@ -287,6 +327,11 @@ public class ProductMetadata {
 		if (getClass() != obj.getClass())
 			return false;
 		ProductMetadata other = (ProductMetadata) obj;
+		if (featureRepository == null) {
+			if (other.featureRepository != null)
+				return false;
+		} else if (!featureRepository.equals(other.featureRepository))
+			return false;
 		if (licenceKeyRequired == null) {
 			if (other.licenceKeyRequired != null)
 				return false;
@@ -324,7 +369,6 @@ public class ProductMetadata {
 			return false;
 		return true;
 	}
-
 
 
 }
