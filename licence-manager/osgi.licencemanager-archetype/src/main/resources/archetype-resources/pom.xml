@@ -23,6 +23,11 @@
     <licenceClassPath>${package}</licenceClassPath>
 
   </properties>
+  
+  <!-- REMOVE THESE MODULES AND ONLY USE THE DEFAULT PROFILE DEFINITIONS BELOW    -->
+  <!-- THE ARTEFACT GENERATOR CANNOT BE PREVENTED FROM ADDING THESE AUTOMATICALLY -->
+  <modules>
+  </modules>
 
   <build>
       
@@ -103,18 +108,79 @@
   <profiles>
     <profile>
       <id>generateLicence</id>
-      <!-- TODO REMOVE - SHOULD NOT GENERATE BY DEFAULT -->
       <activation>
-        <activeByDefault>true</activeByDefault>
+        <activeByDefault>false</activeByDefault>
       </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <tasks>
+                    <echo>*****************************************************</echo>
+                    <echo>PROFILE GENERATING LICENCE (-P generateLicence )     </echo>
+                    <echo>Note: This build will generate new licence modules   </echo>
+                    <echo>for this project and install them in maven.          </echo>
+                    <echo>Ideally you should only do this once so that you     </echo>
+                    <echo>dont need to install a new licence during testing    </echo>
+                    <echo>*****************************************************</echo>
+                  </tasks>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
       <modules>
         <module>LicenceGenerator</module>
         <module>LicenceSpec</module>
         <module>LicenceAuthenticator</module>
+        <module>Feature</module>
       </modules>
-
+    </profile>
+    <profile>
+      <id>default-not-generating-licence</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <executions>
+              <execution>
+                <phase>verify</phase>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+                <configuration>
+                  <tasks>
+                    <echo>*****************************************************</echo>
+                    <echo>DEFAULT BUILD - NOT GENERATING LICENCE               </echo>
+                    <echo>Note: this build will fail if licence modules have   </echo>
+                    <echo>not previously been generated and installed in maven.</echo>
+                    <echo>To generate the licence modules run with profile:    </echo>
+                    <echo>mvn clean install -P generateLicence                 </echo>
+                    <echo>*****************************************************</echo>
+                  </tasks>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+      <modules>
+        <module>Feature</module>
+      </modules>
     </profile>
   </profiles>
+
 
   <!-- Change this to match your repo for the licenced product modules (i.e. containing the authenticator) -->
   <distributionManagement>

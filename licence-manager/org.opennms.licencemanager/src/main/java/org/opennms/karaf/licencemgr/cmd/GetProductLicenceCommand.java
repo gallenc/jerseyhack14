@@ -40,7 +40,7 @@ public class GetProductLicenceCommand extends OsgiCommandSupport {
 	protected Object doExecute() throws Exception {
 		try{
 			String licence = getLicenceService().getLicence(productId);
-			System.out.println("productId='" + productId+"' licence="+licence+"'");
+			System.out.println("productId='" + productId+"' licence='"+licence+"'");
 		} catch (Exception e) {
 			System.out.println("getting licence for productId. Exception="+e);
 		}
