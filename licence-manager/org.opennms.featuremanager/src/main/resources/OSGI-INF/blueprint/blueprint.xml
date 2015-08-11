@@ -27,6 +27,12 @@
     <argument ref="featuresService" />
   </bean>
 
+  <!-- Maps in the test resource files for serving basic test pages -->
+  <bean id="testResourceMapping" class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
+    <property name="alias" value="/featuremgr/test" />
+    <property name="path" value="/test" />
+  </bean>
 
+  <service id="testResources" ref="testResourceMapping" interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping" />
 
 </blueprint>

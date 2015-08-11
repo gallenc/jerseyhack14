@@ -212,7 +212,7 @@
 #right-column {
     position: fixed;
 	left: 850px;
-    top:  50px;
+    top:  20px;
 }
 
 </style>
@@ -552,7 +552,7 @@
 			</td>
 			<td>URL Command Example:<BR><a href="../rest/licence-mgr/setsystemid?systemId=">[baseUrl:port]/pluginmgr/rest/licence-mgr/setsystemid?systemId=</a>
 			<BR><BR>Button command Example:<BR>
-			<input type="text" id="systemId" form="usrform" style="width: 500px; "> productId<BR><BR>
+			<input type="text" id="systemId" form="usrform" style="width: 500px; "> systemId<BR><BR>
 			<button type="button" onclick="sendGETXMLDoc('../rest/licence-mgr/setsystemid?systemId='+document.getElementById('systemId').value)">Licence Manager Set SystemId</button>
              </td>
 		</tr>
@@ -563,7 +563,7 @@
 			</td>
 			<td>URL Command Example:<BR><a href="../rest/licence-mgr/makesystemid">[baseUrl:port]/pluginmgr/rest/licence-mgr/makesystemid</a>
 			<BR><BR>Button command Example:<BR>
-			<button type="button" onclick="sendGETXMLDoc('../rest/licence-mgr/makesystemid)">Licence Manager Make SystemId</button>
+			<button type="button" onclick="sendGETXMLDoc('../rest/licence-mgr/makesystemid')">Licence Manager Make SystemId</button>
              </td>
 		</tr>
 		<tr>

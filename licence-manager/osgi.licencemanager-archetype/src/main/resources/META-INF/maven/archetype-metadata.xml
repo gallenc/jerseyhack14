@@ -5,18 +5,17 @@
 
   <fileSets>
     <!-- filtered files -->
-    <!-- <fileSet filtered="true" encoding="UTF-8"> -->
-    <!-- <directory></directory> -->
-    <!-- <includes> -->
-    <!-- <include>*.xml</include> -->
-    <!-- </includes> -->
-    <!-- </fileSet> -->
+    <fileSet filtered="true" encoding="UTF-8">
+      <directory></directory>
+      <includes>
+        <include>README.txt</include>
+      </includes>
+    </fileSet>
     <!-- un-filtered files -->
     <fileSet encoding="UTF-8">
       <directory></directory>
       <includes>
         <include>.gitignore</include>
-        <include>README.txt</include>
       </includes>
     </fileSet>
   </fileSets>

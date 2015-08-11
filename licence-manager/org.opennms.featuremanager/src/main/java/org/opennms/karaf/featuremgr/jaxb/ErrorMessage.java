@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.opennms.karaf.licencemgr.metadata.jaxb;
+package org.opennms.karaf.featuremgr.jaxb;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;

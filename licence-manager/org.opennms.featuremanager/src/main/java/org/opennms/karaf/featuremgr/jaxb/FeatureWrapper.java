@@ -1,40 +1,64 @@
 package org.opennms.karaf.featuremgr.jaxb;
 
-import javax.ws.rs.Path;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
-* Wrapper to a Karaf feature including JAXB and JAX-RS annotations.
-*/
+ * Wrapper to a Karaf feature including JAXB and JAX-RS annotations.
+ */
 @XmlRootElement(name = "Feature")
 public class FeatureWrapper {
 
-  private String name;
-  private String version;
+	private String name;
+	private String version;
+	private String description;
+	private String details;
 
-  public FeatureWrapper() { }
+	public FeatureWrapper() { }
 
-  public FeatureWrapper(String name, String version) {
-    this.name = name;
-    this.version = version;
-  }
+	public FeatureWrapper(String name, String version, String description, String details) {
+		this.name = name;
+		this.version = version;
+		this.description=description;
+		this.details=details;
+	}
 
-  @Path("name")
-  public String getName() {
-    return this.name;
-  }
+	public String getName() {
+		return this.name;
+	}
 
-  public void setName(String name) {
-    this.name = name;
-  }
+	@XmlElement(name="name")
+	public void setName(String name) {
+		this.name = name;
+	}
 
-  @Path("version")
-  public String getVersion() {
-    return this.version;
-  }
 
-  public void setVersion(String version) {
-    this.version = version;
-  }
+	public String getVersion() {
+		return this.version;
+	}
+
+	@XmlElement(name="version")
+	public void setVersion(String version) {
+		this.version = version;
+	}
+
+
+	public String getDescription() {
+		return description;
+	}
+
+	@XmlElement(name="description")
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getDetails() {
+		return details;
+	}
+
+	@XmlElement(name="details")
+	public void setDetails(String details) {
+		this.details = details;
+	}
 
 }
