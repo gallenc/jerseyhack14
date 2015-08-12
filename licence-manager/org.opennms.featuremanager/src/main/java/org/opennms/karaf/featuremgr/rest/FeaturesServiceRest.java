@@ -8,6 +8,7 @@ import org.opennms.karaf.featuremgr.jaxb.FeatureWrapperJaxb;
 import org.opennms.karaf.featuremgr.jaxb.ErrorMessage;
 import org.opennms.karaf.featuremgr.jaxb.RepositoryList;
 import org.opennms.karaf.featuremgr.jaxb.RepositoryWrapperJaxb;
+import org.opennms.karaf.featuremgr.jaxb.SuccessMessage;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -28,6 +29,11 @@ import javax.ws.rs.core.Response;
 @Path("/")
 public class FeaturesServiceRest {
 
+	/* ************************************
+	 * feature management rest interface
+	 * ************************************
+	 */
+	
 	/**
 	 * Returns an explicit collection of all features in XML format in response to HTTP GET requests.
 	 * @return a response containing a list of Features
@@ -78,26 +84,12 @@ public class FeaturesServiceRest {
 		FeatureWrapperJaxb featurewrapper = new FeatureWrapperJaxb(feature.getName(), feature.getVersion(), feature.getDescription(), feature.getDetails(), isInstalled);
 		return Response.status(200).entity(featurewrapper).build();  
 	}
-	
-	/** 
-	 * Uninstalls a feature with the specified name and version.
-	 * @return a response containing a feature or an ErrorMessage
-	 */
-	@GET
-	@Path("/features-uninstall")
-	@Produces(MediaType.APPLICATION_XML)
-	public Response  featuresUninstall(@QueryParam("name") String name, @QueryParam("version") String version) throws Exception {
-		
-		FeaturesService featuresService = ServiceLoader.getFeaturesService();
-		if (featuresService == null) throw new RuntimeException("ServiceLoader.getLicencePublisher() cannot be null.");
 
-		//TODO
-		return Response.status(400).build();
-	}
-	
 	/** 
 	 * Installs a feature with the specified name and version.
-	 * @return a response containing a feature or an ErrorMessage
+	 * @param name  name of the feature
+	 * @param version version of the feature (optional - if not supplied will use the latest found)
+	 * @return a 200 response or an ErrorMessage
 	 */
 	@GET
 	@Path("/features-install")
@@ -107,9 +99,54 @@ public class FeaturesServiceRest {
 		FeaturesService featuresService = ServiceLoader.getFeaturesService();
 		if (featuresService == null) throw new RuntimeException("ServiceLoader.getLicencePublisher() cannot be null.");
 
-		//TODO
-		return Response.status(400).build();
+		try{
+			if (name== null) throw new RuntimeException("feature name cannot be null.");
+			if (version !=null) {
+				featuresService.installFeature(name, version);
+			} else featuresService.installFeature(name); 
+		
+		} catch (Exception exception){
+			//return status 400 Error
+			return Response.status(400).entity(new ErrorMessage(400, 0, "unable to install feature name="+name+ " version="+version, null, exception)).build();
+		}
+
+		return Response.status(200).entity(new SuccessMessage(200, 0, "Success. Installed feature name="+name+ " version="+version, null,null)).build();
+
 	}
+	
+
+	/** 
+	 * Uninstalls a feature with the specified name and version.
+	 * @param name  name of the feature
+	 * @param version version of the feature (optional - if not supplied will use the latest found)
+	 * @return a 200 response or an ErrorMessage
+	 */
+	@GET
+	@Path("/features-uninstall")
+	@Produces(MediaType.APPLICATION_XML)
+	public Response  featuresUninstall(@QueryParam("name") String name, @QueryParam("version") String version) throws Exception {
+		
+		FeaturesService featuresService = ServiceLoader.getFeaturesService();
+		if (featuresService == null) throw new RuntimeException("ServiceLoader.getLicencePublisher() cannot be null.");
+
+		try{
+			if (name== null) throw new RuntimeException("feature name cannot be null.");
+			if (version !=null) {
+				featuresService.uninstallFeature(name, version);
+			} else featuresService.uninstallFeature(name); 
+		
+		} catch (Exception exception){
+			//return status 400 Error
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to uninstall feature name="+name+ " version="+version, null, exception)).build();
+		}
+
+		return Response.status(200).entity(new SuccessMessage(200, 0, "Success. Uninstalled feature name="+name+ " version="+version, null,null)).build();
+	}
+	
+/* ************************************
+ * repository management rest interface
+ * ************************************
+ */
 	
 	/** 
 	 * Returns an explicit collection of all defined repositories in XML format in response to HTTP GET requests.
@@ -129,7 +166,7 @@ public class FeaturesServiceRest {
 			RepositoryWrapperJaxb wrapper = new RepositoryWrapperJaxb(repositories[i].getName(), repositories[i].getURI());
 			repositoryList.getRepositoryList().add(wrapper);     
 		}
-		return Response.status(400).entity(repositoryList).build();
+		return Response.status(200).entity(repositoryList).build();
 	}
 	
 	/** 
@@ -196,102 +233,71 @@ public class FeaturesServiceRest {
 	
 	/** 
 	 * Removes the specified repository features service..
-	 * @return a response containing a message or an ErrorMessage
+	 * @param String uri locating the repository
+	 * @return a 200 response or an ErrorMessage
 	 */
 	@GET
 	@Path("/features-removerepository")
 	@Produces(MediaType.APPLICATION_XML)
-	public Response  featuresRemoveRepository() throws Exception {
+	public Response  featuresRemoveRepository(@QueryParam("uri") String uriStr) throws Exception {
 		
 		FeaturesService featuresService = ServiceLoader.getFeaturesService();
 		if (featuresService == null) throw new RuntimeException("ServiceLoader.getLicencePublisher() cannot be null.");
 
-		// featuresService.removeRepository(url);
-		return Response.status(400).build();
+		try{
+			if ( uriStr == null) throw new RuntimeException("you must supply ?uri= paramater.");
+			URI url= new URI(uriStr);
+			
+			//find repository
+			Repository repositories[]=featuresService.listRepositories();
+			Repository repository=null;
+			for (int i = 0; i < repositories.length; i++){
+				 // or testing uri
+					if(repositories[i].getURI().equals(url)) repository=repositories[i];
+				}	
+			if (repository== null) throw new RuntimeException("repository not found.");
+			
+			featuresService.removeRepository(url); // remove repository if found
+		} catch (URISyntaxException uriException){
+			//return status 400 Error
+			return Response.status(400).entity(new ErrorMessage(400, 0, "unable to parse URI for feature uri="+uriStr, null, uriException)).build();
+		} catch (Exception exception){
+			//return status 400 Error
+			return Response.status(400).entity(new ErrorMessage(400, 0, "problem removing repository uri="+uriStr, null, exception)).build();
+		}
+		
+		return Response.status(200).entity(new SuccessMessage(200, 0, "Success. Removed repository uri="+uriStr, null,null)).build();
+
 	}
 	
 	/** 
 	 * adds a repository url.
-	 * @return a response containing a message or an ErrorMessage
+	 * @param String uri locating the repository
+	 * @return a 200 response or an ErrorMessage
 	 */
 	@GET
 	@Path("/features-addrepositoryurl")
 	@Produces(MediaType.APPLICATION_XML)
-	public Response  featuresAddRepository() throws Exception {
+	public Response  featuresAddRepository(@QueryParam("uri") String uriStr) throws Exception {
 		
 		FeaturesService featuresService = ServiceLoader.getFeaturesService();
 		if (featuresService == null) throw new RuntimeException("ServiceLoader.getLicencePublisher() cannot be null.");
 
-		// featuresService.addRepository(url);
-
-		
-		return Response.status(400).build();
-	}
-	
-
-	
-	/*
-	 *        features:addurl              Adds a list of repository URLs to the features service
-        features:chooseurl           Add a repository url for well known features
-        features:info                Shows information about selected feature.
-        features:install             Installs a feature with the specified name and version.
-        features:list                Lists all existing features available from the defined repositories.
-        features:listrepositories    Displays a list of all defined repositories.
-        features:listurl             Displays a list of all defined repository URLs.
-        features:listversions        Lists all versions of a feature available from the currently available repositories.
-        features:refreshurl          Reloads the list of available features from the repositories.
-        features:removerepository    Removes the specified repository features service.
-        features:removeurl           Removes the given list of repository URLs from the features service
-        features:uninstall           Uninstalls a feature with the specified name and version.
-
-
-	 */
-	
-	//TODO REMOVE
-	/*
-	TODO 
-	complete rest services for repositories and features
-	add, delete, list repositories and features
-	complete test page for features service
-	
-	create config load/save service for vaadin ui
-	vaadin ui - load information from given rest interfaces
-	vaadin ui - deploy features from product spec
-	vaadin ui - deploy licences for features
-	
-	get working with opennms 16
-	convert to work with apache cxf / opennms 17
-	
-	*/
-	private void temp(){
-		FeaturesService featuresService=ServiceLoader.getFeaturesService();
-
-		URI url=null;
-		try {
+		try{
+			if ( uriStr == null) throw new RuntimeException("you must supply ?uri= paramater.");
+			URI url= new URI(uriStr);
+			featuresService.validateRepository(url); // will throw exception if not a valid repository
 			featuresService.addRepository(url);
-			featuresService.removeRepository(url);
-			featuresService.listRepositories();
-			
-			
-			String name=null;
-			featuresService.getFeature(name); // done
-			
-			String version=null;
-			featuresService.getFeature(name, version); //done
-			featuresService.installFeature(name);
-			featuresService.installFeature(name, version);
-			featuresService.uninstallFeature(name);
-			featuresService.uninstallFeature(name, version);
-			
-			Feature f=null;
-			featuresService.isInstalled(f);
-
-			URI uri=null;
-			featuresService.validateRepository(uri);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (URISyntaxException uriException){
+			//return status 400 Error
+			return Response.status(400).entity(new ErrorMessage(400, 0, "unable to parse URI for feature uri="+uriStr, null, uriException)).build();
+		} catch (Exception exception){
+			//return status 400 Error
+			return Response.status(400).entity(new ErrorMessage(400, 0, "problem adding repository uri="+uriStr, null, exception)).build();
 		}
-
+		
+		return Response.status(200).entity(new SuccessMessage(200, 0, "Success. Added repository uri="+uriStr, null,null)).build();
 	}
+	
+
 } 
