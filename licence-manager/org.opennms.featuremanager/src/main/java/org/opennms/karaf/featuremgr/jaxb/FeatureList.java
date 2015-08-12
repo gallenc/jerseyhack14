@@ -17,13 +17,13 @@ public class FeatureList {
 
 	@XmlElementWrapper(name="featureList")
 	@XmlElement(name="feature")
-	private List<FeatureWrapper> featureList = new ArrayList<FeatureWrapper>();
+	private List<FeatureWrapperJaxb> featureList = new ArrayList<FeatureWrapperJaxb>();
 
-	public List<FeatureWrapper> getFeatureList() {
+	public List<FeatureWrapperJaxb> getFeatureList() {
 		return featureList;
 	}
 
-	public void setFeatureList(List<FeatureWrapper> featureList) {
+	public void setFeatureList(List<FeatureWrapperJaxb> featureList) {
 		this.featureList = featureList;
 	}
 

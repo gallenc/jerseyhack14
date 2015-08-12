@@ -4,23 +4,25 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- * Wrapper to a Karaf feature including JAXB and JAX-RS annotations.
+ * Wrapper for a Karaf feature including JAXB annotations.
  */
 @XmlRootElement(name = "Feature")
-public class FeatureWrapper {
+public class FeatureWrapperJaxb {
 
 	private String name;
 	private String version;
 	private String description;
 	private String details;
+	private Boolean isInstalled;
 
-	public FeatureWrapper() { }
+	public FeatureWrapperJaxb() { }
 
-	public FeatureWrapper(String name, String version, String description, String details) {
+	public FeatureWrapperJaxb(String name, String version, String description, String details, Boolean isInstalled) {
 		this.name = name;
 		this.version = version;
 		this.description=description;
 		this.details=details;
+		this.isInstalled=isInstalled;
 	}
 
 	public String getName() {
@@ -59,6 +61,15 @@ public class FeatureWrapper {
 	@XmlElement(name="details")
 	public void setDetails(String details) {
 		this.details = details;
+	}
+
+	public Boolean getIsInstalled() {
+		return isInstalled;
+	}
+
+	@XmlElement(name="isinstalled")
+	public void setIsInstalled(Boolean isInstalled) {
+		this.isInstalled = isInstalled;
 	}
 
 }

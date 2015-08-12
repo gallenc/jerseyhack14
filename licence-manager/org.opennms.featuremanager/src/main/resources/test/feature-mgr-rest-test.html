@@ -175,23 +175,45 @@
 			<th style="width: 300px">Example</th>
 		</tr>
 		<tr>
-			<td>/features (GET features)
+			<td>/features-list (GET features list)
 				<p>gets an xml list of features</p>
 			</td>
-			<td>URL Command Example:<BR><a href="../rest/features">[baseUrl:port]/featuremgr/rest/features</a>
+			<td>URL Command Example:<BR><a href="../rest/features-list">[baseUrl:port]/featuremgr/rest/features-list</a>
 			<BR><BR>Button command Example:<BR>
-			<button type="button" onclick="sendGETXMLDoc('../rest/features')">Feature Manager get features list</button>
+			<button type="button" onclick="sendGETXMLDoc('../rest/features-list')">Feature Manager get features list</button>
              </td>
 		</tr>
 		<tr>
-			<td>/feature (GET feature)
-				<p>removes any licence corresponding to productId.</p>
+			<td>/features-info (GET feature)
+				<p>gets information for specific feature. (Version may be omitted) </p>
 			</td>
-			<td>URL Command Example:<BR><a href="../rest/feature?name=pax-cdi-weld&version=0.8.1">[baseUrl:port]/featuremgr/rest/feature?name=pax-cdi-weld&version=0.8.1</a>
+			<td>URL Command Example:<BR><a href="../rest/features-info?name=pax-cdi-weld&version=0.8.1">[baseUrl:port]/featuremgr/rest/features-info?name=pax-cdi-weld&version=0.8.1</a>
 			<BR><BR>Button command Example:<BR>
 			<input type="text" id="featureName1" form="usrform" style="width: 500px; "> feature name<BR><BR>
 			<input type="text" id="featureVersion1" form="usrform" style="width: 500px; "> feature version<BR><BR>
-			<button type="button" onclick="sendGETXMLDoc('../rest/feature?name='+document.getElementById('featureName1').value+'&version='+document.getElementById('featureVersion1').value)">Feature Manager get Feature</button>
+			<button type="button" onclick="sendGETXMLDoc('../rest/features-info?name='+document.getElementById('featureName1').value+'&version='+document.getElementById('featureVersion1').value)">Feature Manager get Feature</button>
+             </td>
+		</tr>
+		<tr>
+			<td>/features-install (GET install feature)
+				<p>gets information for specific feature. (Version may be omitted) </p>
+			</td>
+			<td>URL Command Example:<BR><a href="../rest/features-install?name=pax-cdi-weld&version=0.8.1">[baseUrl:port]/featuremgr/rest/features-info?name=pax-cdi-weld&version=0.8.1</a>
+			<BR><BR>Button command Example:<BR>
+			<input type="text" id="featureName1" form="usrform" style="width: 500px; "> feature name<BR><BR>
+			<input type="text" id="featureVersion1" form="usrform" style="width: 500px; "> feature version<BR><BR>
+			<button type="button" onclick="sendGETXMLDoc('../rest/features-install?name='+document.getElementById('featureName1').value+'&version='+document.getElementById('featureVersion1').value)">Feature Manager Install Feature</button>
+             </td>
+		</tr>
+				<tr>
+			<td>/features-uninstall (GET Uninstall feature)
+				<p>gets information for specific feature. (Version may be omitted) </p>
+			</td>
+			<td>URL Command Example:<BR><a href="../rest/features-uninstall?name=pax-cdi-weld&version=0.8.1">[baseUrl:port]/featuremgr/rest/features-uninstall?name=pax-cdi-weld&version=0.8.1</a>
+			<BR><BR>Button command Example:<BR>
+			<input type="text" id="featureName1" form="usrform" style="width: 500px; "> feature name<BR><BR>
+			<input type="text" id="featureVersion1" form="usrform" style="width: 500px; "> feature version<BR><BR>
+			<button type="button" onclick="sendGETXMLDoc('../rest/features-uninstall?name='+document.getElementById('featureName1').value+'&version='+document.getElementById('featureVersion1').value)">Feature Manager Uninstall Feature</button>
              </td>
 		</tr>
 
