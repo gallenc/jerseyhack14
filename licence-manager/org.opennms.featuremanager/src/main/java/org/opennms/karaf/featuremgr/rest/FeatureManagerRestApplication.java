@@ -28,10 +28,7 @@ public class FeatureManagerRestApplication extends Application {
 	public Set<Class<?>> getClasses()
 	{
 		Set<Class<?>> s = new HashSet<Class<?>>();
-		s.add(FeaturesServiceRest.class);
-//		s.add(LicencePublisherRest.class);
-//		s.add(ProductPublisherRest.class);
-//		s.add(ProductRegisterRest.class);
+		s.add(FeaturesServiceRestImpl.class);
 		return s;
 	}
 
