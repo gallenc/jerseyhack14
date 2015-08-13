@@ -8,7 +8,7 @@ import org.opennms.karaf.featuremgr.jaxb.FeatureWrapperJaxb;
 import org.opennms.karaf.featuremgr.jaxb.ErrorMessage;
 import org.opennms.karaf.featuremgr.jaxb.RepositoryList;
 import org.opennms.karaf.featuremgr.jaxb.RepositoryWrapperJaxb;
-import org.opennms.karaf.featuremgr.jaxb.SuccessMessage;
+import org.opennms.karaf.featuremgr.jaxb.ReplyMessage;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -110,7 +110,7 @@ public class FeaturesServiceRestImpl {
 			return Response.status(400).entity(new ErrorMessage(400, 0, "unable to install feature name="+name+ " version="+version, null, exception)).build();
 		}
 
-		return Response.status(200).entity(new SuccessMessage(200, 0, "Success. Installed feature name="+name+ " version="+version, null,null)).build();
+		return Response.status(200).entity(new ReplyMessage(200, 0, "Success. Installed feature name="+name+ " version="+version, null,null)).build();
 
 	}
 	
@@ -140,7 +140,7 @@ public class FeaturesServiceRestImpl {
 			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to uninstall feature name="+name+ " version="+version, null, exception)).build();
 		}
 
-		return Response.status(200).entity(new SuccessMessage(200, 0, "Success. Uninstalled feature name="+name+ " version="+version, null,null)).build();
+		return Response.status(200).entity(new ReplyMessage(200, 0, "Success. Uninstalled feature name="+name+ " version="+version, null,null)).build();
 	}
 	
 /* ************************************
@@ -266,7 +266,7 @@ public class FeaturesServiceRestImpl {
 			return Response.status(400).entity(new ErrorMessage(400, 0, "problem removing repository uri="+uriStr, null, exception)).build();
 		}
 		
-		return Response.status(200).entity(new SuccessMessage(200, 0, "Success. Removed repository uri="+uriStr, null,null)).build();
+		return Response.status(200).entity(new ReplyMessage(200, 0, "Success. Removed repository uri="+uriStr, null,null)).build();
 
 	}
 	
@@ -296,7 +296,7 @@ public class FeaturesServiceRestImpl {
 			return Response.status(400).entity(new ErrorMessage(400, 0, "problem adding repository uri="+uriStr, null, exception)).build();
 		}
 		
-		return Response.status(200).entity(new SuccessMessage(200, 0, "Success. Added repository uri="+uriStr, null,null)).build();
+		return Response.status(200).entity(new ReplyMessage(200, 0, "Success. Added repository uri="+uriStr, null,null)).build();
 	}
 	
 

@@ -6,17 +6,22 @@ package org.opennms.karaf.featuremanager.jerseyimpl;
 import java.io.StringWriter;
 
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriBuilder;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
 import org.opennms.karaf.featuremanager.FeaturesServiceI;
+import org.opennms.karaf.featuremgr.jaxb.ErrorMessage;
 import org.opennms.karaf.featuremgr.jaxb.FeatureList;
 import org.opennms.karaf.featuremgr.jaxb.FeatureWrapperJaxb;
 import org.opennms.karaf.featuremgr.jaxb.RepositoryList;
 import org.opennms.karaf.featuremgr.jaxb.RepositoryWrapperJaxb;
+import org.opennms.karaf.featuremgr.jaxb.ReplyMessage;
+import org.opennms.karaf.featuremgr.jaxb.Util;
 
 import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.GenericType;
 import com.sun.jersey.api.client.WebResource;
 
 /**
@@ -108,14 +113,42 @@ public class FeaturesServiceJerseyImpl implements FeaturesServiceI {
 		return featurewrapper;
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see org.opennms.karaf.featuremanager.FeaturesService#featuresInstall(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void featuresInstall(String name, String version) throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
-		// TODO Auto-generated method stub
+	    if (name==null)throw new RuntimeException("?name= parameter must be set");
+	    
+		Client client = Client.create();
+		
+		//http://localhost:8181/featuremgr/rest/features-install?name=myproject.Feature&version=1.0-SNAPSHOT
+		
+		String getStr= baseUrl+basePath+"/rest/features-install?name="+name;
+		if(version != null) getStr=getStr+"&version="+version;
+		
+		WebResource r = client.resource(getStr);
 
+		String replyString= r
+				.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
+				.accept(MediaType.APPLICATION_XML).get(String.class);
+		
+		// unmarshalling reply
+		Object replyObject = Util.fromXml(replyString);
+		if (replyObject instanceof ErrorMessage){
+			ErrorMessage errorm= (ErrorMessage)replyObject;
+			throw new RuntimeException("could not install feature."
+					+" status:"+ errorm.getStatus()
+					+" message:"+ errorm.getMessage()
+					+" code:"+ errorm.getCode()
+					+" developer message:"+errorm.getDeveloperMessage());
+			
+		} else if (! (replyObject instanceof ReplyMessage) ){
+			throw new RuntimeException("received unexpected reply object: "+replyObject.getClass().getCanonicalName());
+		} 
+		// success !!!
 	}
 
 	/* (non-Javadoc)

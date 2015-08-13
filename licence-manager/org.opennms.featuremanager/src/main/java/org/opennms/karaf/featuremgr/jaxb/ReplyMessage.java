@@ -31,7 +31,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType (propOrder={"status","message","code","link","developerMessage"})
-public class SuccessMessage {
+public class ReplyMessage {
 	
 
 
@@ -48,7 +48,7 @@ public class SuccessMessage {
 	 *       switched on and could potentially contain stack trace information or something similar
 	 * @return EventGatewayErrorMessage jaxb object to include in the xml reply
 	 */
-	public SuccessMessage(int status,int code, String message, String link, String developerMessage)	{
+	public ReplyMessage(int status,int code, String message, String link, String developerMessage)	{
 		super();
 		this.status=status;
 		this.code=code;
@@ -59,7 +59,7 @@ public class SuccessMessage {
 	
 
 
-	public SuccessMessage() {
+	public ReplyMessage() {
 		super();
 	}
 

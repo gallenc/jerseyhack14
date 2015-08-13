@@ -60,9 +60,9 @@ public class ObjectFactory {
     }
   
     /**
-     * Create an instance of {@link SuccessMessage  }
+     * Create an instance of {@link ReplyMessage  }
      */
-    public SuccessMessage createSuccessMessage() {
-        return new SuccessMessage();
+    public ReplyMessage createReplyMessage() {
+        return new ReplyMessage();
     }
 }

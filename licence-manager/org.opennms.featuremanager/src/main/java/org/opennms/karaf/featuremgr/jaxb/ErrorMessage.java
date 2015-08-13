@@ -34,9 +34,7 @@ import javax.xml.bind.annotation.XmlType;
 @XmlRootElement
 @XmlAccessorType(XmlAccessType.NONE)
 @XmlType (propOrder={"status","message","code","link","developerMessage"})
-public class ErrorMessage {
-	
-
+public class ErrorMessage extends ReplyMessage {
 
 	/**
 	 * Helper constructor to build an error reply 

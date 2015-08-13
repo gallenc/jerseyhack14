@@ -74,6 +74,18 @@ public class FeaturesServiceRestClientJerseyTest {
 	@Test
 	public void featuresInstall() {
 		System.out.println("@Test - featuresInstall.START");
+		
+		String name="myproject.Feature";
+		String version="1.0-SNAPSHOT";
+				
+		FeaturesServiceI featuresService = getFeaturesService(); 
+		try {
+			featuresService.featuresInstall(name, version);
+		} catch (Exception e) {
+			e.printStackTrace();
+			org.junit.Assert.fail("@Test - getFeaturesInfo() failed see stack trace in consol");
+		}
+		
 		System.out.println("@Test - featuresInstall.FINISH");
 
 	}
