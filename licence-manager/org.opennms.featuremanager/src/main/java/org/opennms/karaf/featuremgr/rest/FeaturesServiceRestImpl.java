@@ -185,7 +185,7 @@ public class FeaturesServiceRestImpl {
 		Repository repository=null;
 		RepositoryWrapperJaxb repositoryWrapper=null;
 		try{
-			// check paramaters
+			// check parameters
 			if (name== null && uriStr==null) throw new RuntimeException("you must specify either a ?uri= or ?name= parameter.");
 			if (name!=null && uriStr!=null) throw new RuntimeException("you can only specify ONE of either a ?uri= or ?name= parameter.");
 			

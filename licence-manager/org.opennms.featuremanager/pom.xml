@@ -71,9 +71,9 @@
           <instructions>
             <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
             <Bundle-Version>${project.version}</Bundle-Version>
-            <!-- <Export-Package> -->
-            <!-- net.nanthrax.examples.jaxrs.service*;version=${project.version} -->
-            <!-- </Export-Package> -->
+            <Export-Package>
+            org.opennms.karaf.featuremanager*;version=${project.version}
+            </Export-Package>
             <Import-Package>
               org.apache.karaf.features*;version="[2,4)",
               *

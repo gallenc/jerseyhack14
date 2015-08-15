@@ -11,7 +11,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 
-import org.opennms.karaf.featuremanager.FeaturesServiceI;
+import org.opennms.karaf.featuremanager.FeaturesServiceClient;
 import org.opennms.karaf.featuremgr.jaxb.ErrorMessage;
 import org.opennms.karaf.featuremgr.jaxb.FeatureList;
 import org.opennms.karaf.featuremgr.jaxb.FeatureWrapperJaxb;
@@ -28,7 +28,7 @@ import com.sun.jersey.api.client.WebResource;
  * @author craig gallen
  *
  */
-public class FeaturesServiceJerseyImpl implements FeaturesServiceI {
+public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClient {
 	
 	private String baseUrl = "http://localhost:8181";
 	private String basePath = "/featuremgr";
@@ -76,6 +76,9 @@ public class FeaturesServiceJerseyImpl implements FeaturesServiceI {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		
 		Client client = Client.create();
+		
+		//http://localhost:8181/featuremgr/rest/features-list
+		
 		WebResource r = client
 				.resource(baseUrl+basePath+"/rest/features-list");
 
@@ -157,7 +160,35 @@ public class FeaturesServiceJerseyImpl implements FeaturesServiceI {
 	@Override
 	public void featuresUninstall(String name, String version) throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
-		// TODO Auto-generated method stub
+	    if (name==null)throw new RuntimeException("?name= parameter must be set");
+	    
+		Client client = Client.create();
+		
+		//http://localhost:8181/featuremgr/rest/features-uninstall?name=myproject.Feature&version=1.0-SNAPSHOT
+		
+		String getStr= baseUrl+basePath+"/rest/features-uninstall?name="+name;
+		if(version != null) getStr=getStr+"&version="+version;
+		
+		WebResource r = client.resource(getStr);
+
+		String replyString= r
+				.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
+				.accept(MediaType.APPLICATION_XML).get(String.class);
+		
+		// unmarshalling reply
+		Object replyObject = Util.fromXml(replyString);
+		if (replyObject instanceof ErrorMessage){
+			ErrorMessage errorm= (ErrorMessage)replyObject;
+			throw new RuntimeException("could not uninstall feature."
+					+" status:"+ errorm.getStatus()
+					+" message:"+ errorm.getMessage()
+					+" code:"+ errorm.getCode()
+					+" developer message:"+errorm.getDeveloperMessage());
+			
+		} else if (! (replyObject instanceof ReplyMessage) ){
+			throw new RuntimeException("received unexpected reply object: "+replyObject.getClass().getCanonicalName());
+		} 
+		// success !!!
 
 	}
 
@@ -167,8 +198,20 @@ public class FeaturesServiceJerseyImpl implements FeaturesServiceI {
 	@Override
 	public RepositoryList getFeaturesListRepositories() throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
-		// TODO Auto-generated method stub
-		return null;
+		
+		Client client = Client.create();
+		
+		//http://localhost:8181/featuremgr/rest/features-listrepositories
+		
+		WebResource r = client
+				.resource(baseUrl+basePath+"/rest/features-listrepositories");
+
+		RepositoryList repositoryList = r
+				.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
+				.accept(MediaType.APPLICATION_XML).get(RepositoryList.class);
+		
+		return repositoryList;
+
 	}
 
 	/* (non-Javadoc)
@@ -177,8 +220,24 @@ public class FeaturesServiceJerseyImpl implements FeaturesServiceI {
 	@Override
 	public RepositoryWrapperJaxb getFeaturesRepositoryInfo(String name,	String uriStr) throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
-		// TODO Auto-generated method stub
-		return null;
+		// check parameters
+		if (name== null && uriStr==null) throw new RuntimeException("you must specify either a ?uri= or ?name= parameter.");
+		if (name!=null && uriStr!=null) throw new RuntimeException("you can only specify ONE of either a ?uri= or ?name= parameter.");
+	    
+		Client client = Client.create();
+
+		//http://localhost:8181/featuremgr/rest/features-repositoryinfo?uri=mvn:org.opennms.project/myproject.Feature/1.0-SNAPSHOT/xml/features
+		
+		String getStr= baseUrl+basePath+"/rest/features-repositoryinfo?"+ ( (uriStr==null)? "name="+name : "uri="+uriStr);
+		
+		WebResource r = client
+				.resource(getStr);
+
+		RepositoryWrapperJaxb repositoryWrapper = r
+				.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
+				.accept(MediaType.APPLICATION_XML).get(RepositoryWrapperJaxb.class);
+		
+		return repositoryWrapper;
 	}
 
 	/* (non-Javadoc)
@@ -187,7 +246,35 @@ public class FeaturesServiceJerseyImpl implements FeaturesServiceI {
 	@Override
 	public void featuresRemoveRepository(String uriStr) throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
-		// TODO Auto-generated method stub
+		
+	    if (uriStr==null)throw new RuntimeException("uriStr= parameter must be set");
+	    
+		Client client = Client.create();
+		
+		//http://localhost:8181/featuremgr/rest/features-removerepository?uri=mvn:org.opennms.project/myproject.Feature/1.0-SNAPSHOT/xml/features
+		
+		String getStr= baseUrl+basePath+"/rest/features-removerepository?uri="+uriStr;
+		
+		WebResource r = client.resource(getStr);
+
+		String replyString= r
+				.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
+				.accept(MediaType.APPLICATION_XML).get(String.class);
+		
+		// unmarshalling reply
+		Object replyObject = Util.fromXml(replyString);
+		if (replyObject instanceof ErrorMessage){
+			ErrorMessage errorm= (ErrorMessage)replyObject;
+			throw new RuntimeException("could not uninstall feature."
+					+" status:"+ errorm.getStatus()
+					+" message:"+ errorm.getMessage()
+					+" code:"+ errorm.getCode()
+					+" developer message:"+errorm.getDeveloperMessage());
+			
+		} else if (! (replyObject instanceof ReplyMessage) ){
+			throw new RuntimeException("received unexpected reply object: "+replyObject.getClass().getCanonicalName());
+		} 
+		// success !!!
 
 	}
 
@@ -197,10 +284,35 @@ public class FeaturesServiceJerseyImpl implements FeaturesServiceI {
 	@Override
 	public void featuresAddRepository(String uriStr) throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
-		// TODO Auto-generated method stub
+	    if (uriStr==null)throw new RuntimeException("uriStr= parameter must be set");
+	    
+		Client client = Client.create();
+		
+		//http://localhost:8181/featuremgr/rest/features-addrepositoryurl?uri=mvn:org.opennms.project/myproject.Feature/1.0-SNAPSHOT/xml/features
+		
+		String getStr= baseUrl+basePath+"/rest/features-addrepositoryurl?uri="+uriStr;
+		
+		WebResource r = client.resource(getStr);
+
+		String replyString= r
+				.type(MediaType.APPLICATION_FORM_URLENCODED_TYPE)
+				.accept(MediaType.APPLICATION_XML).get(String.class);
+		
+		// unmarshalling reply
+		Object replyObject = Util.fromXml(replyString);
+		if (replyObject instanceof ErrorMessage){
+			ErrorMessage errorm= (ErrorMessage)replyObject;
+			throw new RuntimeException("could not uninstall feature."
+					+" status:"+ errorm.getStatus()
+					+" message:"+ errorm.getMessage()
+					+" code:"+ errorm.getCode()
+					+" developer message:"+errorm.getDeveloperMessage());
+			
+		} else if (! (replyObject instanceof ReplyMessage) ){
+			throw new RuntimeException("received unexpected reply object: "+replyObject.getClass().getCanonicalName());
+		} 
+		// success !!!
 
 	}
-	
-
 
 }

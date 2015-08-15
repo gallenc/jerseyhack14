@@ -9,7 +9,7 @@ import org.opennms.karaf.featuremgr.jaxb.RepositoryWrapperJaxb;
 /**
  * service to manipulate Karaf features
  */
-public interface FeaturesServiceI {
+public interface FeaturesServiceClient {
 
 	/* ************************************
 	 * feature management rest interface
