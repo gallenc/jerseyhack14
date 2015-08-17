@@ -13,12 +13,13 @@
  * limitations under the License.
  */
 
-package org.opennms.karaf.licencemgr.rest;
+package org.opennms.karaf.licencemgr.rest.impl;
 
 import java.util.HashSet;
 import java.util.Set;
 
 import javax.ws.rs.core.Application;
+
 import org.opennms.karaf.licencemgr.rest.LicencePublisherRest;
 import org.opennms.karaf.licencemgr.rest.LicenceServiceRest;
 import org.opennms.karaf.licencemgr.rest.ProductPublisherRest;
@@ -32,10 +33,10 @@ public class LicenceManagerRestApplication extends Application {
 	public Set<Class<?>> getClasses()
 	{
 		Set<Class<?>> s = new HashSet<Class<?>>();
-		s.add(LicenceServiceRest.class);
-		s.add(LicencePublisherRest.class);
-		s.add(ProductPublisherRest.class);
-		s.add(ProductRegisterRest.class);
+		s.add(LicenceServiceRestImpl.class);
+		s.add(LicencePublisherRestImpl.class);
+		s.add(ProductPublisherRestImpl.class);
+		s.add(ProductRegisterRestImpl.class);
 		return s;
 	}
 

@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.opennms.karaf.licencemgr.rest;
+package org.opennms.karaf.licencemgr.rest.impl;
 
 import org.opennms.karaf.licencemgr.LicenceService;
 import org.opennms.karaf.licencepub.LicencePublisher;

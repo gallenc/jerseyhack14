@@ -180,10 +180,10 @@
     </bean>
   </service>
 
-  <bean id="licenceManagerRestApplication" class="org.opennms.karaf.licencemgr.rest.LicenceManagerRestApplication" />
+  <bean id="licenceManagerRestApplication" class="org.opennms.karaf.licencemgr.rest.impl.LicenceManagerRestApplication" />
 
   <!-- ServiceLoader(LicenceService licenceService, LicencePublisher licencePublisher, ProductPublisher productPublisher, ProductRegister productRegister ) -->
-  <bean id="serviceLoader" class="org.opennms.karaf.licencemgr.rest.ServiceLoader">
+  <bean id="serviceLoader" class="org.opennms.karaf.licencemgr.rest.impl.ServiceLoader">
     <argument ref="licenceServiceImpl" />
     <argument ref="licencePublisherImpl" />
     <argument ref="productPublisherImpl" />
