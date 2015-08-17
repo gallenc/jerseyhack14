@@ -19,23 +19,25 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 
 import org.opennms.karaf.licencemgr.PublisherKeys;
 
 @XmlRootElement(name="licenceSpecification")
 @XmlAccessorType(XmlAccessType.NONE)
+@XmlType (propOrder={"productId","aesSecretKeyStr","publicKeyStr","licenceMetadataSpec"})
 public class LicenceSpecification {
 
-	@XmlElement()
+	@XmlElement(name = "aesSecretKeyStr")
 	private String aesSecretKeyStr;
 	
-	@XmlElement()
+	@XmlElement(name = "publicKeyStr")
 	private String publicKeyStr;
 	
-	@XmlElement()
+	@XmlElement(name = "licenceMetadataSpec")
 	private LicenceMetadata licenceMetadataSpec;
 	
-	@XmlElement()
+	@XmlElement(name = "productId")
     private String productId;
 	
 	/**

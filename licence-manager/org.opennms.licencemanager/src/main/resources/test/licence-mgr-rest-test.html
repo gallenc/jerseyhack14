@@ -27,21 +27,22 @@
 				
 		var addLicenceSpec ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 		+ "<licenceSpecification>\n"
-		+ " <productId>org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT</productId>\n"
-		+ " <aesSecretKeyStr>0009AA12B0AB63C9B5760361FADC990D</aesSecretKeyStr>\n"
-		+ " <publicKeyStr>885ffe7c62e1cfa8dca02332d025ad3f9dcc7a08d4882a760ee22a8f71aa5337f9ef60087fddc45c9af2dfd458423119775885d7e4891e2e8be6746d5e037405f92a7c32396c76c868639a81fd553aa896052ca9fc3d0f66627c9cd6fd728931b4b46ec939174ddcec2b60b100339bc4bc37fb2e8fc25e581c128d5cd406d775d26158b66a4e6b80db7e48ccf0ab1a05812840c2d1704861f00cbc42f79482fd35b4f75cd64833e358265592892d65e6d230d078e8b52ef98b5b67e7e14b230f3135579b83953bd11f8b1f433121b47da1513449f27bb06c1ed80cd4d7864fbad5e562f50ff8f36c5e778ec0195628ed56c0daa64985a6a1c3ff96c1dfea99a7-10001</publicKeyStr>\n"
+		+ " <productId>myproject/1.0-SNAPSHOT</productId>\n"
+		+ " <aesSecretKeyStr>CB0059D481BD446A49FBCBF21298A3CD</aesSecretKeyStr>\n"
+		+ " <publicKeyStr>81f3de27fc2d4d7905b65d13d4e6137dffd11fb25570eee794ffb83df6e137ee0697550aa0eedbdec9173d35649e25cd55ce7dc9353506dfa8ba1af4ad992cfbddf119c4115f31ff1655f07c267365610e31c48fc69c6020149e2694d2606a9c8b9cda42ed245812fe45f35826b81d2803f117604ddb8ad147a245fc965b866e99cb2bfd6e4dc5c2fa57b322c30298ece77e18b93adc9c3279e506a49b0523bc6af943d7dd99f05c42176c617285321e73b84578d9bbdb96ba5d6e91b0d5ed1ee32547b9aab0d57408d4d84a9cdc8da181a2fe173781666b3432a2f9cebb3d49f968e383022923c12e9eb3d40501c879303f106f8a20eadd5366adb799ec9da7-10001</publicKeyStr>\n"
 		+ " <licenceMetadataSpec>\n"
-		+ "   <productId>org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT</productId>\n"
-		+ "   <licensee>Mr Craig Gallen</licensee>\n"
+		+ "   <productId>myproject/1.0-SNAPSHOT</productId>\n"
+		+ "   <featureRepository>org.opennms.project/myproject/1.0-SNAPSHOT/xml/features</featureRepository>\n"
+		+ "   <licensee></licensee>\n"
 		+ "   <licensor>OpenNMS UK</licensor>\n"
-		//+ "   <systemId>4ad72a34e3635c1b-99da3323</systemId>\n"
-		//+ "   <startDate>2015-01-07T15:10:45.138Z</startDate>\n"
-		//+ "   <expiryDate>2015-01-07T15:10:45.138Z</expiryDate>\n"
+		+ "   <systemId></systemId>\n"
+		+ "   <startDate>2015-08-17T14:51:16.715+01:00</startDate>\n"
+		+ "   <duration>0</duration>\n"
 		+ "   <options>\n"
 		+ "     <option>\n"
-		+ "       <description>this is the description</description>\n"
+		+ "       <description>this is the description of option 1</description>\n"
 		+ "       <name>option1</name>\n"
-		+ "       <value>newvalue</value>\n"
+		+ "       <value></value>\n"
 		+ "     </option>\n"
 		+ "   </options>\n"
 		+ " </licenceMetadataSpec>\n"
@@ -49,18 +50,19 @@
 
 		var addproductMetadata ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 		+ "<product>\n"
-		+ "	<organization>OpenNMS Project</organization>\n"
-		+ "	<productDescription>Test product description</productDescription>\n"
-		+ "	<productId>org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT</productId>\n"
+		+ "	<productId>myproject/1.0-SNAPSHOT</productId>\n"
+		+ "	<featureRepository>org.opennms.project/myproject/1.0-SNAPSHOT/xml/features</featureRepository>\n"
 		+ "	<productName>test Bundle</productName>\n"
+		+ "	<productDescription>Test product description</productDescription>\n"
 		+ "	<productUrl>http:\\opennms.co.uk</productUrl>\n"
-		+ " <licenceKeyRequired>true</licenceKeyRequired>\n"
-		+ " <licenceType>OpenNMS EULA See http:\\opennms.co.uk\EULA</licenceType>\n"
+		+ "	<organization>OpenNMS Project</organization>\n"
+		+ "	<licenceType>OpenNMS EULA See http:\\opennms.co.uk\EULA</licenceType>\n"
+		+ "	<licenceKeyRequired>true</licenceKeyRequired>\n"
 		+ "</product>\n"
-		
+
 		var createlicenceMetadata ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 			+ "<licenceMetadata>\n"
-			+ "<productId>org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT</productId>\n"
+			+ "<productId>myproject/1.0-SNAPSHOT</productId>\n"
 			+ "<licensee>Mr Craig Gallen</licensee>\n"
 			+ "<licensor>OpenNMS UK</licensor>\n"
 			+ "<systemId>4ad72a34e3635c1b-99da3323</systemId>\n"
@@ -75,7 +77,8 @@
 			+ " </options>\n" 
 			+ "</licenceMetadata>\n";
 			
-		var defaultProductId="org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT";
+			//myproject/1.0-SNAPSHOT
+		var defaultProductId="myproject/1.0-SNAPSHOT";
 		//product publisher
 		document.getElementById('removeproductspecpubId').value = defaultProductId;
 		document.getElementById('getproductspecpubId').value = defaultProductId;
