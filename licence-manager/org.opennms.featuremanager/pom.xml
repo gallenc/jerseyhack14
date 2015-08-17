@@ -99,8 +99,7 @@
         <configuration>
           <excludes>
             <!-- prevent tests running in this package. These are one off development tests -->
-
-            <exclude>**/org/opennms/karaf/featuremgr/rest/test/manual/*.java</exclude>
+            <exclude>**/org/opennms/karaf/featuremgr/rest/client/test/manual/*.java</exclude>
           </excludes>
         </configuration>
       </plugin>

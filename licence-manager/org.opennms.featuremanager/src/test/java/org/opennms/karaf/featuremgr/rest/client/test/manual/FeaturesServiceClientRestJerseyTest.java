@@ -1,10 +1,10 @@
-package org.opennms.karaf.featuremgr.rest.test.manual;
+package org.opennms.karaf.featuremgr.rest.client.test.manual;
 
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.opennms.karaf.featuremanager.FeaturesServiceClient;
-import org.opennms.karaf.featuremanager.jerseyimpl.FeaturesServiceClientRestJerseyImpl;
+import org.opennms.karaf.featuremanager.rest.client.FeaturesServiceClient;
+import org.opennms.karaf.featuremanager.rest.client.jerseyimpl.FeaturesServiceClientRestJerseyImpl;
 import org.opennms.karaf.featuremgr.jaxb.FeatureList;
 import org.opennms.karaf.featuremgr.jaxb.FeatureWrapperJaxb;
 import org.opennms.karaf.featuremgr.jaxb.RepositoryList;

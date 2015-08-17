@@ -13,7 +13,7 @@
  * limitations under the License.
  */
 
-package org.opennms.karaf.featuremgr.rest;
+package org.opennms.karaf.featuremgr.rest.impl;
 
 
 import org.apache.karaf.features.FeaturesService;

@@ -1,4 +1,4 @@
-package org.opennms.karaf.featuremanager;
+package org.opennms.karaf.featuremanager.rest.client;
 
 import org.opennms.karaf.featuremgr.jaxb.FeatureList;
 import org.opennms.karaf.featuremgr.jaxb.FeatureWrapperJaxb;

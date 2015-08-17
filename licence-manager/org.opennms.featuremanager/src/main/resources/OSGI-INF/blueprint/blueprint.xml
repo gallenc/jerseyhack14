@@ -20,10 +20,10 @@
     </bean>
   </service>
 
-  <bean id="featureManagerRestApplication" class="org.opennms.karaf.featuremgr.rest.FeatureManagerRestApplication" />
+  <bean id="featureManagerRestApplication" class="org.opennms.karaf.featuremgr.rest.impl.FeatureManagerRestApplication" />
 
   <!-- ServiceLoader(FeaturesService featuresService) -->
-  <bean id="serviceLoader" class="org.opennms.karaf.featuremgr.rest.ServiceLoader">
+  <bean id="serviceLoader" class="org.opennms.karaf.featuremgr.rest.impl.ServiceLoader">
     <argument ref="featuresService" />
   </bean>
 

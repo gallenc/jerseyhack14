@@ -1,4 +1,4 @@
-package org.opennms.karaf.featuremgr.rest;
+package org.opennms.karaf.featuremgr.rest.impl;
 
 import org.apache.karaf.features.Feature;
 import org.apache.karaf.features.FeaturesService;
