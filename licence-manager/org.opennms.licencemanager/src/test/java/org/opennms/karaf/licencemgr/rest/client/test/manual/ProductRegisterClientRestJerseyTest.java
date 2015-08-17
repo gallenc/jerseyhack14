@@ -6,11 +6,11 @@ import org.junit.Test;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
 import org.opennms.karaf.licencemgr.metadata.jaxb.Util;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
-import org.opennms.karaf.licencemgr.rest.client.ProductPublisherClient;
-import org.opennms.karaf.licencemgr.rest.client.jerseyimpl.ProductPublisherClientRestJerseyImpl;
+import org.opennms.karaf.licencemgr.rest.client.ProductRegisterClient;
+import org.opennms.karaf.licencemgr.rest.client.jerseyimpl.ProductRegisterClientRestJerseyImpl;
 
 
-public class ProductPublisherClientRestJerseyTest {
+public class ProductRegisterClientRestJerseyTest {
 	
 	private static String test_productId="myproject/1.0-SNAPSHOT";
 	
@@ -28,43 +28,42 @@ public class ProductPublisherClientRestJerseyTest {
 
 
 	// initialises tests
-	private ProductPublisherClient getProductPublisherClient() {
+	private ProductRegisterClient getProductRegisterClient() {
 
 		// defaults for test running on standard karaf
 		String baseUrl = "http://localhost:8181";
 		String basePath = "/pluginmgr/rest/product-pub";
 
-		ProductPublisherClientRestJerseyImpl productPublisherClient = new ProductPublisherClientRestJerseyImpl();
-		productPublisherClient.setBasePath(basePath);
-		productPublisherClient.setBaseUrl(baseUrl);
+		ProductRegisterClientRestJerseyImpl productRegisterClient = new ProductRegisterClientRestJerseyImpl();
+		productRegisterClient.setBasePath(basePath);
+		productRegisterClient.setBaseUrl(baseUrl);
 
-		return productPublisherClient;
+		return productRegisterClient;
 	}
 
 	@Test
 	public void testsInOrder(){
-		System.out.println("@Test - PRODUCT PUBLISHER TESTS.START");
+		System.out.println("@Test - PRODUCT REGISTER TESTS.START");
 		addProductSpecTest();
 		getListTest();
 		getProductSpecTest();
 		removeProductSpecTest();
 		clearProductSpecsTest();
 		getListTest(); //  just to confirm product gone
-		System.out.println("@Test - PRODUCT PUBLISHER TESTS.FINISH");
-		
+		System.out.println("@Test - PRODUCT REGISTER TESTS.FINISH");
 	}
 	
 	//@Test
 	public void addProductSpecTest() {
 		System.out.println("@Test - addProductSpecTest.START");
 
-		ProductPublisherClient productPublisherClient = getProductPublisherClient();
+		ProductRegisterClient productRegisterClient = getProductRegisterClient();
 
 		try {
 			// load test product specification
 			ProductMetadata productMetadata = (ProductMetadata) Util.fromXml(test_productMetadata);
 			
-			productPublisherClient.addProductSpec(productMetadata);
+			productRegisterClient.addProductSpec(productMetadata);
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -79,10 +78,10 @@ public class ProductPublisherClientRestJerseyTest {
 	public void getListTest() {
 		System.out.println("@Test - getListTest.START");
 
-		ProductPublisherClient productPublisherClient = getProductPublisherClient();
+		ProductRegisterClient productRegisterClient = getProductRegisterClient();
 
 		try {
-			ProductSpecList repositoryList = productPublisherClient.getList();
+			ProductSpecList repositoryList = productRegisterClient.getList();
 			System.out.println(Util.toXml(repositoryList));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -99,13 +98,13 @@ public class ProductPublisherClientRestJerseyTest {
 		
 		String productId=test_productId;
 
-		ProductPublisherClient productPublisherClient = getProductPublisherClient();
+		ProductRegisterClient productRegisterClient = getProductRegisterClient();
 
 		try {
-			ProductMetadata productMetadata = productPublisherClient.getProductSpec(productId);
+			ProductMetadata productMetadata = productRegisterClient.getProductSpec(productId);
 			System.out.println(Util.toXml(productMetadata));
 
-			// productPublisherClient
+			// productRegisterClient
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("@Test - getProductSpecTest() failed. See stack trace in consol");
@@ -119,11 +118,11 @@ public class ProductPublisherClientRestJerseyTest {
 	public void removeProductSpecTest() {
 		System.out.println("@Test - removeProductSpecTest.START");
 
-		ProductPublisherClient productPublisherClient = getProductPublisherClient();
+		ProductRegisterClient productRegisterClient = getProductRegisterClient();
 
 		try {
 			String productId=test_productId;
-			productPublisherClient.removeProductSpec(productId);
+			productRegisterClient.removeProductSpec(productId);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("@Test - removeProductSpecTest() failed. See stack trace in consol");
@@ -137,10 +136,10 @@ public class ProductPublisherClientRestJerseyTest {
 	public void clearProductSpecsTest() {
 		System.out.println("@Test - clearProductSpecTest.START");
 
-		ProductPublisherClient productPublisherClient = getProductPublisherClient();
+		ProductRegisterClient productRegisterClient = getProductRegisterClient();
 
 		try {
-			 productPublisherClient.clearProductSpecs(true);
+			 productRegisterClient.clearProductSpecs(true);
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("@Test - clearProductSpecTest() failed. See stack trace in consol");

@@ -79,20 +79,17 @@ public class ProductPublisherRestImpl implements ProductPublisherRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			removed = productPublisher.removeProductDescription(productId);
+			String devMessage=null;
+			if (!removed) return Response.status(400).entity(new ErrorMessage(400, 0, "Product Description not found to remove for productId="+productId, null, devMessage)).build();
 		} catch (Exception exception){
 			//return status 400 Error
 			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to remove product description", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
-		if (removed) {
-			reply.setReplyComment("Product Description removed for productId="+productId);
-		} else {
-			reply.setReplyComment("Product Description not found to remove for productId="+productId);
-		}
+		reply.setReplyComment("Product Description removed for productId="+productId);
 		
-		return Response
-				.status(200).entity(reply).build();
+		return Response.status(200).entity(reply).build();
 
 	}
 
