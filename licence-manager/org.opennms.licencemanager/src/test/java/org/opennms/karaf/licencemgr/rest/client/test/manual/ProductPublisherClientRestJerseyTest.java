@@ -82,8 +82,8 @@ public class ProductPublisherClientRestJerseyTest {
 		ProductPublisherClient productPublisherClient = getProductPublisherClient();
 
 		try {
-			ProductSpecList repositoryList = productPublisherClient.getList();
-			System.out.println(Util.toXml(repositoryList));
+			ProductSpecList productSpecList = productPublisherClient.getList();
+			System.out.println(Util.toXml(productSpecList));
 		} catch (Exception e) {
 			e.printStackTrace();
 			fail("@Test - getListTest() failed. See stack trace in consol");

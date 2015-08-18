@@ -61,7 +61,7 @@ A test page is provided which illustrates the use of the ReST interface.
 
 http://localhost:8181/pluginmgr/test/licence-mgr-rest-test.html
 
-## Insallation in stand alone Karaf
+## Installation in stand alone Karaf
 
 1. Install Karaf
 Download and install the apache-karaf-2.3.9 Karaf distribution
