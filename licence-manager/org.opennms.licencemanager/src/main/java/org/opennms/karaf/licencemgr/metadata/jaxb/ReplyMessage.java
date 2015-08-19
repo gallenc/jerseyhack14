@@ -42,7 +42,7 @@ public class ReplyMessage {
 	private String productId=null;
 	
 	@XmlElement()
-	private LicenceSpecification licenceSpec=null;
+	private LicenceSpecification licenceSpecification=null;
 	
 	@XmlElement()
 	private LicenceMetadata licenceMetadata=null;
@@ -113,17 +113,17 @@ public class ReplyMessage {
 	}
 
 	/**
-	 * @return the licenceSpec
+	 * @return the licenceSpecification
 	 */
-	public LicenceSpecification getLicenceSpec() {
-		return licenceSpec;
+	public LicenceSpecification getLicenceSpecification() {
+		return licenceSpecification;
 	}
 
 	/**
-	 * @param licenceSpec the licenceSpec to set
+	 * @param licenceSpecification the licenceSpecification to set
 	 */
-	public void setLicenceSpec(LicenceSpecification licenceSpec) {
-		this.licenceSpec = licenceSpec;
+	public void setLicenceSpecification(LicenceSpecification licenceSpecification) {
+		this.licenceSpecification = licenceSpecification;
 	}
 
 	/**

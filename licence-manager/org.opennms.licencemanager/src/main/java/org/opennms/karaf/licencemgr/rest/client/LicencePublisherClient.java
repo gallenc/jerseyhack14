@@ -11,6 +11,8 @@ public interface LicencePublisherClient {
 	/**
 	 * /addlicencespec (POST LicenceSpecification)
 	 * 
+	 * e.g. http://localhost:8181/pluginmgr/rest/licence-pub/addlicencespec
+	 * 
 	 * Adds a new licence specification to the licence publisher. 
 	 * Looks for the productId in the licence specification and adds an 
 	 * entry in the licence table under that productId. 
@@ -98,7 +100,7 @@ public interface LicencePublisherClient {
 	 * @param confirm
 	 * @throws Exception
 	 */
-	public void deleteLicenceSpecifications(String confirm) throws Exception;
+	public void deleteLicenceSpecifications(Boolean confirm) throws Exception;
 	
 	/**
 	 * /createlicence (POST licenceMetadata) 

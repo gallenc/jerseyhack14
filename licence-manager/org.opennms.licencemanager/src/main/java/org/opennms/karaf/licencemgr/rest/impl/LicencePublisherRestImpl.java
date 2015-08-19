@@ -1,5 +1,5 @@
 /*
- * Copyright 2014 OpenNMS Group Inc., Entimoss ltd.
+licenceSpecification * Copyright 2014 OpenNMS Group Inc., Entimoss ltd.
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
@@ -80,17 +80,15 @@ public class LicencePublisherRestImpl implements LicencePublisherRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			removed = licencePublisher.removeLicenceSpec(productId);
+			String devMessage=null;
+			if (!removed) return Response.status(400).entity(new ErrorMessage(400, 0, "Licence Specification not found to remove for productId="+productId, null, devMessage)).build();
 		} catch (Exception exception){
 			//return status 400 Error
 			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to remove licence specification", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
-		if (removed) {
-			reply.setReplyComment("Licence Specification successfully removed for productId="+productId);
-		} else {
-			reply.setReplyComment("Licence Specification not found to remove for productId="+productId);
-		}
+		reply.setReplyComment("Licence Specification successfully removed for productId="+productId);
 		
 		return Response
 				.status(200).entity(reply).build();
@@ -111,22 +109,18 @@ public class LicencePublisherRestImpl implements LicencePublisherRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			licenceSpec = licencePublisher.getLicenceSpec(productId);
+			String devMessage=null;
+			if (licenceSpec==null) return Response.status(400).entity(new ErrorMessage(400, 0, "Licence Specification not found for productId="+productId, null, devMessage)).build();
 		} catch (Exception exception){
 			//return status 400 Error
 			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get licence specification", null, exception)).build();
 		}
 		
 		ReplyMessage reply= new ReplyMessage();
-		if (licenceSpec==null) {
-			reply.setReplyComment("Licence Specification not found for productId="+productId);
-			reply.setLicenceSpec(null);
-		} else {
-			reply.setReplyComment("Licence Specification found for productId="+productId);
-			reply.setLicenceSpec(licenceSpec);
-		}
+		reply.setReplyComment("Licence Specification found for productId="+productId);
+		reply.setLicenceSpecification(licenceSpec);
 		
-		return Response
-				.status(200).entity(reply).build();
+		return Response.status(200).entity(reply).build();
 	}
 	
 	/**
@@ -145,22 +139,18 @@ public class LicencePublisherRestImpl implements LicencePublisherRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			licenceSpec = licencePublisher.getLicenceSpec(productId);
+			String devMessage=null;
+			if (licenceSpec==null) return Response.status(400).entity(new ErrorMessage(400, 0, "Licence Metadata not found for productId="+productId, null, devMessage)).build();
 		} catch (Exception exception){
 			//return status 400 Error
-			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get licence specification", null, exception)).build();
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get Licence Metadata", null, exception)).build();
 		}
 		
 		ReplyMessage reply= new ReplyMessage();
-		if (licenceSpec==null) {
-			reply.setReplyComment("Licence Metadata Spec not found for productId="+productId);
-			reply.setLicenceMetadataSpec(null);
-		} else {
-			reply.setReplyComment("Licence Metadata Spec found for productId="+productId);
-			reply.setLicenceMetadataSpec(licenceSpec.getLicenceMetadataSpec());
-		}
+	    reply.setReplyComment("Licence Metadata Spec found for productId="+productId);
+		reply.setLicenceMetadataSpec(licenceSpec.getLicenceMetadataSpec());
 		
-		return Response
-				.status(200).entity(reply).build();
+		return Response.status(200).entity(reply).build();
 	}
 	
 	@GET
@@ -217,8 +207,7 @@ public class LicencePublisherRestImpl implements LicencePublisherRest {
 			licenceMetadataList.getLicenceMetadataList().add(licenceMetadataSpec);
 		}
 		
-		return Response
-				.status(200).entity(licenceMetadataList).build();
+		return Response.status(200).entity(licenceMetadataList).build();
 
 	}
 	
@@ -243,8 +232,7 @@ public class LicencePublisherRestImpl implements LicencePublisherRest {
 		ReplyMessage reply= new ReplyMessage();
         reply.setReplyComment("All Licence Specifications removed");
 		
-		return Response
-				.status(200).entity(reply).build();
+		return Response.status(200).entity(reply).build();
 	}
 	
 	
@@ -271,8 +259,7 @@ public class LicencePublisherRestImpl implements LicencePublisherRest {
         reply.setReplyComment("Successfully created licence instance");
         reply.setLicence(licenceInstanceStr);
 		
-		return Response
-				.status(200).entity(reply).build();
+		return Response.status(200).entity(reply).build();
 
 	}
 	
