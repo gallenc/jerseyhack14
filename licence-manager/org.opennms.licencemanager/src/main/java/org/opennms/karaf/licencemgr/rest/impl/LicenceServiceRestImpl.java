@@ -19,7 +19,6 @@ package org.opennms.karaf.licencemgr.rest.impl;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
@@ -32,6 +31,7 @@ import org.opennms.karaf.licencemgr.metadata.Licence;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ErrorMessage;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceEntry;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ReplyMessage;
 import org.opennms.karaf.licencemgr.rest.LicenceServiceRest;
 
@@ -54,9 +54,10 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 		LicenceService licenceService= ServiceLoader.getLicenceService();
 		if (licenceService == null) throw new RuntimeException("ServiceLoader.getLicenceService() cannot be null.");
 
+		LicenceMetadata licenceMetadata= null;
 		try{
 			if (licence == null) throw new RuntimeException("Licence cannot be null.");
-			licenceService.addLicence(licence);
+			licenceMetadata = licenceService.addLicence(licence);
 		} catch (Exception exception){
 			//return status 400 Error
 			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to add licence", null, exception)).build();
@@ -66,6 +67,7 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
         String productId = Licence.getUnverifiedMetadata(licence).getProductId();
         reply.setReplyComment("Successfully added licence instance for productId="+productId);
         reply.setProductId(productId);
+        reply.setLicenceMetadata(licenceMetadata);
 		
 		return Response
 				.status(200).entity(reply).build();
@@ -85,20 +87,17 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			removed = licenceService.removeLicence(productId);
+			String devMessage=null;
+			if (!removed) return Response.status(400).entity(new ErrorMessage(400, 0, "Licence not found to remove for productId="+productId, null, devMessage)).build();
 		} catch (Exception exception){
 			//return status 400 Error
 			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to remove licence", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
-		if (removed) {
-			reply.setReplyComment("Licence successfully removed for productId="+productId);
-		} else {
-			reply.setReplyComment("Licence not found to remove for productId="+productId);
-		}
+		reply.setReplyComment("Licence successfully removed for productId="+productId);
 		
-		return Response
-				.status(200).entity(reply).build();
+		return Response.status(200).entity(reply).build();
 
 	}
 	
@@ -115,22 +114,18 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			licence = licenceService.getLicence(productId);
+			String devMessage=null;
+			if (licence==null) return Response.status(400).entity(new ErrorMessage(400, 0, "Licence not found for productId="+productId, null, devMessage)).build();
 		} catch (Exception exception){
 			//return status 400 Error
 			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot get licence", null, exception)).build();
 		}
-
-		ReplyMessage reply= new ReplyMessage();
-		if (licence==null) {
-			reply.setReplyComment("Licence not found for productId for productId="+productId);
-			reply.setLicence(null);
-		} else {
-			reply.setReplyComment("Licence Specification found for productId="+productId);
-			reply.setLicence(licence);
-		}
 		
-		return Response
-				.status(200).entity(reply).build();
+		ReplyMessage reply= new ReplyMessage();
+		reply.setReplyComment("Licence Specification found for productId="+productId);
+		reply.setLicence(licence);
+		
+		return Response.status(200).entity(reply).build();
 
 	}
 

@@ -19,6 +19,7 @@ import org.apache.felix.gogo.commands.Argument;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.opennms.karaf.licencemgr.LicenceService;
+import org.opennms.karaf.licencemgr.metadata.Licence;
 
 @Command(scope = "licence-mgr", name = "getlicence", description="returns licence string installed for productId")
 public class GetProductLicenceCommand extends OsgiCommandSupport {
@@ -40,7 +41,14 @@ public class GetProductLicenceCommand extends OsgiCommandSupport {
 	protected Object doExecute() throws Exception {
 		try{
 			String licence = getLicenceService().getLicence(productId);
-			System.out.println("productId='" + productId+"' licence='"+licence+"'");
+			if(licence==null){
+				System.out.println("no licence installed for productId='" + productId+"'");
+			} else {
+				String metadatastr = Licence.getUnverifiedMetadata(licence).toXml();
+				System.out.println("Found licence ProductId='"+productId + "'");
+				System.out.println("              licence=  '" + licence+"'");
+				System.out.println("              licenceMetadata='"+metadatastr+"'");
+			}
 		} catch (Exception e) {
 			System.out.println("getting licence for productId. Exception="+e);
 		}

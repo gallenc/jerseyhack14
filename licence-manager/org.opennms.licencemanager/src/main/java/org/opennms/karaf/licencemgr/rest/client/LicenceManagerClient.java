@@ -2,6 +2,7 @@ package org.opennms.karaf.licencemgr.rest.client;
 
 
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
 
 public interface LicenceManagerClient {
 
@@ -18,9 +19,10 @@ public interface LicenceManagerClient {
 	 * The licence string must have correct checksum and readable LicenceMetadata 
 	 * 
 	 * @param licence
+	 * @return licenceMetadata contained in the licence just added
 	 * @throws Exception Throws error if licence string incorrectly formatted. 
 	 */
-	public void addLicence(String licence) throws Exception;
+	public LicenceMetadata addLicence(String licence) throws Exception;
 
 	/**
 	 * /removelicence (GET productId)
@@ -69,7 +71,7 @@ public interface LicenceManagerClient {
 	 * @param confirm
 	 * @throws Exception
 	 */
-	public void deleteLicences(String confirm) throws Exception;
+	public void deleteLicences(Boolean confirm) throws Exception;
 
 	/**
 	 * /getsystemid (GET ) 

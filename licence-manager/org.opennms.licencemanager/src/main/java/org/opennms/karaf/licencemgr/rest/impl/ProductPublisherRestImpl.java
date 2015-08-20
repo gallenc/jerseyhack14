@@ -27,7 +27,6 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import org.opennms.karaf.licencemgr.metadata.jaxb.ErrorMessage;
-import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceSpecList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ReplyMessage;
@@ -107,22 +106,19 @@ public class ProductPublisherRestImpl implements ProductPublisherRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			productDescription = productPublisher.getProductDescription(productId);
+			String devMessage=null;
+			if (productDescription==null) return Response.status(400).entity(new ErrorMessage(400, 0, "productDescription not found for productId="+productId, null, devMessage)).build();
+
 		} catch (Exception exception){
 			//return status 400 Error
 			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get product description", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
-		if (productDescription==null) {
-			reply.setReplyComment("Product Description not found for productId for productId="+productId);
-			reply.setProductMetadata(null);
-		} else {
-			reply.setReplyComment("Product Description found for productId="+productId);
-			reply.setProductMetadata(productDescription);
-		}
-		
-		return Response
-				.status(200).entity(reply).build();
+		reply.setReplyComment("Product Description found for productId="+productId);
+		reply.setProductMetadata(productDescription);
+
+		return Response	.status(200).entity(reply).build();
 
 	}
 
@@ -147,8 +143,7 @@ public class ProductPublisherRestImpl implements ProductPublisherRest {
 		ProductSpecList productSpecList= new ProductSpecList();
 		productSpecList.getProductSpecList().addAll(productDescrMap.values());
 
-		return Response
-				.status(200).entity(productSpecList).build();
+		return Response.status(200).entity(productSpecList).build();
 
 	}
 
@@ -172,8 +167,7 @@ public class ProductPublisherRestImpl implements ProductPublisherRest {
 		ReplyMessage reply= new ReplyMessage();
         reply.setReplyComment("All Product Specifications removed");
 		
-		return Response
-				.status(200).entity(reply).build();
+		return Response.status(200).entity(reply).build();
 
 	}
 

@@ -106,22 +106,18 @@ public class ProductRegisterRestImpl implements ProductRegisterRest {
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
 			productDescription = productRegister.getProductDescription(productId);
+			String devMessage=null;
+			if (productDescription==null) return Response.status(400).entity(new ErrorMessage(400, 0, "productDescription not found for productId="+productId, null, devMessage)).build();
 		} catch (Exception exception){
 			//return status 400 Error
 			return Response.status(400).entity(new ErrorMessage(400, 0, "Unable to get product description", null, exception)).build();
 		}
 
 		ReplyMessage reply= new ReplyMessage();
-		if (productDescription==null) {
-			reply.setReplyComment("Product Description not found for productId for productId="+productId);
-			reply.setProductMetadata(null);
-		} else {
-			reply.setReplyComment("Product Description found for productId="+productId);
-			reply.setProductMetadata(productDescription);
-		}
+		reply.setReplyComment("Product Description found for productId="+productId);
+		reply.setProductMetadata(productDescription);
 		
-		return Response
-				.status(200).entity(reply).build();
+		return Response.status(200).entity(reply).build();
 
 	}
 

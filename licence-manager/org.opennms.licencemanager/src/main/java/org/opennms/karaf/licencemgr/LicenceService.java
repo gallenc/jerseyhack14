@@ -17,6 +17,8 @@ package org.opennms.karaf.licencemgr;
 
 import java.util.Map;
 
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
+
 public interface LicenceService {
 
 	/**
@@ -25,8 +27,9 @@ public interface LicenceService {
 	 * the licence is added for productId corresponding to the productId in the LicenceMetadata
 	 * previous entries for that productId are overwritten
 	 * @param licence
+	 * @return the licence metadata contained in the added licence
 	 */
-	public void addLicence(String licence);
+	public LicenceMetadata addLicence(String licence);
 
 	/**
 	 * removes any licence corresponding to productId. 

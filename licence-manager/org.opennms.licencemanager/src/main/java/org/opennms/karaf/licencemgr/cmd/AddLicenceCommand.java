@@ -20,6 +20,7 @@ import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.opennms.karaf.licencemgr.LicenceService;
 import org.opennms.karaf.licencemgr.metadata.Licence;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
 
 @Command(scope = "licence-mgr", name = "addlicence", description="adds licence for productId")
 public class AddLicenceCommand extends OsgiCommandSupport {
@@ -41,8 +42,11 @@ public class AddLicenceCommand extends OsgiCommandSupport {
 	protected Object doExecute() throws Exception {
 		try{
 			String productId = Licence.getUnverifiedMetadata(licence).getProductId();
-			getLicenceService().addLicence(licence);
-			System.out.println("Added licence ProductId='"+productId + "' licence='" + licence+"'");
+			LicenceMetadata licenceMetadata = getLicenceService().addLicence(licence);
+			String metadatastr = (licenceMetadata==null) ? "null" : licenceMetadata.toXml();
+			System.out.println("Added licence ProductId='"+productId + "'");
+			System.out.println("              licence=  '" + licence+"'");
+			System.out.println("              licenceMetadata='"+metadatastr+"'\n");
 		} catch (Exception e) {
 			System.out.println("Error Adding licence. Exception="+e);
 		}
