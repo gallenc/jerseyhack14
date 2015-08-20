@@ -59,7 +59,7 @@ A test page is provided which illustrates the use of the ReST interface.
 
 (The source of this page includes javascript examples for handling post XML messages).
 
-http://localhost:8181/pluginmgr/test/licence-mgr-rest-test.html
+http://localhost:8181/pluginmgr/diagnostics/licence-mgr-rest-diagnostics.html
 
 ## Installation in stand alone Karaf
 
@@ -129,7 +129,7 @@ START LEVEL 100 , List Threshold: 50
 
 4. Use Test Page
 
-Navigate to http://localhost:8181/pluginmgr/test/licence-mgr-rest-test.html
+Navigate to http://localhost:8181/pluginmgr/diagnostics/licence-mgr-rest-diagnostics.html
 to see a list of commands
 
 5. Other notes 
