@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.opennms.plugins</groupId>
-  <artifactId>org.opennms.featuremanager.parent</artifactId>
+  <artifactId>org.opennms.plugin.featuremanager.parent</artifactId>
   <version>1.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>org.opennms.featuremanager.parent</name>
+  <name>org.opennms.plugin.featuremanager.parent</name>
   <description>feature manager karaf plugin parent project</description>
 
   <properties>

@@ -29,8 +29,8 @@
 
   <!-- Maps in the test resource files for serving basic test pages -->
   <bean id="testResourceMapping" class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
-    <property name="alias" value="/featuremgr/test" />
-    <property name="path" value="/test" />
+    <property name="alias" value="/featuremgr/diagnostics" />
+    <property name="path" value="/diagnostics" />
   </bean>
 
   <service id="testResources" ref="testResourceMapping" interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping" />
