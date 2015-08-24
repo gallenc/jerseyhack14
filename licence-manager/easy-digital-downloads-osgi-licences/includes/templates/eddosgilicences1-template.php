@@ -9,7 +9,7 @@ get_header();
 <?php
 echo 'xml test page';
 
-$uri = 'http://localhost:8181/pluginmgr/rest/licence-pub/getlicencemetadataspec?productId=org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT';
+$uri = 'http://localhost:8181/licencemgr/rest/licence-pub/getlicencemetadataspec?productId=org.opennms.co.uk/org.opennms.co.uk.newfeature/0.0.1-SNAPSHOT';
 $response = \Httpful\Request::get ( $uri )->expectsXml()->send();
 
 echo "debug data";

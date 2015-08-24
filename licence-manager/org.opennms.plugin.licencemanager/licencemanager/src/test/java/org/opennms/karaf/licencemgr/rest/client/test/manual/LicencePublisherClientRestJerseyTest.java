@@ -67,7 +67,7 @@ public class LicencePublisherClientRestJerseyTest {
 
 		// defaults for test running on standard karaf
 		String baseUrl = "http://localhost:8181";
-		String basePath = "/pluginmgr/rest/licence-pub";
+		String basePath = "/licencemgr/rest/licence-pub";
 
 		LicencePublisherClientRestJerseyImpl licencePublisherClient = new LicencePublisherClientRestJerseyImpl();
 		licencePublisherClient.setBasePath(basePath);

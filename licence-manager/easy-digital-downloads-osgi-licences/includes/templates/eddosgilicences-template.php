@@ -166,7 +166,7 @@ function generateLicence($_licenceMetadataSpec, $_licenceMetadata, $osgiLicenceG
 // 		}
 // 	}
 	
-	$uri = $osgiLicenceGeneratorUrl . '/pluginmgr/rest/licence-pub/createlicence';
+	$uri = $osgiLicenceGeneratorUrl . '/licencemgr/rest/licence-pub/createlicence';
 	
 	$payload = ( string ) $_licenceMetadata->asXML ();
 	// save updated licence metadata
@@ -266,7 +266,7 @@ try {
 		$noEditMetadata = TRUE;
 	}
 	
-	$uri = $osgiLicenceGeneratorUrl . '/pluginmgr/rest/licence-pub/getlicencemetadataspec?productId=' . $edd_osgiProductIdStr;
+	$uri = $osgiLicenceGeneratorUrl . '/licencemgr/rest/licence-pub/getlicencemetadataspec?productId=' . $edd_osgiProductIdStr;
 	
 	if ($osgipub_osgi_debug == 'on')
 		echo "Get Licence Metadata Spec request to licence publisher: Basic Authentication\n" . "     username='" . $osgi_username . "' password='" . $osgi_password . "'\n" . "     uri='" . $uri . "\n";

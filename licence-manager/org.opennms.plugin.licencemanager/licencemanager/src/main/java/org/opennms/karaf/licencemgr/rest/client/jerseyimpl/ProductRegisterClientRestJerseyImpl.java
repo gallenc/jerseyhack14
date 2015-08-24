@@ -16,7 +16,7 @@ import com.sun.jersey.api.client.WebResource;
 public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClient {
 	
 	private String baseUrl = "http://localhost:8181";
-	private String basePath = "/pluginmgr/rest/product-reg";
+	private String basePath = "/licencemgr/rest/product-reg";
 	
 	/**
 	 * base URL of service as http://HOSTNAME:PORT e.g http://localhost:8181
@@ -36,7 +36,7 @@ public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClien
 
 	/**
 	 * base path of service starting with '/' such that service is accessed using baseUrl/basePath... 
-	 * e.g http://localhost:8181/pluginmgr/rest/product-pub
+	 * e.g http://localhost:8181/licencemgr/rest/product-pub
 	 * @return basePath
 	 */
 	public String getBasePath() {
@@ -45,7 +45,7 @@ public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClien
 
 	/**
 	 * base path of service starting with '/' such that service is accessed using baseUrl/basePath... 
-	 * e.g http://localhost:8181/pluginmgr/rest/product-pub
+	 * e.g http://localhost:8181/licencemgr/rest/product-pub
 	 * @return basePath
 	 */
 	public void setBasePath(String basePath) {
@@ -60,7 +60,7 @@ public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClien
 	    
 		Client client = Client.create();
 		
-		//http://localhost:8181/pluginmgr/rest/product-pub/addproductspec
+		//http://localhost:8181/licencemgr/rest/product-pub/addproductspec
 		
 		String getStr= baseUrl+basePath+"/addproductspec";
 		
@@ -97,7 +97,7 @@ public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClien
 	    
 		Client client = Client.create();
 		
-		//http://localhost:8181/pluginmgr/rest/product-pub/removeproductspec?productId=
+		//http://localhost:8181/licencemgr/rest/product-pub/removeproductspec?productId=
 		
 		String getStr= baseUrl+basePath+"/removeproductspec?productId="+productId;
 		
@@ -135,7 +135,7 @@ public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClien
 	    
 		Client client = Client.create();
 		
-		//http://localhost:8181/pluginmgr/rest/product-pub/getproductspec?productId=
+		//http://localhost:8181/licencemgr/rest/product-pub/getproductspec?productId=
 		
 		String getStr= baseUrl+basePath+"/getproductspec?productId="+productId;
 		
@@ -159,7 +159,7 @@ public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClien
 
 		Client client = Client.create();
 		
-		//http://localhost:8181/pluginmgr/rest/product-pub/list
+		//http://localhost:8181/licencemgr/rest/product-pub/list
 		
 		String getStr= baseUrl+basePath+"/list";
 		
@@ -190,7 +190,7 @@ public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClien
 
 		Client client = Client.create();
 		
-		//http://localhost:8181/pluginmgr/rest/product-pub/clearproductspecs?confirm=false
+		//http://localhost:8181/licencemgr/rest/product-pub/clearproductspecs?confirm=false
 		
 		String getStr= baseUrl+basePath+"/clearproductspecs?confirm="+ (confirm ? "true":"false");
 		

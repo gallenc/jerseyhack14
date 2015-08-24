@@ -32,7 +32,7 @@ public class ProductPublisherClientRestJerseyTest {
 
 		// defaults for test running on standard karaf
 		String baseUrl = "http://localhost:8181";
-		String basePath = "/pluginmgr/rest/product-pub";
+		String basePath = "/licencemgr/rest/product-pub";
 
 		ProductPublisherClientRestJerseyImpl productPublisherClient = new ProductPublisherClientRestJerseyImpl();
 		productPublisherClient.setBasePath(basePath);

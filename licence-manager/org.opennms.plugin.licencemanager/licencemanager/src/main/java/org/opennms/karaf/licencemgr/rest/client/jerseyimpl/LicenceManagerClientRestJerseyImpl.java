@@ -16,7 +16,7 @@ import com.sun.jersey.api.client.WebResource;
 public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient {
 	
 	private String baseUrl = "http://localhost:8181";
-	private String basePath = "/pluginmgr/rest/licence-mgr";
+	private String basePath = "/licencemgr/rest/licence-mgr";
 	
 	/**
 	 * base URL of service as http://HOSTNAME:PORT e.g http://localhost:8181
@@ -59,7 +59,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 	    
 		Client client = Client.create();
 		
-		//http://localhost:8181/pluginmgr/rest/licence-mgr/addlicence?licence=
+		//http://localhost:8181/licencemgr/rest/licence-mgr/addlicence?licence=
 		
 		String getStr= baseUrl+basePath+"/addlicence?licence="+licence;
 		
@@ -99,7 +99,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 
 		Client client = Client.create();
 		
-		//http://localhost:8181/pluginmgr/rest/licence-mgr/removelicence?productId=
+		//http://localhost:8181/licencemgr/rest/licence-mgr/removelicence?productId=
 		
 		String getStr= baseUrl+basePath+"/removelicence?productId="+productId;
 		
@@ -134,7 +134,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 	    
 		Client client = Client.create();
 		
-		//http://localhost:8181/pluginmgr/rest/licence-mgr/getlicence?productId=
+		//http://localhost:8181/licencemgr/rest/licence-mgr/getlicence?productId=
 		
 		String getStr= baseUrl+basePath+"/getlicence?productId="+productId;
 		
@@ -173,7 +173,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 	    
 		Client client = Client.create();
 		
-		//http://localhost:8181/pluginmgr/rest/licence-mgr/list
+		//http://localhost:8181/licencemgr/rest/licence-mgr/list
 		
 		String getStr= baseUrl+basePath+"/list";
 		
@@ -211,7 +211,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 
 		Client client = Client.create();
 
-		//http://localhost:8181/pluginmgr/rest/licence-mgr/clearlicences?confirm=false
+		//http://localhost:8181/licencemgr/rest/licence-mgr/clearlicences?confirm=false
 		
 		String getStr= baseUrl+basePath+"/clearlicences?confirm="+ (confirm ? "true":"false");
 		
@@ -245,7 +245,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 	    
 		Client client = Client.create();
 		
-		//http://localhost:8181/pluginmgr/rest/licence-mgr/getsystemid
+		//http://localhost:8181/licencemgr/rest/licence-mgr/getsystemid
 		
 		String getStr= baseUrl+basePath+"/getsystemid";
 		
@@ -285,7 +285,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 	    
 		Client client = Client.create();
 		
-		//http://localhost:8181/pluginmgr/rest/licence-mgr/setsystemid?systemId=
+		//http://localhost:8181/licencemgr/rest/licence-mgr/setsystemid?systemId=
 		
 		String getStr= baseUrl+basePath+"/setsystemid?systemId="+systemId;
 		
@@ -319,7 +319,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 	    
 		Client client = Client.create();
 		
-		//http://localhost:8181/pluginmgr/rest/licence-mgr/makesystemid
+		//http://localhost:8181/licencemgr/rest/licence-mgr/makesystemid
 		
 		String getStr= baseUrl+basePath+"/makesystemid";
 		
@@ -359,7 +359,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 	    
 		Client client = Client.create();
 		
-		//http://localhost:8181/pluginmgr/rest/licence-mgr/checksumforstring?string=
+		//http://localhost:8181/licencemgr/rest/licence-mgr/checksumforstring?string=
 		
 		String getStr= baseUrl+basePath+"/checksumforstring?string="+string;
 		

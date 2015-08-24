@@ -173,7 +173,7 @@
 
   <service interface="javax.servlet.http.HttpServlet">
     <service-properties>
-      <entry key="alias" value="/pluginmgr/rest" />
+      <entry key="alias" value="/licencemgr/rest" />
     </service-properties>
     <bean class="com.sun.jersey.spi.container.servlet.ServletContainer">
       <argument ref="licenceManagerRestApplication" />
@@ -192,7 +192,7 @@
 
   <!-- Maps in the test resource files for serving basic test pages -->
   <bean id="testResourceMapping" class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
-    <property name="alias" value="/pluginmgr/diagnostics" />
+    <property name="alias" value="/licencemgr/diagnostics" />
     <property name="path" value="/diagnostics" />
   </bean>
 
