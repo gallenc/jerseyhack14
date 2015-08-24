@@ -1,11 +1,11 @@
 /**
  * 
  */
-package org.opennms.karaf.featuremanager.rest.client.jerseyimpl;
+package org.opennms.karaf.featuremgr.rest.client.jerseyimpl;
 
 
 import javax.ws.rs.core.MediaType;
-import org.opennms.karaf.featuremanager.rest.client.FeaturesServiceClient;
+
 import org.opennms.karaf.featuremgr.jaxb.ErrorMessage;
 import org.opennms.karaf.featuremgr.jaxb.FeatureList;
 import org.opennms.karaf.featuremgr.jaxb.FeatureWrapperJaxb;
@@ -13,6 +13,7 @@ import org.opennms.karaf.featuremgr.jaxb.RepositoryList;
 import org.opennms.karaf.featuremgr.jaxb.RepositoryWrapperJaxb;
 import org.opennms.karaf.featuremgr.jaxb.ReplyMessage;
 import org.opennms.karaf.featuremgr.jaxb.Util;
+import org.opennms.karaf.featuremgr.rest.client.FeaturesServiceClient;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
@@ -61,7 +62,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opennms.karaf.featuremanager.rest.client.FeaturesService#getFeaturesList()
+	 * @see org.opennms.karaf.featuremgr.rest.client.FeaturesService#getFeaturesList()
 	 */
 	@Override
 	public FeatureList getFeaturesList() throws Exception {
@@ -84,7 +85,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opennms.karaf.featuremanager.rest.client.FeaturesService#getFeaturesInfo(java.lang.String, java.lang.String)
+	 * @see org.opennms.karaf.featuremgr.rest.client.FeaturesService#getFeaturesInfo(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public FeatureWrapperJaxb getFeaturesInfo(String name, String version) throws Exception {
@@ -111,7 +112,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 
 	
 	/* (non-Javadoc)
-	 * @see org.opennms.karaf.featuremanager.rest.client.FeaturesService#featuresInstall(java.lang.String, java.lang.String)
+	 * @see org.opennms.karaf.featuremgr.rest.client.FeaturesService#featuresInstall(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void featuresInstall(String name, String version) throws Exception {
@@ -148,7 +149,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opennms.karaf.featuremanager.rest.client.FeaturesService#featuresUninstall(java.lang.String, java.lang.String)
+	 * @see org.opennms.karaf.featuremgr.rest.client.FeaturesService#featuresUninstall(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public void featuresUninstall(String name, String version) throws Exception {
@@ -186,7 +187,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opennms.karaf.featuremanager.rest.client.FeaturesService#getFeaturesListRepositories()
+	 * @see org.opennms.karaf.featuremgr.rest.client.FeaturesService#getFeaturesListRepositories()
 	 */
 	@Override
 	public RepositoryList getFeaturesListRepositories() throws Exception {
@@ -208,7 +209,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opennms.karaf.featuremanager.rest.client.FeaturesService#getFeaturesRepositoryInfo(java.lang.String, java.lang.String)
+	 * @see org.opennms.karaf.featuremgr.rest.client.FeaturesService#getFeaturesRepositoryInfo(java.lang.String, java.lang.String)
 	 */
 	@Override
 	public RepositoryWrapperJaxb getFeaturesRepositoryInfo(String name,	String uriStr) throws Exception {
@@ -234,7 +235,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opennms.karaf.featuremanager.rest.client.FeaturesService#featuresRemoveRepository(java.lang.String)
+	 * @see org.opennms.karaf.featuremgr.rest.client.FeaturesService#featuresRemoveRepository(java.lang.String)
 	 */
 	@Override
 	public void featuresRemoveRepository(String uriStr) throws Exception {
@@ -272,7 +273,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 	}
 
 	/* (non-Javadoc)
-	 * @see org.opennms.karaf.featuremanager.rest.client.FeaturesService#featuresAddRepository(java.lang.String)
+	 * @see org.opennms.karaf.featuremgr.rest.client.FeaturesService#featuresAddRepository(java.lang.String)
 	 */
 	@Override
 	public void featuresAddRepository(String uriStr) throws Exception {

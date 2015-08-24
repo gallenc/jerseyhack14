@@ -3,13 +3,13 @@ package org.opennms.karaf.featuremgr.rest.client.test.manual;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
-import org.opennms.karaf.featuremanager.rest.client.FeaturesServiceClient;
-import org.opennms.karaf.featuremanager.rest.client.jerseyimpl.FeaturesServiceClientRestJerseyImpl;
 import org.opennms.karaf.featuremgr.jaxb.FeatureList;
 import org.opennms.karaf.featuremgr.jaxb.FeatureWrapperJaxb;
 import org.opennms.karaf.featuremgr.jaxb.RepositoryList;
 import org.opennms.karaf.featuremgr.jaxb.RepositoryWrapperJaxb;
 import org.opennms.karaf.featuremgr.jaxb.Util;
+import org.opennms.karaf.featuremgr.rest.client.FeaturesServiceClient;
+import org.opennms.karaf.featuremgr.rest.client.jerseyimpl.FeaturesServiceClientRestJerseyImpl;
 
 /**
  * Test of jersey web client implementation
@@ -45,7 +45,7 @@ public class FeaturesServiceClientRestJerseyTest {
 			featuresService.featuresAddRepository(uriStr);
 		} catch (Exception e) {
 			e.printStackTrace();
-			org.junit.Assert.fail("@Test - featuresAddRepository() failed. See stack trace in consol");
+			fail("@Test - featuresAddRepository() failed. See stack trace in consol");
 		}
 		
 		System.out.println("@Test - featuresAddRepository.FINISH");
@@ -62,7 +62,7 @@ public class FeaturesServiceClientRestJerseyTest {
 			System.out.println(Util.toXml(repositoryList));
 		} catch (Exception e) {
 			e.printStackTrace();
-			org.junit.Assert.fail("@Test - getFeaturesListRepositories() failed. See stack trace in consol");
+			fail("@Test - getFeaturesListRepositories() failed. See stack trace in consol");
 		}
 
 		System.out.println("@Test - getFeaturesListRepositories.FINISH");
@@ -84,7 +84,7 @@ public class FeaturesServiceClientRestJerseyTest {
 			System.out.println(Util.toXml(repositoryWrapper));
 		} catch (Exception e) {
 			e.printStackTrace();
-			org.junit.Assert.fail("@Test - getFeaturesRepositoryInfo failed. See stack trace in consol");
+			fail("@Test - getFeaturesRepositoryInfo failed. See stack trace in consol");
 		}
 
 		System.out.println("@Test - getFeaturesRepositoryInfo.FINISH");
@@ -103,7 +103,7 @@ public class FeaturesServiceClientRestJerseyTest {
 			System.out.println(Util.toXml(featuresList));
 		} catch (Exception e) {
 			e.printStackTrace();
-			org.junit.Assert.fail("@Test - getFeaturesList() failed. See stack trace in consol");
+			fail("@Test - getFeaturesList() failed. See stack trace in consol");
 		}
 		
 		System.out.println("@Test - getFeaturesList.FINISH");
@@ -122,7 +122,7 @@ public class FeaturesServiceClientRestJerseyTest {
 			featuresService.featuresInstall(name, version);
 		} catch (Exception e) {
 			e.printStackTrace();
-			org.junit.Assert.fail("@Test - featuresInstall() failed. See stack trace in consol");
+			fail("@Test - featuresInstall() failed. See stack trace in consol");
 		}
 		
 		System.out.println("@Test - featuresInstall.FINISH");
@@ -145,7 +145,7 @@ public class FeaturesServiceClientRestJerseyTest {
 			System.out.println(Util.toXml(featureWrapper));
 		} catch (Exception e) {
 			e.printStackTrace();
-			org.junit.Assert.fail("@Test - getFeaturesInfo() failed. See stack trace in consol");
+			fail("@Test - getFeaturesInfo() failed. See stack trace in consol");
 		}
 		
 		System.out.println("@Test - getFeaturesInfo.FINISH");
@@ -163,7 +163,7 @@ public class FeaturesServiceClientRestJerseyTest {
 			featuresService.featuresUninstall(name, version);
 		} catch (Exception e) {
 			e.printStackTrace();
-			org.junit.Assert.fail("@Test - featuresUninstall() failed. See stack trace in consol");
+			fail("@Test - featuresUninstall() failed. See stack trace in consol");
 		}
 		System.out.println("@Test - featuresUninstall.FINISH");
 	}
@@ -182,7 +182,7 @@ public class FeaturesServiceClientRestJerseyTest {
 			featuresService.featuresRemoveRepository(uriStr);
 		} catch (Exception e) {
 			e.printStackTrace();
-			org.junit.Assert.fail("@Test - featuresRemoveRepository() failed. See stack trace in consol");
+			fail("@Test - featuresRemoveRepository() failed. See stack trace in consol");
 		}
 		
 		System.out.println("@Test - featuresRemoveRepository.FINISH");

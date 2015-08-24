@@ -63,7 +63,7 @@
             <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
             <Bundle-Version>${project.version}</Bundle-Version>
             <Export-Package>
-            org.opennms.karaf.featuremanager*;version=${project.version}
+            org.opennms.karaf.featuremgr*;version=${project.version}
             </Export-Package>
             <Import-Package>
               org.apache.karaf.features*;version="[2,4)",
