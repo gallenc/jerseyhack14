@@ -17,6 +17,7 @@ import org.opennms.karaf.featuremgr.rest.client.FeaturesServiceClient;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 
 /**
  * @author craig gallen
@@ -26,7 +27,42 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 	
 	private String baseUrl = "http://localhost:8181";
 	private String basePath = "/featuremgr";
+	private String userName = null; // If userName is null no basic authentication is generated
+	private String password = "";
 	
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+
+	/**
+	 * User name to use in basic authentication
+	 * If userName is null then no basic authentication is generated
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+     * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * password to use in basic authentication.
+	 * password must not be set to null but if not set, password will default to empty string "".
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		if (password==null) throw new RuntimeException("password must not be set to null");
+		this.password = password;
+	}
+
 	/**
 	 * base URL of service as http://HOSTNAME:PORT e.g http://localhost:8181
 	 * @return baseUrl
@@ -60,6 +96,12 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 	public void setBasePath(String basePath) {
 		this.basePath = basePath;
 	}
+	
+	private Client newClient(){
+		Client client = Client.create();
+		if (userName!=null) client.addFilter(new HTTPBasicAuthFilter(userName, password));
+		return  client;
+	}
 
 	/* (non-Javadoc)
 	 * @see org.opennms.karaf.featuremgr.rest.client.FeaturesService#getFeaturesList()
@@ -69,7 +111,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/featuremgr/rest/features-list
 		
@@ -93,7 +135,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 	    if (name==null)throw new RuntimeException("?name= parameter must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/featuremgr/rest/features-info?name=myproject.Feature&version=1.0-SNAPSHOT
 		
@@ -119,7 +161,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 	    if (name==null)throw new RuntimeException("?name= parameter must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/featuremgr/rest/features-install?name=myproject.Feature&version=1.0-SNAPSHOT
 		
@@ -156,7 +198,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 	    if (name==null)throw new RuntimeException("?name= parameter must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/featuremgr/rest/features-uninstall?name=myproject.Feature&version=1.0-SNAPSHOT
 		
@@ -193,7 +235,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 	public RepositoryList getFeaturesListRepositories() throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/featuremgr/rest/features-listrepositories
 		
@@ -218,7 +260,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 		if (name== null && uriStr==null) throw new RuntimeException("you must specify either a ?uri= or ?name= parameter.");
 		if (name!=null && uriStr!=null) throw new RuntimeException("you can only specify ONE of either a ?uri= or ?name= parameter.");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 
 		//http://localhost:8181/featuremgr/rest/features-repositoryinfo?uri=mvn:org.opennms.project/myproject.Feature/1.0-SNAPSHOT/xml/features
 		
@@ -243,7 +285,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 		
 	    if (uriStr==null)throw new RuntimeException("uriStr= parameter must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/featuremgr/rest/features-removerepository?uri=mvn:org.opennms.project/myproject.Feature/1.0-SNAPSHOT/xml/features
 		
@@ -280,7 +322,7 @@ public class FeaturesServiceClientRestJerseyImpl implements FeaturesServiceClien
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 	    if (uriStr==null)throw new RuntimeException("uriStr= parameter must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/featuremgr/rest/features-addrepositoryurl?uri=mvn:org.opennms.project/myproject.Feature/1.0-SNAPSHOT/xml/features
 		

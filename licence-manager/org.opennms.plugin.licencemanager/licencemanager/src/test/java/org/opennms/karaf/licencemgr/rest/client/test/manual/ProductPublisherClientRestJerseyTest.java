@@ -33,10 +33,14 @@ public class ProductPublisherClientRestJerseyTest {
 		// defaults for test running on standard karaf
 		String baseUrl = "http://localhost:8181";
 		String basePath = "/licencemgr/rest/product-pub";
+		String userName = "admin";
+		String password = "admin";
 
 		ProductPublisherClientRestJerseyImpl productPublisherClient = new ProductPublisherClientRestJerseyImpl();
 		productPublisherClient.setBasePath(basePath);
 		productPublisherClient.setBaseUrl(baseUrl);
+		productPublisherClient.setUserName(userName);
+		productPublisherClient.setPassword(password);
 
 		return productPublisherClient;
 	}

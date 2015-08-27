@@ -24,10 +24,14 @@ public class FeaturesServiceClientRestJerseyTest {
 		//defaults for test running on standard karaf
 		String baseUrl = "http://localhost:8181";
 		String basePath = "/featuremgr";
+		String userName="admin";
+		String password="admin";
 		
 		FeaturesServiceClientRestJerseyImpl jerseyFeaturesService = new FeaturesServiceClientRestJerseyImpl(); 
 		jerseyFeaturesService.setBasePath(basePath);
 		jerseyFeaturesService.setBaseUrl(baseUrl);
+		jerseyFeaturesService.setUserName(userName);
+		jerseyFeaturesService.setPassword(password);
 		
 		return jerseyFeaturesService;
 	}

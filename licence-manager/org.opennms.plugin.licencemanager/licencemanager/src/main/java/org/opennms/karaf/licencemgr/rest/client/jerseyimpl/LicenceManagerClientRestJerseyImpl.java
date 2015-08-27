@@ -12,11 +12,47 @@ import org.opennms.karaf.licencemgr.rest.client.LicenceManagerClient;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 
 public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient {
 	
 	private String baseUrl = "http://localhost:8181";
 	private String basePath = "/licencemgr/rest/licence-mgr";
+	private String userName = null; // If userName is null no basic authentication is generated
+	private String password = "";
+	
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+
+	/**
+	 * User name to use in basic authentication
+	 * If userName is null then no basic authentication is generated
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+     * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * password to use in basic authentication.
+	 * password must not be set to null but if not set, password will default to empty string "".
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		if (password==null) throw new RuntimeException("password must not be set to null");
+		this.password = password;
+	}
 	
 	/**
 	 * base URL of service as http://HOSTNAME:PORT e.g http://localhost:8181
@@ -51,13 +87,19 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 	public void setBasePath(String basePath) {
 		this.basePath = basePath;
 	}
+	
+	private Client newClient(){
+		Client client = Client.create();
+		if (userName!=null) client.addFilter(new HTTPBasicAuthFilter(userName, password));
+		return  client;
+	}
 
 	@Override
 	public LicenceMetadata addLicence(String licence) throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(licence==null ) throw new RuntimeException("licence must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-mgr/addlicence?licence=
 		
@@ -97,7 +139,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(productId==null ) throw new RuntimeException("productId must be set");
 
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-mgr/removelicence?productId=
 		
@@ -132,7 +174,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(productId==null ) throw new RuntimeException("productId must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-mgr/getlicence?productId=
 		
@@ -171,7 +213,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 	public LicenceList getLicenceMap() throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-mgr/list
 		
@@ -209,7 +251,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(confirm==null) throw new RuntimeException("confirm must be set true of false");
 
-		Client client = Client.create();
+		Client client = newClient();
 
 		//http://localhost:8181/licencemgr/rest/licence-mgr/clearlicences?confirm=false
 		
@@ -243,7 +285,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 	public String getSystemId() throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-mgr/getsystemid
 		
@@ -283,7 +325,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(systemId==null ) throw new RuntimeException("systemId must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-mgr/setsystemid?systemId=
 		
@@ -317,7 +359,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 	public String makeSystemInstance() throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-mgr/makesystemid
 		
@@ -357,7 +399,7 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(string==null ) throw new RuntimeException("string must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-mgr/checksumforstring?string=
 		

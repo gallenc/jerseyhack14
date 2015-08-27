@@ -68,10 +68,14 @@ public class LicencePublisherClientRestJerseyTest {
 		// defaults for test running on standard karaf
 		String baseUrl = "http://localhost:8181";
 		String basePath = "/licencemgr/rest/licence-pub";
+		String userName = "admin";
+		String password = "admin";
 
 		LicencePublisherClientRestJerseyImpl licencePublisherClient = new LicencePublisherClientRestJerseyImpl();
 		licencePublisherClient.setBasePath(basePath);
 		licencePublisherClient.setBaseUrl(baseUrl);
+		licencePublisherClient.setUserName(userName);
+		licencePublisherClient.setPassword(password);
 
 		return licencePublisherClient;
 	}

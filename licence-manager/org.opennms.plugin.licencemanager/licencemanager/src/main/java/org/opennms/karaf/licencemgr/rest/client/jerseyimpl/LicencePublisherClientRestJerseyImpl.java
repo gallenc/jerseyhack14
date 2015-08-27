@@ -15,11 +15,47 @@ import org.opennms.karaf.licencemgr.rest.client.LicencePublisherClient;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 
 public class LicencePublisherClientRestJerseyImpl implements LicencePublisherClient {
 	
 	private String baseUrl = "http://localhost:8181";
 	private String basePath = "/licencemgr/rest/licence-pub";
+	private String userName = null; // If userName is null no basic authentication is generated
+	private String password = "";
+	
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+
+	/**
+	 * User name to use in basic authentication
+	 * If userName is null then no basic authentication is generated
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+     * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * password to use in basic authentication.
+	 * password must not be set to null but if not set, password will default to empty string "".
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		if (password==null) throw new RuntimeException("password must not be set to null");
+		this.password = password;
+	}
 	
 	/**
 	 * base URL of service as http://HOSTNAME:PORT e.g http://localhost:8181
@@ -54,13 +90,19 @@ public class LicencePublisherClientRestJerseyImpl implements LicencePublisherCli
 	public void setBasePath(String basePath) {
 		this.basePath = basePath;
 	}
+	
+	private Client newClient(){
+		Client client = Client.create();
+		if (userName!=null) client.addFilter(new HTTPBasicAuthFilter(userName, password));
+		return  client;
+	}
 
 	@Override
 	public void addLicenceSpec(LicenceSpecification licenceSpec) throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(licenceSpec==null ) throw new RuntimeException("licenceSpec must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-pub/addlicencespec
 		
@@ -96,7 +138,7 @@ public class LicencePublisherClientRestJerseyImpl implements LicencePublisherCli
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(productId==null ) throw new RuntimeException("productId must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-pub/removelicencespec?productId=
 		
@@ -133,7 +175,7 @@ public class LicencePublisherClientRestJerseyImpl implements LicencePublisherCli
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(productId==null ) throw new RuntimeException("productId must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-pub/getlicencespec?productId=
 		
@@ -174,7 +216,7 @@ public class LicencePublisherClientRestJerseyImpl implements LicencePublisherCli
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(productId==null ) throw new RuntimeException("productId must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-pub/getlicencemetadataspec?productId=
 		
@@ -213,7 +255,7 @@ public class LicencePublisherClientRestJerseyImpl implements LicencePublisherCli
 	public LicenceSpecList getLicenceSpecList() throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-pub/listspecs
 		
@@ -242,7 +284,7 @@ public class LicencePublisherClientRestJerseyImpl implements LicencePublisherCli
 	public LicenceMetadataList getLicenceMetadataList() throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-pub/list
 		
@@ -272,7 +314,7 @@ public class LicencePublisherClientRestJerseyImpl implements LicencePublisherCli
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(confirm==null) throw new RuntimeException("confirm must be set true of false");
 
-		Client client = Client.create();
+		Client client = newClient();
 		
 		////http://localhost:8181/licencemgr/rest/licence-pub/clearlicencespecs?confirm=false
 		
@@ -307,7 +349,7 @@ public class LicencePublisherClientRestJerseyImpl implements LicencePublisherCli
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(licenceMetadata==null ) throw new RuntimeException("licenceMetadata must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/licence-pub/createlicence
 		

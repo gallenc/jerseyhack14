@@ -24,10 +24,14 @@ public class LicenceManagerClientRestJerseyTest {
 		// defaults for test running on standard karaf
 		String baseUrl = "http://localhost:8181";
 		String basePath = "/licencemgr/rest/licence-mgr";
+		String userName="admin";
+		String password="admin";
 
 		LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
 		licenceManagerClient.setBasePath(basePath);
 		licenceManagerClient.setBaseUrl(baseUrl);
+		licenceManagerClient.setUserName(userName);
+		licenceManagerClient.setPassword(password);
 
 		return licenceManagerClient;
 	}

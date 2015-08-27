@@ -12,11 +12,47 @@ import org.opennms.karaf.licencemgr.rest.client.ProductRegisterClient;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
 
 public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClient {
 	
 	private String baseUrl = "http://localhost:8181";
 	private String basePath = "/licencemgr/rest/product-reg";
+	private String userName = null; // If userName is null no basic authentication is generated
+	private String password = "";
+	
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
+
+	/**
+	 * User name to use in basic authentication
+	 * If userName is null then no basic authentication is generated
+	 * @param userName the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	/**
+     * @return the password
+	 */
+	public String getPassword() {
+		return password;
+	}
+
+	/**
+	 * password to use in basic authentication.
+	 * password must not be set to null but if not set, password will default to empty string "".
+	 * @param password the password to set
+	 */
+	public void setPassword(String password) {
+		if (password==null) throw new RuntimeException("password must not be set to null");
+		this.password = password;
+	}
 	
 	/**
 	 * base URL of service as http://HOSTNAME:PORT e.g http://localhost:8181
@@ -51,14 +87,19 @@ public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClien
 	public void setBasePath(String basePath) {
 		this.basePath = basePath;
 	}
-
+	
+	private Client newClient(){
+		Client client = Client.create();
+		if (userName!=null) client.addFilter(new HTTPBasicAuthFilter(userName, password));
+		return  client;
+	}
 	
 	@Override
 	public void addProductSpec(ProductMetadata productMetadata) throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(productMetadata==null ) throw new RuntimeException("productMetadata must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/product-pub/addproductspec
 		
@@ -95,7 +136,7 @@ public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClien
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(productId==null ) throw new RuntimeException("productId must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/product-pub/removeproductspec?productId=
 		
@@ -133,7 +174,7 @@ public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClien
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(productId==null ) throw new RuntimeException("productId must be set");
 	    
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/product-pub/getproductspec?productId=
 		
@@ -157,7 +198,7 @@ public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClien
 	public ProductSpecList getList() throws Exception {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/product-pub/list
 		
@@ -188,7 +229,7 @@ public class ProductRegisterClientRestJerseyImpl implements ProductRegisterClien
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(confirm==null) throw new RuntimeException("confirm must be set true of false");
 
-		Client client = Client.create();
+		Client client = newClient();
 		
 		//http://localhost:8181/licencemgr/rest/product-pub/clearproductspecs?confirm=false
 		

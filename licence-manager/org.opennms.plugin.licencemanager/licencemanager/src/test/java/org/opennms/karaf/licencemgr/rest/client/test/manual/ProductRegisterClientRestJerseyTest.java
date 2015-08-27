@@ -33,10 +33,14 @@ public class ProductRegisterClientRestJerseyTest {
 		// defaults for test running on standard karaf
 		String baseUrl = "http://localhost:8181";
 		String basePath = "/licencemgr/rest/product-pub";
+		String userName = "admin";
+		String password = "admin";
 
 		ProductRegisterClientRestJerseyImpl productRegisterClient = new ProductRegisterClientRestJerseyImpl();
 		productRegisterClient.setBasePath(basePath);
 		productRegisterClient.setBaseUrl(baseUrl);
+		productRegisterClient.setUserName(userName);
+		productRegisterClient.setPassword(password);
 
 		return productRegisterClient;
 	}
