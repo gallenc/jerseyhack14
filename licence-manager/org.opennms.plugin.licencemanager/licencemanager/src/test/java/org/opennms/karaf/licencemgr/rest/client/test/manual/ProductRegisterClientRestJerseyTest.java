@@ -2,6 +2,9 @@ package org.opennms.karaf.licencemgr.rest.client.test.manual;
 
 import static org.junit.Assert.*;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.junit.Test;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
 import org.opennms.karaf.licencemgr.metadata.jaxb.Util;
@@ -26,15 +29,47 @@ public class ProductRegisterClientRestJerseyTest {
 					+ "	<licenceKeyRequired>true</licenceKeyRequired>\n"
 					+ "</product>\n";
 
-
+	private static String TEST_PROPERTIES_FILE="/licenceServiceTest.properties";
+	
+	private String basePath = "/licencemgr/rest/product-pub";
+	
+	//defaults for test running on standard karaf
+	private String baseUrl = "http://localhost:8181";
+	private String userName="admin";
+	private String password="admin";
+	
+	// constructor loads test properties file if exists
+	public ProductRegisterClientRestJerseyTest(){
+		super();
+		
+		System.out.println("LOADING PROPERTIES: LicenceManagerClientRestJerseyTest() from "+TEST_PROPERTIES_FILE);
+		
+		Properties prop = null;
+        InputStream is = null;
+        try {
+            prop = new Properties();
+            is = this.getClass().getResourceAsStream(TEST_PROPERTIES_FILE);
+            prop.load(is);
+            
+    		baseUrl = prop.getProperty("baseUrl");
+    		userName=  prop.getProperty("userName");
+    		password= prop.getProperty("password");
+ 
+        } catch (Exception e) {
+        	System.out.println("     Using defailt values. Problem loading TEST_PROPERTIES_FILE:"+TEST_PROPERTIES_FILE+" Exception:"+e);
+        }
+        
+		System.out.println("     basePath = "+basePath);
+		
+        System.out.println("     baseUrl = "+baseUrl);
+		System.out.println("     userName= "+userName);
+		System.out.println("     password= "+password);
+		
+	}
+	
+	
 	// initialises tests
 	private ProductRegisterClient getProductRegisterClient() {
-
-		// defaults for test running on standard karaf
-		String baseUrl = "http://localhost:8181";
-		String basePath = "/licencemgr/rest/product-pub";
-		String userName = "admin";
-		String password = "admin";
 
 		ProductRegisterClientRestJerseyImpl productRegisterClient = new ProductRegisterClientRestJerseyImpl();
 		productRegisterClient.setBasePath(basePath);

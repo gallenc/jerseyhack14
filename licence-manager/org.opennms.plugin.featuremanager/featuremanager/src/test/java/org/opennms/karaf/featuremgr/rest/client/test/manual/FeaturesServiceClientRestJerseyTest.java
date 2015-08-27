@@ -2,6 +2,9 @@ package org.opennms.karaf.featuremgr.rest.client.test.manual;
 
 import static org.junit.Assert.*;
 
+import java.io.InputStream;
+import java.util.Properties;
+
 import org.junit.Test;
 import org.opennms.karaf.featuremgr.jaxb.FeatureList;
 import org.opennms.karaf.featuremgr.jaxb.FeatureWrapperJaxb;
@@ -17,15 +20,57 @@ import org.opennms.karaf.featuremgr.rest.client.jerseyimpl.FeaturesServiceClient
  *
  */
 public class FeaturesServiceClientRestJerseyTest {
+	
+	private static String TEST_PROPERTIES_FILE="/featuresServiceTest.properties";
+	
+	//defaults for test running on standard karaf
+	private String baseUrl = "http://localhost:8181";
+	private String basePath = "/featuremgr";
+	private String userName="admin";
+	private String password="admin";
+	
+	// name of test feature to be loaded
+	private String uriStr="mvn:org.opennms.project/myproject.Feature/1.0-SNAPSHOT/xml/features";
+	private String name="myproject.Feature";
+	private String version="1.0-SNAPSHOT";
+	
+	// constructor loads test properties file if exists
+	public FeaturesServiceClientRestJerseyTest(){
+		super();
+		
+		System.out.println("LOADING PROPERTIES: FeaturesServiceClientRestJerseyTest() from "+TEST_PROPERTIES_FILE);
+		
+		Properties prop = null;
+        InputStream is = null;
+        try {
+            prop = new Properties();
+            is = this.getClass().getResourceAsStream(TEST_PROPERTIES_FILE);
+            prop.load(is);
+            
+    		baseUrl = prop.getProperty("baseUrl");
+    		basePath =  prop.getProperty("basePath");
+    		userName=  prop.getProperty("userName");
+    		password= prop.getProperty("password");
+    		uriStr= prop.getProperty("uriStr");
+    		name= prop.getProperty("name");
+    		version= prop.getProperty("version");
+ 
+        } catch (Exception e) {
+        	System.out.println("     Using defailt values. Problem loading TEST_PROPERTIES_FILE:"+TEST_PROPERTIES_FILE+" Exception:"+e);
+        }
+
+        System.out.println("     baseUrl = "+baseUrl);
+		System.out.println("     basePath = "+basePath);
+		System.out.println("     userName= "+userName);
+		System.out.println("     password= "+password);
+		System.out.println("     test feature uriStr=" +uriStr);
+		System.out.println("     test feature name=" +name);
+		System.out.println("     test feature version=" +version);
+		
+	}
 
 	// initialises tests
 	private FeaturesServiceClient getFeaturesService(){
-		
-		//defaults for test running on standard karaf
-		String baseUrl = "http://localhost:8181";
-		String basePath = "/featuremgr";
-		String userName="admin";
-		String password="admin";
 		
 		FeaturesServiceClientRestJerseyImpl jerseyFeaturesService = new FeaturesServiceClientRestJerseyImpl(); 
 		jerseyFeaturesService.setBasePath(basePath);
@@ -36,11 +81,28 @@ public class FeaturesServiceClientRestJerseyTest {
 		return jerseyFeaturesService;
 	}
 	
+	
 	@Test
-	public void AfeaturesAddRepository() {
-		System.out.println("@Test - featuresAddRepository.START");
+	public void testsInOrder(){
+		System.out.println("@Test - LICENCE MANAGER TESTS.START");
+		
+		this.featuresAddRepository();
+		this.getFeaturesListRepositories();
+		this.getFeaturesRepositoryInfo();
+		this.getFeaturesList();
+		this.featuresInstall();
+		this.getFeaturesInfo();
+		this.featuresUninstall();
+		this.featuresRemoveRepository();		
+		
+		System.out.println("@Test - LICENCE MANAGER TESTS.FINISH");
+	}
 
-		String uriStr="mvn:org.opennms.project/myproject.Feature/1.0-SNAPSHOT/xml/features";
+	
+	
+	//@Test
+	public void featuresAddRepository() {
+		System.out.println("@Test - featuresAddRepository.START");
 
 		//http://localhost:8181/featuremgr/rest/features-addrepositoryurl?uri=mvn:org.opennms.project/myproject.Feature/1.0-SNAPSHOT/xml/features
 
@@ -56,8 +118,8 @@ public class FeaturesServiceClientRestJerseyTest {
 		
 	}
 	
-	@Test
-	public void BgetFeaturesListRepositories() {
+	//@Test
+	public void getFeaturesListRepositories() {
 		System.out.println("@Test - getFeaturesListRepositories.START");
 		
 		FeaturesServiceClient featuresService = getFeaturesService(); 
@@ -73,12 +135,11 @@ public class FeaturesServiceClientRestJerseyTest {
 		
 	}
 
-	@Test
-	public void CgetFeaturesRepositoryInfo() {
+	//@Test
+	public void getFeaturesRepositoryInfo() {
 		System.out.println("@Test - getFeaturesRepositoryInfo.START");
 		
 		String name=null;
-		String uriStr="mvn:org.opennms.project/myproject.Feature/1.0-SNAPSHOT/xml/features";
 
 		//http://localhost:8181/featuremgr/rest/features-repositoryinfo?uri=mvn:org.opennms.project/myproject.Feature/1.0-SNAPSHOT/xml/features
 				
@@ -96,8 +157,8 @@ public class FeaturesServiceClientRestJerseyTest {
 	}
 
 	
-	@Test
-	public void DgetFeaturesList() {
+	//@Test
+	public void getFeaturesList() {
 
 		System.out.println("@Test - getFeaturesList. START");
 		
@@ -114,12 +175,9 @@ public class FeaturesServiceClientRestJerseyTest {
 		
 	}
 
-	@Test
-	public void EfeaturesInstall() {
+	//@Test
+	public void featuresInstall() {
 		System.out.println("@Test - featuresInstall.START");
-		
-		String name="myproject.Feature";
-		String version="1.0-SNAPSHOT";
 				
 		FeaturesServiceClient featuresService = getFeaturesService(); 
 		try {
@@ -133,16 +191,13 @@ public class FeaturesServiceClientRestJerseyTest {
 
 	}
 
-	@Test
-	public void FgetFeaturesInfo() {
+	//@Test
+	public void getFeaturesInfo() {
 		
 		System.out.println("@Test - getFeaturesInfo.START");
 		
 		//http://localhost:8181/featuremgr/rest/features-info?name=myproject.Feature&version=1.0-SNAPSHOT
-		
-		String name="myproject.Feature";
-		String version="1.0-SNAPSHOT";
-				
+
 		FeaturesServiceClient featuresService = getFeaturesService(); 
 		try {
 			FeatureWrapperJaxb featureWrapper = featuresService.getFeaturesInfo(name, version);
@@ -156,11 +211,9 @@ public class FeaturesServiceClientRestJerseyTest {
 
 	}
 
-	@Test
-	public void GfeaturesUninstall() {
+	//@Test
+	public void featuresUninstall() {
 		System.out.println("@Test - featuresUninstall.START");
-		String name="myproject.Feature";
-		String version="1.0-SNAPSHOT";
 				
 		FeaturesServiceClient featuresService = getFeaturesService(); 
 		try {
@@ -173,12 +226,10 @@ public class FeaturesServiceClientRestJerseyTest {
 	}
 
 
-	@Test
-	public void HfeaturesRemoveRepository() {
+	//@Test
+	public void featuresRemoveRepository() {
 		System.out.println("@Test - featuresRemoveRepository.START");
 		
-		String uriStr="mvn:org.opennms.project/myproject.Feature/1.0-SNAPSHOT/xml/features";
-
 		//http://localhost:8181/featuremgr/rest/features-removerepository?uri=mvn:org.opennms.project/myproject.Feature/1.0-SNAPSHOT/xml/features
 				
 		FeaturesServiceClient featuresService = getFeaturesService(); 
