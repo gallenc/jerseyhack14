@@ -37,3 +37,31 @@ START LEVEL 100 , List Threshold: 50
 4. test feature manager using diagnostics page
 http://localhost:8181/featuremgr/diagnostics/feature-mgr-rest-diagnostics.html
 
+To run on opennms
+-----------------
+You need to add the repo where the feature is installed. If you have built on your local machine, add the local repo
+
+sudo vi /opt/opennms/org.ops4j.pax.url.mvn.cfg
+
+change the following property to add file:/home/admin/.m2/repository@snapshots@id=localrepo 
+where /home/admin/.m2/repository is the location of local maven repository
+
+org.ops4j.pax.url.mvn.repositories= \
+    http://repo1.maven.org/maven2@id=central, \
+    http://svn.apache.org/repos/asf/servicemix/m2-repo@id=servicemix, \
+    http://repository.springsource.com/maven/bundles/release@id=springsource.release, \
+    http://repository.springsource.com/maven/bundles/external@id=springsource.external, \
+    https://oss.sonatype.org/content/repositories/releases/@id=sonatype, \
+    file:/home/admin/.m2/repository@snapshots@id=localrepo
+
+The diagnostics page can be found at
+http://localhost:8980/opennms/licencemgr/diagnostics/licence-mgr-rest-diagnostics.html
+
+You can run the tests against a licence manager installed on opennms by 
+copying 
+/src/main/resources/licenceServiceTestKaraf.properties 
+to
+/src/main/resources/licenceServiceTest.properties
+
+
+
