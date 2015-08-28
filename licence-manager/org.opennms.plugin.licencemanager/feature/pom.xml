@@ -29,6 +29,10 @@
               <goal>generate-features-xml</goal>
             </goals>
             <configuration>
+              <features>
+                <feature>http</feature>
+                <feature>http-whiteboard</feature>
+              </features>
             </configuration>
           </execution>
         </executions>

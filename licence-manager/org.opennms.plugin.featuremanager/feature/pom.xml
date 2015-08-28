@@ -6,7 +6,7 @@
     <artifactId>org.opennms.plugin.featuremanager.parent</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  
+
   <!-- Feature Definition -->
   <modelVersion>4.0.0</modelVersion>
   <artifactId>org.opennms.plugin.featuremanager.feature</artifactId>
@@ -29,6 +29,10 @@
               <goal>generate-features-xml</goal>
             </goals>
             <configuration>
+              <features>
+                <feature>http</feature>
+                <feature>http-whiteboard</feature>
+              </features>
             </configuration>
           </execution>
         </executions>
@@ -43,7 +47,7 @@
       <artifactId>org.opennms.plugin.featuremanager</artifactId>
       <version>${project.version}</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.apache.karaf.features</groupId>
       <artifactId>org.apache.karaf.features.core</artifactId>
@@ -68,15 +72,15 @@
       <artifactId>jersey-core</artifactId>
       <scope>compile</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-client</artifactId>
       <scope>compile</scope>
     </dependency>
-    
+
   </dependencies>
-  
+
   <pluginRepositories>
     <pluginRepository>
       <snapshots>
