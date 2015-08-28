@@ -6,7 +6,7 @@ to install in karaf:
 
 1. install feature url
 
-karaf@root> features:addurl mvn:org.opennms.plugins/org.opennms.plugin.featuremanager.feature/1.0-SNAPSHOT/xml/featuresopennms.featuremanager.feature
+karaf@root> features:addurl mvn:org.opennms.plugins/org.opennms.plugin.featuremanager.feature/1.0-SNAPSHOT/xml/features
 
 check the repository is installed using
 karaf@root> features:listurl
