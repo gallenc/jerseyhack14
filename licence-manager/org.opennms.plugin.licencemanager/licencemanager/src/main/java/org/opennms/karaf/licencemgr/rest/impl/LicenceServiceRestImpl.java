@@ -64,11 +64,11 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 		}
 
 		ReplyMessage reply= new ReplyMessage();
-        String productId = Licence.getUnverifiedMetadata(licence).getProductId();
-        reply.setReplyComment("Successfully added licence instance for productId="+productId);
-        reply.setProductId(productId);
-        reply.setLicenceMetadata(licenceMetadata);
-		
+		String productId = Licence.getUnverifiedMetadata(licence).getProductId();
+		reply.setReplyComment("Successfully added licence instance for productId="+productId);
+		reply.setProductId(productId);
+		reply.setLicenceMetadata(licenceMetadata);
+
 		return Response
 				.status(200).entity(reply).build();
 
@@ -82,7 +82,7 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 
 		LicenceService licenceService= ServiceLoader.getLicenceService();
 		if (licenceService == null)	throw new RuntimeException("ServiceLoader.getLicenceService() cannot be null.");
-		
+
 		Boolean removed=null;
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
@@ -96,11 +96,11 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 
 		ReplyMessage reply= new ReplyMessage();
 		reply.setReplyComment("Licence successfully removed for productId="+productId);
-		
+
 		return Response.status(200).entity(reply).build();
 
 	}
-	
+
 	@GET
 	@Path("/getlicence")
 	@Produces(MediaType.APPLICATION_XML)
@@ -109,7 +109,7 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 
 		LicenceService licenceService= ServiceLoader.getLicenceService();
 		if (licenceService == null)	throw new RuntimeException("ServiceLoader.getLicenceService() cannot be null.");
-		
+
 		String licence=null;
 		try{
 			if (productId == null) throw new RuntimeException("productId cannot be null.");
@@ -120,14 +120,57 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 			//return status 400 Error
 			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot get licence", null, exception)).build();
 		}
-		
+
 		ReplyMessage reply= new ReplyMessage();
 		reply.setReplyComment("Licence Specification found for productId="+productId);
 		reply.setLicence(licence);
-		
+
 		return Response.status(200).entity(reply).build();
 
 	}
+
+	@GET
+	@Path("/isauthenticated")
+	@Produces(MediaType.APPLICATION_XML)
+	@Override
+	public Response isAuthenticatedProductId(@QueryParam("productId") String productId){
+
+		LicenceService licenceService= ServiceLoader.getLicenceService();
+		if (licenceService == null)	throw new RuntimeException("ServiceLoader.getLicenceService() cannot be null.");
+
+		String licence=null;
+		boolean isAuthenticated=false;
+		try{
+			if (productId == null) throw new RuntimeException("productId cannot be null.");
+			
+			isAuthenticated = licenceService.isAuthenticatedProductId(productId);
+
+			if(!isAuthenticated){
+				// check if licence installed
+				licence = licenceService.getLicence(productId);
+				String devMessage=null;
+				if (licence==null) {
+					return Response.status(400).entity(new ErrorMessage(400, 0, "Licence not installed for productId="+productId, null, devMessage)).build();
+				}
+			}
+		} catch (Exception exception){
+			//return status 400 Error
+			return Response.status(400).entity(new ErrorMessage(400, 0, "Problem finding if productId is authenticated", null, exception)).build();
+		}
+
+		ReplyMessage reply= new ReplyMessage();
+		reply.setIsAuthenticated(isAuthenticated);
+		reply.setProductId(productId);
+		if (isAuthenticated){
+			reply.setReplyComment("Licence is authenticated for productId="+productId);
+		} else {
+			reply.setReplyComment("Licence is not authenticated for productId="+productId);
+		}
+
+		return Response.status(200).entity(reply).build();
+
+	}
+
 
 	@GET
 	@Path("/list")
@@ -147,14 +190,14 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 		}
 
 		LicenceList licenceListResponse= new LicenceList();
-		
+
 		for (Entry<String, String> entry:licenceMap.entrySet()){
 			LicenceEntry licenceEntry = new LicenceEntry();
 			licenceEntry.setProductId(entry.getKey());
 			licenceEntry.setLicenceStr(entry.getValue());
 			licenceListResponse.getLicenceList().add(licenceEntry);
 		}
-		
+
 		return Response
 				.status(200).entity(licenceListResponse).build();
 
@@ -179,8 +222,8 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 		}
 
 		ReplyMessage reply= new ReplyMessage();
-        reply.setReplyComment("All Licences removed");
-		
+		reply.setReplyComment("All Licences removed");
+
 		return Response
 				.status(200).entity(reply).build();
 
@@ -206,9 +249,9 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 		}
 
 		ReplyMessage reply= new ReplyMessage();
-        reply.setReplyComment("Returned systemId for this system");
-        reply.setSystemId(systemId);
-		
+		reply.setReplyComment("Returned systemId for this system");
+		reply.setSystemId(systemId);
+
 		return Response
 				.status(200).entity(reply).build();
 	}
@@ -233,9 +276,9 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 		}
 
 		ReplyMessage reply= new ReplyMessage();
-        reply.setReplyComment("Set systemId for this system");
-        reply.setSystemId(systemId);
-		
+		reply.setReplyComment("Set systemId for this system");
+		reply.setSystemId(systemId);
+
 		return Response
 				.status(200).entity(reply).build();
 
@@ -259,9 +302,9 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 		}
 
 		ReplyMessage reply= new ReplyMessage();
-        reply.setReplyComment("New systemId created and installed for this system");
-        reply.setSystemId(systemId);
-		
+		reply.setReplyComment("New systemId created and installed for this system");
+		reply.setSystemId(systemId);
+
 		return Response
 				.status(200).entity(reply).build();
 
@@ -272,7 +315,7 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 	@Produces(MediaType.APPLICATION_XML)
 	@Override
 	public Response checksumForString(@QueryParam("string") String string){
-		
+
 		LicenceService licenceService= ServiceLoader.getLicenceService();
 		if (licenceService == null) throw new RuntimeException("ServiceLoader.getLicenceService() cannot be null.");
 
@@ -286,9 +329,9 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 		}
 
 		ReplyMessage reply= new ReplyMessage();
-        reply.setReplyComment("New checksum added to string");
-        reply.setChecksum(checksum);
-		
+		reply.setReplyComment("New checksum added to string");
+		reply.setChecksum(checksum);
+
 		return Response
 				.status(200).entity(reply).build();
 

@@ -48,6 +48,21 @@ public interface LicenceManagerClient {
 	 * @throws Exception
 	 */
 	public String getLicence(String productId) throws Exception;
+	
+	
+	/**
+	 * /isauthenticated (GET productId)
+	 * 
+	 * e.g. http://localhost:8181/licencemgr/rest/licence-mgr/isauthenticated?productId=
+	 * 
+	 * checks if the licence corresponding to the productId is authenticated
+	 * 
+	 * 
+	 * @param productId
+	 * @return true if authenticated / false if not
+	 * @throws Exception
+	 */
+	public Boolean isAuthenticated(String productId) throws Exception;
 
 	/**
 	 * /list (GET )

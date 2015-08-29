@@ -16,8 +16,10 @@
 package org.opennms.karaf.licencemgr;
 
 import java.io.File;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Random;
+import java.util.Set;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -40,6 +42,10 @@ public class LicenceServiceImpl implements LicenceService {
 
 	// used to store location of persistence file
 	private String fileUri=null;
+	
+	// used to store list of productId's with authenticated licences
+	// this is not persisted but rebuilt as products are installed and authenticated
+	private Set<String> authenticatedLicences= new HashSet<String>();
 
 	@XmlElementWrapper(name="licenceMap")
 	private SortedMap<String, String> licenceMap = new TreeMap<String, String>();
@@ -53,6 +59,25 @@ public class LicenceServiceImpl implements LicenceService {
 
 	public void setFileUri(String fileUri) {
 		this.fileUri = fileUri;
+	}
+	
+	@Override
+	public synchronized void addAuthenticatedProductId(String productId){
+		if (productId==null) throw new RuntimeException("productId cannot be null");
+		if (! licenceMap.containsKey(productId)) throw new RuntimeException("there is no licence installed for productId="+productId);
+		authenticatedLicences.add(productId);
+	}
+	
+	@Override
+	public synchronized void removeAuthenticatedProductId(String productId){
+		if (productId==null) throw new RuntimeException("productId cannot be null");
+		authenticatedLicences.remove(productId);
+	}
+	
+	@Override
+	public synchronized boolean isAuthenticatedProductId(String productId){
+		if (productId==null) throw new RuntimeException("productId cannot be null");
+		return authenticatedLicences.contains(productId);
 	}
 
 	@Override
@@ -183,9 +208,9 @@ public class LicenceServiceImpl implements LicenceService {
 				this.licenceMap.clear();
 				this.licenceMap.putAll(licenceServiceImpl.getLicenceMap());
 				this.systemId= licenceServiceImpl.getSystemId();
-				System.out.println("Licence Manager successfully loaded licences from file="+fileUri);
+				System.out.println("Licence Manager successfully loaded licences from file="+licenceManagerFile.getAbsolutePath());
 			} else {
-				System.out.println("Licence Manager licence file="+fileUri+" does not exist. A new one will be created.");
+				System.out.println("Licence Manager licence file="+licenceManagerFile.getAbsolutePath()+" does not exist. A new one will be created.");
 			}
 			System.out.println("Licence Manager Started");
 		} catch (JAXBException e) {

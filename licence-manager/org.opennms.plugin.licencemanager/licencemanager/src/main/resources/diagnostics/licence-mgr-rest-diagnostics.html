@@ -94,8 +94,9 @@
 		
 		//licence manager
 		document.getElementById('getlicenceId').value = defaultProductId;
+		document.getElementById('getisAuthenticatedId').value = defaultProductId;
 		document.getElementById('removelicenceId').value = defaultProductId;
-
+		
         // username password default
 		document.getElementById('user').value = user;
 		document.getElementById('password').value = password;
@@ -518,6 +519,17 @@
 			<BR><BR>Button command Example:<BR>
 			<input type="text" id="getlicenceId" form="usrform" style="width: 500px; "> productId<BR><BR>
 			<button type="button" onclick="sendGETXMLDoc('../rest/licence-mgr/getlicence?productId='+document.getElementById('getlicenceId').value)">Licence Manager Get Licence</button>
+             </td>
+		</tr>
+		<tr>
+			<td>/isauthenticated (GET productId)
+				<p>checks if the licence corresponding to the productId is authenticated</p>
+				<p>Throws 400 error if licence not installed for this productId</p>
+			</td>
+			<td>URL Command Example:<BR><a href="../rest/licence-mgr/isauthenticated?productId=">[baseUrl:port]/licencemgr/rest/licence-mgr/isauthenticated?productId=</a>
+			<BR><BR>Button command Example:<BR>
+			<input type="text" id="getisAuthenticatedId" form="usrform" style="width: 500px; "> productId<BR><BR>
+			<button type="button" onclick="sendGETXMLDoc('../rest/licence-mgr/isauthenticated?productId='+document.getElementById('getisAuthenticatedId').value)">Licence Manager Check Licence Is Authenticated</button>
              </td>
 		</tr>
 		<tr>

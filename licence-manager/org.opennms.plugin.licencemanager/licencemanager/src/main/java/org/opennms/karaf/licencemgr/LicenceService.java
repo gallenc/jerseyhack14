@@ -86,5 +86,32 @@ public interface LicenceService {
 	 * @return original string plus checksum in form 'valueString'-'CRC32 in Hex'
 	 */
 	public String checksumForString(String string);
+	
+	
+	/**
+	 * Used by the Licence Authenticator to add a productId to the authenticatedProductId list.
+	 * Throws an exception if the productId does not have a corresponding licence installed.
+	 * (this is an error as it can't have been authenticated without a licence)
+	 * @param productId
+	 */
+	public void addAuthenticatedProductId(String productId);
+	
+	/**
+	 * Used by the Licence Authenticator to remove a productId from the authenticatedProductId list.
+	 * If the productId is not in the list, nothing happens.
+	 * @param productId
+	 */
+	public void removeAuthenticatedProductId(String productId);
+	
+	/**
+	 * Checks if the productId is in the authenticatedProductId list.
+	 * NOTE this service is used for the UI not for licence verification.
+	 * This service should NOT be used to enable a product to start up but only as an indication that
+	 * a licence authenticator has started up. A licence Authenticator failing should be used to stop a product from starting.
+	 * 
+	 * @param productId
+	 * @return true if the productId is in the list, false if not in the list
+	 */
+	public boolean isAuthenticatedProductId(String productId);
 
 }

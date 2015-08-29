@@ -96,6 +96,11 @@
         <property name="licenceService" ref="licenceServiceImpl" />
       </action>
     </command>
+    <command name="licence-mgr/isauthenticated">
+      <action class="org.opennms.karaf.licencemgr.cmd.IsAuthenticatedProductIdCommand">
+        <property name="licenceService" ref="licenceServiceImpl" />
+      </action>
+    </command>
 
     <!-- licence publisher service commands -->
     <command name="licence-pub/createlicence">

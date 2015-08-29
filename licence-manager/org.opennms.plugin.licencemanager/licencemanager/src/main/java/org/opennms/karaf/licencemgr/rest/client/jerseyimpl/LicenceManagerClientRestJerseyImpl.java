@@ -5,7 +5,6 @@ import javax.ws.rs.core.MediaType;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ErrorMessage;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
-import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceSpecification;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ReplyMessage;
 import org.opennms.karaf.licencemgr.rest.client.LicenceManagerClient;
 
@@ -208,6 +207,48 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 
         return licence;
 	}
+	
+	
+	@Override
+	public Boolean isAuthenticated(String productId) throws Exception {
+		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
+		if(productId==null ) throw new RuntimeException("productId must be set");
+	    
+		Client client = newClient();
+		
+		//http://localhost:8181/licencemgr/rest/licence-mgr/isauthenticated?productId=
+		
+		String getStr= baseUrl+basePath+"/isauthenticated?productId="+productId;
+		
+		WebResource r = client.resource(getStr);
+
+		// GET method
+		ClientResponse response = r.accept(MediaType.APPLICATION_XML)
+                .type(MediaType.APPLICATION_FORM_URLENCODED).get(ClientResponse.class);
+
+        // check response status code and reply error message
+        if (response.getStatus() != 200) {
+        	ErrorMessage errorMessage=null;
+        	try {
+        		errorMessage = response.getEntity(ErrorMessage.class);
+        	} catch (Exception e) {
+        	}
+        	String errMsg= "getLicence Failed : HTTP error code : "+ response.getStatus();
+        	if (errorMessage!=null){
+        		errMsg=errMsg+" message:"+ errorMessage.getMessage()
+					+" code:"+ errorMessage.getCode()
+					+" developer message:"+errorMessage.getDeveloperMessage();
+        	}
+            throw new RuntimeException(errMsg);
+        }
+		
+        ReplyMessage replyMessage = response.getEntity(ReplyMessage.class);
+        
+        Boolean  isAuthenticated =  replyMessage.getIsAuthenticated();
+
+        return isAuthenticated;
+	}
+	
 
 	@Override
 	public LicenceList getLicenceMap() throws Exception {

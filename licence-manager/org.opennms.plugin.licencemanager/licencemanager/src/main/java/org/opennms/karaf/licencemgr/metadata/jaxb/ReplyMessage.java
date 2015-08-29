@@ -55,6 +55,9 @@ public class ReplyMessage {
 	
 	@XmlElement()
 	private String checksum=null;
+	
+	@XmlElement()
+	private Boolean isAuthenticated=null;
 
 	/**
 	 * @return the replyComment
@@ -180,6 +183,20 @@ public class ReplyMessage {
 	 */
 	public void setChecksum(String checksum) {
 		this.checksum = checksum;
+	}
+
+	/**
+	 * @return the isAuthenticated
+	 */
+	public Boolean getIsAuthenticated() {
+		return isAuthenticated;
+	}
+
+	/**
+	 * @param isAuthenticated the isAuthenticated to set
+	 */
+	public void setIsAuthenticated(Boolean isAuthenticated) {
+		this.isAuthenticated = isAuthenticated;
 	}
 	
 	

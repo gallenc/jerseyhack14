@@ -84,6 +84,7 @@ public class LicenceManagerClientRestJerseyTest {
 		this.addLicenceTest();
 		this.getLicenceTest();
 		this.getLicenceMapTest();
+		this.isAuthenticatedTest();
 		this.removeLicenceTest();
 		
 		this.deleteLicencesTest(); // final clean up
@@ -141,6 +142,35 @@ public class LicenceManagerClientRestJerseyTest {
 		}
 
 		System.out.println("@Test - removeLicenceTest().FINISH");
+
+	}
+	
+	
+	
+	
+    /**
+	 * /isauthenticated (GET productId)
+	 * 
+	 * e.g. http://localhost:8181/licencemgr/rest/licence-mgr/isauthenticated?productId=
+	 * 
+	 * tests if product id is authenticated.
+	 */
+	//@Test
+	public void isAuthenticatedTest() {
+		System.out.println("@Test - isAuthenticatedTest().START");
+
+		LicenceManagerClient licenceManagerClient = getLicenceManagerClient();
+
+		try {
+			String productId=test_productId;
+			boolean isAuthenticated = licenceManagerClient.isAuthenticated(productId);
+			System.out.println("    productId="+productId+" isAuthenticated="+isAuthenticated );
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("@Test - removeLicenceTest() failed. See stack trace in consol");
+		}
+
+		System.out.println("@Test - isAuthenticatedTest().FINISH");
 
 	}
 

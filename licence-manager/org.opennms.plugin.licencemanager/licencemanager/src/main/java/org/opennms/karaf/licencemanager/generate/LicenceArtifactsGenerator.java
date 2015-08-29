@@ -242,7 +242,7 @@ public class LicenceArtifactsGenerator {
 				+"  <!-- check licence with licence service -->\n"
 				+"  <reference id=\"licenceService\" interface=\"org.opennms.karaf.licencemgr.LicenceService\" timeout=\"10000\" />\n"
 				+"\n"
-				+"  <bean id=\"licenceAuthenticator\" class=\""+licenceAuthenticatorPackage+"."+licenceAuthenticatorClassName+"\">\n"
+				+"  <bean id=\"licenceAuthenticator\" class=\""+licenceAuthenticatorPackage+"."+licenceAuthenticatorClassName+"\" destroy-method=\"destroyMethod\">\n"
 				+"    <argument ref=\"licenceService\" />\n"
 				+"  </bean>\n"
 				+"\n"

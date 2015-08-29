@@ -47,6 +47,11 @@ public interface LicenceServiceRest {
 	@Path("/getlicence")
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getLicence(@QueryParam("productId") String productId);
+	
+	@GET
+	@Path("/isauthenticated")
+	@Produces(MediaType.APPLICATION_XML)
+	public Response isAuthenticatedProductId(@QueryParam("productId") String productId);
 
 	@GET
 	@Path("/list")
