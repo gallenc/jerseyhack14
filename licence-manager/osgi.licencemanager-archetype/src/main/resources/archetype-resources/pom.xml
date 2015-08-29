@@ -141,6 +141,7 @@
         <module>LicenceGenerator</module>
         <module>LicenceSpec</module>
         <module>LicenceAuthenticator</module>
+        <module>ProductDescriptor</module>
         <module>Feature</module>
       </modules>
     </profile>

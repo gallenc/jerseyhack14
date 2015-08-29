@@ -78,6 +78,25 @@
       </fileSets>
     </module>
     
+    <module name="${rootArtifactId}.ProductDescriptor" id="${rootArtifactId}.ProductDescriptor" dir="ProductDescriptor">
+      <fileSets>
+        <!-- filtered files -->
+        <!-- <fileSet filtered="true" encoding="UTF-8"> -->
+        <!-- <directory></directory> -->
+        <!-- <includes> -->
+        <!-- <include>**/*.xml</include> -->
+        <!-- </includes> -->
+        <!-- </fileSet> -->
+        <!-- un-filtered files -->
+        <fileSet encoding="UTF-8">
+          <directory></directory>
+          <includes>
+            <include>**/*.gitignore</include>
+          </includes>
+        </fileSet>
+      </fileSets>
+    </module>
+    
     <module name="${rootArtifactId}.Feature" id="${rootArtifactId}.Feature" dir="Feature">
       <fileSets>
         <!-- filtered files -->
@@ -96,6 +115,7 @@
         </fileSet>
       </fileSets>
     </module>
+
   </modules>
 
 </archetype-descriptor>

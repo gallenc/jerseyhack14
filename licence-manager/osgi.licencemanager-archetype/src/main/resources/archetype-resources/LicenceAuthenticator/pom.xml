@@ -51,7 +51,7 @@
                   <classifier>sources</classifier>
                   <overWrite>true</overWrite>
                   <outputDirectory>${symbol_dollar}{project.build.directory}/generated-licence/resources</outputDirectory>
-                  <includes>**/licenceAuthenticatorBlueprint.xml,**/productSpec.xml</includes>
+                  <includes>**/licenceAuthenticatorBlueprint.xml</includes>
                 </artifactItem>
               </artifactItems>
             </configuration>

@@ -67,6 +67,7 @@ public class LicenceArtifactsGenerator {
 		generateLicenceKeys();
 		generateLicenceSpec();
 		generateLicenceAuthenticator();
+		generateProductDescriptor();
 
 	}
 
@@ -85,7 +86,7 @@ public class LicenceArtifactsGenerator {
 	}
 
 	/**
-	 * Generates the file artifacts for with the Bundle Licence Specification
+	 * Generates the file artifacts for the Bundle Licence Specification
 	 */
 	private void generateLicenceSpec(){
 
@@ -178,7 +179,7 @@ public class LicenceArtifactsGenerator {
 	}
 
 	/**
-	 * Generates the file artifacts for with the Bundle Licence Authenticator
+	 * Generates the file artifacts for the Bundle Licence Authenticator
 	 */
 	private void generateLicenceAuthenticator(){
 
@@ -246,10 +247,25 @@ public class LicenceArtifactsGenerator {
 				+"    <argument ref=\"licenceService\" />\n"
 				+"  </bean>\n"
 				+"\n"
+				+"</blueprint>\n"
+				+ "";
+
+		writeFile(resourcesOutputDirectory, "OSGI-INF/blueprint", "licenceAuthenticatorBlueprint.xml", licenceAuthenticatorBlueprintStr);
+
+	}
+
+	/**
+	 * Generates the file artifacts for the Product Description Bundle
+	 */
+	private void generateProductDescriptor(){
+
+		String productDescriptorBlueprintStr=""
+				+"<blueprint xmlns=\"http://www.osgi.org/xmlns/blueprint/v1.0.0\">\n"
+				+"\n"
 				+"  <!-- register product information with product registry -->\n"
 				+"  <reference id=\"productRegister\" interface=\"org.opennms.karaf.productpub.ProductRegister\" timeout=\"10000\" />\n"
 				+"\n"
-				+"  <bean id=\"localBundleProductSpec\" class=\"org.opennms.karaf.productpub.BundleProductSpecImpl\" init-method=\"registerSpec\" destroy-method=\"unregisterSpec\">\n"
+				+"  <bean id=\"localBundleProductDescription\" class=\"org.opennms.karaf.productpub.BundleProductSpecImpl\" init-method=\"registerSpec\" destroy-method=\"unregisterSpec\">\n"
 				+"    <property name=\"bundleContext\" ref=\"blueprintBundleContext\"></property>\n"
 				+"    <property name=\"productPublisher\" ref=\"productRegister\"></property>\n"
 				+"    <property name=\"productMetadataUri\" value=\"/productSpec.xml\"></property>\n"
@@ -258,10 +274,10 @@ public class LicenceArtifactsGenerator {
 				+"</blueprint>\n"
 				+ "";
 
-		writeFile(resourcesOutputDirectory, "OSGI-INF/blueprint", "licenceAuthenticatorBlueprint.xml", licenceAuthenticatorBlueprintStr);
+		writeFile(resourcesOutputDirectory, "OSGI-INF/blueprint", "productDescriptorBlueprint.xml", productDescriptorBlueprintStr);
 
 	}
-
+	
 	/**
 	 * 
 	 * @param outputDirectory path to parent directory for generated file

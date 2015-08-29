@@ -1,3 +1,4 @@
+
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
@@ -8,11 +9,11 @@
     <version>${version}</version>
   </parent>
 
-  <!-- LicenceSpec -->
+  <!-- ProductDescriptor -->
   <modelVersion>4.0.0</modelVersion>
   <artifactId>${artifactId}</artifactId>
   <name>${artifactId}</name>
-  <description>LicenceSpec for ${rootArtifactId}</description>
+  <description>ProductDescriptor for ${rootArtifactId}</description>
   <packaging>bundle</packaging>
 
   <build>
@@ -38,19 +39,8 @@
                   <type>jar</type>
                   <classifier>sources</classifier>
                   <overWrite>true</overWrite>
-                  <outputDirectory>${symbol_dollar}{project.build.directory}/generated-licence/java</outputDirectory>
-                  <includes>**/*LicenceSpec*.java</includes>
-                  <excludes>**/*.xml</excludes>
-                </artifactItem>
-                <artifactItem>
-                  <groupId>${symbol_dollar}{project.groupId}</groupId>
-                  <artifactId>${rootArtifactId}.LicenceGenerator</artifactId>
-                  <version>${symbol_dollar}{project.version}</version>
-                  <type>jar</type>
-                  <classifier>sources</classifier>
-                  <overWrite>true</overWrite>
                   <outputDirectory>${symbol_dollar}{project.build.directory}/generated-licence/resources</outputDirectory>
-                  <includes>**/licenceSpecBlueprint.xml,**/licenceMetadataSpec.xml,**/productSpec.xml</includes>
+                  <includes>**/productDescriptorBlueprint.xml,**/productSpec.xml</includes>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -97,8 +87,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
-          <target>1.6</target>
-          <source>1.6</source>
+          <target>1.8</target>
+          <source>1.8</source>
         </configuration>
       </plugin>
 
@@ -111,7 +101,6 @@
           <instructions>
             <Bundle-SymbolicName>${symbol_dollar}{project.artifactId}</Bundle-SymbolicName>
             <Bundle-Version>${symbol_dollar}{project.version}</Bundle-Version>
-
             <Import-Package>
               *
             </Import-Package>
@@ -126,7 +115,6 @@
     </plugins>
 
   </build>
-
   <dependencies>
     <dependency>
       <groupId>org.opennms.plugins</groupId>
@@ -150,19 +138,5 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
-  
-  <!-- Change this to match your repo for the licence specifications (i.e. containing the spec) -->
-  <distributionManagement>
-    <repository>
-      <id>deployment</id>
-      <name>osgi-licence-specs</name>
-      <url>http://devel2.entimoss.org:8081/nexus/content/repositories/osgi-licence-specs</url>
-    </repository>
-    <snapshotRepository>
-      <id>deployment</id>
-      <name>osgi-licence-specs-snapshots</name>
-      <url>http://devel2.entimoss.org:8081/nexus/content/repositories/osgi-licence-specs-snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
 
 </project>
