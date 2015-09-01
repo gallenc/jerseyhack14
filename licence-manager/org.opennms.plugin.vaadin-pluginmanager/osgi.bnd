@@ -4,6 +4,5 @@
 
 # Package format version - do not change
 #Export-Package: org.opennms.*
-Embed-Dependency: jsmiparser*
 Embed-Transitive: true
 

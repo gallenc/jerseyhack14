@@ -20,7 +20,7 @@
     </bean>
   </service>
 
-  <bean id="featureManagerRestApplication" class="org.opennms.karaf.featuremgr.rest.impl.FeatureManagerRestApplication" />
+  <bean id="featureManagerRestApplication" class="org.opennms.karaf.featuremgr.rest.impl.FeatureManagerRestApplication" destroy-method="destroyMethod"/>
 
   <!-- ServiceLoader(FeaturesService featuresService) -->
   <bean id="serviceLoader" class="org.opennms.karaf.featuremgr.rest.impl.ServiceLoader">

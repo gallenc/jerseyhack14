@@ -21,6 +21,11 @@ import java.util.Set;
 import javax.ws.rs.core.Application;
 
 public class FeatureManagerRestApplication extends Application {
+	
+	public FeatureManagerRestApplication(){
+		super();
+		System.out.println("Feature Manager starting.");
+	}
 
 	// doing this because the com.sun.ws.rest.api.core.PackagesResourceConfig 
 	// class contains OSGi unfriendly classloader code
@@ -36,5 +41,9 @@ public class FeatureManagerRestApplication extends Application {
 	// only for java logging - no use :(
 	// registerInstances(new LoggingFilter(Logger.getLogger(EventGatewayApplication.class.getName()), true));
 	//	}
+	
+	public void destroyMethod(){
+		System.out.println("Feature Manager shutting down.");
+	}
 
 }
