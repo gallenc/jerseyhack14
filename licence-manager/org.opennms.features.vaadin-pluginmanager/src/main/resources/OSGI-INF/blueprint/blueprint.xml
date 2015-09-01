@@ -70,12 +70,12 @@
 		</service-properties>
 	</service>
 
-	<cm:property-placeholder persistent-id="org.opennms.features.licencemgr.config" update-strategy="reload">
-		<cm:default-properties>
-			<cm:property name="licenceServerURL","notSet" />
-			<cm:property name="licenceServerUserName","notSet" />
-			<cm:property name="licenceServerPassword","notSet" />
-		</cm:default-properties>
-	</cm:property-placeholder>
+<!-- 	<cm:property-placeholder persistent-id="org.opennms.features.licencemgr.config" update-strategy="reload"> -->
+<!-- 		<cm:default-properties> -->
+<!-- 			<cm:property name="licenceServerURL","notSet" /> -->
+<!-- 			<cm:property name="licenceServerUserName","notSet" /> -->
+<!-- 			<cm:property name="licenceServerPassword","notSet" /> -->
+<!-- 		</cm:default-properties> -->
+<!-- 	</cm:property-placeholder> -->
 
 </blueprint>
