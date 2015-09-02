@@ -1,81 +1,124 @@
 <blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:cm="http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0"
-	xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 
+  xsi:schemaLocation="http://www.osgi.org/xmlns/blueprint/v1.0.0 
 					http://www.osgi.org/xmlns/blueprint/v1.0.0/blueprint.xsd
 					http://aries.apache.org/blueprint/xmlns/blueprint-cm/v1.1.0 
 					https://svn.apache.org/repos/asf/aries/tags/blueprint-0.3.1/blueprint-cm/src/main/resources/org/apache/aries/blueprint/compendium/cm/blueprint-cm-1.1.0.xsd
 					http://www.osgi.org/xmlns/blueprint-ext/v1.1.0 
 					https://svn.apache.org/repos/asf/aries/tags/blueprint-0.3.1/blueprint-core/src/main/resources/org/apache/aries/blueprint/ext/blueprint-ext.xsd">
 
-	<!-- <reference id="eventProxy" interface="org.opennms.netmgt.events.api.EventProxy" availability="mandatory" /> -->
-	<!-- <reference id="eventConfDao" interface="org.opennms.netmgt.config.api.EventConfDao" availability="mandatory" /> -->
-	<!-- <reference id="dataCollectionConfigDao" interface="org.opennms.netmgt.config.api.DataCollectionConfigDao" availability="mandatory" /> -->
+  <!-- TODO REMOVE -->
+  <!-- <reference id="eventProxy" interface="org.opennms.netmgt.events.api.EventProxy" availability="mandatory" /> -->
+  <!-- <reference id="eventConfDao" interface="org.opennms.netmgt.config.api.EventConfDao" availability="mandatory" /> -->
+  <!-- <reference id="dataCollectionConfigDao" interface="org.opennms.netmgt.config.api.DataCollectionConfigDao" availability="mandatory" /> -->
 
-	<reference id="onmsHeaderProvider" interface="org.opennms.web.api.OnmsHeaderProvider" availability="optional" />
+  <!-- <bean id="mibParser" class="org.opennms.features.vaadin.mibcompiler.services.JsmiMibParser" /> -->
 
-	<!-- <bean id="mibParser" class="org.opennms.features.vaadin.mibcompiler.services.JsmiMibParser" /> -->
+  <!-- <bean id="mibCompilerApplicationFactory" class="org.opennms.features.vaadin.mibcompiler.MibCompilerApplicationFactory" > -->
+  <!-- <property name="eventProxy" ref="eventProxy" /> -->
+  <!-- <property name="eventConfDao" ref="eventConfDao" /> -->
+  <!-- <property name="dataCollectionDao" ref="dataCollectionConfigDao" /> -->
+  <!-- <property name="mibParser" ref="mibParser" /> -->
+  <!-- </bean> -->
 
-	<!-- <bean id="mibCompilerApplicationFactory" class="org.opennms.features.vaadin.mibcompiler.MibCompilerApplicationFactory" > -->
-	<!-- <property name="eventProxy" ref="eventProxy" /> -->
-	<!-- <property name="eventConfDao" ref="eventConfDao" /> -->
-	<!-- <property name="dataCollectionDao" ref="dataCollectionConfigDao" /> -->
-	<!-- <property name="mibParser" ref="mibParser" /> -->
-	<!-- </bean> -->
+  <!-- <bean id="eventAdminApplicationFactory" class="org.opennms.features.vaadin.config.EventAdminApplicationFactory"> -->
+  <!-- <property name="eventProxy" ref="eventProxy" /> -->
+  <!-- <property name="eventConfDao" ref="eventConfDao" /> -->
+  <!-- </bean> -->
 
-	<!-- <bean id="eventAdminApplicationFactory" class="org.opennms.features.vaadin.config.EventAdminApplicationFactory"> -->
-	<!-- <property name="eventProxy" ref="eventProxy" /> -->
-	<!-- <property name="eventConfDao" ref="eventConfDao" /> -->
-	<!-- </bean> -->
+  <!-- <service id="mibCompilerService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="mibCompilerApplicationFactory"> -->
+  <!-- <service-properties> -->
+  <!-- <entry key="alias" value="/mib-compiler" /> -->
+  <!-- </service-properties> -->
+  <!-- </service> -->
 
-	<bean id="pluginManagerAdminApplicationFactory" class="org.opennms.features.vaadin.config.PluginManagerAdminApplicationFactory">
-		<!-- <property name="dataCollectionDao" ref="dataCollectionConfigDao" /> -->
-		<property name="headerProvider" ref="onmsHeaderProvider" />
-	</bean>
+  <!-- <service id="eventsAdminService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="eventAdminApplicationFactory"> -->
+  <!-- <service-properties> -->
+  <!-- <entry key="alias" value="/admin-events" /> -->
+  <!-- </service-properties> -->
+  <!-- </service> -->
 
+  <!-- <service id="snmpCollectionsService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="snmpCollectionAdminApplicationFactory"> -->
+  <!-- <service-properties> -->
+  <!-- <entry key="alias" value="/admin-snmp-collections" /> -->
+  <!-- </service-properties> -->
+  <!-- </service> -->
 
-	<service id="pluginManagerService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="pluginManagerAdminApplicationFactory">
-		<service-properties>
-			<entry key="alias" value="/admin/plugin-manager" />
-		</service-properties>
-	</service>
+  <!-- Provides OpenNMS headers for admin pages -->
+  <reference id="onmsHeaderProvider" interface="org.opennms.web.api.OnmsHeaderProvider" availability="optional" />
 
-	<!-- <service id="mibCompilerService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="mibCompilerApplicationFactory"> -->
-	<!-- <service-properties> -->
-	<!-- <entry key="alias" value="/mib-compiler" /> -->
-	<!-- </service-properties> -->
-	<!-- </service> -->
+  <!-- Main Plugin UI -->
+  <bean id="pluginManagerAdminApplicationFactory" class="org.opennms.features.vaadin.config.PluginManagerAdminApplicationFactory">
+    <property name="headerProvider" ref="onmsHeaderProvider" />
+    <property name="headerLinks">
+      <map>
+        <entry key="Licence Manager Diagnostics" value="/opennms/admin/plugin-manager-licence-diagnostics" />
+        <entry key="Feature Manager Diagnostics" value="/opennms/admin/plugin-manager-feature-diagnostics" />
+      </map>
+    </property>
+  </bean>
 
-	<!-- <service id="eventsAdminService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="eventAdminApplicationFactory"> -->
-	<!-- <service-properties> -->
-	<!-- <entry key="alias" value="/admin-events" /> -->
-	<!-- </service-properties> -->
-	<!-- </service> -->
+  <service id="pluginManagerService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="pluginManagerAdminApplicationFactory">
+    <service-properties>
+      <entry key="alias" value="/admin/plugin-manager" />
+    </service-properties>
+  </service>
 
-	<!-- <service id="snmpCollectionsService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="snmpCollectionAdminApplicationFactory"> -->
-	<!-- <service-properties> -->
-	<!-- <entry key="alias" value="/admin-snmp-collections" /> -->
-	<!-- </service-properties> -->
-	<!-- </service> -->
+  <!-- feature Diagnostics page -->
+  <bean id="featureDiagnisticsApplicationFactory" class="org.opennms.features.vaadin.config.SimpleIframeApplicationFactory">
+    <property name="headerProvider" ref="onmsHeaderProvider" />
+    <property name="iframePageUrl" value="/opennms/featuremgr/diagnostics/feature-mgr-rest-diagnostics.html" />
+    <property name="headerLinks">
+      <map>
+        <entry key="Return to Plugin Manager" value="/opennms/admin/plugin-manager" />
+      </map>
+    </property>
+  </bean>
 
-	<bean id="pluginManagerAdminUiLink" class="org.opennms.features.vaadin.pluginmanager.AdminPageNavEntry">
-		<!-- <property name="url" value="admin/pluginManager.jsp" /> -->
-		<property name="url" value="admin/plugin-manager" />
-		<property name="name" value="OpenNMS Plugin Manager" />
-	</bean>
+  <service id="featureDiagnisticsService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="featureDiagnisticsApplicationFactory">
+    <service-properties>
+      <entry key="alias" value="/admin/plugin-manager-feature-diagnostics" />
+    </service-properties>
+  </service>
 
-	<service id="pluginManagerAdminUiService" interface="org.opennms.web.navigate.PageNavEntry" ref="pluginManagerAdminUiLink">
-		<service-properties>
-			<entry key="Page" value="admin" />
-			<entry key="Category" value="operations" />
-			<entry key="registration.export" value="true" />
-		</service-properties>
-	</service>
+  <!-- Licence Diagnostics page -->
+  <bean id="licenceDiagnisticsApplicationFactory" class="org.opennms.features.vaadin.config.SimpleIframeApplicationFactory">
+    <property name="headerProvider" ref="onmsHeaderProvider" />
+    <property name="iframePageUrl" value="/opennms/licencemgr/diagnostics/licence-mgr-rest-diagnostics.html" />
+    <property name="headerLinks">
+      <map>
+        <entry key="Return to Plugin Manager" value="/opennms/admin/plugin-manager" />
+      </map>
+    </property>
+  </bean>
 
-<!-- 	<cm:property-placeholder persistent-id="org.opennms.features.licencemgr.config" update-strategy="reload"> -->
-<!-- 		<cm:default-properties> -->
-<!-- 			<cm:property name="licenceServerURL","notSet" /> -->
-<!-- 			<cm:property name="licenceServerUserName","notSet" /> -->
-<!-- 			<cm:property name="licenceServerPassword","notSet" /> -->
-<!-- 		</cm:default-properties> -->
-<!-- 	</cm:property-placeholder> -->
+  <service id="licenceDiagnisticsService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="licenceDiagnisticsApplicationFactory">
+    <service-properties>
+      <entry key="alias" value="/admin/plugin-manager-licence-diagnostics" />
+    </service-properties>
+  </service>
+
+  <!-- Setting up link to plugin manager in admin page -->
+
+  <bean id="pluginManagerAdminUiLink" class="org.opennms.features.vaadin.pluginmanager.AdminPageNavEntry">
+    <!-- <property name="url" value="admin/pluginManager.jsp" /> -->
+    <property name="url" value="admin/plugin-manager" />
+    <property name="name" value="OpenNMS Plugin Manager" />
+  </bean>
+
+  <service id="pluginManagerAdminUiService" interface="org.opennms.web.navigate.PageNavEntry" ref="pluginManagerAdminUiLink">
+    <service-properties>
+      <entry key="Page" value="admin" />
+      <entry key="Category" value="operations" />
+      <entry key="registration.export" value="true" />
+    </service-properties>
+  </service>
+
+  <!-- <cm:property-placeholder persistent-id="org.opennms.features.licencemgr.config" update-strategy="reload"> -->
+  <!-- <cm:default-properties> -->
+  <!-- <cm:property name="licenceServerURL","notSet" /> -->
+  <!-- <cm:property name="licenceServerUserName","notSet" /> -->
+  <!-- <cm:property name="licenceServerPassword","notSet" /> -->
+  <!-- </cm:default-properties> -->
+  <!-- </cm:property-placeholder> -->
 
 </blueprint>

@@ -39,13 +39,22 @@ import com.vaadin.ui.UI;
 /**
  * A factory for creating Plugin Manager Administration Application objects.
  */
-public class PluginManagerAdminApplicationFactory extends AbstractApplicationFactory {
+public class SimpleIframeApplicationFactory extends AbstractApplicationFactory {
+	
+	private String iframePageUrl;
+	
+	private Map<String, String> headerLinks;
 	
     private OnmsHeaderProvider m_headerProvider;
-    
-    // headerLinks map of key= name and value=url for links to be placed in header of page
-    private Map<String, String> headerLinks;
 
+	public String getIframePageUrl() {
+		return iframePageUrl;
+	}
+
+	public void setIframePageUrl(String iframePageUrl) {
+		this.iframePageUrl = iframePageUrl;
+	}
+	
 	/**
 	 * headerLinks map of key= name and value=url for links to be placed in header of page
 	 * @return
@@ -60,7 +69,7 @@ public class PluginManagerAdminApplicationFactory extends AbstractApplicationFac
 	public void setHeaderLinks(Map<String,String> headerLinks) {
 		this.headerLinks = headerLinks;
 	}
-	
+
 	public OnmsHeaderProvider getHeaderProvider() {
 		return m_headerProvider;
 	}
@@ -68,16 +77,17 @@ public class PluginManagerAdminApplicationFactory extends AbstractApplicationFac
 	public void setHeaderProvider(OnmsHeaderProvider headerProvider) {
 		this.m_headerProvider = headerProvider;
 	}
-	
+
     /* (non-Javadoc)
      * @see org.opennms.vaadin.extender.AbstractApplicationFactory#getUI()
      */
     @Override
     public UI createUI() {
-        PluginManagerAdminApplication pluginManagerAdminApplication = new PluginManagerAdminApplication();
-        pluginManagerAdminApplication.setHeaderProvider(m_headerProvider);
-        pluginManagerAdminApplication.setHeaderLinks(headerLinks);
-        return pluginManagerAdminApplication;
+        SimpleIframeApplication simpleIframeApplication = new SimpleIframeApplication();
+        simpleIframeApplication.setHeaderProvider(m_headerProvider);
+        simpleIframeApplication.setIframePageUrl(iframePageUrl);
+        simpleIframeApplication.setHeaderLinks(headerLinks);;
+        return simpleIframeApplication;
     }
 
     /* (non-Javadoc)
@@ -85,7 +95,7 @@ public class PluginManagerAdminApplicationFactory extends AbstractApplicationFac
      */
     @Override
     public Class<? extends UI> getUIClass() {
-        return PluginManagerAdminApplication.class;
+        return SimpleIframeApplication.class;
     }
 
 }
