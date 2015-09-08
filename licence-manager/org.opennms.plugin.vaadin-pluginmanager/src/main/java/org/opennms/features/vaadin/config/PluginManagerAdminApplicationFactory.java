@@ -31,6 +31,7 @@ package org.opennms.features.vaadin.config;
 
 import java.util.Map;
 
+import org.opennms.features.vaadin.config.model.PluginModel;
 import org.opennms.vaadin.extender.AbstractApplicationFactory;
 import org.opennms.web.api.OnmsHeaderProvider;
 
@@ -43,23 +44,11 @@ public class PluginManagerAdminApplicationFactory extends AbstractApplicationFac
 	
     private OnmsHeaderProvider m_headerProvider;
     
+    private PluginModel pluginModel;
+    
     // headerLinks map of key= name and value=url for links to be placed in header of page
     private Map<String, String> headerLinks;
 
-	/**
-	 * headerLinks map of key= name and value=url for links to be placed in header of page
-	 * @return
-	 */
-	public Map<String,String> getHeaderLinks() {
-		return headerLinks;
-	}
-
-	/**
-	 * @param headerLinks map of key= name and value=url for links to be placed in header of page
-	 */
-	public void setHeaderLinks(Map<String,String> headerLinks) {
-		this.headerLinks = headerLinks;
-	}
 	
 	public OnmsHeaderProvider getHeaderProvider() {
 		return m_headerProvider;
@@ -68,6 +57,31 @@ public class PluginManagerAdminApplicationFactory extends AbstractApplicationFac
 	public void setHeaderProvider(OnmsHeaderProvider headerProvider) {
 		this.m_headerProvider = headerProvider;
 	}
+
+	public PluginModel getPluginModel() {
+		return pluginModel;
+	}
+
+	public void setPluginModel(PluginModel pluginModel) {
+		this.pluginModel = pluginModel;
+	}
+	
+	/**
+	 * headerLinks map of key= name and value=url for links to be placed in header of page
+	 * @return
+	 */
+	public Map<String,String> getHeaderLinks() {
+		return headerLinks;
+	}
+
+
+	/**
+	 * @param headerLinks map of key= name and value=url for links to be placed in header of page
+	 */
+	public void setHeaderLinks(Map<String,String> headerLinks) {
+		this.headerLinks = headerLinks;
+	}
+
 	
     /* (non-Javadoc)
      * @see org.opennms.vaadin.extender.AbstractApplicationFactory#getUI()
@@ -77,6 +91,7 @@ public class PluginManagerAdminApplicationFactory extends AbstractApplicationFac
         PluginManagerAdminApplication pluginManagerAdminApplication = new PluginManagerAdminApplication();
         pluginManagerAdminApplication.setHeaderProvider(m_headerProvider);
         pluginManagerAdminApplication.setHeaderLinks(headerLinks);
+        pluginManagerAdminApplication.setPluginModel(pluginModel);
         return pluginManagerAdminApplication;
     }
 

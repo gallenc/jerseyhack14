@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 
+import org.opennms.features.vaadin.config.model.PluginModel;
 import org.opennms.features.vaadin.pluginmanager.PluginManagerUIMainPanelImpl2;
 import org.opennms.features.vaadin.pluginmanager.internal.HttpServletRequestVaadinImpl;
 import org.opennms.web.api.OnmsHeaderProvider;
@@ -79,6 +80,16 @@ public class PluginManagerAdminApplication extends UI {
 	private String m_headerHtml;
 	private VaadinRequest m_request;
 	private VerticalLayout m_rootLayout;
+
+	private PluginModel pluginModel;
+	
+	public PluginModel getPluginModel() {
+		return pluginModel;
+	}
+
+	public void setPluginModel(PluginModel pluginModel) {
+		this.pluginModel = pluginModel;
+	}
 
 	/**
 	 * headerLinks map of key= name and value=url for links to be placed in header of page
@@ -178,7 +189,8 @@ public class PluginManagerAdminApplication extends UI {
 			m_rootLayout.addComponent(horizontalLayout1);
 		}
 
-		CustomComponent pluginManagerUIMainPanel = new PluginManagerUIMainPanelImpl2();
+		PluginManagerUIMainPanelImpl2 pluginManagerUIMainPanel = new PluginManagerUIMainPanelImpl2(pluginModel);
+		
 		m_rootLayout.addComponent(pluginManagerUIMainPanel);
 
 		// this forces the UI panel to use up all the available space below the header

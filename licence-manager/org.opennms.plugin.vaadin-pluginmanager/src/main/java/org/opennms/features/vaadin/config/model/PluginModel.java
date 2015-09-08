@@ -1,36 +1,80 @@
 package org.opennms.features.vaadin.config.model;
 
-import java.util.List;
 
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
 
-import com.vaadin.ui.CustomComponent;
 
 public class PluginModel {
 
-	CustomComponent getPluginPanel(){
-		
-		ProductSpecList psl = null;
-		List<ProductMetadata> pmeta = psl.getProductSpecList();
-		
-		ProductMetadata productMetadata = new ProductMetadata();
-		productMetadata.getProductName();
-		productMetadata.getProductId();
-     	productMetadata.getFeatureRepository();
-		productMetadata.getProductDescription();
-		productMetadata.getOrganization();
-		productMetadata.getProductUrl();
-		productMetadata.getLicenceKeyRequired();
-		productMetadata.getLicenceType();
-
-		
-		
-		
-		
-		
-		return null;
-	}
+	ProductSpecList availablePlugins;
 	
+	ProductSpecList installedPlugins;
+
+	/**
+	 * @return the availablePlugins
+	 */
+	public ProductSpecList getAvailablePlugins() {
+		
+		// test code generating a spec list
+		ProductSpecList productSpecList = new ProductSpecList();
+		
+		String[] productIds = {"Mercury","Venus","Earth","Mars","Jupiter","Saturn","Neptune","Uranus"};
+		
+		for (String pid: productIds){
+			ProductMetadata pmeta= new ProductMetadata();
+			pmeta.setProductId(pid);
+			pmeta.setOrganization("OpenNMS Project");
+			pmeta.setProductDescription("Test product description");
+			pmeta.setFeatureRepository("mvn:org.opennms.licencemgr/licence.manager.example/2.10.0/xml/features");
+			pmeta.setProductName("test Bundle");
+			pmeta.setProductUrl("http:\\\\opennms.co.uk");
+			pmeta.setLicenceKeyRequired(true);
+			pmeta.setLicenceType("OpenNMS EULA See http:\\\\opennms.co.uk\\EULA");
+			productSpecList.getProductSpecList().add(pmeta);
+		}
+
+		availablePlugins= productSpecList;
+		return availablePlugins;
+	}
+
+	/**
+	 * @param availablePlugins the availablePlugins to set
+	 */
+	public void setAvailablePlugins(ProductSpecList availablePlugins) {
+		this.availablePlugins = availablePlugins;
+	}
+
+	/**
+	 * @return the installedPlugins
+	 */
+	public ProductSpecList getInstalledPlugins() {
+		// test code generating a spec list
+		ProductSpecList productSpecList = new ProductSpecList();
+		
+		String[] productIds = {"Mercury","Venus","Earth","Mars","Jupiter","Saturn","Neptune","Uranus"};
+		
+		for (String pid: productIds){
+			ProductMetadata pmeta= new ProductMetadata();
+			pmeta.setProductId(pid);
+			pmeta.setOrganization("OpenNMS Project");
+			pmeta.setProductDescription("Test product description");
+			pmeta.setFeatureRepository("mvn:org.opennms.licencemgr/licence.manager.example/2.10.0/xml/features");
+			pmeta.setProductName("test Bundle");
+			pmeta.setProductUrl("http:\\\\opennms.co.uk");
+			pmeta.setLicenceKeyRequired(true);
+			pmeta.setLicenceType("OpenNMS EULA See http:\\\\opennms.co.uk\\EULA");
+			productSpecList.getProductSpecList().add(pmeta);
+		}
+		installedPlugins=productSpecList;
+		return installedPlugins;
+	}
+
+	/**
+	 * @param installedPlugins the installedPlugins to set
+	 */
+	public void setInstalledPlugins(ProductSpecList installedPlugins) {
+		this.installedPlugins = installedPlugins;
+	}
 	
 }

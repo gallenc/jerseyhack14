@@ -48,6 +48,7 @@
 
   <!-- Main Plugin UI -->
   <bean id="pluginManagerAdminApplicationFactory" class="org.opennms.features.vaadin.config.PluginManagerAdminApplicationFactory">
+    <property name="pluginModel" ref="pluginModel" />
     <property name="headerProvider" ref="onmsHeaderProvider" />
     <property name="headerLinks">
       <map>
@@ -55,6 +56,9 @@
         <entry key="Feature Manager Diagnostics" value="/opennms/admin/plugin-manager-feature-diagnostics" />
       </map>
     </property>
+  </bean>
+  
+  <bean id="pluginModel" class="org.opennms.features.vaadin.config.model.PluginModel">
   </bean>
 
   <service id="pluginManagerService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="pluginManagerAdminApplicationFactory">
