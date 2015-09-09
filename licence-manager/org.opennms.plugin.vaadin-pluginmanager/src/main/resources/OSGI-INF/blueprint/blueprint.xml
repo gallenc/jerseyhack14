@@ -57,7 +57,7 @@
       </map>
     </property>
   </bean>
-  
+
   <bean id="pluginModel" class="org.opennms.features.vaadin.config.model.PluginModel">
   </bean>
 
@@ -117,12 +117,12 @@
     </service-properties>
   </service>
 
-  <!-- <cm:property-placeholder persistent-id="org.opennms.features.licencemgr.config" update-strategy="reload"> -->
-  <!-- <cm:default-properties> -->
-  <!-- <cm:property name="licenceServerURL","notSet" /> -->
-  <!-- <cm:property name="licenceServerUserName","notSet" /> -->
-  <!-- <cm:property name="licenceServerPassword","notSet" /> -->
-  <!-- </cm:default-properties> -->
-  <!-- </cm:property-placeholder> -->
+  <cm:property-placeholder persistent-id="org.opennms.features.licencemgr.config" update-strategy="reload">
+    <cm:default-properties>
+      <cm:property name="licenceServerURL" value="notSet" />
+      <cm:property name="licenceServerUserName" value="notSet" />
+      <cm:property name="licenceServerPassword" value="notSet" />
+    </cm:default-properties>
+  </cm:property-placeholder>
 
 </blueprint>

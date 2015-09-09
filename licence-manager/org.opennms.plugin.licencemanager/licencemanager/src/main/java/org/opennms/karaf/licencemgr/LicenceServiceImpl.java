@@ -83,7 +83,12 @@ public class LicenceServiceImpl implements LicenceService {
 	@Override
 	public synchronized LicenceMetadata addLicence(String licenceStrPlusCrc) {
 		if (licenceStrPlusCrc==null) throw new RuntimeException("licenceStrPlusCrc cannot be null");
-		LicenceMetadata unverifiedMetadata = Licence.getUnverifiedMetadata(licenceStrPlusCrc);
+		LicenceMetadata unverifiedMetadata;
+		try {
+			unverifiedMetadata = Licence.getUnverifiedMetadata(licenceStrPlusCrc);
+		} catch (Exception e) {
+			throw new RuntimeException("cannot decode licence string", e);
+		}
 		String productId = unverifiedMetadata.getProductId();
 		licenceMap.put(productId, licenceStrPlusCrc);
 		persist();

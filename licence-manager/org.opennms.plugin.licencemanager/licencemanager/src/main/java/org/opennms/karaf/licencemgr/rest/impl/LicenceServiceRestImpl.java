@@ -64,7 +64,12 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 		}
 
 		ReplyMessage reply= new ReplyMessage();
-		String productId = Licence.getUnverifiedMetadata(licence).getProductId();
+		String productId;
+		try {
+			productId = Licence.getUnverifiedMetadata(licence).getProductId();
+		} catch (Exception e) {
+			throw new RuntimeException("cannot decode licence string",e);
+		}
 		reply.setReplyComment("Successfully added licence instance for productId="+productId);
 		reply.setProductId(productId);
 		reply.setLicenceMetadata(licenceMetadata);

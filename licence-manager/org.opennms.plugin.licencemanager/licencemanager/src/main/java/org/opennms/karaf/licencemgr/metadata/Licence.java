@@ -151,7 +151,7 @@ public class Licence {
 	 * @param licenceStrPlusCrc
 	 * @return
 	 */
-	public static LicenceMetadata getUnverifiedMetadata(String licenceStrPlusCrc){
+	public static LicenceMetadata getUnverifiedMetadata(String licenceStrPlusCrc) throws Exception {
 		try{ 
 			if (licenceStrPlusCrc==null) throw new RuntimeException("licencewithCRC cannot be null");
 			// check and remove checksum

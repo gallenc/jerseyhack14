@@ -65,7 +65,12 @@ public class LicenceTest {
 		System.out.println("@Test testLicence licenceStrPlusCrc="+licenceStrPlusCrc);
 		
 		// get metadata from licence		
-		LicenceMetadata licenceManagerLicenceMetadata = Licence.getUnverifiedMetadata(licenceStrPlusCrc);
+		LicenceMetadata licenceManagerLicenceMetadata;
+		try {
+			licenceManagerLicenceMetadata = Licence.getUnverifiedMetadata(licenceStrPlusCrc);
+		} catch (Exception e) {
+			throw new RuntimeException("cannot decode licence string",e);
+		}
 		
 		// check that metadata matches original
 		String metadata2xml=licenceManagerLicenceMetadata.toXml();
