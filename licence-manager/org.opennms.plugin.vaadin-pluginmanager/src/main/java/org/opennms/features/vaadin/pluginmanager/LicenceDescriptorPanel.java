@@ -76,9 +76,9 @@ public class LicenceDescriptorPanel extends CustomComponent {
 	 * @return true if metadata read, false if not
 	 */
 	public boolean updateMetadata(String licenceStr){
-		
+
 		boolean success = false;
-		
+
 		if (licenceStr!=null) {
 
 			LicenceMetadata licenceMetadata=null;
@@ -90,50 +90,53 @@ public class LicenceDescriptorPanel extends CustomComponent {
 			}
 
 			if (licenceMetadata==null) {
-				productIdTextField.setValue("cannot decode licence string");
+				//create empty licenceMetadata panel
+				licenceMetadata= new LicenceMetadata();
+				licenceMetadata.setStartDate(null);
+				licenceMetadata.setProductId("cannot decode licence string");
+				success=false;
+			} else success=true;
+
+			productIdTextField.setValue( (licenceMetadata.getProductId()==null )?  "":licenceMetadata.getProductId());
+			featureRepositoryTextField.setValue( (licenceMetadata.getFeatureRepository()==null )?  "":licenceMetadata.getFeatureRepository());
+			systemIdTextField.setValue( (licenceMetadata.getSystemId()==null )?  "":licenceMetadata.getSystemId());
+
+			//TODO MAY NEED DATE FORMATTING
+			startDateTextField.setValue( (licenceMetadata.getStartDate()==null )?  "":licenceMetadata.getStartDate().toString());
+			expiryDateTextField.setValue( (licenceMetadata.getExpiryDate()==null )?  "":licenceMetadata.getExpiryDate().toString());
+
+			durationTextField.setValue( (licenceMetadata.getDuration()==null )?  "":Integer.toString(licenceMetadata.getDuration()));
+			licenseeTextField.setValue( (licenceMetadata.getLicensee()==null )?  "":licenceMetadata.getLicensee());
+			licensorTextField.setValue( (licenceMetadata.getLicensor()==null )?  "":licenceMetadata.getLicensor());
+
+			if (licenceMetadata.getOptions()==null || licenceMetadata.getOptions().isEmpty()){
+				licenceOptionsVerticalLayout.removeAllComponents();
+				Label l = new Label("No Licence Options Defined");
+				licenceOptionsVerticalLayout.addComponent(l);
 			} else {
-
-				productIdTextField.setValue( (licenceMetadata.getProductId()==null )?  "":licenceMetadata.getProductId());
-				featureRepositoryTextField.setValue( (licenceMetadata.getFeatureRepository()==null )?  "":licenceMetadata.getFeatureRepository());
-				systemIdTextField.setValue( (licenceMetadata.getSystemId()==null )?  "":licenceMetadata.getSystemId());
-
-				//TODO MAY NEED DATE FORMATTING
-				startDateTextField.setValue( (licenceMetadata.getStartDate()==null )?  "":licenceMetadata.getStartDate().toString());
-				expiryDateTextField.setValue( (licenceMetadata.getExpiryDate()==null )?  "":licenceMetadata.getExpiryDate().toString());
-
-				durationTextField.setValue( (licenceMetadata.getDuration()==null )?  "":Integer.toString(licenceMetadata.getDuration()));
-				licenseeTextField.setValue( (licenceMetadata.getLicensee()==null )?  "":licenceMetadata.getLicensee());
-				licensorTextField.setValue( (licenceMetadata.getLicensor()==null )?  "":licenceMetadata.getLicensor());
-
-				if (licenceMetadata.getOptions()==null || licenceMetadata.getOptions().isEmpty()){
-					licenceOptionsVerticalLayout.removeAllComponents();
-					Label l = new Label("No Licence Options Defined");
-					licenceOptionsVerticalLayout.addComponent(l);
-				} else {
-					for (OptionMetadata option: licenceMetadata.getOptions()){
-						TextField optionField = new TextField();
-						optionField.setImmediate(false);
-						optionField.setWidth("400px");
-						optionField.setHeight("-1px");
-						optionField.setCaption(option.getName());
-						optionField.setValue(option.getValue());
-						optionField.setDescription(option.getDescription());
-						licenceOptionsVerticalLayout.addComponent(optionField);
-					}
+				for (OptionMetadata option: licenceMetadata.getOptions()){
+					TextField optionField = new TextField();
+					optionField.setImmediate(false);
+					optionField.setWidth("400px");
+					optionField.setHeight("-1px");
+					optionField.setCaption(option.getName());
+					optionField.setValue(option.getValue());
+					optionField.setDescription(option.getDescription());
+					licenceOptionsVerticalLayout.addComponent(optionField);
 				}
-				success=true;
 			}
+
 		}
 		return success;
 	}
 
-	public void setLicenceString(String licenceStr){
+	public boolean setLicenceString(String licenceStr){
 		if (licenceStr==null) {
 			licenceTextArea.setValue("");
 		} else {
 			licenceTextArea.setValue(licenceStr);
 		}
-		updateMetadata(licenceStr);
+		return updateMetadata(licenceStr);
 	}
 
 	public String getLicenceString(){
@@ -251,7 +254,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 		featureRepositoryTextField = new TextField();
 		featureRepositoryTextField.setCaption("Feature Repository");
 		featureRepositoryTextField.setImmediate(false);
-		featureRepositoryTextField.setWidth("-1px");
+		featureRepositoryTextField.setWidth("400px");
 		featureRepositoryTextField.setHeight("-1px");
 		licenceMetadataVerticalLayout.addComponent(featureRepositoryTextField);
 		

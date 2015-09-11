@@ -42,11 +42,11 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 	private static final long serialVersionUID = 1L;
 
 	private Map<String,LicenceDescriptorPanel> panelIds = new HashMap<String,LicenceDescriptorPanel>();
-	
+
 	private String selectedLicenceId=null;
-	
+
 	private Object selectedLicenceIdLock = new Object();
-	
+
 
 	/**
 	 * The constructor should first build the main layout, set the
@@ -80,7 +80,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 					LicenceDescriptorPanel selectedLicenceDescriptorPanel = panelIds.get(selectedLicnceId);
 					if (selectedLicenceDescriptorPanel!=null) {
 						selectedLicenceDescriptorPanel.setVisible(true);
-						
+
 						synchronized (selectedLicenceIdLock){
 							selectedLicenceId=selectedLicnceId;
 						}
@@ -95,7 +95,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 	}
 
 	public synchronized void addLicenceList(LicenceList licencelist){
-		
+
 		List<LicenceEntry> llist = licencelist.getLicenceList();
 
 		Map<String,LicenceEntry> lmap = new TreeMap<String,LicenceEntry>();
@@ -105,8 +105,9 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		}
 
 		licenceListSelect.removeAllItems();
-	
+
 		licenceListSelect.setRows(5); 	// Show 5 items and a scrollbar if there are more
+		licenceListSelect.setNullSelectionAllowed(false);
 
 		licencePanels.removeAllComponents();
 
@@ -117,17 +118,30 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 			// add a new licence descriptor panel and populate with LicenceMetadata(
 			LicenceDescriptorPanel licenceDescriptorPanel= new LicenceDescriptorPanel();
 			licenceDescriptorPanel.setImmediate(true);
-			
+
 			licenceDescriptorPanel.setLicenceString(lmap.get(productId).getLicenceStr());
 
 			licenceDescriptorPanel.setVisible(false);
-			
+
+			licenceDescriptorPanel.setReadOnly(true);
+
 			panelIds.put(productId, licenceDescriptorPanel);
 			licencePanels.addComponent(licenceDescriptorPanel);
 		}
+		// selects first value for display
+		if (! lmap.keySet().isEmpty()) {
+			String selectedLicnceId = lmap.keySet().iterator().next();
+			LicenceDescriptorPanel selectedLicenceDescriptorPanel = panelIds.get(selectedLicnceId);
+			if (selectedLicenceDescriptorPanel!=null) {
+				selectedLicenceDescriptorPanel.setVisible(true);
+				synchronized (selectedLicenceIdLock){
+					selectedLicenceId=selectedLicnceId;
+				}
+			}
+		}
 
 	}
-	
+
 	public String getSelectedLicenceId(){
 		String s =null;
 		synchronized (selectedLicenceIdLock) {
@@ -135,7 +149,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		}
 		return s;
 	}
-	
+
 	public VerticalLayout getControlsVerticalLayout(){
 		return controlsVerticalLayout;
 	}
@@ -149,21 +163,21 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		mainLayout.setWidth("-1px");
 		mainLayout.setHeight("-1px");
 		mainLayout.setMargin(true);
-		
+
 		// top-level component properties
 		setWidth("-1px");
 		setHeight("-1px");
-		
+
 		// verticalLayout_2
 		verticalLayout_2 = buildVerticalLayout_2();
 		mainLayout.addComponent(verticalLayout_2);
 		mainLayout.setExpandRatio(verticalLayout_2, 1.0f);
-		
+
 		// verticalLayout_1
 		verticalLayout_1 = buildVerticalLayout_1();
 		mainLayout.addComponent(verticalLayout_1);
 		mainLayout.setExpandRatio(verticalLayout_1, 1.0f);
-		
+
 		return mainLayout;
 	}
 
@@ -175,7 +189,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		verticalLayout_2.setWidth("-1px");
 		verticalLayout_2.setHeight("-1px");
 		verticalLayout_2.setMargin(true);
-		
+
 		// licenceListSelect
 		licenceListSelect = new ListSelect();
 		licenceListSelect.setCaption("Licence Id");
@@ -184,7 +198,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		licenceListSelect.setHeight("-1px");
 		verticalLayout_2.addComponent(licenceListSelect);
 		verticalLayout_2.setExpandRatio(licenceListSelect, 1.0f);
-		
+
 		// controlsVerticalLayout
 		controlsVerticalLayout = new VerticalLayout();
 		controlsVerticalLayout.setImmediate(false);
@@ -192,7 +206,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		controlsVerticalLayout.setHeight("-1px");
 		controlsVerticalLayout.setMargin(false);
 		verticalLayout_2.addComponent(controlsVerticalLayout);
-		
+
 		return verticalLayout_2;
 	}
 
@@ -204,7 +218,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		verticalLayout_1.setWidth("-1px");
 		verticalLayout_1.setHeight("-1px");
 		verticalLayout_1.setMargin(false);
-		
+
 		// licencePanels
 		licencePanels = new VerticalLayout();
 		licencePanels.setImmediate(false);
@@ -213,7 +227,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		licencePanels.setMargin(false);
 		verticalLayout_1.addComponent(licencePanels);
 		verticalLayout_1.setExpandRatio(licencePanels, 1.0f);
-		
+
 		return verticalLayout_1;
 	}
 
