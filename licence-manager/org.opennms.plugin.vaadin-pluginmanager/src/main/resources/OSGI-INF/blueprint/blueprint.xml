@@ -58,7 +58,8 @@
     </property>
   </bean>
 
-  <bean id="pluginModel" class="org.opennms.features.vaadin.config.model.PluginModel">
+  <bean id="pluginModel" class="org.opennms.features.vaadin.config.model.PluginModel" init-method="load" destroy-method="close">
+    <property name="fileUri" value="./pluginmodeldata.xml" />
   </bean>
 
   <service id="pluginManagerService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="pluginManagerAdminApplicationFactory">

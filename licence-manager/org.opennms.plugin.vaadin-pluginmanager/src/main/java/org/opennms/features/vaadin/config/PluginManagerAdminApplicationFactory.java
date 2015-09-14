@@ -31,6 +31,7 @@ package org.opennms.features.vaadin.config;
 
 import java.util.Map;
 
+import org.opennms.features.vaadin.config.model.SessionPluginModel;
 import org.opennms.features.vaadin.config.model.PluginModel;
 import org.opennms.vaadin.extender.AbstractApplicationFactory;
 import org.opennms.web.api.OnmsHeaderProvider;
@@ -91,7 +92,11 @@ public class PluginManagerAdminApplicationFactory extends AbstractApplicationFac
         PluginManagerAdminApplication pluginManagerAdminApplication = new PluginManagerAdminApplication();
         pluginManagerAdminApplication.setHeaderProvider(m_headerProvider);
         pluginManagerAdminApplication.setHeaderLinks(headerLinks);
-        pluginManagerAdminApplication.setPluginModel(pluginModel);
+        
+        //local plugin model persists data for session instance
+        SessionPluginModel sessionPluginModel=new SessionPluginModel();
+        sessionPluginModel.setPluginModel(pluginModel);
+        pluginManagerAdminApplication.setSessionPluginModel(sessionPluginModel);
         return pluginManagerAdminApplication;
     }
 
