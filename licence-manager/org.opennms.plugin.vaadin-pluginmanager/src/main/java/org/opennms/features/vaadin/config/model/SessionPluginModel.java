@@ -157,9 +157,12 @@ public class SessionPluginModel {
 	}
 
 	public void addLicence(String licenceStr){
-		pluginModel.addLicence(licenceStr, karafInstance);;
+		pluginModel.addLicence(licenceStr, karafInstance);
 	}
 
+	public void removeLicence(String selectedLicenceId) {
+		pluginModel.removeLicence(selectedLicenceId, karafInstance);
+	}
 
 	public void installPlugin(String selectedProductId) {
 		pluginModel.installPlugin(selectedProductId, karafInstance);

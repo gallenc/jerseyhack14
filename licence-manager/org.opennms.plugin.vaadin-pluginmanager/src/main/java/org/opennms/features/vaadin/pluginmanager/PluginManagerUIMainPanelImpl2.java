@@ -375,6 +375,13 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 
 		LicenceList licencelist = sessionPluginModel.getInstalledLicenceList();
 		if (licencelist!=null) licenceDescriptorTablePanel.addLicenceList(licencelist);
+		
+		InstalledLicencesControlsPanel  installedLicencesControlsPanel= new InstalledLicencesControlsPanel();
+		installedLicencesControlsPanel.setSessionPluginModel(sessionPluginModel);		
+		installedLicencesControlsPanel.setLicenceDescriptorTablePanel(licenceDescriptorTablePanel);
+		
+		installedLicencesControlsPanel.setSystemMessages(systemMessages);
+		licenceDescriptorTablePanel.getControlsVerticalLayout().addComponent( installedLicencesControlsPanel);
 
 		// Add Licences Tab
 

@@ -163,21 +163,21 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		mainLayout.setWidth("-1px");
 		mainLayout.setHeight("-1px");
 		mainLayout.setMargin(true);
-
+		
 		// top-level component properties
 		setWidth("-1px");
 		setHeight("-1px");
-
+		
 		// verticalLayout_2
 		verticalLayout_2 = buildVerticalLayout_2();
 		mainLayout.addComponent(verticalLayout_2);
 		mainLayout.setExpandRatio(verticalLayout_2, 1.0f);
-
+		
 		// verticalLayout_1
 		verticalLayout_1 = buildVerticalLayout_1();
 		mainLayout.addComponent(verticalLayout_1);
 		mainLayout.setExpandRatio(verticalLayout_1, 1.0f);
-
+		
 		return mainLayout;
 	}
 
@@ -189,7 +189,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		verticalLayout_2.setWidth("-1px");
 		verticalLayout_2.setHeight("-1px");
 		verticalLayout_2.setMargin(true);
-
+		
 		// licenceListSelect
 		licenceListSelect = new ListSelect();
 		licenceListSelect.setCaption("Licence Id");
@@ -198,7 +198,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		licenceListSelect.setHeight("-1px");
 		verticalLayout_2.addComponent(licenceListSelect);
 		verticalLayout_2.setExpandRatio(licenceListSelect, 1.0f);
-
+		
 		// controlsVerticalLayout
 		controlsVerticalLayout = new VerticalLayout();
 		controlsVerticalLayout.setImmediate(false);
@@ -206,7 +206,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		controlsVerticalLayout.setHeight("-1px");
 		controlsVerticalLayout.setMargin(false);
 		verticalLayout_2.addComponent(controlsVerticalLayout);
-
+		
 		return verticalLayout_2;
 	}
 
@@ -218,7 +218,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		verticalLayout_1.setWidth("-1px");
 		verticalLayout_1.setHeight("-1px");
 		verticalLayout_1.setMargin(false);
-
+		
 		// licencePanels
 		licencePanels = new VerticalLayout();
 		licencePanels.setImmediate(false);
@@ -227,7 +227,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		licencePanels.setMargin(false);
 		verticalLayout_1.addComponent(licencePanels);
 		verticalLayout_1.setExpandRatio(licencePanels, 1.0f);
-
+		
 		return verticalLayout_1;
 	}
 

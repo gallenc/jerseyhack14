@@ -125,6 +125,8 @@ public class LicenceDescriptorPanel extends CustomComponent {
 					licenceOptionsVerticalLayout.addComponent(optionField);
 				}
 			}
+			
+			mainLayout.markAsDirty();
 
 		}
 		return success;

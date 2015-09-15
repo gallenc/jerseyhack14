@@ -2,9 +2,7 @@ package org.opennms.features.vaadin.config.model;
 
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
@@ -13,13 +11,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlElementWrapper;
-import javax.xml.bind.annotation.XmlRootElement;
 
-import org.opennms.karaf.licencemgr.LicenceServiceImpl;
 import org.opennms.karaf.licencemgr.metadata.Licence;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceEntry;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
@@ -347,6 +339,24 @@ public class PluginModel {
 		
 	}
 
+	public void removeLicence(String selectedLicenceId, String karafInstance) {
+		refreshKarafEntry(karafInstance);
+		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
+		
+		//TODO REPLACE WITH REAL COMMAND
+		LicenceEntry le=null;
+		for (LicenceEntry licenceEntry : karafEntry.getInstalledLicenceList().getLicenceList()){
+			if (licenceEntry.getProductId().equals(selectedLicenceId)){
+				le=licenceEntry;
+				break;
+			};
+		}
+		if (le!=null) {
+			karafEntry.getInstalledLicenceList().getLicenceList().remove(le);
+		} else throw new RuntimeException("licenceId " + selectedLicenceId
+				+ " not installed in karaf instance "+ karafInstance);
+
+	}
 
 	/**
 	 * installs a plugin for the product id in the selected karaf instance
@@ -354,7 +364,17 @@ public class PluginModel {
 	 * @param karafInstance
 	 */
 	public synchronized void installPlugin(String selectedProductId,String karafInstance) {
-		throw new RuntimeException("plugin model unimplimented method");
+		
+		refreshKarafEntry(karafInstance);
+		
+		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
+			throw new RuntimeException("cannot install plugin "+selectedProductId+" Unknown karaf instance "+karafInstance);
+		} 
+
+		throw new RuntimeException("installPlugin plugin model unimplimented method");
+		// TODO ADD COMMAND INSTALL PLUGIN
+		//refreshKarafEntry(karafInstance);
+		
 
 	}
 
@@ -364,7 +384,16 @@ public class PluginModel {
 	 * @param karafInstance
 	 */
 	public synchronized void unInstallPlugin(String selectedProductId,String karafInstance) {
-		throw new RuntimeException("plugin model unimplimented method");
+		refreshKarafEntry(karafInstance);
+		
+		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
+			throw new RuntimeException("cannot install plugin "+selectedProductId+" Unknown karaf instance "+karafInstance);
+		} 
+
+		throw new RuntimeException("unInstallPlugin plugin model unimplimented method");
+		// TODO ADD COMMAND INSTALL PLUGIN
+		//refreshKarafEntry(karafInstance);
+
 
 	}
 
@@ -425,8 +454,6 @@ public class PluginModel {
 	public synchronized void close() {
 		System.out.println("Plugin Manager Shutting Down ");
 	}
-
-
 
 
 
