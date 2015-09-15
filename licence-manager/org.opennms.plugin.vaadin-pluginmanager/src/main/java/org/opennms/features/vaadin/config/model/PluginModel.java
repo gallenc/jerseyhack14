@@ -135,6 +135,7 @@ public class PluginModel {
 
 		pluginModelJaxb.setAvailablePlugins(availablePlugins);
 		pluginModelJaxb.setAvailablePluginsLastUpdated(new Date());
+		persist();
 		
 	}
 	
@@ -146,6 +147,10 @@ public class PluginModel {
 	 */
 	public synchronized ProductSpecList getAvailablePlugins() {
 
+		if (pluginModelJaxb.getAvailablePlugins()==null 
+				|| pluginModelJaxb.getAvailablePlugins().getProductSpecList()==null 
+				|| pluginModelJaxb.getAvailablePlugins().getProductSpecList().size()==0) refreshAvailablePlugins();
+		
 		return pluginModelJaxb.getAvailablePlugins();
 	}
 

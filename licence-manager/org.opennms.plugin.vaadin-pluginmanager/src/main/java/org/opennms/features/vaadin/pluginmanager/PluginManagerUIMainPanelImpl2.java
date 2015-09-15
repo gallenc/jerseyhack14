@@ -159,8 +159,6 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		String karafInstanceSelected= (sessionPluginModel.getKarafInstance()==null) ? "" : sessionPluginModel.getKarafInstance().toString();
 		karafInstanceSelectedTextField.setValue(karafInstanceSelected);
 
-
-
         Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		String karaflastupdate= (sessionPluginModel.getKarafInstanceLastUpdated()==null) ? "never updated" : formatter.format(sessionPluginModel.getKarafInstanceLastUpdated());
@@ -170,11 +168,11 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		availablepluginsLastUpdatedTextField.setValue(pluginslastupdate);
 
 		ProductSpecList availablePluginsList = sessionPluginModel.getAvailablePlugins();
-		availablePluginsPanel.addProductList(availablePluginsList);
+		if (availablePluginsList!=null) availablePluginsPanel.addProductList(availablePluginsList);
 		ProductSpecList installedPluginsList = sessionPluginModel.getInstalledPlugins();
-		installedPluginsPanel.addProductList(installedPluginsList);
+		if (installedPluginsList!=null) installedPluginsPanel.addProductList(installedPluginsList);
 		LicenceList licencelist = sessionPluginModel.getInstalledLicenceList();
-		licenceDescriptorTablePanel.addLicenceList(licencelist);
+		if (licencelist!=null) licenceDescriptorTablePanel.addLicenceList(licencelist);
 
 		systemIdTxtField.setValue(sessionPluginModel.getSystemId());
 		pluginServerPasswordTxtField.setValue(sessionPluginModel.getPluginServerPassword());
@@ -356,7 +354,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		// Available Plugins Tab
 
 		ProductSpecList availablePluginsList = sessionPluginModel.getAvailablePlugins();
-		availablePluginsPanel.addProductList(availablePluginsList);
+		if (availablePluginsList!=null) availablePluginsPanel.addProductList(availablePluginsList);
 		AvailablePluginControlsPanel  availablePluginsControlsPanel= new AvailablePluginControlsPanel();
 		availablePluginsControlsPanel.setSessionPluginModel(sessionPluginModel);
 		availablePluginsControlsPanel.setProductDescriptorTablePanel(availablePluginsPanel);
@@ -366,7 +364,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		// Installed Plugins Tab
 
 		ProductSpecList installedPluginsList = sessionPluginModel.getInstalledPlugins();
-		installedPluginsPanel.addProductList(installedPluginsList);
+		if (installedPluginsList!=null) installedPluginsPanel.addProductList(installedPluginsList);
 		InstalledPluginControlsPanel  installedPluginsControlsPanel= new InstalledPluginControlsPanel();
 		installedPluginsControlsPanel.setSessionPluginModel(sessionPluginModel);
 		installedPluginsControlsPanel.setProductDescriptorTablePanel(installedPluginsPanel);
@@ -376,7 +374,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		// Installed Licences Tab
 
 		LicenceList licencelist = sessionPluginModel.getInstalledLicenceList();
-		licenceDescriptorTablePanel.addLicenceList(licencelist);
+		if (licencelist!=null) licenceDescriptorTablePanel.addLicenceList(licencelist);
 
 		// Add Licences Tab
 
