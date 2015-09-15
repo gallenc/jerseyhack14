@@ -1,6 +1,7 @@
 package org.opennms.features.vaadin.config.model;
 
 import java.util.Date;
+import java.util.SortedMap;
 
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
@@ -170,6 +171,13 @@ public class SessionPluginModel {
 
 	}
 
+	/**
+	 * returns list of karaf instances which can be addressed by ui
+	 * @return Map of key = karafInstanceName, value = karafInstanceUrl
+	 */
+	public SortedMap<String,String> getKarafInstances(){
+		return pluginModel.getKarafInstances();
+	}
 
 
 }

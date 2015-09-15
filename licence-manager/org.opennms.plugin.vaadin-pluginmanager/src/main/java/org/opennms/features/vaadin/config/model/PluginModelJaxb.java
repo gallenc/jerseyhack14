@@ -29,7 +29,7 @@ public class PluginModelJaxb {
 	private String pluginServerUrl = "http://localhost:8980";
 	
 	@XmlElement(name="licenceShoppingCartUrl")
-	private String licenceShoppingCartUrl = "http://localhost:8980";
+	private String licenceShoppingCartUrl = "http://opennms.org";
 	
 	@XmlElementWrapper(name="karafDataMap")
 	private SortedMap<String, KarafEntryJaxb> karafDataMap = new TreeMap<String, KarafEntryJaxb>();

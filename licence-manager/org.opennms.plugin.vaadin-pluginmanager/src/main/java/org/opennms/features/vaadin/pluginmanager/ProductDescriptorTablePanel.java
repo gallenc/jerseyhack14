@@ -88,7 +88,6 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 			}
 		});
 
-
 	}
 
 
@@ -198,7 +197,7 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 		
 		// controlsVerticalLayout
 		controlsVerticalLayout = new VerticalLayout();
-		controlsVerticalLayout.setImmediate(false);
+		controlsVerticalLayout.setImmediate(true);
 		controlsVerticalLayout.setWidth("-1px");
 		controlsVerticalLayout.setHeight("-1px");
 		controlsVerticalLayout.setMargin(false);
@@ -212,14 +211,14 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 	private VerticalLayout buildVerticalLayout_1() {
 		// common part: create layout
 		verticalLayout_1 = new VerticalLayout();
-		verticalLayout_1.setImmediate(false);
+		verticalLayout_1.setImmediate(true);
 		verticalLayout_1.setWidth("-1px");
 		verticalLayout_1.setHeight("-1px");
 		verticalLayout_1.setMargin(false);
 		
 		// productPanels
 		productPanels = new VerticalLayout();
-		productPanels.setImmediate(false);
+		productPanels.setImmediate(true);
 		productPanels.setWidth("-1px");
 		productPanels.setHeight("-1px");
 		productPanels.setMargin(false);
