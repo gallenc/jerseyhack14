@@ -77,7 +77,7 @@ public class InstalledPluginControlsPanel extends CustomComponent {
 	private VerticalLayout buildMainLayout() {
 		// common part: create layout
 		mainLayout = new VerticalLayout();
-		mainLayout.setImmediate(false);
+		mainLayout.setImmediate(true);
 		mainLayout.setWidth("100%");
 		mainLayout.setHeight("100%");
 		mainLayout.setMargin(true);

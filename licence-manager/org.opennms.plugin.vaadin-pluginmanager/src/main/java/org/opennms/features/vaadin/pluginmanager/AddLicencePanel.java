@@ -107,7 +107,7 @@ public class AddLicencePanel extends CustomComponent {
 	private HorizontalLayout buildMainLayout() {
 		// common part: create layout
 		mainLayout = new HorizontalLayout();
-		mainLayout.setImmediate(false);
+		mainLayout.setImmediate(true);
 		mainLayout.setWidth("100%");
 		mainLayout.setHeight("100%");
 		mainLayout.setMargin(false);
@@ -131,7 +131,7 @@ public class AddLicencePanel extends CustomComponent {
 	private VerticalLayout buildControlsVerticalLayout() {
 		// common part: create layout
 		controlsVerticalLayout = new VerticalLayout();
-		controlsVerticalLayout.setImmediate(false);
+		controlsVerticalLayout.setImmediate(true);
 		controlsVerticalLayout.setWidth("-1px");
 		controlsVerticalLayout.setHeight("-1px");
 		controlsVerticalLayout.setMargin(true);
@@ -163,14 +163,14 @@ public class AddLicencePanel extends CustomComponent {
 	private VerticalLayout buildVerticalLayout_3() {
 		// common part: create layout
 		verticalLayout_3 = new VerticalLayout();
-		verticalLayout_3.setImmediate(false);
+		verticalLayout_3.setImmediate(true);
 		verticalLayout_3.setWidth("-1px");
 		verticalLayout_3.setHeight("-1px");
 		verticalLayout_3.setMargin(false);
 		
 		// licenceDescriptorPanel
 		licenceDescriptorPanel = new LicenceDescriptorPanel();
-		licenceDescriptorPanel.setImmediate(false);
+		licenceDescriptorPanel.setImmediate(true);
 		licenceDescriptorPanel.setWidth("-1px");
 		licenceDescriptorPanel.setHeight("-1px");
 		verticalLayout_3.addComponent(licenceDescriptorPanel);

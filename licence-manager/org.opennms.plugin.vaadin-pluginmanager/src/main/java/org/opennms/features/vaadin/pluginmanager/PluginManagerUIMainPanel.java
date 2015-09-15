@@ -317,7 +317,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private VerticalLayout buildMainLayout() {
 		// common part: create layout
 		mainLayout = new VerticalLayout();
-		mainLayout.setImmediate(false);
+		mainLayout.setImmediate(true);
 		mainLayout.setWidth("100%");
 		mainLayout.setHeight("100%");
 		mainLayout.setMargin(false);
@@ -338,7 +338,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		pluginMgrHorSplitPanel_1 = new HorizontalSplitPanel();
 		pluginMgrHorSplitPanel_1.setCaption("Plugin Manager Settings");
-		pluginMgrHorSplitPanel_1.setImmediate(false);
+		pluginMgrHorSplitPanel_1.setImmediate(true);
 		pluginMgrHorSplitPanel_1.setWidth("100.0%");
 		pluginMgrHorSplitPanel_1.setHeight("100.0%");
 		
@@ -358,7 +358,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		generalSettingsPanel = new VerticalLayout();
 		generalSettingsPanel.setCaption("General Settings");
-		generalSettingsPanel.setImmediate(false);
+		generalSettingsPanel.setImmediate(true);
 		generalSettingsPanel.setWidth("-1px");
 		generalSettingsPanel.setHeight("-1px");
 		generalSettingsPanel.setMargin(true);
@@ -388,7 +388,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		systemIdPanel = new VerticalLayout();
 		systemIdPanel.setCaption("System Id Settings");
-		systemIdPanel.setImmediate(false);
+		systemIdPanel.setImmediate(true);
 		systemIdPanel.setDescription("System Id Settings");
 		systemIdPanel.setWidth("-1px");
 		systemIdPanel.setHeight("-1px");
@@ -397,7 +397,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// systemIdTxtField
 		systemIdTxtField = new TextField();
 		systemIdTxtField.setCaption("System Id");
-		systemIdTxtField.setImmediate(false);
+		systemIdTxtField.setImmediate(true);
 		systemIdTxtField.setWidth("-1px");
 		systemIdTxtField.setHeight("-1px");
 		systemIdPanel.addComponent(systemIdTxtField);
@@ -413,7 +413,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private HorizontalLayout buildHorizontalLayout_3() {
 		// common part: create layout
 		horizontalLayout_3 = new HorizontalLayout();
-		horizontalLayout_3.setImmediate(false);
+		horizontalLayout_3.setImmediate(true);
 		horizontalLayout_3.setWidth("-1px");
 		horizontalLayout_3.setHeight("-1px");
 		horizontalLayout_3.setMargin(false);
@@ -442,7 +442,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		licenceServerConfigPanel = new VerticalLayout();
 		licenceServerConfigPanel.setCaption("Licence Server");
-		licenceServerConfigPanel.setImmediate(false);
+		licenceServerConfigPanel.setImmediate(true);
 		licenceServerConfigPanel.setWidth("-1px");
 		licenceServerConfigPanel.setHeight("-1px");
 		licenceServerConfigPanel.setMargin(true);
@@ -450,7 +450,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// licenceServerUrlTxtField
 		licenceServerUrlTxtField = new TextField();
 		licenceServerUrlTxtField.setCaption("Licence Server URL");
-		licenceServerUrlTxtField.setImmediate(false);
+		licenceServerUrlTxtField.setImmediate(true);
 		licenceServerUrlTxtField.setWidth("-1px");
 		licenceServerUrlTxtField.setHeight("-1px");
 		licenceServerConfigPanel.addComponent(licenceServerUrlTxtField);
@@ -458,7 +458,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// licenceServerUsernameTxtField
 		licenceServerUsernameTxtField = new TextField();
 		licenceServerUsernameTxtField.setCaption("Licence Server Username");
-		licenceServerUsernameTxtField.setImmediate(false);
+		licenceServerUsernameTxtField.setImmediate(true);
 		licenceServerUsernameTxtField.setWidth("-1px");
 		licenceServerUsernameTxtField.setHeight("-1px");
 		licenceServerConfigPanel.addComponent(licenceServerUsernameTxtField);
@@ -466,7 +466,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// licenceServerPasswordTxtField
 		licenceServerPasswordTxtField = new TextField();
 		licenceServerPasswordTxtField.setCaption("Licence Server Password");
-		licenceServerPasswordTxtField.setImmediate(false);
+		licenceServerPasswordTxtField.setImmediate(true);
 		licenceServerPasswordTxtField.setWidth("-1px");
 		licenceServerPasswordTxtField.setHeight("-1px");
 		licenceServerConfigPanel.addComponent(licenceServerPasswordTxtField);
@@ -487,7 +487,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		featureServerPanel = new VerticalLayout();
 		featureServerPanel.setCaption("Maven Feature Server");
-		featureServerPanel.setImmediate(false);
+		featureServerPanel.setImmediate(true);
 		featureServerPanel.setWidth("-1px");
 		featureServerPanel.setHeight("-1px");
 		featureServerPanel.setMargin(true);
@@ -495,7 +495,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// featureServerUrlTxtField
 		featureServerUrlTxtField = new TextField();
 		featureServerUrlTxtField.setCaption("Feature Server URL");
-		featureServerUrlTxtField.setImmediate(false);
+		featureServerUrlTxtField.setImmediate(true);
 		featureServerUrlTxtField.setWidth("-1px");
 		featureServerUrlTxtField.setHeight("-1px");
 		featureServerPanel.addComponent(featureServerUrlTxtField);
@@ -503,7 +503,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// featureServerUsernameTxtField
 		featureServerUsernameTxtField = new TextField();
 		featureServerUsernameTxtField.setCaption("Feature Server Username");
-		featureServerUsernameTxtField.setImmediate(false);
+		featureServerUsernameTxtField.setImmediate(true);
 		featureServerUsernameTxtField.setWidth("-1px");
 		featureServerUsernameTxtField.setHeight("-1px");
 		featureServerPanel.addComponent(featureServerUsernameTxtField);
@@ -512,7 +512,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// featureServerPasswordTxtField
 		featureServerPasswordTxtField = new TextField();
 		featureServerPasswordTxtField.setCaption("Feature Server Password");
-		featureServerPasswordTxtField.setImmediate(false);
+		featureServerPasswordTxtField.setImmediate(true);
 		featureServerPasswordTxtField.setWidth("-1px");
 		featureServerPasswordTxtField.setHeight("-1px");
 		featureServerPanel.addComponent(featureServerPasswordTxtField);
@@ -528,7 +528,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private HorizontalLayout buildHorizontalLayout_2() {
 		// common part: create layout
 		horizontalLayout_2 = new HorizontalLayout();
-		horizontalLayout_2.setImmediate(false);
+		horizontalLayout_2.setImmediate(true);
 		horizontalLayout_2.setWidth("-1px");
 		horizontalLayout_2.setHeight("-1px");
 		horizontalLayout_2.setMargin(false);
@@ -549,7 +549,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		rawFeatureImportPanel = new VerticalLayout();
 		rawFeatureImportPanel.setCaption("Raw Feature Import");
-		rawFeatureImportPanel.setImmediate(false);
+		rawFeatureImportPanel.setImmediate(true);
 		rawFeatureImportPanel.setWidth("-1px");
 		rawFeatureImportPanel.setHeight("-1px");
 		rawFeatureImportPanel.setMargin(true);
@@ -557,7 +557,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// rawMavenFeatureIdTxtField
 		rawMavenFeatureIdTxtField = new TextField();
 		rawMavenFeatureIdTxtField.setCaption("Feature Maven Id");
-		rawMavenFeatureIdTxtField.setImmediate(false);
+		rawMavenFeatureIdTxtField.setImmediate(true);
 		rawMavenFeatureIdTxtField.setWidth("-1px");
 		rawMavenFeatureIdTxtField.setHeight("-1px");
 		rawFeatureImportPanel.addComponent(rawMavenFeatureIdTxtField);
@@ -573,7 +573,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private HorizontalLayout buildHorizontalLayout_6() {
 		// common part: create layout
 		horizontalLayout_6 = new HorizontalLayout();
-		horizontalLayout_6.setImmediate(false);
+		horizontalLayout_6.setImmediate(true);
 		horizontalLayout_6.setWidth("-1px");
 		horizontalLayout_6.setHeight("-1px");
 		horizontalLayout_6.setMargin(false);
@@ -602,7 +602,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		featureSettingsPanel = new VerticalLayout();
 		featureSettingsPanel.setCaption("Feature Settings");
-		featureSettingsPanel.setImmediate(false);
+		featureSettingsPanel.setImmediate(true);
 		featureSettingsPanel.setWidth("-1px");
 		featureSettingsPanel.setHeight("-1px");
 		featureSettingsPanel.setMargin(true);
@@ -614,7 +614,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// systemMessages
 		systemMessages = new TextArea();
 		systemMessages.setCaption("System Messages");
-		systemMessages.setImmediate(false);
+		systemMessages.setImmediate(true);
 		systemMessages.setWidth("100.0%");
 		systemMessages.setHeight("100.0%");
 		featureSettingsPanel.addComponent(systemMessages);
@@ -654,7 +654,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		availableFeaturesTab = new VerticalLayout();
 		availableFeaturesTab.setCaption("Available Features");
-		availableFeaturesTab.setImmediate(false);
+		availableFeaturesTab.setImmediate(true);
 		availableFeaturesTab.setWidth("-1px");
 		availableFeaturesTab.setHeight("-1px");
 		availableFeaturesTab.setMargin(true);
@@ -670,7 +670,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private HorizontalLayout buildAvailableFeaturesHorizontalLayout_1() {
 		// common part: create layout
 		availableFeaturesHorizontalLayout_1 = new HorizontalLayout();
-		availableFeaturesHorizontalLayout_1.setImmediate(false);
+		availableFeaturesHorizontalLayout_1.setImmediate(true);
 		availableFeaturesHorizontalLayout_1.setWidth("100.0%");
 		availableFeaturesHorizontalLayout_1.setHeight("100.0%");
 		availableFeaturesHorizontalLayout_1.setMargin(true);
@@ -690,7 +690,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private VerticalLayout buildVerticalLayout_6() {
 		// common part: create layout
 		verticalLayout_6 = new VerticalLayout();
-		verticalLayout_6.setImmediate(false);
+		verticalLayout_6.setImmediate(true);
 		verticalLayout_6.setWidth("-1px");
 		verticalLayout_6.setHeight("-1px");
 		verticalLayout_6.setMargin(false);
@@ -698,7 +698,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// availableFeaturesListSelect_1
 		availableFeaturesListSelect_1 = new ListSelect();
 		availableFeaturesListSelect_1.setCaption("Available Features");
-		availableFeaturesListSelect_1.setImmediate(false);
+		availableFeaturesListSelect_1.setImmediate(true);
 		availableFeaturesListSelect_1.setWidth("-1px");
 		availableFeaturesListSelect_1.setHeight("-1px");
 		verticalLayout_6.addComponent(availableFeaturesListSelect_1);
@@ -710,7 +710,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private VerticalLayout buildVerticalLayout_10() {
 		// common part: create layout
 		verticalLayout_10 = new VerticalLayout();
-		verticalLayout_10.setImmediate(false);
+		verticalLayout_10.setImmediate(true);
 		verticalLayout_10.setWidth("-1px");
 		verticalLayout_10.setHeight("-1px");
 		verticalLayout_10.setMargin(true);
@@ -731,7 +731,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		availableFeatureDetailPanel = new VerticalLayout();
 		availableFeatureDetailPanel.setCaption("Feature Details");
-		availableFeatureDetailPanel.setImmediate(false);
+		availableFeatureDetailPanel.setImmediate(true);
 		availableFeatureDetailPanel.setWidth("-1px");
 		availableFeatureDetailPanel.setHeight("-1px");
 		availableFeatureDetailPanel.setMargin(true);
@@ -739,7 +739,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// availableFeatureName
 		availableFeatureName = new TextField();
 		availableFeatureName.setCaption("Feature Name");
-		availableFeatureName.setImmediate(false);
+		availableFeatureName.setImmediate(true);
 		availableFeatureName.setWidth("-1px");
 		availableFeatureName.setHeight("-1px");
 		availableFeatureDetailPanel.addComponent(availableFeatureName);
@@ -747,7 +747,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// textField_9
 		textField_9 = new TextField();
 		textField_9.setCaption("Version");
-		textField_9.setImmediate(false);
+		textField_9.setImmediate(true);
 		textField_9.setWidth("-1px");
 		textField_9.setHeight("-1px");
 		availableFeatureDetailPanel.addComponent(textField_9);
@@ -755,7 +755,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// textArea_5
 		textArea_5 = new TextArea();
 		textArea_5.setCaption("Feature Description");
-		textArea_5.setImmediate(false);
+		textArea_5.setImmediate(true);
 		textArea_5.setWidth("-1px");
 		textArea_5.setHeight("-1px");
 		availableFeatureDetailPanel.addComponent(textArea_5);
@@ -768,7 +768,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		horizontalLayout_5 = new HorizontalLayout();
 		horizontalLayout_5.setCaption("Controls");
-		horizontalLayout_5.setImmediate(false);
+		horizontalLayout_5.setImmediate(true);
 		horizontalLayout_5.setWidth("-1px");
 		horizontalLayout_5.setHeight("-1px");
 		horizontalLayout_5.setMargin(true);
@@ -791,7 +791,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		installedFeaturesTab = new VerticalLayout();
 		installedFeaturesTab.setCaption("Installed Features");
-		installedFeaturesTab.setImmediate(false);
+		installedFeaturesTab.setImmediate(true);
 		installedFeaturesTab.setWidth("-1px");
 		installedFeaturesTab.setHeight("-1px");
 		installedFeaturesTab.setMargin(true);
@@ -807,7 +807,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private HorizontalLayout buildInstalledFeaturesHorizontalLayout_1() {
 		// common part: create layout
 		installedFeaturesHorizontalLayout_1 = new HorizontalLayout();
-		installedFeaturesHorizontalLayout_1.setImmediate(false);
+		installedFeaturesHorizontalLayout_1.setImmediate(true);
 		installedFeaturesHorizontalLayout_1.setWidth("-1px");
 		installedFeaturesHorizontalLayout_1.setHeight("-1px");
 		installedFeaturesHorizontalLayout_1.setMargin(false);
@@ -827,7 +827,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private VerticalLayout buildVerticalLayout_11() {
 		// common part: create layout
 		verticalLayout_11 = new VerticalLayout();
-		verticalLayout_11.setImmediate(false);
+		verticalLayout_11.setImmediate(true);
 		verticalLayout_11.setWidth("-1px");
 		verticalLayout_11.setHeight("-1px");
 		verticalLayout_11.setMargin(false);
@@ -835,7 +835,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// installedFeaturesListSelect_1
 		installedFeaturesListSelect_1 = new ListSelect();
 		installedFeaturesListSelect_1.setCaption("Installed Features");
-		installedFeaturesListSelect_1.setImmediate(false);
+		installedFeaturesListSelect_1.setImmediate(true);
 		installedFeaturesListSelect_1.setWidth("-1px");
 		installedFeaturesListSelect_1.setHeight("-1px");
 		verticalLayout_11.addComponent(installedFeaturesListSelect_1);
@@ -847,7 +847,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private VerticalLayout buildVerticalLayout_12() {
 		// common part: create layout
 		verticalLayout_12 = new VerticalLayout();
-		verticalLayout_12.setImmediate(false);
+		verticalLayout_12.setImmediate(true);
 		verticalLayout_12.setWidth("-1px");
 		verticalLayout_12.setHeight("-1px");
 		verticalLayout_12.setMargin(false);
@@ -867,7 +867,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private VerticalLayout buildVerticalLayout_7() {
 		// common part: create layout
 		verticalLayout_7 = new VerticalLayout();
-		verticalLayout_7.setImmediate(false);
+		verticalLayout_7.setImmediate(true);
 		verticalLayout_7.setWidth("-1px");
 		verticalLayout_7.setHeight("-1px");
 		verticalLayout_7.setMargin(true);
@@ -888,7 +888,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		installedFeatureDetailPanel = new VerticalLayout();
 		installedFeatureDetailPanel.setCaption("Installed Feature Details");
-		installedFeatureDetailPanel.setImmediate(false);
+		installedFeatureDetailPanel.setImmediate(true);
 		installedFeatureDetailPanel.setWidth("-1px");
 		installedFeatureDetailPanel.setHeight("-1px");
 		installedFeatureDetailPanel.setMargin(true);
@@ -896,7 +896,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// textField_11
 		textField_11 = new TextField();
 		textField_11.setCaption("Feature Name");
-		textField_11.setImmediate(false);
+		textField_11.setImmediate(true);
 		textField_11.setWidth("-1px");
 		textField_11.setHeight("-1px");
 		installedFeatureDetailPanel.addComponent(textField_11);
@@ -904,7 +904,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// textField_12
 		textField_12 = new TextField();
 		textField_12.setCaption("Version");
-		textField_12.setImmediate(false);
+		textField_12.setImmediate(true);
 		textField_12.setWidth("-1px");
 		textField_12.setHeight("-1px");
 		installedFeatureDetailPanel.addComponent(textField_12);
@@ -912,7 +912,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// textArea_3
 		textArea_3 = new TextArea();
 		textArea_3.setCaption("Feature Description");
-		textArea_3.setImmediate(false);
+		textArea_3.setImmediate(true);
 		textArea_3.setWidth("-1px");
 		textArea_3.setHeight("-1px");
 		installedFeatureDetailPanel.addComponent(textArea_3);
@@ -925,7 +925,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		horizontalLayout_8 = new HorizontalLayout();
 		horizontalLayout_8.setCaption("Controls");
-		horizontalLayout_8.setImmediate(false);
+		horizontalLayout_8.setImmediate(true);
 		horizontalLayout_8.setWidth("-1px");
 		horizontalLayout_8.setHeight("-1px");
 		horizontalLayout_8.setMargin(false);
@@ -947,7 +947,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private VerticalLayout buildVerticalLayout_9() {
 		// common part: create layout
 		verticalLayout_9 = new VerticalLayout();
-		verticalLayout_9.setImmediate(false);
+		verticalLayout_9.setImmediate(true);
 		verticalLayout_9.setWidth("-1px");
 		verticalLayout_9.setHeight("-1px");
 		verticalLayout_9.setMargin(false);
@@ -968,7 +968,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		installedFeaturesTabLicenceDetailPanel = new VerticalLayout();
 		installedFeaturesTabLicenceDetailPanel.setCaption("Licence Detail");
-		installedFeaturesTabLicenceDetailPanel.setImmediate(false);
+		installedFeaturesTabLicenceDetailPanel.setImmediate(true);
 		installedFeaturesTabLicenceDetailPanel.setWidth("-1px");
 		installedFeaturesTabLicenceDetailPanel.setHeight("-1px");
 		installedFeaturesTabLicenceDetailPanel.setMargin(true);
@@ -976,7 +976,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// textArea_2
 		textArea_2 = new TextArea();
 		textArea_2.setCaption("Licence");
-		textArea_2.setImmediate(false);
+		textArea_2.setImmediate(true);
 		textArea_2.setWidth("-1px");
 		textArea_2.setHeight("-1px");
 		installedFeaturesTabLicenceDetailPanel.addComponent(textArea_2);
@@ -989,7 +989,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		horizontalLayout_1 = new HorizontalLayout();
 		horizontalLayout_1.setCaption("Controls");
-		horizontalLayout_1.setImmediate(false);
+		horizontalLayout_1.setImmediate(true);
 		horizontalLayout_1.setWidth("-1px");
 		horizontalLayout_1.setHeight("-1px");
 		horizontalLayout_1.setMargin(false);
@@ -1025,7 +1025,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		installedLicencesTab = new VerticalLayout();
 		installedLicencesTab.setCaption("Installed Licences");
-		installedLicencesTab.setImmediate(false);
+		installedLicencesTab.setImmediate(true);
 		installedLicencesTab.setWidth("-1px");
 		installedLicencesTab.setHeight("-1px");
 		installedLicencesTab.setMargin(true);
@@ -1041,7 +1041,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private HorizontalLayout buildHorizontalLayout_7() {
 		// common part: create layout
 		horizontalLayout_7 = new HorizontalLayout();
-		horizontalLayout_7.setImmediate(false);
+		horizontalLayout_7.setImmediate(true);
 		horizontalLayout_7.setWidth("-1px");
 		horizontalLayout_7.setHeight("-1px");
 		horizontalLayout_7.setMargin(false);
@@ -1061,7 +1061,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private VerticalLayout buildVerticalLayout_3() {
 		// common part: create layout
 		verticalLayout_3 = new VerticalLayout();
-		verticalLayout_3.setImmediate(false);
+		verticalLayout_3.setImmediate(true);
 		verticalLayout_3.setWidth("-1px");
 		verticalLayout_3.setHeight("-1px");
 		verticalLayout_3.setMargin(false);
@@ -1069,7 +1069,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// installedLicencesListSelect_1
 		installedLicencesListSelect_1 = new ListSelect();
 		installedLicencesListSelect_1.setCaption("Installed Licences");
-		installedLicencesListSelect_1.setImmediate(false);
+		installedLicencesListSelect_1.setImmediate(true);
 		installedLicencesListSelect_1.setWidth("-1px");
 		installedLicencesListSelect_1.setHeight("-1px");
 		verticalLayout_3.addComponent(installedLicencesListSelect_1);
@@ -1081,7 +1081,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private VerticalLayout buildVerticalLayout_4() {
 		// common part: create layout
 		verticalLayout_4 = new VerticalLayout();
-		verticalLayout_4.setImmediate(false);
+		verticalLayout_4.setImmediate(true);
 		verticalLayout_4.setWidth("-1px");
 		verticalLayout_4.setHeight("-1px");
 		verticalLayout_4.setMargin(true);
@@ -1097,7 +1097,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	private VerticalLayout buildVerticalLayout_13() {
 		// common part: create layout
 		verticalLayout_13 = new VerticalLayout();
-		verticalLayout_13.setImmediate(false);
+		verticalLayout_13.setImmediate(true);
 		verticalLayout_13.setWidth("-1px");
 		verticalLayout_13.setHeight("-1px");
 		verticalLayout_13.setMargin(false);
@@ -1118,7 +1118,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		installedLicencesTabLicenceDetailPanel = new VerticalLayout();
 		installedLicencesTabLicenceDetailPanel.setCaption("Licence Detail");
-		installedLicencesTabLicenceDetailPanel.setImmediate(false);
+		installedLicencesTabLicenceDetailPanel.setImmediate(true);
 		installedLicencesTabLicenceDetailPanel.setWidth("-1px");
 		installedLicencesTabLicenceDetailPanel.setHeight("-1px");
 		installedLicencesTabLicenceDetailPanel.setMargin(true);
@@ -1126,7 +1126,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// textArea_6
 		textArea_6 = new TextArea();
 		textArea_6.setCaption("Licence");
-		textArea_6.setImmediate(false);
+		textArea_6.setImmediate(true);
 		textArea_6.setWidth("-1px");
 		textArea_6.setHeight("-1px");
 		installedLicencesTabLicenceDetailPanel.addComponent(textArea_6);
@@ -1139,7 +1139,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// common part: create layout
 		horizontalLayout_10 = new HorizontalLayout();
 		horizontalLayout_10.setCaption("Controls");
-		horizontalLayout_10.setImmediate(false);
+		horizontalLayout_10.setImmediate(true);
 		horizontalLayout_10.setWidth("-1px");
 		horizontalLayout_10.setHeight("-1px");
 		horizontalLayout_10.setMargin(true);

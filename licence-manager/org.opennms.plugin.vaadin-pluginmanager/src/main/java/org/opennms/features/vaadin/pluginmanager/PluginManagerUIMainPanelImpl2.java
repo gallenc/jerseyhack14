@@ -20,6 +20,7 @@ import com.vaadin.ui.HorizontalSplitPanel;
 import com.vaadin.ui.Link;
 import com.vaadin.ui.ListSelect;
 import com.vaadin.ui.TabSheet;
+import com.vaadin.ui.TabSheet.SelectedTabChangeEvent;
 import com.vaadin.ui.TextArea;
 import com.vaadin.ui.TextField;
 import com.vaadin.ui.VerticalLayout;
@@ -159,7 +160,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		String karafInstanceSelected= (sessionPluginModel.getKarafInstance()==null) ? "" : sessionPluginModel.getKarafInstance().toString();
 		karafInstanceSelectedTextField.setValue(karafInstanceSelected);
 
-        Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		Format formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 		String karaflastupdate= (sessionPluginModel.getKarafInstanceLastUpdated()==null) ? "never updated" : formatter.format(sessionPluginModel.getKarafInstanceLastUpdated());
 		karafLastUpdatedTextField.setValue(karaflastupdate);
@@ -179,10 +180,10 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		pluginServerUsernameTxtField.setValue(sessionPluginModel.getPluginServerUsername());
 		pluginServerUrlTxtField.setValue(sessionPluginModel.getPluginServerUrl());
 		licenceShoppingCartUrlTxtField.setValue(sessionPluginModel.getLicenceShoppingCartUrl());
-		
+
 		ExternalResource resource= new ExternalResource(sessionPluginModel.getLicenceShoppingCartUrl());
 		openShoppingCartLink.setResource(resource);
-		
+
 		mainLayout.markAsDirty();
 
 	}
@@ -243,7 +244,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		pluginServerPasswordTxtField.setValue(sessionPluginModel.getPluginServerPassword());
 		pluginServerUsernameTxtField.setValue(sessionPluginModel.getPluginServerUsername());
 		pluginServerUrlTxtField.setValue(sessionPluginModel.getPluginServerUrl());
-		
+
 		licenceShoppingCartUrlTxtField.setValue(sessionPluginModel.getLicenceShoppingCartUrl());
 		ExternalResource resource= new ExternalResource(sessionPluginModel.getLicenceShoppingCartUrl());
 		openShoppingCartLink.setResource(resource);
@@ -261,7 +262,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 					String pluginServerPassword = pluginServerPasswordTxtField.getValue();
 					String pluginServerUrl= pluginServerUrlTxtField.getValue();
 					String licenceShoppingCartUrl=licenceShoppingCartUrlTxtField.getValue();
-					
+
 					sessionPluginModel.setPluginModelBasicData(pluginServerUsername, pluginServerPassword, pluginServerUrl, licenceShoppingCartUrl);	
 
 					systemMessages.setValue("plugin server password updated to "+pluginServerPasswordTxtField.getValue()
@@ -269,7 +270,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 							+ "\nplugin server URL updated to "+pluginServerUrlTxtField.getValue()
 							+ "\nlicence Shopping Cart URL updated to "+licenceShoppingCartUrlTxtField.getValue()
 							+ "\n");
-					
+
 					updateDisplayValues();
 				} catch (Exception e){
 					systemMessages.setValue("problem updating plugin server data : "+e.getMessage());
@@ -284,7 +285,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		karafListSelect.setRows(5); 	// Show 5 items and a scrollbar if there are more
 		karafListSelect.setNullSelectionAllowed(false);
 		karafListSelect.setImmediate(true);
-		
+
 		// add available instances from opennms
 		for (String instanceName: sessionPluginModel.getKarafInstances().keySet()){
 			karafListSelect.addItem(instanceName);
@@ -351,6 +352,15 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 
 		// Plugins Detail tabs panel
 
+		// update tab content dynamically when tab is selected
+		featuresTabSheet_1.addSelectedTabChangeListener( new TabSheet.SelectedTabChangeListener() {
+			private static final long serialVersionUID = 1L;
+
+			public void selectedTabChange(SelectedTabChangeEvent event){
+				updateDisplayValues();
+			}
+		});
+
 		// Available Plugins Tab
 
 		ProductSpecList availablePluginsList = sessionPluginModel.getAvailablePlugins();
@@ -375,11 +385,11 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 
 		LicenceList licencelist = sessionPluginModel.getInstalledLicenceList();
 		if (licencelist!=null) licenceDescriptorTablePanel.addLicenceList(licencelist);
-		
+
 		InstalledLicencesControlsPanel  installedLicencesControlsPanel= new InstalledLicencesControlsPanel();
 		installedLicencesControlsPanel.setSessionPluginModel(sessionPluginModel);		
 		installedLicencesControlsPanel.setLicenceDescriptorTablePanel(licenceDescriptorTablePanel);
-		
+
 		installedLicencesControlsPanel.setSystemMessages(systemMessages);
 		licenceDescriptorTablePanel.getControlsVerticalLayout().addComponent( installedLicencesControlsPanel);
 
@@ -387,7 +397,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 
 		addLicencePanel.setSessionPluginModel(sessionPluginModel);
 		addLicencePanel.setSystemMessages(systemMessages);
-		
+
 		// update the display
 		updateDisplayValues();
 
@@ -401,15 +411,15 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		mainLayout.setWidth("100%");
 		mainLayout.setHeight("100%");
 		mainLayout.setMargin(false);
-		
+
 		// top-level component properties
 		setWidth("100.0%");
 		setHeight("100.0%");
-		
+
 		// pluginMgrHorSplitPanel_1
 		pluginMgrHorSplitPanel_1 = buildPluginMgrHorSplitPanel_1();
 		mainLayout.addComponent(pluginMgrHorSplitPanel_1);
-		
+
 		return mainLayout;
 	}
 
@@ -421,15 +431,15 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		pluginMgrHorSplitPanel_1.setImmediate(true);
 		pluginMgrHorSplitPanel_1.setWidth("100.0%");
 		pluginMgrHorSplitPanel_1.setHeight("100.0%");
-		
+
 		// generalSettingsPanel
 		generalSettingsPanel = buildGeneralSettingsPanel();
 		pluginMgrHorSplitPanel_1.addComponent(generalSettingsPanel);
-		
+
 		// featureSettingsPanel
 		featureSettingsPanel = buildFeatureSettingsPanel();
 		pluginMgrHorSplitPanel_1.addComponent(featureSettingsPanel);
-		
+
 		return pluginMgrHorSplitPanel_1;
 	}
 
@@ -442,23 +452,23 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		generalSettingsPanel.setWidth("-1px");
 		generalSettingsPanel.setHeight("-1px");
 		generalSettingsPanel.setMargin(true);
-		
+
 		// horizontalLayout_3
 		horizontalLayout_3 = buildHorizontalLayout_3();
 		generalSettingsPanel.addComponent(horizontalLayout_3);
-		
+
 		// horizontalLayout_1
 		horizontalLayout_1 = buildHorizontalLayout_1();
 		generalSettingsPanel.addComponent(horizontalLayout_1);
-		
+
 		// horizontalLayout_4
 		horizontalLayout_4 = buildHorizontalLayout_4();
 		generalSettingsPanel.addComponent(horizontalLayout_4);
-		
+
 		// systemIdPanel
 		systemIdPanel = buildSystemIdPanel();
 		generalSettingsPanel.addComponent(systemIdPanel);
-		
+
 		return generalSettingsPanel;
 	}
 
@@ -471,21 +481,21 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		horizontalLayout_3.setHeight("-1px");
 		horizontalLayout_3.setMargin(false);
 		horizontalLayout_3.setSpacing(true);
-		
+
 		// karafListSelect
 		karafListSelect = new ListSelect();
 		karafListSelect.setCaption("Select Karaf Instance");
 		karafListSelect.setImmediate(true);
 		karafListSelect
-				.setDescription("Selects which Karaf instance you are looking at");
+		.setDescription("Selects which Karaf instance you are looking at");
 		karafListSelect.setWidth("-1px");
 		karafListSelect.setHeight("-1px");
 		horizontalLayout_3.addComponent(karafListSelect);
-		
+
 		// verticalLayout_4
 		verticalLayout_4 = buildVerticalLayout_4();
 		horizontalLayout_3.addComponent(verticalLayout_4);
-		
+
 		return horizontalLayout_3;
 	}
 
@@ -498,7 +508,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		verticalLayout_4.setHeight("-1px");
 		verticalLayout_4.setMargin(true);
 		verticalLayout_4.setSpacing(true);
-		
+
 		// karafInstanceSelectedTextField
 		karafInstanceSelectedTextField = new TextField();
 		karafInstanceSelectedTextField.setCaption("Karaf Instance Selected");
@@ -506,7 +516,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		karafInstanceSelectedTextField.setWidth("-1px");
 		karafInstanceSelectedTextField.setHeight("-1px");
 		verticalLayout_4.addComponent(karafInstanceSelectedTextField);
-		
+
 		// karafLastUpdatedTextField
 		karafLastUpdatedTextField = new TextField();
 		karafLastUpdatedTextField.setCaption("Karaf  Last Updated");
@@ -514,7 +524,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		karafLastUpdatedTextField.setWidth("-1px");
 		karafLastUpdatedTextField.setHeight("-1px");
 		verticalLayout_4.addComponent(karafLastUpdatedTextField);
-		
+
 		// reloadKarafDataButton
 		reloadKarafDataButton = new Button();
 		reloadKarafDataButton.setCaption("Reload Karaf Data");
@@ -522,7 +532,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		reloadKarafDataButton.setWidth("-1px");
 		reloadKarafDataButton.setHeight("-1px");
 		verticalLayout_4.addComponent(reloadKarafDataButton);
-		
+
 		return verticalLayout_4;
 	}
 
@@ -535,7 +545,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		horizontalLayout_1.setHeight("-1px");
 		horizontalLayout_1.setMargin(true);
 		horizontalLayout_1.setSpacing(true);
-		
+
 		// reloadAvailablePluginsButton
 		reloadAvailablePluginsButton = new Button();
 		reloadAvailablePluginsButton.setCaption("Reload Available Plugins");
@@ -545,16 +555,16 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		horizontalLayout_1.addComponent(reloadAvailablePluginsButton);
 		horizontalLayout_1.setComponentAlignment(reloadAvailablePluginsButton,
 				new Alignment(9));
-		
+
 		// availablepluginsLastUpdatedTextField
 		availablepluginsLastUpdatedTextField = new TextField();
 		availablepluginsLastUpdatedTextField
-				.setCaption("Available Pugins Last Updated");
+		.setCaption("Available Pugins Last Updated");
 		availablepluginsLastUpdatedTextField.setImmediate(true);
 		availablepluginsLastUpdatedTextField.setWidth("-1px");
 		availablepluginsLastUpdatedTextField.setHeight("-1px");
 		horizontalLayout_1.addComponent(availablepluginsLastUpdatedTextField);
-		
+
 		return horizontalLayout_1;
 	}
 
@@ -566,17 +576,17 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		horizontalLayout_4.setWidth("-1px");
 		horizontalLayout_4.setHeight("-1px");
 		horizontalLayout_4.setMargin(false);
-		
+
 		// pluginServerConfigPanel
 		pluginServerConfigPanel = buildPluginServerConfigPanel();
 		horizontalLayout_4.addComponent(pluginServerConfigPanel);
-		
+
 		// verticalLayout_2
 		verticalLayout_2 = buildVerticalLayout_2();
 		horizontalLayout_4.addComponent(verticalLayout_2);
 		horizontalLayout_4.setComponentAlignment(verticalLayout_2,
 				new Alignment(48));
-		
+
 		return horizontalLayout_4;
 	}
 
@@ -587,11 +597,11 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		pluginServerConfigPanel.setCaption("Plugin Server");
 		pluginServerConfigPanel.setImmediate(true);
 		pluginServerConfigPanel
-				.setDescription("External server listing plugins");
+		.setDescription("External server listing plugins");
 		pluginServerConfigPanel.setWidth("-1px");
 		pluginServerConfigPanel.setHeight("-1px");
 		pluginServerConfigPanel.setMargin(true);
-		
+
 		// pluginServerUrlTxtField
 		pluginServerUrlTxtField = new TextField();
 		pluginServerUrlTxtField.setCaption("Plugin Server URL");
@@ -599,7 +609,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		pluginServerUrlTxtField.setWidth("-1px");
 		pluginServerUrlTxtField.setHeight("-1px");
 		pluginServerConfigPanel.addComponent(pluginServerUrlTxtField);
-		
+
 		// pluginServerUsernameTxtField
 		pluginServerUsernameTxtField = new TextField();
 		pluginServerUsernameTxtField.setCaption("Plugin Server Username");
@@ -607,7 +617,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		pluginServerUsernameTxtField.setWidth("-1px");
 		pluginServerUsernameTxtField.setHeight("-1px");
 		pluginServerConfigPanel.addComponent(pluginServerUsernameTxtField);
-		
+
 		// pluginServerPasswordTxtField
 		pluginServerPasswordTxtField = new TextField();
 		pluginServerPasswordTxtField.setCaption("Plugin Server Password");
@@ -615,7 +625,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		pluginServerPasswordTxtField.setWidth("-1px");
 		pluginServerPasswordTxtField.setHeight("-1px");
 		pluginServerConfigPanel.addComponent(pluginServerPasswordTxtField);
-		
+
 		// licenceShoppingCartUrlTxtField
 		licenceShoppingCartUrlTxtField = new TextField();
 		licenceShoppingCartUrlTxtField.setCaption("Licence Shopping Cart URL");
@@ -623,7 +633,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		licenceShoppingCartUrlTxtField.setWidth("-1px");
 		licenceShoppingCartUrlTxtField.setHeight("-1px");
 		pluginServerConfigPanel.addComponent(licenceShoppingCartUrlTxtField);
-		
+
 		return pluginServerConfigPanel;
 	}
 
@@ -635,7 +645,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		verticalLayout_2.setWidth("-1px");
 		verticalLayout_2.setHeight("-1px");
 		verticalLayout_2.setMargin(false);
-		
+
 		// updatePluginServerButton
 		updatePluginServerButton = new Button();
 		updatePluginServerButton.setCaption("Update Plugin Server");
@@ -643,7 +653,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		updatePluginServerButton.setWidth("-1px");
 		updatePluginServerButton.setHeight("-1px");
 		verticalLayout_2.addComponent(updatePluginServerButton);
-		
+
 		// openShoppingCartLink
 		openShoppingCartLink = new Link();
 		openShoppingCartLink.setCaption("Open Shopping Cart");
@@ -651,7 +661,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		openShoppingCartLink.setWidth("-1px");
 		openShoppingCartLink.setHeight("-1px");
 		verticalLayout_2.addComponent(openShoppingCartLink);
-		
+
 		return verticalLayout_2;
 	}
 
@@ -665,7 +675,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		systemIdPanel.setWidth("-1px");
 		systemIdPanel.setHeight("-1px");
 		systemIdPanel.setMargin(true);
-		
+
 		// systemIdTxtField
 		systemIdTxtField = new TextField();
 		systemIdTxtField.setCaption("System Id");
@@ -673,11 +683,11 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		systemIdTxtField.setWidth("-1px");
 		systemIdTxtField.setHeight("-1px");
 		systemIdPanel.addComponent(systemIdTxtField);
-		
+
 		// verticalLayout_3
 		verticalLayout_3 = buildVerticalLayout_3();
 		systemIdPanel.addComponent(verticalLayout_3);
-		
+
 		return systemIdPanel;
 	}
 
@@ -689,7 +699,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		verticalLayout_3.setWidth("-1px");
 		verticalLayout_3.setHeight("-1px");
 		verticalLayout_3.setMargin(true);
-		
+
 		// updateSystemIdButton
 		updateSystemIdButton = new Button();
 		updateSystemIdButton.setCaption("Update System Id");
@@ -697,7 +707,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		updateSystemIdButton.setWidth("-1px");
 		updateSystemIdButton.setHeight("-1px");
 		verticalLayout_3.addComponent(updateSystemIdButton);
-		
+
 		// generateRandomSystemIdButton
 		generateRandomSystemIdButton = new Button();
 		generateRandomSystemIdButton.setCaption("Generate Random System Id");
@@ -705,7 +715,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		generateRandomSystemIdButton.setWidth("-1px");
 		generateRandomSystemIdButton.setHeight("-1px");
 		verticalLayout_3.addComponent(generateRandomSystemIdButton);
-		
+
 		return verticalLayout_3;
 	}
 
@@ -718,11 +728,11 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		featureSettingsPanel.setWidth("-1px");
 		featureSettingsPanel.setHeight("-1px");
 		featureSettingsPanel.setMargin(true);
-		
+
 		// featuresTabSheet_1
 		featuresTabSheet_1 = buildFeaturesTabSheet_1();
 		featureSettingsPanel.addComponent(featuresTabSheet_1);
-		
+
 		// systemMessages
 		systemMessages = new TextArea();
 		systemMessages.setCaption("System Messages");
@@ -730,7 +740,7 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		systemMessages.setWidth("100.0%");
 		systemMessages.setHeight("100.0%");
 		featureSettingsPanel.addComponent(systemMessages);
-		
+
 		return featureSettingsPanel;
 	}
 
@@ -742,26 +752,26 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		featuresTabSheet_1.setImmediate(true);
 		featuresTabSheet_1.setWidth("-1px");
 		featuresTabSheet_1.setHeight("-1px");
-		
+
 		// installedPluginsTab
 		installedPluginsTab = buildInstalledPluginsTab();
 		featuresTabSheet_1.addTab(installedPluginsTab, "Installed Plugins",
 				null);
-		
+
 		// availablePluginsTab
 		availablePluginsTab = buildAvailablePluginsTab();
 		featuresTabSheet_1.addTab(availablePluginsTab, "Available Plugins",
 				null);
-		
+
 		// installedLicencesTab
 		installedLicencesTab = buildInstalledLicencesTab();
 		featuresTabSheet_1.addTab(installedLicencesTab, "Installed Licences",
 				null);
-		
+
 		// addLicenceTab
 		addLicenceTab = buildAddLicenceTab();
 		featuresTabSheet_1.addTab(addLicenceTab, "Add Licence", null);
-		
+
 		return featuresTabSheet_1;
 	}
 
@@ -773,14 +783,14 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		installedPluginsTab.setWidth("-1px");
 		installedPluginsTab.setHeight("-1px");
 		installedPluginsTab.setMargin(true);
-		
+
 		// installedPluginsPanel
 		installedPluginsPanel = new ProductDescriptorTablePanel();
 		installedPluginsPanel.setImmediate(true);
 		installedPluginsPanel.setWidth("100.0%");
 		installedPluginsPanel.setHeight("100.0%");
 		installedPluginsTab.addComponent(installedPluginsPanel);
-		
+
 		return installedPluginsTab;
 	}
 
@@ -792,14 +802,14 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		availablePluginsTab.setWidth("-1px");
 		availablePluginsTab.setHeight("-1px");
 		availablePluginsTab.setMargin(true);
-		
+
 		// availablePluginsPanel
 		availablePluginsPanel = new ProductDescriptorTablePanel();
 		availablePluginsPanel.setImmediate(true);
 		availablePluginsPanel.setWidth("100.0%");
 		availablePluginsPanel.setHeight("100.0%");
 		availablePluginsTab.addComponent(availablePluginsPanel);
-		
+
 		return availablePluginsTab;
 	}
 
@@ -812,14 +822,14 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		installedLicencesTab.setWidth("-1px");
 		installedLicencesTab.setHeight("-1px");
 		installedLicencesTab.setMargin(true);
-		
+
 		// licenceDescriptorTablePanel
 		licenceDescriptorTablePanel = new LicenceDescriptorTablePanel();
 		licenceDescriptorTablePanel.setImmediate(true);
 		licenceDescriptorTablePanel.setWidth("100.0%");
 		licenceDescriptorTablePanel.setHeight("100.0%");
 		installedLicencesTab.addComponent(licenceDescriptorTablePanel);
-		
+
 		return installedLicencesTab;
 	}
 
@@ -832,14 +842,14 @@ public class PluginManagerUIMainPanelImpl2 extends CustomComponent {
 		addLicenceTab.setWidth("-1px");
 		addLicenceTab.setHeight("-1px");
 		addLicenceTab.setMargin(true);
-		
+
 		// addLicencePanel
 		addLicencePanel = new AddLicencePanel();
 		addLicencePanel.setImmediate(true);
 		addLicencePanel.setWidth("100.0%");
 		addLicencePanel.setHeight("100.0%");
 		addLicenceTab.addComponent(addLicencePanel);
-		
+
 		return addLicenceTab;
 	}
 

@@ -201,7 +201,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		
 		// controlsVerticalLayout
 		controlsVerticalLayout = new VerticalLayout();
-		controlsVerticalLayout.setImmediate(false);
+		controlsVerticalLayout.setImmediate(true);
 		controlsVerticalLayout.setWidth("-1px");
 		controlsVerticalLayout.setHeight("-1px");
 		controlsVerticalLayout.setMargin(false);
@@ -214,14 +214,14 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 	private VerticalLayout buildVerticalLayout_1() {
 		// common part: create layout
 		verticalLayout_1 = new VerticalLayout();
-		verticalLayout_1.setImmediate(false);
+		verticalLayout_1.setImmediate(true);
 		verticalLayout_1.setWidth("-1px");
 		verticalLayout_1.setHeight("-1px");
 		verticalLayout_1.setMargin(false);
 		
 		// licencePanels
 		licencePanels = new VerticalLayout();
-		licencePanels.setImmediate(false);
+		licencePanels.setImmediate(true);
 		licencePanels.setWidth("-1px");
 		licencePanels.setHeight("-1px");
 		licencePanels.setMargin(false);

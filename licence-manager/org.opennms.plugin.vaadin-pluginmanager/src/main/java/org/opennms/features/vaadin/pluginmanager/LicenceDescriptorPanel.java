@@ -116,7 +116,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 			} else {
 				for (OptionMetadata option: licenceMetadata.getOptions()){
 					TextField optionField = new TextField();
-					optionField.setImmediate(false);
+					optionField.setImmediate(true);
 					optionField.setWidth("400px");
 					optionField.setHeight("-1px");
 					optionField.setCaption(option.getName());
@@ -150,7 +150,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 	private VerticalLayout buildMainLayout() {
 		// common part: create layout
 		mainLayout = new VerticalLayout();
-		mainLayout.setImmediate(false);
+		mainLayout.setImmediate(true);
 		mainLayout.setWidth("100%");
 		mainLayout.setHeight("100%");
 		mainLayout.setMargin(false);
@@ -162,7 +162,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 		// licenceTextArea
 		licenceTextArea = new TextArea();
 		licenceTextArea.setCaption("Licence String");
-		licenceTextArea.setImmediate(false);
+		licenceTextArea.setImmediate(true);
 		licenceTextArea.setWidth("400px");
 		licenceTextArea.setHeight("200px");
 		mainLayout.addComponent(licenceTextArea);
@@ -179,7 +179,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 		// common part: create layout
 		licenceMetadataVerticalLayout = new VerticalLayout();
 		licenceMetadataVerticalLayout.setCaption("Licence Metadata");
-		licenceMetadataVerticalLayout.setImmediate(false);
+		licenceMetadataVerticalLayout.setImmediate(true);
 		licenceMetadataVerticalLayout.setWidth("-1px");
 		licenceMetadataVerticalLayout.setHeight("-1px");
 		licenceMetadataVerticalLayout.setMargin(false);
@@ -187,7 +187,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 		// productIdTextField
 		productIdTextField = new TextField();
 		productIdTextField.setCaption("Product Id");
-		productIdTextField.setImmediate(false);
+		productIdTextField.setImmediate(true);
 		productIdTextField.setWidth("400px");
 		productIdTextField.setHeight("-1px");
 		licenceMetadataVerticalLayout.addComponent(productIdTextField);
@@ -195,7 +195,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 		// licenseeTextField
 		licenseeTextField = new TextField();
 		licenseeTextField.setCaption("Licensee");
-		licenseeTextField.setImmediate(false);
+		licenseeTextField.setImmediate(true);
 		licenseeTextField
 				.setDescription("The person or organisation to whom the licence applies.");
 		licenseeTextField.setWidth("400px");
@@ -205,7 +205,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 		// licensorTextField
 		licensorTextField = new TextField();
 		licensorTextField.setCaption("Licensor");
-		licensorTextField.setImmediate(false);
+		licensorTextField.setImmediate(true);
 		licensorTextField
 				.setDescription("The person or organisation issuing the licence");
 		licensorTextField.setWidth("400px");
@@ -215,7 +215,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 		// durationTextField
 		durationTextField = new TextField();
 		durationTextField.setCaption("Duration");
-		durationTextField.setImmediate(false);
+		durationTextField.setImmediate(true);
 		durationTextField
 				.setDescription("The duration in days from the start date.");
 		durationTextField.setWidth("400px");
@@ -225,7 +225,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 		// expiryDateTextField
 		expiryDateTextField = new TextField();
 		expiryDateTextField.setCaption("Expiry Date");
-		expiryDateTextField.setImmediate(false);
+		expiryDateTextField.setImmediate(true);
 		expiryDateTextField
 				.setDescription("The date after which the licence expires. Note if present, Duration takes priority over this date.");
 		expiryDateTextField.setWidth("400px");
@@ -235,7 +235,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 		// startDateTextField
 		startDateTextField = new TextField();
 		startDateTextField.setCaption("Start Date");
-		startDateTextField.setImmediate(false);
+		startDateTextField.setImmediate(true);
 		startDateTextField
 				.setDescription("The date on which the licence becomes valid");
 		startDateTextField.setWidth("400px");
@@ -245,7 +245,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 		// systemIdTextField
 		systemIdTextField = new TextField();
 		systemIdTextField.setCaption("System Id");
-		systemIdTextField.setImmediate(false);
+		systemIdTextField.setImmediate(true);
 		systemIdTextField
 				.setDescription("The unique id of the system to which this licence applies");
 		systemIdTextField.setWidth("400px");
@@ -255,7 +255,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 		// featureRepositoryTextField
 		featureRepositoryTextField = new TextField();
 		featureRepositoryTextField.setCaption("Feature Repository");
-		featureRepositoryTextField.setImmediate(false);
+		featureRepositoryTextField.setImmediate(true);
 		featureRepositoryTextField.setWidth("400px");
 		featureRepositoryTextField.setHeight("-1px");
 		licenceMetadataVerticalLayout.addComponent(featureRepositoryTextField);
@@ -263,7 +263,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 		// licenceOptionsVerticalLayout
 		licenceOptionsVerticalLayout = new VerticalLayout();
 		licenceOptionsVerticalLayout.setCaption("Licence Options");
-		licenceOptionsVerticalLayout.setImmediate(false);
+		licenceOptionsVerticalLayout.setImmediate(true);
 		licenceOptionsVerticalLayout.setWidth("-1px");
 		licenceOptionsVerticalLayout.setHeight("-1px");
 		licenceOptionsVerticalLayout.setMargin(false);
