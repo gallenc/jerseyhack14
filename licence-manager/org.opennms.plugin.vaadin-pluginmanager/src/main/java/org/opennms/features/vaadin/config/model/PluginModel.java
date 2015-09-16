@@ -26,13 +26,22 @@ public class PluginModel {
 
 	private PluginModelJaxb pluginModelJaxb = new PluginModelJaxb();
 
+	/**
+	 * fileUri is the location of the persisted plugin data
+	 * @return
+	 */
 	public String getFileUri() {
 		return fileUri;
 	}
 
+	/**
+	 * fileUri is the location of the persisted plugin data
+	 * @param fileUri
+	 */
 	public void setFileUri(String fileUri) {
 		this.fileUri = fileUri;
 	}
+
 
 	/**
 	 * returns the password of the remote plugin server
@@ -42,7 +51,13 @@ public class PluginModel {
 		return pluginModelJaxb.getPluginServerPassword();
 	}
 
-
+	/**
+	 * 
+	 * @param pluginServerPassword
+	 */
+	public void setPluginServerPassword(String pluginServerPassword){
+		pluginModelJaxb.setPluginServerPassword(pluginServerPassword);
+	}
 
 	/**
 	 * gets the username to access the plugin server
@@ -52,7 +67,13 @@ public class PluginModel {
 		return pluginModelJaxb.getPluginServerUsername();
 	}
 
-
+	/**
+	 * 
+	 * @param pluginServerUsername
+	 */
+	public void setPluginServerUsername(String pluginServerUsername){
+		pluginModelJaxb.setPluginServerUsername(pluginServerUsername);
+	}
 
 	/**
 	 * gets the url to access the plugin server
@@ -62,7 +83,13 @@ public class PluginModel {
 		return pluginModelJaxb.getPluginServerUrl();
 	}
 
-
+	/**
+	 * 
+	 * @param pluginServerUrl
+	 */
+	public void setPluginServerUrl(String pluginServerUrl){
+		pluginModelJaxb.setPluginServerUrl(pluginServerUrl);
+	}
 
 	/**
 	 * @return the licenceShoppingCartUrl
@@ -70,7 +97,16 @@ public class PluginModel {
 	public synchronized String getLicenceShoppingCartUrl() {
 		return pluginModelJaxb.getLicenceShoppingCartUrl();
 	}
-	
+
+	/**
+	 * 
+	 * @param licenceShoppingCartUrl
+	 */
+	public void setLicenceShoppingCartUrl(String licenceShoppingCartUrl){
+		pluginModelJaxb.setLicenceShoppingCartUrl(licenceShoppingCartUrl);
+	}
+
+
 	/**
 	 * Sets basic data for PluginModel and persists all at once
 	 * @param pluginServerUsername
@@ -103,6 +139,9 @@ public class PluginModel {
 
 	}
 
+	/**
+	 * 
+	 */
 	public synchronized void refreshAvailablePlugins() {
 		// TODO REPLACE WITH GETTER CODE
 
@@ -128,11 +167,11 @@ public class PluginModel {
 		pluginModelJaxb.setAvailablePlugins(availablePlugins);
 		pluginModelJaxb.setAvailablePluginsLastUpdated(new Date());
 		persist();
-		
+
 	}
-	
-	
-	
+
+
+
 	/**
 	 * returns list of available plugins obtained from the plugin server
 	 * @return the availablePlugins
@@ -142,7 +181,7 @@ public class PluginModel {
 		if (pluginModelJaxb.getAvailablePlugins()==null 
 				|| pluginModelJaxb.getAvailablePlugins().getProductSpecList()==null 
 				|| pluginModelJaxb.getAvailablePlugins().getProductSpecList().size()==0) refreshAvailablePlugins();
-		
+
 		return pluginModelJaxb.getAvailablePlugins();
 	}
 
@@ -152,7 +191,7 @@ public class PluginModel {
 	 */
 	public synchronized  KarafEntryJaxb refreshKarafEntry(String karafInstance){
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
-		
+
 		SortedMap<String, String> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("opennms does not know karafInstance="+karafInstance);
 		String karafInstanceUrl=karafInstances.get(karafInstance);
@@ -161,7 +200,7 @@ public class PluginModel {
 
 		try{
 			karafEntryJaxb= new KarafEntryJaxb();
-			
+
 			// TODO REPLACE WITH GETTER CODE against karaf
 
 
@@ -210,14 +249,14 @@ public class PluginModel {
 			pluginModelJaxb.getKarafDataMap().put(karafInstance, karafEntryJaxb);
 
 			persist();
-			
+
 		} catch (Exception e){
 			throw new RuntimeException("problem updating data from karaf Instance"+karafInstance, e);
 		}
 
 		return karafEntryJaxb;
 	}
-	
+
 	/**
 	 * returns the time the karaf instance date was last updated from the instance
 	 * returns null if never updated
@@ -231,7 +270,7 @@ public class PluginModel {
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
 		return karafEntry.getKarafInstanceLastUpdated();
 	}
-	
+
 	/**
 	 * returns the time when the available plugisn were last updated.
 	 * null if never updated
@@ -286,10 +325,10 @@ public class PluginModel {
 	public synchronized void setSystemId(String systemId, String karafInstance) {
 		refreshKarafEntry(karafInstance);
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
-		
+
 		// TODO CREATE COMMAND
 		karafEntry.setSystemId(systemId);
-		
+
 	}
 
 	/**
@@ -300,10 +339,10 @@ public class PluginModel {
 	public synchronized String generateRandomSystemId(String karafInstance){
 		refreshKarafEntry(karafInstance);
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
-		
+
 		// TODO CREATE COMMAND
 		karafEntry.setSystemId("32e396e36b28ef5d-a48ef1cb");
-        return karafEntry.getSystemId();
+		return karafEntry.getSystemId();
 	}
 
 	/**
@@ -314,7 +353,7 @@ public class PluginModel {
 	public synchronized void addLicence(String licenceStr,String karafInstance){
 		refreshKarafEntry(karafInstance);
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
-		
+
 		// TODO CREATE COMMAND
 		LicenceMetadata licenceMetadata=null;
 		try {
@@ -336,13 +375,18 @@ public class PluginModel {
 		licenceEntry.setLicenceStr(licenceStr);
 		licenceEntry.setProductId(productId);
 		karafEntry.getInstalledLicenceList().getLicenceList().add(licenceEntry);
-		
+
 	}
 
+	/**
+	 * 
+	 * @param selectedLicenceId
+	 * @param karafInstance
+	 */
 	public void removeLicence(String selectedLicenceId, String karafInstance) {
 		refreshKarafEntry(karafInstance);
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
-		
+
 		//TODO REPLACE WITH REAL COMMAND
 		LicenceEntry le=null;
 		for (LicenceEntry licenceEntry : karafEntry.getInstalledLicenceList().getLicenceList()){
@@ -364,9 +408,9 @@ public class PluginModel {
 	 * @param karafInstance
 	 */
 	public synchronized void installPlugin(String selectedProductId,String karafInstance) {
-		
+
 		refreshKarafEntry(karafInstance);
-		
+
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
 			throw new RuntimeException("cannot install plugin "+selectedProductId+" Unknown karaf instance "+karafInstance);
 		} 
@@ -374,7 +418,7 @@ public class PluginModel {
 		throw new RuntimeException("installPlugin plugin model unimplimented method");
 		// TODO ADD COMMAND INSTALL PLUGIN
 		//refreshKarafEntry(karafInstance);
-		
+
 
 	}
 
@@ -385,7 +429,7 @@ public class PluginModel {
 	 */
 	public synchronized void unInstallPlugin(String selectedProductId,String karafInstance) {
 		refreshKarafEntry(karafInstance);
-		
+
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
 			throw new RuntimeException("cannot install plugin "+selectedProductId+" Unknown karaf instance "+karafInstance);
 		} 
@@ -397,7 +441,9 @@ public class PluginModel {
 
 	}
 
-
+	/**
+	 * persists the plugin data to the file indicated by fileUri
+	 */
 	public synchronized void persist(){
 		if (fileUri==null) throw new RuntimeException("fileUri must be set for plugin manager");
 
@@ -419,6 +465,7 @@ public class PluginModel {
 
 	/**
 	 * blueprint init-method
+	 * loads the persisted plugin data to the file indicated by fileUri
 	 */
 	public synchronized void load(){
 		if (fileUri==null) throw new RuntimeException("fileUri must be set for plugin manager");
