@@ -130,8 +130,15 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 			panelIds.put(productId, productDescriptorPanel);
 			productPanels.addComponent(productDescriptorPanel);
 		}
-		// selects first value for display
-		if (! pmap.keySet().isEmpty()) {
+		
+		if (pmap.keySet().isEmpty()) {
+			//if there are no panels to display display an empty panel
+			ProductDescriptorPanel productDescriptorPanel= new ProductDescriptorPanel();
+			productDescriptorPanel.setReadOnly(true);
+			productDescriptorPanel.setVisible(true);
+			productPanels.addComponent(productDescriptorPanel);
+		} else{
+			// selects first value for display
 			String selectedProdId = pmap.keySet().iterator().next();
 			ProductDescriptorPanel selectedProductDescriptorPanel = panelIds.get(selectedProdId);
 			if (selectedProductDescriptorPanel!=null) {

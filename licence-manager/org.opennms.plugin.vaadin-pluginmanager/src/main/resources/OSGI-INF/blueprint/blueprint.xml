@@ -60,11 +60,11 @@
 
   <bean id="pluginModel" class="org.opennms.features.vaadin.config.model.PluginModel" init-method="load" destroy-method="close">
     <!-- setting defaults if no pluginmodeldata.xml -->
-    <property name="fileUri" value="./pluginmodeldata.xml" />
-    <property name="pluginServerUsername" value="" />
-    <property name="pluginServerPassword" value="" />
-    <property name="pluginServerUrl" value="" />
-    <property name="licenceShoppingCartUrl" value="" />
+    <property name="fileUri" value="${pluginmodelfileUri}" />
+    <property name="pluginServerUsername" value="${pluginServerUsername}" />
+    <property name="pluginServerPassword" value="${pluginServerPassword}" />
+    <property name="pluginServerUrl" value="${pluginServerUrl}" />
+    <property name="licenceShoppingCartUrl" value="${licenceShoppingCartUrl}" />
   </bean>
 
   <service id="pluginManagerService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="pluginManagerAdminApplicationFactory">
@@ -123,13 +123,13 @@
     </service-properties>
   </service>
 
-  <!-- load default properties from  org.opennms.features.licencemgr.config.cfg if exists -->
-  <cm:property-placeholder persistent-id="org.opennms.features.licencemgr.config" update-strategy="reload">
+  <!-- load default properties from  org.opennms.features.pluginmgr.config.cfg if exists -->
+  <cm:property-placeholder persistent-id="org.opennms.features.pluginmgr.config" update-strategy="reload">
     <cm:default-properties>
       <cm:property name="pluginmodelfileUri" value="./pluginmodeldata.xml" />
       <cm:property name="pluginServerUsername" value="admin" />
       <cm:property name="pluginServerPassword" value="admin" />
-      <cm:property name="pluginServerUrl" value="http://localhost:8980" />
+      <cm:property name="pluginServerUrl" value="http://localhost:8980/opennms" />
       <cm:property name="licenceShoppingCartUrl" value="http://opennms.org" />
     </cm:default-properties>
   </cm:property-placeholder>
