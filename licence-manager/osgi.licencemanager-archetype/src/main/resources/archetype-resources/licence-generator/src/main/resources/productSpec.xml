@@ -17,10 +17,10 @@
 
   <!-- featureRepository is expected to contain the url of the features repository -->
   <!-- which describes the Karaf feature using the concatenated form -->
-  <!-- <groupId>/<artifactId>/<version>/xml/features -->
+  <!-- mvn:<groupId>/<artifactId>/<version>/xml/features -->
   <!-- such that the repository can be installed using features:addurl (Karaf 2.4.0) -->
   <!-- e.g. features:addurl mvn:org.apache.camel/camel-example-osgi/2.10.0/xml/features -->
-  <featureRepository>${groupId}/${rootArtifactId}/${version}/xml/features</featureRepository>
+  <featureRepository>mvn:${groupId}/${rootArtifactId}/${version}/xml/features</featureRepository>
 	
   <organization>OpenNMS Project</organization>
   <productDescription>Test product description</productDescription>

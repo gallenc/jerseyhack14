@@ -21,7 +21,7 @@
   </fileSets>
 
   <modules>
-    <module name="${rootArtifactId}.LicenceGenerator" id="${rootArtifactId}.LicenceGenerator" dir="LicenceGenerator">
+    <module name="${rootArtifactId}.licence-generator" id="${rootArtifactId}.licence-generator" dir="licence-generator">
       <fileSets>
         <!-- filtered files -->
         <fileSet filtered="true" encoding="UTF-8">
@@ -40,7 +40,7 @@
       </fileSets>
     </module>
 
-    <module name="${rootArtifactId}.LicenceSpec" id="${rootArtifactId}.LicenceSpec" dir="LicenceSpec">
+    <module name="${rootArtifactId}.licence-spec" id="${rootArtifactId}.licence-spec" dir="licence-spec">
       <fileSets>
         <!-- filtered files -->
         <!-- <fileSet filtered="true" encoding="UTF-8"> -->
@@ -59,7 +59,7 @@
       </fileSets>
     </module>
 
-    <module name="${rootArtifactId}.LicenceAuthenticator" id="${rootArtifactId}.LicenceAuthenticator" dir="LicenceAuthenticator">
+    <module name="${rootArtifactId}.licence-authenticator" id="${rootArtifactId}.licence-authenticator" dir="licence-authenticator">
       <fileSets>
         <!-- filtered files -->
         <!-- <fileSet filtered="true" encoding="UTF-8"> -->
@@ -78,7 +78,7 @@
       </fileSets>
     </module>
     
-    <module name="${rootArtifactId}.ProductDescriptor" id="${rootArtifactId}.ProductDescriptor" dir="ProductDescriptor">
+    <module name="${rootArtifactId}.product-descriptor" id="${rootArtifactId}.product-descriptor" dir="product-descriptor">
       <fileSets>
         <!-- filtered files -->
         <!-- <fileSet filtered="true" encoding="UTF-8"> -->
@@ -97,7 +97,7 @@
       </fileSets>
     </module>
     
-    <module name="${rootArtifactId}.Feature" id="${rootArtifactId}.Feature" dir="Feature">
+    <module name="${rootArtifactId}" id="${rootArtifactId}" dir="feature">
       <fileSets>
         <!-- filtered files -->
         <!-- <fileSet filtered="true" encoding="UTF-8"> -->

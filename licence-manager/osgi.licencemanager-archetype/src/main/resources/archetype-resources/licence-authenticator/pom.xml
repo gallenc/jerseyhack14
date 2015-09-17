@@ -1,18 +1,19 @@
+
 #set( $symbol_pound = '#' )
 #set( $symbol_dollar = '$' )
 #set( $symbol_escape = '\' )
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <groupId>${groupId}</groupId>
-    <artifactId>${rootArtifactId}</artifactId>
+    <artifactId>${rootArtifactId}.parent</artifactId>
     <version>${version}</version>
   </parent>
 
-  <!-- LicenceSpec -->
+  <!-- LicenceAuthenticator -->
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>${artifactId}</artifactId>
-  <name>${artifactId}</name>
-  <description>LicenceSpec for ${rootArtifactId}</description>
+  <artifactId>${rootArtifactId}.licence-authenticator</artifactId>
+  <name>${rootArtifactId}.licence-authenticator</name>
+  <description>Licence Authenticator for ${rootArtifactId}</description>
   <packaging>bundle</packaging>
 
   <build>
@@ -33,24 +34,24 @@
               <artifactItems>
                 <artifactItem>
                   <groupId>${symbol_dollar}{project.groupId}</groupId>
-                  <artifactId>${rootArtifactId}.LicenceGenerator</artifactId>
+                  <artifactId>${rootArtifactId}.licence-generator</artifactId>
                   <version>${symbol_dollar}{project.version}</version>
                   <type>jar</type>
                   <classifier>sources</classifier>
                   <overWrite>true</overWrite>
                   <outputDirectory>${symbol_dollar}{project.build.directory}/generated-licence/java</outputDirectory>
-                  <includes>**/*LicenceSpec*.java</includes>
+                  <includes>**/*LicenceAuthenticator*.java</includes>
                   <excludes>**/*.xml</excludes>
                 </artifactItem>
                 <artifactItem>
                   <groupId>${symbol_dollar}{project.groupId}</groupId>
-                  <artifactId>${rootArtifactId}.LicenceGenerator</artifactId>
+                  <artifactId>${rootArtifactId}.licence-generator</artifactId>
                   <version>${symbol_dollar}{project.version}</version>
                   <type>jar</type>
                   <classifier>sources</classifier>
                   <overWrite>true</overWrite>
                   <outputDirectory>${symbol_dollar}{project.build.directory}/generated-licence/resources</outputDirectory>
-                  <includes>**/licenceSpecBlueprint.xml,**/licenceMetadataSpec.xml,**/productSpec.xml</includes>
+                  <includes>**/licenceAuthenticatorBlueprint.xml</includes>
                 </artifactItem>
               </artifactItems>
             </configuration>
@@ -97,8 +98,8 @@
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
         <configuration>
-          <target>1.6</target>
-          <source>1.6</source>
+          <target>1.8</target>
+          <source>1.8</source>
         </configuration>
       </plugin>
 
@@ -111,7 +112,6 @@
           <instructions>
             <Bundle-SymbolicName>${symbol_dollar}{project.artifactId}</Bundle-SymbolicName>
             <Bundle-Version>${symbol_dollar}{project.version}</Bundle-Version>
-
             <Import-Package>
               *
             </Import-Package>
@@ -126,7 +126,6 @@
     </plugins>
 
   </build>
-
   <dependencies>
     <dependency>
       <groupId>org.opennms.plugins</groupId>
@@ -150,19 +149,5 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
-  
-  <!-- Change this to match your repo for the licence specifications (i.e. containing the spec) -->
-  <distributionManagement>
-    <repository>
-      <id>deployment</id>
-      <name>osgi-licence-specs</name>
-      <url>http://devel2.entimoss.org:8081/nexus/content/repositories/osgi-licence-specs</url>
-    </repository>
-    <snapshotRepository>
-      <id>deployment</id>
-      <name>osgi-licence-specs-snapshots</name>
-      <url>http://devel2.entimoss.org:8081/nexus/content/repositories/osgi-licence-specs-snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
 
 </project>

@@ -28,15 +28,18 @@ open karaf command prompt using
 ssh -p 8101 admin@localhost
 
 to install the feature in karaf use
-karaf@root> features:addurl mvn:${groupId}/${artifactId}.Feature/${version}/xml/features
-karaf@root> features:install ${artifactId}.Feature
+karaf@root> features:addurl mvn:${groupId}/${artifactId}/${version}/xml/features
+karaf@root> features:install ${artifactId}
+
+(or features:install ${artifactId}/${version} for a specific version of the feature)
 
 to install the licence specification in karaf use
-karaf@root>  osgi:install -s  mvn:${groupId}/${artifactId}.LicenceSpec/${version}
+karaf@root>  osgi:install -s  mvn:${groupId}/${artifactId}.licence-spec/${version}
 
 To install on OpenNMS
 ---------------------
-You need to add the repo where the feature is installed. Obviously this could point at a remote repository
+You need to add the repo where the feature is installed to the opennms karaf configuration.
+Obviously this could point at a remote repository
 However if you have built on your local machine, add the local repo as follows;
 
 sudo vi /opt/opennms/org.ops4j.pax.url.mvn.cfg

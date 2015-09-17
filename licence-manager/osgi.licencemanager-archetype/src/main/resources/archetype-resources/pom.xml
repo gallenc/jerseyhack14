@@ -5,11 +5,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>${groupId}</groupId>
-  <artifactId>${artifactId}</artifactId>
+  <artifactId>${rootArtifactId}.parent</artifactId>
   <version>${version}</version>
   <packaging>pom</packaging>
-  <name>${artifactId}</name>
-  <description>${artifactId} Parent Project</description>
+  <name>${rootArtifactId}.parent</name>
+  <description>${rootArtifactId} Parent Project</description>
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -18,7 +18,7 @@
     <!-- Note must set project.artifactId explicitly as ${project.artifactId}expression is re-evaluated in each sub module !! -->
     <!-- <productId>${project.groupId}/${project.artifactId}/${project.version}</productId> -->
     <!-- <productId>${project.groupId}/org.opennms.co.uk.newfeature/${project.version}</productId> -->
-    <productId>${artifactId}/${symbol_dollar}{project.version}</productId>
+    <productId>${rootArtifactId}/${symbol_dollar}{project.version}</productId>
     <!-- <licenceClassPath>org.opennms.co.uk.newfeature</licenceClassPath> -->
     <licenceClassPath>${package}</licenceClassPath>
 
@@ -138,11 +138,11 @@
         </plugins>
       </build>
       <modules>
-        <module>LicenceGenerator</module>
-        <module>LicenceSpec</module>
-        <module>LicenceAuthenticator</module>
-        <module>ProductDescriptor</module>
-        <module>Feature</module>
+        <module>licence-generator</module>
+        <module>licence-spec</module>
+        <module>licence-authenticator</module>
+        <module>product-descriptor</module>
+        <module>feature</module>
       </modules>
     </profile>
     <profile>
@@ -177,7 +177,7 @@
         </plugins>
       </build>
       <modules>
-        <module>Feature</module>
+        <module>feature</module>
       </modules>
     </profile>
   </profiles>
