@@ -133,6 +133,7 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 		
 		if (pmap.keySet().isEmpty()) {
 			//if there are no panels to display display an empty panel
+			selectedProductId=null;
 			ProductDescriptorPanel productDescriptorPanel= new ProductDescriptorPanel();
 			productDescriptorPanel.setReadOnly(true);
 			productDescriptorPanel.setVisible(true);
