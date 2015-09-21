@@ -3,7 +3,7 @@ package org.opennms.features.vaadin.config.model;
 
 import java.io.File;
 import java.util.Date;
-
+import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -13,6 +13,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.opennms.karaf.featuremgr.rest.client.jerseyimpl.FeaturesServiceClientRestJerseyImpl;
+import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceEntry;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
@@ -27,7 +28,7 @@ public class PluginModel {
 
 	private static String LICENCE_PUB_BASE_PATH = "/licencemgr/rest/licence-pub"; // not used
 	private static String LICENCE_MGR_BASE_PATH = "/licencemgr/rest/licence-mgr";
-	
+
 	private static String FEATURE_MGR_BASE_PATH = "/featuremgr";
 
 	private String fileUri="./pluginmodeldata.xml";
@@ -199,32 +200,12 @@ public class PluginModel {
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("opennms does not know karafInstance="+karafInstance);
 		String karafInstanceUrl=karafInstances.get(karafInstance);
 
-		KarafEntryJaxb karafEntryJaxb= null;
+		KarafEntryJaxb karafEntryJaxb= new KarafEntryJaxb();
 
 		try{
-			karafEntryJaxb= new KarafEntryJaxb();
 
 			karafEntryJaxb.setKarafInstanceName(karafInstance);
 			karafEntryJaxb.setKarafInstanceUrl(karafInstanceUrl);
-
-			ProductRegisterClientRestJerseyImpl productRegisterClient = new ProductRegisterClientRestJerseyImpl();
-			productRegisterClient.setBaseUrl(karafInstanceUrl);
-			productRegisterClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
-			productRegisterClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
-
-			// getting karaf installed plugins
-			productRegisterClient.setBasePath(PRODUCT_REG_BASE_PATH);
-
-			ProductSpecList installedPlugins;
-			try {
-				installedPlugins = productRegisterClient.getList();
-				karafEntryJaxb.setInstalledPlugins(installedPlugins);
-			} catch (Exception e) {
-				throw new RuntimeException("problem refreshing installed plugins for "
-						+ "karafInstance="+karafInstance
-						+ " karafInstanceUrl="+karafInstanceUrl
-						+ ": ", e);
-			}
 
 			// getting karaf installed licences and system id
 			LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
@@ -241,6 +222,46 @@ public class PluginModel {
 				karafEntryJaxb.setSystemId(systemId);
 			} catch (Exception e) {
 				throw new RuntimeException("problem refreshing installed licences for "
+						+ "karafInstance="+karafInstance
+						+ " karafInstanceUrl="+karafInstanceUrl
+						+ ": ", e);
+			}
+
+			// getting installed plugins
+			ProductRegisterClientRestJerseyImpl productRegisterClient = new ProductRegisterClientRestJerseyImpl();
+			productRegisterClient.setBaseUrl(karafInstanceUrl);
+			productRegisterClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
+			productRegisterClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
+
+			// getting karaf installed plugins
+			productRegisterClient.setBasePath(PRODUCT_REG_BASE_PATH);
+
+			ProductSpecList installedPlugins;
+			try {
+				installedPlugins = productRegisterClient.getList();
+				
+				List<LicenceEntry> licenceList = karafEntryJaxb.getInstalledLicenceList().getLicenceList();
+
+				// tests if plugins need a licence and if the licence is authenticated
+				for (ProductMetadata installedPlugin: installedPlugins.getProductSpecList()){
+					if (installedPlugin.getLicenceKeyRequired()!=null && installedPlugin.getLicenceKeyRequired() == true){
+						// if plugin needs a licence then check if licence is already verified
+						// ignores exception if no licence is installed
+						Boolean licenceKeyAuthenticated = false;
+						for (LicenceEntry licenceEntry :licenceList){
+							if (licenceEntry.getProductId().equals(installedPlugin.getProductId())){
+								// only check where licence is installed
+								// note will throw exception if licence is not installed when checked
+								licenceKeyAuthenticated = licenceManagerClient.isAuthenticated(installedPlugin.getProductId());
+							}
+						}
+						installedPlugin.setLicenceKeyAuthenticated(licenceKeyAuthenticated);
+					}
+				}
+
+				karafEntryJaxb.setInstalledPlugins(installedPlugins);
+			} catch (Exception e) {
+				throw new RuntimeException("problem refreshing installed plugins for "
 						+ "karafInstance="+karafInstance
 						+ " karafInstanceUrl="+karafInstanceUrl
 						+ ": ", e);
@@ -342,7 +363,6 @@ public class PluginModel {
 		licenceManagerClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
 		licenceManagerClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
 		licenceManagerClient.setBasePath(LICENCE_MGR_BASE_PATH);
-
 		try {
 			licenceManagerClient.setSystemId(systemId);
 			refreshKarafEntry(karafInstance);
@@ -459,7 +479,7 @@ public class PluginModel {
 	public synchronized void installPlugin(String selectedProductId,String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
-		
+
 		SortedMap<String, String> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("opennms does not know karafInstance="+karafInstance);
 		String karafInstanceUrl=karafInstances.get(karafInstance);
@@ -479,7 +499,7 @@ public class PluginModel {
 		featuresServiceClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
 		featuresServiceClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
 		featuresServiceClient.setBasePath(FEATURE_MGR_BASE_PATH);
-		
+
 		try {
 			// add feature repository
 			featuresServiceClient.featuresAddRepository(productMetadata.getFeatureRepository());
@@ -511,7 +531,7 @@ public class PluginModel {
 	public synchronized void unInstallPlugin(String selectedProductId,String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
-		
+
 		SortedMap<String, String> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("opennms does not know karafInstance="+karafInstance);
 		String karafInstanceUrl=karafInstances.get(karafInstance);
@@ -531,7 +551,7 @@ public class PluginModel {
 		featuresServiceClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
 		featuresServiceClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
 		featuresServiceClient.setBasePath(FEATURE_MGR_BASE_PATH);
-		
+
 		try {
 			String version=null;
 			String name=null;

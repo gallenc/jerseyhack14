@@ -32,12 +32,9 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name="product")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType (propOrder={"productId","featureRepository","productName","productDescription","productUrl","organization","licenceType","licenceKeyRequired"})
+@XmlType (propOrder={"productId","featureRepository","productName","productDescription","productUrl","organization","licenceType","licenceKeyRequired","licenceKeyAuthenticated"})
 public class ProductMetadata {
 
-	//NOTE IF YOU MODIFY THIS CLASS YOU MUST REGENERATE THE equals and hashCode methods
-	//AND change the fromXml() method
-	
 	/**
 	 * productId is expected to contain the name of the product in the form <name>/<version>
 	 * The productId is used as the feature name for installing into Karaf the top level feature 
@@ -89,6 +86,13 @@ public class ProductMetadata {
 	 * If true this product requires a licence key to be installed
 	 */
 	private Boolean licenceKeyRequired=null;
+	
+	/**
+	 * If true the licence key for this product is authenticated
+	 * (this is only used by licence manager and not the product publisher)
+	 */
+	private Boolean licenceKeyAuthenticated=null;
+
 
 	/**
 	 * @return the productId
@@ -212,6 +216,23 @@ public class ProductMetadata {
 	}
 	
 	/**
+	 * If true the licence key for this product is authenticated
+	 * (this is only used by licence manager and not the product publisher)
+	 */
+	public Boolean getLicenceKeyAuthenticated() {
+		return licenceKeyAuthenticated;
+	}
+
+	/**
+	 * If true the licence key for this product is authenticated
+	 * (this is only used by licence manager and not the product publisher)
+	 */
+	@XmlElement(name="licenceKeyAuthenticated")
+	public void setLicenceKeyAuthenticated(Boolean licenceKeyAuthenticated) {
+		this.licenceKeyAuthenticated = licenceKeyAuthenticated;
+	}
+	
+	/**
 	 * @return XML encoded version of ProductMetadata
 	 */
 	public String toXml(){
@@ -246,6 +267,7 @@ public class ProductMetadata {
 			this.productName=productMetadata.productName;
 			this.productUrl=productMetadata.productUrl;
 			this.licenceKeyRequired=productMetadata.licenceKeyRequired;
+			this.licenceKeyAuthenticated=productMetadata.licenceKeyAuthenticated;
 			this.licenceType=productMetadata.licenceType;
 		} catch (JAXBException e) {
 			throw new RuntimeException("Problem unmarshalling ProductMetadata:",e);
@@ -281,8 +303,9 @@ public class ProductMetadata {
 		}
 	}
 
-
-
+	//NOTE IF YOU MODIFY THIS CLASS YOU MUST REGENERATE THE equals and hashCode methods
+	//AND change the fromXml() method
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#hashCode()
 	 */
@@ -294,6 +317,10 @@ public class ProductMetadata {
 				* result
 				+ ((featureRepository == null) ? 0 : featureRepository
 						.hashCode());
+		result = prime
+				* result
+				+ ((licenceKeyAuthenticated == null) ? 0
+						: licenceKeyAuthenticated.hashCode());
 		result = prime
 				* result
 				+ ((licenceKeyRequired == null) ? 0 : licenceKeyRequired
@@ -332,6 +359,12 @@ public class ProductMetadata {
 				return false;
 		} else if (!featureRepository.equals(other.featureRepository))
 			return false;
+		if (licenceKeyAuthenticated == null) {
+			if (other.licenceKeyAuthenticated != null)
+				return false;
+		} else if (!licenceKeyAuthenticated
+				.equals(other.licenceKeyAuthenticated))
+			return false;
 		if (licenceKeyRequired == null) {
 			if (other.licenceKeyRequired != null)
 				return false;
@@ -369,6 +402,7 @@ public class ProductMetadata {
 			return false;
 		return true;
 	}
+
 
 
 }
