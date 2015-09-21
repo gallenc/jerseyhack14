@@ -40,6 +40,8 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 	private ListSelect productListSelect;
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final int PRODUCT_LIST_SELECT_ROWS = 10; // default number of rows shown in product list
 
 	private Map<String,ProductDescriptorPanel> panelIds = new HashMap<String,ProductDescriptorPanel>();
 
@@ -110,7 +112,7 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 
 		productListSelect.removeAllItems();
 
-		productListSelect.setRows(5); 	// Show 5 items and a scrollbar if there are more
+		productListSelect.setRows(PRODUCT_LIST_SELECT_ROWS); 	// Show n items and a scrollbar if there are more
 		productListSelect.setNullSelectionAllowed(false);
 
 		productPanels.removeAllComponents();

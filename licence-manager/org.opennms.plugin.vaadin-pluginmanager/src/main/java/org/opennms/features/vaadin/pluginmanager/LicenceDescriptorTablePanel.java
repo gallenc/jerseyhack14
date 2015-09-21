@@ -40,6 +40,8 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 	private ListSelect licenceListSelect;
 
 	private static final long serialVersionUID = 1L;
+	
+	private static final int LICENCE_LIST_SELECT_ROWS = 10; // default number of rows shown in licence list
 
 	private Map<String,LicenceDescriptorPanel> panelIds = new HashMap<String,LicenceDescriptorPanel>();
 
@@ -106,7 +108,7 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 
 		licenceListSelect.removeAllItems();
 
-		licenceListSelect.setRows(5); 	// Show 5 items and a scrollbar if there are more
+		licenceListSelect.setRows(LICENCE_LIST_SELECT_ROWS); 	// Show n items and a scrollbar if there are more
 		licenceListSelect.setNullSelectionAllowed(false);
 
 		licencePanels.removeAllComponents();
