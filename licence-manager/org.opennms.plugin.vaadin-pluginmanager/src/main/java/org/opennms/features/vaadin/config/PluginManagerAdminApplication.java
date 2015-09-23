@@ -38,7 +38,7 @@ import java.net.URL;
 import java.util.Map;
 
 import org.opennms.features.vaadin.config.model.SessionPluginModel;
-import org.opennms.features.vaadin.pluginmanager.PluginManagerUIMainPanelImpl2;
+import org.opennms.features.vaadin.pluginmanager.PluginManagerUIMainPanel;
 import org.opennms.features.vaadin.pluginmanager.internal.HttpServletRequestVaadinImpl;
 import org.opennms.web.api.OnmsHeaderProvider;
 
@@ -189,7 +189,7 @@ public class PluginManagerAdminApplication extends UI {
 			m_rootLayout.addComponent(horizontalLayout1);
 		}
 
-		PluginManagerUIMainPanelImpl2 pluginManagerUIMainPanel = new PluginManagerUIMainPanelImpl2(sessionPluginModel);
+		PluginManagerUIMainPanel pluginManagerUIMainPanel = new PluginManagerUIMainPanel(sessionPluginModel);
 		
 		m_rootLayout.addComponent(pluginManagerUIMainPanel);
 
