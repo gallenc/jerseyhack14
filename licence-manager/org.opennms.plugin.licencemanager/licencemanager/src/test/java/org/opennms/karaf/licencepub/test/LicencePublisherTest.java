@@ -59,7 +59,10 @@ public class LicencePublisherTest {
 		licencemetadata.setStartDate(new Date());
 		licencemetadata.setLicensee("Mr Craig Gallen");
 		licencemetadata.setProductId("org.opennms/org.opennms.karaf.licencemanager.testbundle/1.0-SNAPSHOT");
-		licencemetadata.setSystemId("4ad72a34e3635c1b-99da3323");
+		
+		licencemetadata.setMaxSizeSystemIds(3);
+		licencemetadata.getSystemIds().add("4ad72a34e3635c1b-99da3323");
+		licencemetadata.getSystemIds().add("32e396e36b28ef5d-a48ef1cb");
 
 		String licenceMetadataXml=licencemetadata.toXml();
 		
@@ -119,7 +122,10 @@ public class LicencePublisherTest {
 		licencemetadata.setStartDate(new Date());
 		licencemetadata.setLicensee("Mr Craig Gallen");
 		licencemetadata.setProductId("org.opennms/org.opennms.karaf.licencemanager.testbundle/1.0-SNAPSHOT");
-		licencemetadata.setSystemId("4ad72a34e3635c1b-99da3323");
+
+		licencemetadata.setMaxSizeSystemIds(3);
+		licencemetadata.getSystemIds().add("4ad72a34e3635c1b-99da3323");
+		licencemetadata.getSystemIds().add("32e396e36b28ef5d-a48ef1cb");
 
 		String licenceMetadataXml=licencemetadata.toXml();
 		

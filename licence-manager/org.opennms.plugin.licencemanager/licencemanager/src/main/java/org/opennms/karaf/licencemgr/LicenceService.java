@@ -54,6 +54,16 @@ public interface LicenceService {
 	public Map<String, String> getLicenceMap();
 	
 	/**
+	 * returns a map of all installed licences which have systemId in systemId's list
+	 * or where maxSizeSystemIds=0 (i.e. authenticates for any systemId)
+	 * returns an empty map if no licences match.
+	 * key=productId 
+	 * and value = licence string
+	 * @return
+	 */
+	public Map<String, String> getLicenceMapForSystemId(String systemId);
+	
+	/**
 	 * deletes all licence entries
 	 */
 	public void deleteLicences();

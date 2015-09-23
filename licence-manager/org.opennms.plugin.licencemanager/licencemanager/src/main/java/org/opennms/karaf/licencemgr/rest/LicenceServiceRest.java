@@ -57,7 +57,11 @@ public interface LicenceServiceRest {
 	@Path("/list")
 	@Produces(MediaType.APPLICATION_XML)
 	public Response getLicenceMap();
-
+	
+	@GET
+	@Path("/listforsystemid")
+	@Produces(MediaType.APPLICATION_XML)
+	public Response getLicenceMapForSystemId(@QueryParam("systemId") String systemId);
 
 	@GET
 	@Path("/clearlicences")

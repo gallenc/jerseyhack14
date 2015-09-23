@@ -102,11 +102,22 @@ public class LicencePublisherImpl implements LicencePublisher {
 		LicenceSpecification licenceSpec = licenceSpecMap.get(productId);
 		LicenceMetadata metadataSpec = licenceSpec.getLicenceMetadataSpec();
 		
-		// check that the licenser is the same as in the licence specification
+		// check that the licensor is the same as in the licence specification
 		if (! metadataSpec.getLicensor().equals(createLicenceMetadata.getLicensor())) 
-			throw new IllegalArgumentException("createLicenceMetadata licenser='"+createLicenceMetadata.getLicensor()
-					+"' is different from Licence Specification licenser='"+metadataSpec.getLicensor()+"' for productId="+productId);
+			throw new IllegalArgumentException("createLicenceMetadata licensor='"+createLicenceMetadata.getLicensor()
+					+"' is different from Licence Specification licensor='"+metadataSpec.getLicensor()+"' for productId="+productId);
+
+		// check that when maxSizeSystemIds= 0 there are no systemId's defined in specification
+		if (createLicenceMetadata.getMaxSizeSystemIds()==0 && createLicenceMetadata.getSystemIds().size()>0){
+			throw new IllegalArgumentException("createLicenceMetadata maxSizeSystemIds= 0 but number of systemIds defined is greater than 0 in licence for productId="+productId);
+		}
 		
+		// check that the actual number of systemIds in the licence specification is not greater than the max number in
+		// the supplied licenceMetadata
+		if (createLicenceMetadata.getMaxSizeSystemIds()< createLicenceMetadata.getSystemIds().size()){
+			throw new IllegalArgumentException("createLicenceMetadata maxSizeSystemIds is less than the number of systemIds defined in licence for productId="+productId);
+		}
+
 		// check that the options in the licence specification match the options in
 		// the supplied licenceMetadata
 		// note value for options are set in the licence specification but the number

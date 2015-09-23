@@ -15,14 +15,16 @@
 
 package org.opennms.karaf.licencemgr.cmd;
 
+import java.util.Map;
+import java.util.Map.Entry;
+
 import org.apache.felix.gogo.commands.Argument;
 import org.apache.felix.gogo.commands.Command;
 import org.apache.karaf.shell.console.OsgiCommandSupport;
 import org.opennms.karaf.licencemgr.LicenceService;
-import org.opennms.karaf.licencemgr.metadata.Licence;
 
-@Command(scope = "licence-mgr", name = "getlicence", description="returns licence string installed for productId")
-public class GetProductLicenceCommand extends OsgiCommandSupport {
+@Command(scope = "licence-mgr", name = "listforsystemid", description="Lists installed licences which will authenticate for a given systemId")
+public class ListLicencesForSystemIdCommand extends OsgiCommandSupport {
 
 	private LicenceService _licenceService;
 
@@ -33,25 +35,24 @@ public class GetProductLicenceCommand extends OsgiCommandSupport {
 	public void setLicenceService( LicenceService licenceService) {
 		_licenceService = licenceService;
 	}
-
-	@Argument(index = 0, name = "productId", description = "Product Id to which licence-mgr applies", required = true, multiValued = false)
-	String productId = null;
+	
+	@Argument(index = 0, name = "systemId", description = "systemId for which to find licences", required = true, multiValued = false)
+	String systemId = null;
 
 	@Override
 	protected Object doExecute() throws Exception {
-		try{
-			String licence = getLicenceService().getLicence(productId);
-			if(licence==null){
-				System.out.println("no licence installed for productId='" + productId+"'");
-			} else {
-				String metadatastr = Licence.getUnverifiedMetadata(licence).toXml();
-				System.out.println("Found licence ProductId='"+productId + "'");
-				System.out.println("              licence=  '" + licence+"'");
-				System.out.println("              licenceMetadata='"+metadatastr+"'");
+		try {
+			System.out.println("list of licences which will authenticate systemId='"+systemId+"'");
+
+			Map<String, String> licenceMap = getLicenceService().getLicenceMapForSystemId(systemId);
+			for (Entry<String, String> entry : licenceMap.entrySet()){
+				System.out.println("   productId='"+entry.getKey()+"' licence='"+entry.getValue()+"'");
 			}
 		} catch (Exception e) {
-			System.out.println("Error getting licence for productId. Exception="+e);
+			System.out.println("Error getting list of installed licences. Exception="+e);
 		}
 		return null;
 	}
+
+
 }

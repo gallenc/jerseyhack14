@@ -207,7 +207,38 @@ public class LicenceServiceRestImpl implements LicenceServiceRest {
 				.status(200).entity(licenceListResponse).build();
 
 	}
+	
+	
+	@GET
+	@Path("/listforsystemid")
+	@Produces(MediaType.APPLICATION_XML)
+	public Response getLicenceMapForSystemId(@QueryParam("systemId") String systemId){
 
+		LicenceService licenceService= ServiceLoader.getLicenceService();
+		if (licenceService == null)	throw new RuntimeException("ServiceLoader.getLicenceService() cannot be null.");
+
+		Map<String, String> licenceMap=null;
+		try{
+			if (systemId == null)	throw new RuntimeException("parameter systemId cannot be null.");
+			licenceMap = licenceService.getLicenceMapForSystemId(systemId);
+		} catch (Exception exception){
+			//return status 400 Error
+			return Response.status(400).entity(new ErrorMessage(400, 0, "cannot get licence map", null, exception)).build();
+		}
+
+		LicenceList licenceListResponse= new LicenceList();
+
+		for (Entry<String, String> entry:licenceMap.entrySet()){
+			LicenceEntry licenceEntry = new LicenceEntry();
+			licenceEntry.setProductId(entry.getKey());
+			licenceEntry.setLicenceStr(entry.getValue());
+			licenceListResponse.getLicenceList().add(licenceEntry);
+		}
+
+		return Response
+				.status(200).entity(licenceListResponse).build();
+
+	}
 
 	@GET
 	@Path("/clearlicences")

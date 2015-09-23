@@ -20,10 +20,9 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.xml.bind.DatatypeConverter;
 import javax.xml.bind.JAXBContext;
@@ -40,12 +39,13 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name="licenceMetadata")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType (propOrder={"productId","featureRepository","licensee","licensor","systemId","startDate","expiryDate","duration","options"})
+@XmlType (propOrder={"productId","featureRepository","licensee","licensor","maxSizeSystemIds", "systemIds","startDate","expiryDate","duration","options"})
 public class LicenceMetadata {
 
 	//NOTE IF YOU MODIFY THIS CLASS YOU MUST REGENERATE THE equals and hashCode methods
 	//AND change the fromXml() method
-	
+
+
 	/**
 	 * productId is expected to contain the name of the product in the form <name>/<version>
 	 * The productId is used as the feature name for installing into Karaf the top level feature 
@@ -69,10 +69,22 @@ public class LicenceMetadata {
 	String featureRepository=null;
 	
 	/**
-	 * systemId is expected to contain the unique identifier of the system on which which the licensed artifact 
+	 * systemIds is a list of unique systemId's for which this licence is valid.
+	 * a systemId is expected to contain the unique identifier of the system on which which the licensed artifact 
 	 * will be installed. The systemId is terminated with a CRC32 checksum seperated by a - symbol <systemId>-<CRC32>
 	 */
-	String systemId=null;
+	Set<String> systemIds=new TreeSet<String>();
+	
+	/**
+	 * maxSizeSystemIds is the maximum number of systemId's which can be included in the systemIds list.
+	 * This is used by the shopping cart to limit the number of systems to which licences can be applied.
+	 * 
+	 * The actual number of systemId entries in systemId's must be <= maxSizeSystemIds for the licence to authenticate.
+	 * 
+	 * If maxSizeSystemIds==0 then no systemId's should be included in the list and the licence will
+	 * authenticate with any and all systemIds,
+	 */
+	Integer maxSizeSystemIds=0;
 	
 	/**
 	 * startDate - the date from which the licence will be valid
@@ -119,7 +131,8 @@ public class LicenceMetadata {
 	public void setLicenceMetadata(LicenceMetadata licenceMetadata){
 		this.productId=licenceMetadata.productId;
 		this.featureRepository=licenceMetadata.featureRepository;
-		this.systemId=licenceMetadata.systemId;
+		this.maxSizeSystemIds=licenceMetadata.maxSizeSystemIds;
+		if(licenceMetadata.systemIds!=null) this.systemIds.addAll(licenceMetadata.systemIds);
 		this.startDate=licenceMetadata.startDate;
 		this.expiryDate=licenceMetadata.expiryDate;
 		this.duration=licenceMetadata.duration;
@@ -161,19 +174,39 @@ public class LicenceMetadata {
 	}
 
 	/**
-	 * @return the systemId
+	 * @return the systemIds
 	 */
-	public String getSystemId() {
-		return systemId;
+	public Set<String> getSystemIds() {
+		return systemIds;
 	}
 
+
 	/**
-	 * @param systemId the systemId to set
+	 * @param systemIds the systemIds to set
 	 */
+	@XmlElementWrapper(name="systemIds")
 	@XmlElement(name="systemId")
-	public void setSystemId(String systemId) {
-		this.systemId = systemId;
+	public void setSystemIds(Set<String> systemIds) {
+		this.systemIds = systemIds;
 	}
+
+
+	/**
+	 * @return the maxSizeSystemIds
+	 */
+	public Integer getMaxSizeSystemIds() {
+		return maxSizeSystemIds;
+	}
+
+
+	/**
+	 * @param maxSizeSystemIds the maxSizeSystemIds to set
+	 */
+	@XmlElement(name="maxSizeSystemIds")
+	public void setMaxSizeSystemIds(Integer maxSizeSystemIds) {
+		this.maxSizeSystemIds = maxSizeSystemIds;
+	}
+	
 
 	/**
 	 * @return the startDate
@@ -300,7 +333,8 @@ public class LicenceMetadata {
 			LicenceMetadata licenceMetadata= (LicenceMetadata) jaxbUnmarshaller.unmarshal(reader);
 			this.productId=licenceMetadata.productId;
 			this.featureRepository=licenceMetadata.featureRepository;
-			this.systemId=licenceMetadata.systemId;
+			this.maxSizeSystemIds=licenceMetadata.maxSizeSystemIds;
+			if(licenceMetadata.systemIds!=null) this.systemIds.addAll(licenceMetadata.systemIds);
 			this.startDate=licenceMetadata.startDate;
 			this.expiryDate=licenceMetadata.expiryDate;
 			this.duration=licenceMetadata.duration;
@@ -380,13 +414,15 @@ public class LicenceMetadata {
 				+ ((licensee == null) ? 0 : licensee.hashCode());
 		result = prime * result
 				+ ((licensor == null) ? 0 : licensor.hashCode());
+		result = prime * result
+				+ ((maxSizeSystemIds == null) ? 0 : maxSizeSystemIds.hashCode());
 		result = prime * result + ((options == null) ? 0 : options.hashCode());
 		result = prime * result
 				+ ((productId == null) ? 0 : productId.hashCode());
 		result = prime * result
 				+ ((startDate == null) ? 0 : startDate.hashCode());
 		result = prime * result
-				+ ((systemId == null) ? 0 : systemId.hashCode());
+				+ ((systemIds == null) ? 0 : systemIds.hashCode());
 		return result;
 	}
 
@@ -428,6 +464,11 @@ public class LicenceMetadata {
 				return false;
 		} else if (!licensor.equals(other.licensor))
 			return false;
+		if (maxSizeSystemIds == null) {
+			if (other.maxSizeSystemIds != null)
+				return false;
+		} else if (!maxSizeSystemIds.equals(other.maxSizeSystemIds))
+			return false;
 		if (options == null) {
 			if (other.options != null)
 				return false;
@@ -443,13 +484,15 @@ public class LicenceMetadata {
 				return false;
 		} else if (!startDate.equals(other.startDate))
 			return false;
-		if (systemId == null) {
-			if (other.systemId != null)
+		if (systemIds == null) {
+			if (other.systemIds != null)
 				return false;
-		} else if (!systemId.equals(other.systemId))
+		} else if (!systemIds.equals(other.systemIds))
 			return false;
 		return true;
 	}
+
+
 
 
 }

@@ -15,6 +15,8 @@
 
 package org.opennms.karaf.licencemgr;
 
+import java.util.Set;
+
 import org.opennms.karaf.licencemgr.LicenceAuthenticator;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
 import org.osgi.framework.ServiceException;
@@ -78,17 +80,24 @@ public class LicenceAuthenticatorImpl implements LicenceAuthenticator {
 			// check the licence is encoded correctly
 			licenceAuthenticatorImpl(licencewithCRC, productId, privateKeyEnryptedStr );
 
-			// check system id. If systemID == ALL_SYSTEM_IDS then this test is passed because any systemId is allowed
-			if (! systemId.equals(licenceMetadata.getSystemId()) && ! "ALL_SYSTEM_IDS".equals(licenceMetadata.getSystemId())) {
-				System.out.println("licence systemId='"+licenceMetadata.getSystemId()+"' does not match local systemId='"+systemId
-						+ "' in installed licence for productId='"+productId+"'");
-				throw new ServiceException("licence systemId='"+licenceMetadata.getSystemId()+"' does not match local systemId='"+systemId
-						+ "' in installed licence for productId='"+productId+"'");
+			// check if licenceMetadata contains the local systemId
+			Integer maxSizeSystemIds = licenceMetadata.getMaxSizeSystemIds();
+			Set<String> systemIds = licenceMetadata.getSystemIds();
+			if (maxSizeSystemIds==null) throw new ServiceException("maxSizeSystemIds must not be null in licence for productId='"+productId+"'");
+			if (systemIds.size()>maxSizeSystemIds)  throw new ServiceException("the systemIds list in licence for productId='"+productId
+					+"' contains "+systemIds.size()
+					+ " entries which is more than maxSizeSystemIds ("+maxSizeSystemIds+ ")");
+
+			// If maxSizeSystemIds==0 then this test is passed because any systemId is allowed
+			if (maxSizeSystemIds!= 0) {
+				// check if local systemId is referenced in the licence. 
+				if (! systemIds.contains(systemId)) throw new ServiceException("installed licence for productId='"+productId+"'"
+						+"does not contain local systemId = '"+systemId + "'");
 			}
 
 			// if licence authenticated then add the productId to the authenticatedProductId list
 			licenceService.addAuthenticatedProductId(productId);
-			
+
 			System.out.println("BundleLicenceAuthenticator authenticated licence for productId="+productId);
 			System.out.println("Licence Metadata xml="+licenceMetadata.toXml());
 
@@ -159,7 +168,7 @@ public class LicenceAuthenticatorImpl implements LicenceAuthenticator {
 		}
 
 	}
-	
+
 	/**
 	 * this method should be called from blueprint to ensure the licence is 
 	 * indicated as unauthenticated when the authenticator shuts down
@@ -173,7 +182,7 @@ public class LicenceAuthenticatorImpl implements LicenceAuthenticator {
 			}
 		}
 		System.out.println("BundleLicenceAuthenticator shutdown for productId="+productId);
-		
+
 	}
 
 

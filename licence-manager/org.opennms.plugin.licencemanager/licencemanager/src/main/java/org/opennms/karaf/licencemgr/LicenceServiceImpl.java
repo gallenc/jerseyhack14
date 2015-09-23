@@ -18,6 +18,7 @@ package org.opennms.karaf.licencemgr;
 import java.io.File;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Random;
 import java.util.Set;
 import java.util.SortedMap;
@@ -119,6 +120,27 @@ public class LicenceServiceImpl implements LicenceService {
 		// returns an instance of the map because it may change after returned.
 		Map<String, String> map = new TreeMap<String, String>(licenceMap);
 		return map;
+	}
+	
+	@Override
+	public synchronized Map<String, String> getLicenceMapForSystemId(String systemId) {
+
+		Map<String, String> returnMap = new TreeMap<String, String>();
+		
+		for(Entry<String, String> licenceEntry : licenceMap.entrySet()){
+			String licenceStrPlusCrc = licenceEntry.getValue();
+			LicenceMetadata licenceMetadata=null; 
+			try {
+				licenceMetadata = Licence.getUnverifiedMetadata(licenceStrPlusCrc);
+			} catch (Exception e) {
+				throw new RuntimeException("cannot decode licenceMetadata for internal licence map entry "+licenceEntry.getKey());
+			}
+			// checks if any systemId is OK or if systemId matches list of systemId's in licence
+			if (licenceMetadata.getMaxSizeSystemIds() == 0 || licenceMetadata.getSystemIds().contains(systemId)){
+				returnMap.put(licenceEntry.getKey(), licenceEntry.getValue());
+			}
+		}
+		return returnMap;
 	}
 
 	@Override
@@ -230,9 +252,6 @@ public class LicenceServiceImpl implements LicenceService {
 	public synchronized void close() {
 		System.out.println("Licence Manager Shutting Down ");
 	}
-
-
-
 
 
 }

@@ -24,7 +24,7 @@ import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
 import org.opennms.karaf.licencemgr.metadata.jaxb.OptionMetadata;
 
 /**
- * This test goes through the complete lifecycle of the algorithms for generating and decoding a licence. 
+ * This test goes through the complete life-cycle of the algorithms for generating and decoding a licence. 
  * It does not use the Licence object. 
  * @author cgallen
  *
@@ -103,7 +103,10 @@ public class TestEncodeDecodeLicenceComplete {
 		metadata.setLicensor("OpenNMS UK");
 		metadata.setProductId("org.opennms/org.opennms.karaf.licencemanager.testbundle/1.0-SNAPSHOT");
 		metadata.setFeatureRepository("mvn:org.opennms.licencemgr/licence.manager.example/2.10.0/xml/features");
-		metadata.setSystemId("4ad72a34e3635c1b-99da3323");
+		
+		metadata.setMaxSizeSystemIds(3);
+		metadata.getSystemIds().add("4ad72a34e3635c1b-99da3323");
+		metadata.getSystemIds().add("32e396e36b28ef5d-a48ef1cb");
 
 		OptionMetadata option1 = new OptionMetadata("newname", "newvalue", "this is the description");
 		metadata.getOptions().add(option1);

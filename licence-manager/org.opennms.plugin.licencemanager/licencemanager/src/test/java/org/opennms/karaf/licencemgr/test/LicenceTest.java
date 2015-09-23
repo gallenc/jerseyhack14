@@ -54,7 +54,10 @@ public class LicenceTest {
 		createLicenceMetadata.setLicensor("OpenNMS UK");
 		createLicenceMetadata.setProductId("org.opennms/org.opennms.karaf.licencemanager.testbundle/1.0-SNAPSHOT");
 		createLicenceMetadata.setFeatureRepository("mvn:org.opennms.licencemgr/licence.manager.example/2.10.0/xml/features");
-		createLicenceMetadata.setSystemId("4ad72a34e3635c1b-99da3323");
+		
+		createLicenceMetadata.setMaxSizeSystemIds(1);
+		createLicenceMetadata.getSystemIds().add("4ad72a34e3635c1b-99da3323");
+
 
 		OptionMetadata option1 = new OptionMetadata("newname", "newvalue", "this is the description");
 		createLicenceMetadata.getOptions().add(option1);
@@ -91,7 +94,13 @@ public class LicenceTest {
 		
 		System.out.println("@Test testLicence receivedLicenceMetadataxml="+receivedLicenceMetadataxml);
 		System.out.println("@Test testLicence receivedLicenceMetadata.getProductId()="+receivedLicenceMetadata.getProductId());
-		System.out.println("@Test testLicence receivedLicenceMetadata.getSystemId()="+receivedLicenceMetadata.getSystemId());
+		System.out.println("@Test testLicence receivedLicenceMetadata.getMaxSizeSystemIds()="+receivedLicenceMetadata.getMaxSizeSystemIds());
+		
+		String msgStr="@Test testLicence receivedLicenceMetadata.getSystemIds() contains ";
+		for (String systemId :receivedLicenceMetadata.getSystemIds() ){
+			msgStr=msgStr+"'"+systemId+"'  ";
+		}
+		System.out.println(msgStr);
 		
 		
 		System.out.println("@Test testLicence End");

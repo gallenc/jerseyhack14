@@ -35,7 +35,9 @@
 		+ "   <featureRepository>org.opennms.project/myproject/1.0-SNAPSHOT/xml/features</featureRepository>\n"
 		+ "   <licensee></licensee>\n"
 		+ "   <licensor>OpenNMS UK</licensor>\n"
-		+ "   <systemId>32e396e36b28ef5d-a48ef1cb</systemId>\n"
+		+ "   <maxSizeSystemIds>3</maxSizeSystemIds>\n"
+		+ "   <systemIds>\n"
+		+ "   </systemIds>\n"
 		+ "   <startDate>2015-08-17T14:51:16.715+01:00</startDate>\n"
 		+ "   <duration>0</duration>\n"
 		+ "   <options>\n"
@@ -50,31 +52,35 @@
 
 		var addproductMetadata ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 		+ "<product>\n"
-		+ "	<productId>myproject/1.0-SNAPSHOT</productId>\n"
-		+ "	<featureRepository>org.opennms.project/myproject/1.0-SNAPSHOT/xml/features</featureRepository>\n"
-		+ "	<productName>test Bundle</productName>\n"
-		+ "	<productDescription>Test product description</productDescription>\n"
-		+ "	<productUrl>http:\\opennms.co.uk</productUrl>\n"
-		+ "	<organization>OpenNMS Project</organization>\n"
-		+ "	<licenceType>OpenNMS EULA See http:\\opennms.co.uk\EULA</licenceType>\n"
-		+ "	<licenceKeyRequired>true</licenceKeyRequired>\n"
+		+ "	 <productId>myproject/1.0-SNAPSHOT</productId>\n"
+		+ "	 <featureRepository>org.opennms.project/myproject/1.0-SNAPSHOT/xml/features</featureRepository>\n"
+		+ "	 <productName>test Bundle</productName>\n"
+		+ "	 <productDescription>Test product description</productDescription>\n"
+		+ "	 <productUrl>http:\\opennms.co.uk</productUrl>\n"
+		+ "	 <organization>OpenNMS Project</organization>\n"
+		+ "	 <licenceType>OpenNMS EULA See http:\\opennms.co.uk\EULA</licenceType>\n"
+		+ "	 <licenceKeyRequired>true</licenceKeyRequired>\n"
 		+ "</product>\n"
 
 		var createlicenceMetadata ="<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n"
 			+ "<licenceMetadata>\n"
-			+ "<productId>myproject/1.0-SNAPSHOT</productId>\n"
-			+ "<licensee>Mr Craig Gallen</licensee>\n"
-			+ "<licensor>OpenNMS UK</licensor>\n"
-			+ "<systemId></systemId>\n"
-			+ "<startDate>2015-01-07T15:10:45.138Z</startDate>\n"
-			+ "<expiryDate>2015-01-07T15:10:45.138Z</expiryDate>\n"
-			+ "<options>\n" 
-			+ "  <option>\n"
-			+ "    <description>this is the description</description>\n"
-			+ "    <name>option1</name>\n"
-			+ "    <value>newvalue</value>\n" 
-			+ "  </option>\n"
-			+ " </options>\n" 
+			+ "  <productId>myproject/1.0-SNAPSHOT</productId>\n"
+			+ "  <licensee>Mr Craig Gallen</licensee>\n"
+			+ "  <licensor>OpenNMS UK</licensor>\n"
+			+ "  <maxSizeSystemIds>3</maxSizeSystemIds>\n"
+			+ "  <systemIds>\n"
+			+ "    <systemId>32e396e36b28ef5d-a48ef1cb</systemId>\n"
+			+ "    <systemId>4ad72a34e3635c1b-99da3323</systemId>\n"
+			+ "  </systemIds>\n"
+			+ "  <startDate>2015-01-07T15:10:45.138Z</startDate>\n"
+			+ "  <expiryDate>2015-01-07T15:10:45.138Z</expiryDate>\n"
+			+ "  <options>\n" 
+			+ "    <option>\n"
+			+ "      <description>this is the description</description>\n"
+			+ "      <name>option1</name>\n"
+			+ "      <value>newvalue</value>\n" 
+			+ "    </option>\n"
+			+ "   </options>\n" 
 			+ "</licenceMetadata>\n";
 			
 			//myproject/1.0-SNAPSHOT
@@ -540,6 +546,17 @@
 			<td>URL Command Example:<BR><a href="../rest/licence-mgr/list">[baseUrl:port]/licencemgr/rest/licence-mgr/list</a>
 			<BR><BR>Button command Example:<BR>
 			<button type="button" onclick="sendGETXMLDoc('../rest/licence-mgr/list')">Licence Manager Get Installed Licences</button>
+			</td>
+		</tr>
+		<tr>
+			<td>/listforsystemid (GET )
+				<p>returns a map of all installed licences which will authenticate for given systemId 
+				with key=productId and value = licence string</p>
+			</td>
+			<td>URL Command Example:<BR><a href="../rest/licence-mgr/listforsystemid?systemId=">[baseUrl:port]/licencemgr/rest/licence-mgr/listforsystemid?systemId=</a>
+			<BR><BR>Button command Example:<BR>
+			<input type="text" id="listLicencesSystemId" form="usrform" style="width: 500px; "> systemId<BR><BR>
+			<button type="button" onclick="sendGETXMLDoc('../rest/licence-mgr/listforsystemid?systemId='+document.getElementById('listLicencesSystemId').value)">Licence Manager List licences for systemId</button>
 			</td>
 		</tr>
 		<tr>
