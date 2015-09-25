@@ -65,7 +65,7 @@ class EddOsgiLicences {
 					$MetadataFormStr .= "    <td>" . $key . " <bold>**</bold></td>\n"; // ** indicates editable field
 				}
 				$MetadataFormStr .= "        <td>\n";
-				$MetadataFormStr .= "            <input type=\"text\" name=\"" . $key . "\" value=\"" . $value . "\" ";
+				$MetadataFormStr .= "            <input type=\"text\" id=\"" . $key . "\"  name=\"" . $key . "\" value=\"" . $value . "\" ";
 				if ($noinput || ('' != ( string ) $metadataspec [$key])) {
 					$MetadataFormStr .= " readonly";
 				}
@@ -85,7 +85,7 @@ class EddOsgiLicences {
 		$MetadataFormStr .= "        </td>\n";
 		$MetadataFormStr .= "        <td>\n";
 		// creates an option list in which all systemIds are listed
-		$MetadataFormStr .= "           <select id=\"systemIdsList\" multiple ";
+		$MetadataFormStr .= "           <select id=\"systemIdsList\" size=\"10\" ";
 			// do not allow user to change field if no editing allowed
 			if ($noinput) {
 				$MetadataFormStr .= " disabled";
@@ -104,20 +104,11 @@ class EddOsgiLicences {
 			// do not allow user to change field if no editing allowed
 		if (! $noinput) {
 		    // embedded scripts to add and remove systemId's from list
-		    $MetadataFormStr .= "    <tr>\n";
-			$MetadataFormStr .= "        <td>\n";
-			$MetadataFormStr .= "        </td>\n";
-			$MetadataFormStr .= "        <td>\n";
-		    $MetadataFormStr .= "           <input type=\"hidden\" id=\"allSystemIds\" name=\"allSystemIds\" value=\"\" > <!--hidden value used in POST to send systemIds -->\n";
-			$MetadataFormStr .= "           <input type=\"text\" id=\"systemIdInput\" value=\"\" placeholder=\"New or Selected systemId\"> <!--no name defined so value is not sent in post -->\n";
-			$MetadataFormStr .= "           <button type=\"button\" onclick=\"removeSelectedSystemId()\">Remove selected systemId</button>\n";
-			$MetadataFormStr .= "           <button type=\"button\" onclick=\"addNewSystemId()\">Add new systemId</button>\n";
-			$MetadataFormStr .= "        </td>\n";
-			$MetadataFormStr .= "    </tr>\n";
 			$MetadataFormStr .= "<script>\n";
 			$MetadataFormStr .= "function removeSelectedSystemId(){\n";
 			$MetadataFormStr .= "	var systemIdsList=document.getElementById('systemIdsList');\n";
 			$MetadataFormStr .= "	var systemIdInput=document.getElementById('systemIdInput');\n";
+			$MetadataFormStr .= "	document.getElementById('errorField1').innerHTML='';\n";
 			$MetadataFormStr .= "   if (systemIdInput.value != null && systemIdInput.value !='' ) {\n";
 			$MetadataFormStr .= "     for (var i=0; i<systemIdsList.length; i++){\n";
 			$MetadataFormStr .= "        if (systemIdsList.options[i].value==systemIdInput.value ) {\n";
@@ -132,7 +123,14 @@ class EddOsgiLicences {
 			$MetadataFormStr .= "function addNewSystemId(){\n";
 			$MetadataFormStr .= "	var systemIdsList=document.getElementById('systemIdsList');\n";
 			$MetadataFormStr .= "	var systemIdInput=document.getElementById('systemIdInput');\n";
-			$MetadataFormStr .= "   if ((systemIdInput.value != null) && (systemIdInput.value !='') && (systemIdInput.value.indexOf(',') == -1)) {\n";
+			$MetadataFormStr .= "	var maxSizeSystemIdsStr = document.getElementById('maxSizeSystemIds').value;\n";
+			$MetadataFormStr .= "	var maxSizeSystemIds = parseInt(maxSizeSystemIdsStr);\n";
+			$MetadataFormStr .= "   document.getElementById('errorField1').innerHTML='';\n";
+			$MetadataFormStr .= "	if(maxSizeSystemIds==0) {;\n";
+			$MetadataFormStr .= "      document.getElementById('errorField1').innerHTML=' you cannot add systemId if maxSizeSystemIds==0 ';\n";
+			$MetadataFormStr .= "   }else if(systemIdsList.length>=maxSizeSystemIds) {\n";
+			$MetadataFormStr .= "      document.getElementById('errorField1').innerHTML=' you cannot add more systemId entries than maxSizeSystemIds ('+maxSizeSystemIds+')';\n";
+			$MetadataFormStr .= "   } else if ((systemIdInput.value != null) && (systemIdInput.value !='') && (systemIdInput.value.indexOf(',') == -1)) {\n";
 			$MetadataFormStr .= "	   var alreadyInlist=false;\n";
 			$MetadataFormStr .= "      for (var i=0; i<systemIdsList.length; i++){\n";
 			$MetadataFormStr .= "         if (systemIdsList.options[i].value==systemIdInput.value ) {\n";
@@ -145,7 +143,8 @@ class EddOsgiLicences {
 			$MetadataFormStr .= "         opt.value = systemIdInput.value;\n";
 			$MetadataFormStr .= "         opt.innerHTML = systemIdInput.value;\n";
 			$MetadataFormStr .= "         systemIdsList.appendChild(opt);\n";
-			$MetadataFormStr .= "      }\n";
+			$MetadataFormStr .= "         document.getElementById('systemIdInput').value='';\n";
+			$MetadataFormStr .= "      }  else document.getElementById('errorField1').innerHTML=' value is already in list';\n";
 			$MetadataFormStr .= "   }\n";
 			$MetadataFormStr .= "   updateAllSystemIds()\n";
 			$MetadataFormStr .= "}\n";
@@ -161,6 +160,19 @@ class EddOsgiLicences {
 			$MetadataFormStr .= "   document.getElementById('allSystemIds').value=allSystemIdsStr;\n";
 			$MetadataFormStr .= "}\n";
 			$MetadataFormStr .= "</script>\n";
+		    $MetadataFormStr .= "    <tr>\n";
+			$MetadataFormStr .= "        <td>\n";
+			$MetadataFormStr .= "        </td>\n";
+			$MetadataFormStr .= "        <td>\n";
+			$MetadataFormStr .= "           <div style=\"display:inline-block;\">\n";
+		    $MetadataFormStr .= "              <input type=\"hidden\" id=\"allSystemIds\" name=\"allSystemIds\" value=\"\" > <!--hidden value used in POST to send systemIds -->\n";
+			$MetadataFormStr .= "              <input type=\"text\" id=\"systemIdInput\" value=\"\" placeholder=\"New or Selected systemId\"> <!--no name defined so value is not sent in post -->\n";
+			$MetadataFormStr .= "              <button type=\"button\" onclick=\"removeSelectedSystemId()\">Remove selected systemId</button>\n";
+			$MetadataFormStr .= "              <button type=\"button\" onclick=\"addNewSystemId()\">Add new systemId</button>\n";
+			$MetadataFormStr .= "              <div  style=\"color: red;\" id=\"errorField1\"></div>\n";
+			$MetadataFormStr .= "           </div>\n";
+			$MetadataFormStr .= "        </td>\n";
+			$MetadataFormStr .= "    </tr>\n";
 		}
 		// **************
 		// options fields
