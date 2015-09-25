@@ -39,7 +39,7 @@ import javax.xml.bind.annotation.XmlType;
 
 @XmlRootElement(name="licenceMetadata")
 @XmlAccessorType(XmlAccessType.NONE)
-@XmlType (propOrder={"productId","featureRepository","licensee","licensor","maxSizeSystemIds", "systemIds","startDate","expiryDate","duration","options"})
+@XmlType (propOrder={"productId","featureRepository","licensee","licensor","startDate","expiryDate","duration","maxSizeSystemIds","systemIds","options"})
 public class LicenceMetadata {
 
 	//NOTE IF YOU MODIFY THIS CLASS YOU MUST REGENERATE THE equals and hashCode methods

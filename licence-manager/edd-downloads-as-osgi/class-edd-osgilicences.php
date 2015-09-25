@@ -49,12 +49,15 @@ class EddOsgiLicences {
 	 * @return string
 	 */
 	function licenceMetadataForm($_licenceMetadata, $_licenceMetadataSpec, $noinput) {
+		// check if OSGi licence generator debugging is enabled
+		$osgipub_osgi_debug = edd_get_option ( 'osgipub_osgi_debug' );
+	
 		$MetadataFormStr = "";
 		$MetadataFormStr .= "<table id=\"edd-osgi-licenceMetadata\" style=\"width: 100%;border: 3px solid;\" >\n";
 		$metadataspec = ( array ) $_licenceMetadataSpec->children ();
 		$licenceMetadataSpec_xpath = new DOMXPath ( dom_import_simplexml ( $_licenceMetadataSpec )->ownerDocument );
 		foreach ( $_licenceMetadata->children () as $key => $value ) {
-			if ($key != "options") {
+			if (($key != "options") && ($key != "systemIds")) {
 				$MetadataFormStr .= "    <tr>\n";
 				if (('' != ( string ) $metadataspec [$key]) || $noinput) {
 					$MetadataFormStr .= "    <td>" . $key . "</td>\n";
@@ -71,6 +74,97 @@ class EddOsgiLicences {
 				$MetadataFormStr .= "    </tr>\n";
 			}
 		}
+		// **************
+		// systemIds fields
+		// **************
+		$MetadataFormStr .= "    <tr>\n";
+		$MetadataFormStr .= "        <td><u><bold>systemIds</bold></u></td>\n";
+		$MetadataFormStr .= "    </tr>\n";
+		$MetadataFormStr .= "    <tr>\n";
+		$MetadataFormStr .= "        <td>\n";
+		$MetadataFormStr .= "        </td>\n";
+		$MetadataFormStr .= "        <td>\n";
+		// creates an option list in which all systemIds are listed
+		$MetadataFormStr .= "           <select id=\"systemIdsList\" multiple ";
+			// do not allow user to change field if no editing allowed
+			if ($noinput) {
+				$MetadataFormStr .= " disabled";
+			} else {
+				// javascript to update systemIdInput
+				$MetadataFormStr .= " onchange=\"document.getElementById('systemIdInput').value=document.getElementById('systemIdsList').value\" ";
+		    }
+		$MetadataFormStr .= " >\n";
+		foreach ( $_licenceMetadata->xpath ( '//systemIds/systemId' ) as $item ) {
+			$systemIdStr = ( string ) $item;
+			$MetadataFormStr .= "              <option value=\"" . $systemIdStr . "\">" . $systemIdStr . "</option>\n";
+		}
+		$MetadataFormStr .= "           </select>\n";
+		$MetadataFormStr .= "        </td>\n";
+		$MetadataFormStr .= "        </tr>\n";
+			// do not allow user to change field if no editing allowed
+		if (! $noinput) {
+		    // embedded scripts to add and remove systemId's from list
+		    $MetadataFormStr .= "    <tr>\n";
+			$MetadataFormStr .= "        <td>\n";
+			$MetadataFormStr .= "        </td>\n";
+			$MetadataFormStr .= "        <td>\n";
+		    $MetadataFormStr .= "           <input type=\"hidden\" id=\"allSystemIds\" name=\"allSystemIds\" value=\"\" > <!--hidden value used in POST to send systemIds -->\n";
+			$MetadataFormStr .= "           <input type=\"text\" id=\"systemIdInput\" value=\"\" placeholder=\"New or Selected systemId\"> <!--no name defined so value is not sent in post -->\n";
+			$MetadataFormStr .= "           <button type=\"button\" onclick=\"removeSelectedSystemId()\">Remove selected systemId</button>\n";
+			$MetadataFormStr .= "           <button type=\"button\" onclick=\"addNewSystemId()\">Add new systemId</button>\n";
+			$MetadataFormStr .= "        </td>\n";
+			$MetadataFormStr .= "    </tr>\n";
+			$MetadataFormStr .= "<script>\n";
+			$MetadataFormStr .= "function removeSelectedSystemId(){\n";
+			$MetadataFormStr .= "	var systemIdsList=document.getElementById('systemIdsList');\n";
+			$MetadataFormStr .= "	var systemIdInput=document.getElementById('systemIdInput');\n";
+			$MetadataFormStr .= "   if (systemIdInput.value != null && systemIdInput.value !='' ) {\n";
+			$MetadataFormStr .= "     for (var i=0; i<systemIdsList.length; i++){\n";
+			$MetadataFormStr .= "        if (systemIdsList.options[i].value==systemIdInput.value ) {\n";
+			$MetadataFormStr .= "           systemIdsList.remove(i);\n";
+			$MetadataFormStr .= "        }\n";
+			$MetadataFormStr .= "     }\n";
+			$MetadataFormStr .= "     systemIdInput.value='';\n";
+			$MetadataFormStr .= "   }\n";
+			$MetadataFormStr .= "   updateAllSystemIds()\n";
+			$MetadataFormStr .= "}\n";
+			$MetadataFormStr .= "\n";
+			$MetadataFormStr .= "function addNewSystemId(){\n";
+			$MetadataFormStr .= "	var systemIdsList=document.getElementById('systemIdsList');\n";
+			$MetadataFormStr .= "	var systemIdInput=document.getElementById('systemIdInput');\n";
+			$MetadataFormStr .= "   if ((systemIdInput.value != null) && (systemIdInput.value !='') && (systemIdInput.value.indexOf(',') == -1)) {\n";
+			$MetadataFormStr .= "	   var alreadyInlist=false;\n";
+			$MetadataFormStr .= "      for (var i=0; i<systemIdsList.length; i++){\n";
+			$MetadataFormStr .= "         if (systemIdsList.options[i].value==systemIdInput.value ) {\n";
+			$MetadataFormStr .= "            alreadyInlist=true;\n";
+			$MetadataFormStr .= "         }\n";
+			$MetadataFormStr .= "      }\n";
+			$MetadataFormStr .= "      if (! alreadyInlist ) {\n";
+			$MetadataFormStr .= "         var opt = document.createElement('option');\n";
+			$MetadataFormStr .= "         var systemIdInput=document.getElementById('systemIdInput');\n";
+			$MetadataFormStr .= "         opt.value = systemIdInput.value;\n";
+			$MetadataFormStr .= "         opt.innerHTML = systemIdInput.value;\n";
+			$MetadataFormStr .= "         systemIdsList.appendChild(opt);\n";
+			$MetadataFormStr .= "      }\n";
+			$MetadataFormStr .= "   }\n";
+			$MetadataFormStr .= "   updateAllSystemIds()\n";
+			$MetadataFormStr .= "}\n";
+			$MetadataFormStr .= "function updateAllSystemIds(){\n";
+			$MetadataFormStr .= "	var systemIdsList=document.getElementById('systemIdsList');\n";
+			$MetadataFormStr .= "	var allSystemIdsStr='';\n";
+			$MetadataFormStr .= "   for (var i=0; i<systemIdsList.length; i++){\n";
+			$MetadataFormStr .= "      if (systemIdsList.options[i].value !='') { // don't add empty strings \n";
+			$MetadataFormStr .= "         allSystemIdsStr= allSystemIdsStr +systemIdsList.options[i].value;\n";
+			$MetadataFormStr .= "         if ((i+1)<systemIdsList.length) allSystemIdsStr = allSystemIdsStr+',';\n";
+			$MetadataFormStr .= "      }\n";
+			$MetadataFormStr .= "   }\n";
+			$MetadataFormStr .= "   document.getElementById('allSystemIds').value=allSystemIdsStr;\n";
+			$MetadataFormStr .= "}\n";
+			$MetadataFormStr .= "</script>\n";
+		}
+		// **************
+		// options fields
+		// **************
 		$MetadataFormStr .= "    <tr>\n";
 		$MetadataFormStr .= "        <td><u><bold>Options</bold></u></td>\n";
 		$MetadataFormStr .= "    </tr>\n";
@@ -118,6 +212,22 @@ class EddOsgiLicences {
 		// check if OSGi licence generator debugging is enabled
 		$osgipub_osgi_debug = edd_get_option ( 'osgipub_osgi_debug' );
 		
+		// debug code to print out POST_
+		if ($osgipub_osgi_debug) {
+		    echo  "DEBUG received update matadata POST_ \n ";
+		    while( list( $field, $value ) = each( $POST_ )) {
+              // display values
+              if( is_array( $value )) {
+                 // if checkbox (or other multiple value fields)
+                 while( list( $arrayField, $arrayValue ) = each( $value )) {
+                   echo $arrayField ."=" . $arrayValue . "\n";
+                 }
+              } else {
+                 echo $field . "=" . $value . "\n";
+              }
+            }
+            echo  "\n " ;
+		}
 		
 		$metadataspec = ( array ) $_licenceMetadataSpec->children ();
 		$metadata = ( array ) $_licenceMetadata->children ();
@@ -157,6 +267,45 @@ class EddOsgiLicences {
 				}
 			}
 		}
+		
+
+		// populate systemIds fields of licenceMetadata with data from the hidden allSystemIds value in form
+		// the systemId elements in allSystemIds are separated by ','
+		if (isset ( $POST_ ['allSystemIds'] )) {
+		   $allSystemIdsStr= htmlspecialchars ( $POST_ ['allSystemIds'] );
+
+		   // remove existing systemIds values before re-populating
+		   $count = count($_licenceMetadata->systemIds->systemId);
+		   
+           for ($i = 0; $i < $count; $i++) {
+               unset($_licenceMetadata->systemIds->systemId[0]);
+           }
+		   
+           // split string at ',' character and add node for each systemId
+           // check and never add more values than maximum value
+           $maxSizeSystemIds=intval($_licenceMetadataSpec->maxSizeSystemIds);
+
+		   $systemIdArray = explode(',', $allSystemIdsStr);
+		   $systemIdArraySize = count($systemIdArray);
+		   if ($systemIdArraySize > $maxSizeSystemIds) {
+		      $systemIdArraySize=$maxSizeSystemIds;
+		   }
+		   
+		   $systemIdsNode = $_licenceMetadata->systemIds[0];
+		   for ($i = 0; $i < $systemIdArraySize; $i++) {
+		   	   $systemidStr = (string) $systemIdArray[$i];
+               $systemIdsNode->addChild("systemId", $systemidStr );
+           }
+           
+           if ($osgipub_osgi_debug) {
+		      echo "DEBUG systemIds count ". $count . "\n";
+		      echo "DEBUG allSystemIdsStr ". $allSystemIdsStr . "\n";
+		      echo "DEBUG maxSizeSystemIds ". $maxSizeSystemIds . "\n";
+		      echo "DEBUG systemIdArraySize ". $systemIdArraySize . "\n";
+		   }
+		   
+		}
+		
 		return $_licenceMetadata;
 	}
 	
@@ -201,8 +350,15 @@ class EddOsgiLicences {
 		$uri = $osgiLicenceGeneratorUrl . '/licencemgr/rest/licence-pub/createlicence';
 		
 		$payload = ( string ) $_licenceMetadata->asXML ();
+		
 		// save updated licence metadata
 		update_post_meta ( $post_id, 'edd_osgiLicenceMetadataStr', $payload );
+		
+		if ($osgipub_osgi_debug) {
+		   echo "DEBUG _licenceMetadata payload saved to postMetadata edd_osgiLicenceMetadataStr=" . $payload . "\n";
+		   $TEMPedd_osgiLicenceMetadataStr = get_post_meta ( $post_id, 'edd_osgiLicenceMetadataStr', true );
+		   echo "DEBUG _licenceMetadata payload retrieved from postMetadata edd_osgiLicenceMetadataStr=" . $TEMPedd_osgiLicenceMetadataStr . "\n\n";
+		}
 		
 		if ($osgipub_osgi_debug)
 			echo "Post request to licence publisher: Basic Authentication username='" . $osgi_username . "' password='" . $osgi_password . "'\n     uri='" . $uri . "'\n" . "     payload='" . $payload . "\n";
