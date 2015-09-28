@@ -230,6 +230,37 @@ public class LicenceManagerClientRestJerseyTest {
 
 		System.out.println("@Test - getLicenceMapTest().FINISH");
 	}
+	
+	
+	/**
+	 * /list (GET )
+	 * e.g http://localhost:8181/licencemgr/rest/licence-mgr/list
+	 * 
+	 * returns a map of all installed licences 
+	 * with key=productId and value = licence string
+	 */
+	//@Test
+	public void getLicenceMapForSystemIdTest() {
+		System.out.println("@Test - getLicenceMapForSystemIdTest().START");
+
+		LicenceManagerClient licenceManagerClient = getLicenceManagerClient();
+		
+		LicenceList licenceList=null;
+		try {
+			licenceList = licenceManagerClient.getLicenceMapForSystemId(test_system_id);
+		} catch (Exception e) {
+			e.printStackTrace();
+			fail("@Test - getLicenceLicenceMapForSystemIdTest() failed. See stack trace in consol");
+		}
+		List<LicenceEntry> licenceEntries = licenceList.getLicenceList();
+		
+		System.out.println("Licence List:");
+		for (LicenceEntry licenceEntry : licenceEntries) {
+			System.out.println("    productId='"+licenceEntry.getProductId()+"' licence='"+licenceEntry.getLicenceStr()+"'");
+		}
+
+		System.out.println("@Test - LicenceMapForSystemIdTest().FINISH");
+	}
 
 
 	/**

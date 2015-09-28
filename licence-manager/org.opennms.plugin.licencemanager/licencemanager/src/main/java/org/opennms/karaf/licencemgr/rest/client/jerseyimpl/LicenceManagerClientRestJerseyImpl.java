@@ -286,6 +286,45 @@ public class LicenceManagerClientRestJerseyImpl implements LicenceManagerClient 
 
         return licenceListResponse;
 	}
+	
+	@Override
+	public LicenceList getLicenceMapForSystemId(String systemId) throws Exception {
+		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
+		if(systemId==null ) throw new RuntimeException("systemId must not be null");
+	    
+		Client client = newClient();
+		
+		//http://localhost:8980/opennms/licencemgr/rest/licence-mgr/listforsystemid?systemId=32e396e36b28ef5d-a48ef1cb
+		
+		String getStr= baseUrl+basePath+"/listforsystemid?systemId="+systemId;
+		
+		WebResource r = client.resource(getStr);
+
+		// GET method
+		ClientResponse response = r.accept(MediaType.APPLICATION_XML)
+                .type(MediaType.APPLICATION_FORM_URLENCODED).get(ClientResponse.class);
+
+        // check response status code and reply error message
+        if (response.getStatus() != 200) {
+        	ErrorMessage errorMessage=null;
+        	try {
+        		errorMessage = response.getEntity(ErrorMessage.class);
+        	} catch (Exception e) {
+        	}
+        	String errMsg= "getLicenceMapForSystemId Failed : HTTP error code : "+ response.getStatus();
+        	if (errorMessage!=null){
+        		errMsg=errMsg+" message:"+ errorMessage.getMessage()
+					+" code:"+ errorMessage.getCode()
+					+" developer message:"+errorMessage.getDeveloperMessage();
+        	}
+            throw new RuntimeException(errMsg);
+        }
+		// success !
+        LicenceList licenceListResponse = response.getEntity(LicenceList.class);
+
+        return licenceListResponse;
+	}
+
 
 	@Override
 	public void deleteLicences(Boolean confirm) throws Exception {

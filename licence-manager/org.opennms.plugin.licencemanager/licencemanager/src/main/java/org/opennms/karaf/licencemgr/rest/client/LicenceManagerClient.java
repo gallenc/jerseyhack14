@@ -74,6 +74,18 @@ public interface LicenceManagerClient {
 	 * @throws Exception
 	 */
 	public LicenceList getLicenceMap() throws Exception;
+	
+	/**
+	 * /list (GET )
+	 * e.g http://localhost:8980/opennms/licencemgr/rest/licence-mgr/listforsystemid?systemId=32e396e36b28ef5d-a48ef1cb
+	 * 
+	 * returns a map of all installed licences for given systemid
+	 * with key=productId and value = licence string
+	 * @return
+	 * @throws Exception
+	 */
+	public LicenceList getLicenceMapForSystemId(String systemId) throws Exception;
+
 
 
 	/**
