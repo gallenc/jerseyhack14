@@ -595,7 +595,8 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 				
 				$edd_payment_customer_id = ( string ) $meta ['_edd_payment_customer_id'] [0];
 				
-				$edd_payment_number = ( string ) $meta ['_edd_payment_number'] [0];
+				//TODO REMOVED BECAUSE NOT BEING GENERATED $edd_payment_number = ( string ) $meta ['_edd_payment_number'] [0];
+				$edd_payment_number=$edd_payment_post_id;
 				
 				$edd_payment_purchase_key = ( string ) $meta ['_edd_payment_purchase_key'] [0];
 				
