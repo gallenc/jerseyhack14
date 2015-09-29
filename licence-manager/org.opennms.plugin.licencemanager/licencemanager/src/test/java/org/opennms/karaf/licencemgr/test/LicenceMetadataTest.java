@@ -38,7 +38,7 @@ public class LicenceMetadataTest {
     	metadata.setLicensee("Mr Craig Gallen");
     	metadata.setLicensor("OpenNMS UK");
     	metadata.setProductId("product id");
-    	metadata.setMaxSizeSystemIds(2);
+    	metadata.setMaxSizeSystemIds("2");
     	metadata.getSystemIds().add("system id");
     	metadata.setFeatureRepository("mvn:org.opennms.licencemgr/licence.manager.example/2.10.0/xml/features");
     	

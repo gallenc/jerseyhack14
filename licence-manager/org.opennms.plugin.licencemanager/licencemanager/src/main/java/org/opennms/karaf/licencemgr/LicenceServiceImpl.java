@@ -45,6 +45,7 @@ import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceEntry;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceMetadata;
 import org.opennms.karaf.licencemgr.rest.client.jerseyimpl.LicenceManagerClientRestJerseyImpl;
+import org.osgi.framework.ServiceException;
 
 @XmlRootElement(name="LicenceServiceData")
 @XmlAccessorType(XmlAccessType.NONE)
@@ -222,8 +223,16 @@ public class LicenceServiceImpl implements LicenceService {
 			} catch (Exception e) {
 				throw new RuntimeException("cannot decode licenceMetadata for internal licence map entry "+licenceEntry.getKey());
 			}
+			
+			Integer maxSizeSystemIds=null;
+			try {
+				maxSizeSystemIds = Integer.parseInt(licenceMetadata.getMaxSizeSystemIds());
+			} catch (Exception e){
+				throw new RuntimeException("the maxSizeSystemIds '"+licenceMetadata.getMaxSizeSystemIds()
+						+ "' cannot be parsed as int in licence for productId='"+licenceMetadata.getProductId()+"'", e);
+			}
 			// checks if any systemId is OK or if systemId matches list of systemId's in licence
-			if (licenceMetadata.getMaxSizeSystemIds() == 0 || licenceMetadata.getSystemIds().contains(systemId)){
+			if (maxSizeSystemIds == 0 || licenceMetadata.getSystemIds().contains(systemId)){
 				returnMap.put(licenceEntry.getKey(), licenceEntry.getValue());
 			}
 		}
@@ -310,8 +319,9 @@ public class LicenceServiceImpl implements LicenceService {
 
 	/**
 	 * tries to install remote licences from licence manager at a given url. Updates licences list and persists.
-	 * This will only replace duplicate licence it will not delete licences present locally but not
+	 * This will only replace duplicate licence it will not delete licences present locally which are not
 	 * in remote system
+	 * NOTE - because of 'synchronised' you cannot get remote licences from local system
 	 * @param remoteLicencesUrl URL version of remote url
 	 * 
 	 */
@@ -421,7 +431,7 @@ public class LicenceServiceImpl implements LicenceService {
 			if (installedFromLicenceMgr!=null) {
 				System.out.println("Licence Manager loaded remote licences from url="+installedFromLicenceMgr);
 			} else System.out.println("WARNING Licence Manager unabled to load remote licences from any supplied url");
-		} else System.out.println("Licence Manager system set no not load remote licences");
+		} else System.out.println("Licence Manager system set to not load remote licences");
 		System.out.println("Licence Manager Started");
 
 	}

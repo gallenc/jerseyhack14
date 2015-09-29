@@ -84,7 +84,7 @@ public class LicenceMetadata {
 	 * If maxSizeSystemIds==0 then no systemId's should be included in the list and the licence will
 	 * authenticate with any and all systemIds,
 	 */
-	Integer maxSizeSystemIds=0;
+	String maxSizeSystemIds=null;
 	
 	/**
 	 * startDate - the date from which the licence will be valid
@@ -100,7 +100,7 @@ public class LicenceMetadata {
 	 * duration - alternative to expiry date. Duration of licence in days. If null (and expiryDate is null) there is no expiry date.
 	 * If duration =0, there is no expiry date. If both defined, duration has precedence over expiryDate.
 	 */
-	Integer duration=null;
+	String duration=null;
 
 	/**
 	 * (Definition licensee n. a person (organisation) given a license by 
@@ -194,7 +194,7 @@ public class LicenceMetadata {
 	/**
 	 * @return the maxSizeSystemIds
 	 */
-	public Integer getMaxSizeSystemIds() {
+	public String getMaxSizeSystemIds() {
 		return maxSizeSystemIds;
 	}
 
@@ -203,7 +203,7 @@ public class LicenceMetadata {
 	 * @param maxSizeSystemIds the maxSizeSystemIds to set
 	 */
 	@XmlElement(name="maxSizeSystemIds")
-	public void setMaxSizeSystemIds(Integer maxSizeSystemIds) {
+	public void setMaxSizeSystemIds(String maxSizeSystemIds) {
 		this.maxSizeSystemIds = maxSizeSystemIds;
 	}
 	
@@ -241,7 +241,7 @@ public class LicenceMetadata {
 	/**
 	 * @return the duration
 	 */
-	public Integer getDuration() {
+	public String getDuration() {
 		return duration;
 	}
 
@@ -250,7 +250,7 @@ public class LicenceMetadata {
 	 * @param duration the duration to set
 	 */
 	@XmlElement(name="duration")
-	public void setDuration(Integer duration) {
+	public void setDuration(String duration) {
 		this.duration = duration;
 	}
 

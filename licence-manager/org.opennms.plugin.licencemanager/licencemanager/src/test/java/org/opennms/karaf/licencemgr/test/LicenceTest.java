@@ -55,7 +55,7 @@ public class LicenceTest {
 		createLicenceMetadata.setProductId("org.opennms/org.opennms.karaf.licencemanager.testbundle/1.0-SNAPSHOT");
 		createLicenceMetadata.setFeatureRepository("mvn:org.opennms.licencemgr/licence.manager.example/2.10.0/xml/features");
 		
-		createLicenceMetadata.setMaxSizeSystemIds(1);
+		createLicenceMetadata.setMaxSizeSystemIds("1");
 		createLicenceMetadata.getSystemIds().add("4ad72a34e3635c1b-99da3323");
 
 

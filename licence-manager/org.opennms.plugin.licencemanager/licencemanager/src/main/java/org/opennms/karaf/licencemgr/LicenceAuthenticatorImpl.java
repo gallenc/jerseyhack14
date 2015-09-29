@@ -81,7 +81,17 @@ public class LicenceAuthenticatorImpl implements LicenceAuthenticator {
 			licenceAuthenticatorImpl(licencewithCRC, productId, privateKeyEnryptedStr );
 
 			// check if licenceMetadata contains the local systemId
-			Integer maxSizeSystemIds = licenceMetadata.getMaxSizeSystemIds();
+			Integer maxSizeSystemIds = 0;
+			if (licenceMetadata.getMaxSizeSystemIds()== null || "".equals(licenceMetadata.getMaxSizeSystemIds())) {
+				throw new ServiceException("the maxSizeSystemIds value must be set as integer for productId='"+productId+"'");
+			} else {
+				try {
+					maxSizeSystemIds = Integer.parseInt(licenceMetadata.getMaxSizeSystemIds());
+				} catch (Exception e){
+					throw new ServiceException("the maxSizeSystemIds '"+licenceMetadata.getMaxSizeSystemIds()
+							+ "' cannot be parsed as int in licence for productId='"+productId+"'", e);
+				}
+			}
 			Set<String> systemIds = licenceMetadata.getSystemIds();
 			if (maxSizeSystemIds==null) throw new ServiceException("maxSizeSystemIds must not be null in licence for productId='"+productId+"'");
 			if (systemIds.size()>maxSizeSystemIds)  throw new ServiceException("the systemIds list in licence for productId='"+productId

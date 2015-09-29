@@ -58,15 +58,16 @@ class EddOsgiLicences {
 		$licenceMetadataSpec_xpath = new DOMXPath ( dom_import_simplexml ( $_licenceMetadataSpec )->ownerDocument );
 		foreach ( $_licenceMetadata->children () as $key => $value ) {
 			if (($key != "options") && ($key != "systemIds")) {
+				$readOnly = ($noinput || ('' != ( string ) $metadataspec [$key]));
 				$MetadataFormStr .= "    <tr>\n";
-				if (('' != ( string ) $metadataspec [$key]) || $noinput) {
+				if ($readOnly) {
 					$MetadataFormStr .= "    <td>" . $key . "</td>\n";
 				} else {
 					$MetadataFormStr .= "    <td>" . $key . " <bold>**</bold></td>\n"; // ** indicates editable field
 				}
 				$MetadataFormStr .= "        <td>\n";
 				$MetadataFormStr .= "            <input type=\"text\" id=\"" . $key . "\"  name=\"" . $key . "\" value=\"" . $value . "\" ";
-				if ($noinput || ('' != ( string ) $metadataspec [$key])) {
+				if ($readOnly) {
 					$MetadataFormStr .= " readonly";
 				}
 				$MetadataFormStr .= ">\n";

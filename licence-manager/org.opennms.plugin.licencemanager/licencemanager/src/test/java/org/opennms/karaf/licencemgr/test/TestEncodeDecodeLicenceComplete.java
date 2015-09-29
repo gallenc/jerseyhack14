@@ -104,7 +104,7 @@ public class TestEncodeDecodeLicenceComplete {
 		metadata.setProductId("org.opennms/org.opennms.karaf.licencemanager.testbundle/1.0-SNAPSHOT");
 		metadata.setFeatureRepository("mvn:org.opennms.licencemgr/licence.manager.example/2.10.0/xml/features");
 		
-		metadata.setMaxSizeSystemIds(3);
+		metadata.setMaxSizeSystemIds("3");
 		metadata.getSystemIds().add("4ad72a34e3635c1b-99da3323");
 		metadata.getSystemIds().add("32e396e36b28ef5d-a48ef1cb");
 

@@ -108,13 +108,21 @@ public class LicencePublisherImpl implements LicencePublisher {
 					+"' is different from Licence Specification licensor='"+metadataSpec.getLicensor()+"' for productId="+productId);
 
 		// check that when maxSizeSystemIds= 0 there are no systemId's defined in specification
-		if (createLicenceMetadata.getMaxSizeSystemIds()==0 && createLicenceMetadata.getSystemIds().size()>0){
+		Integer maxSizeSystemIds=null;
+		try {
+			maxSizeSystemIds = Integer.parseInt(createLicenceMetadata.getMaxSizeSystemIds());
+		} catch (Exception e){
+			throw new RuntimeException("the maxSizeSystemIds '"+createLicenceMetadata.getMaxSizeSystemIds()
+					+ "' cannot be parsed as int in licence for productId='"+createLicenceMetadata.getProductId()+"'", e);
+		}
+		
+		if ( maxSizeSystemIds==0 && createLicenceMetadata.getSystemIds().size()>0){
 			throw new IllegalArgumentException("createLicenceMetadata maxSizeSystemIds= 0 but number of systemIds defined is greater than 0 in licence for productId="+productId);
 		}
 		
 		// check that the actual number of systemIds in the licence specification is not greater than the max number in
 		// the supplied licenceMetadata
-		if (createLicenceMetadata.getMaxSizeSystemIds()< createLicenceMetadata.getSystemIds().size()){
+		if ( maxSizeSystemIds< createLicenceMetadata.getSystemIds().size()){
 			throw new IllegalArgumentException("createLicenceMetadata maxSizeSystemIds is less than the number of systemIds defined in licence for productId="+productId);
 		}
 

@@ -111,11 +111,11 @@ public class LicenceDescriptorPanel extends CustomComponent {
 			startDateTextField.setValue( (licenceMetadata.getStartDate()==null )?  "": formatter.format(licenceMetadata.getStartDate()));
 			expiryDateTextField.setValue( (licenceMetadata.getExpiryDate()==null )?  "": formatter.format(licenceMetadata.getExpiryDate()));
 
-			durationTextField.setValue( (licenceMetadata.getDuration()==null )?  "":Integer.toString(licenceMetadata.getDuration()));
+			durationTextField.setValue( (licenceMetadata.getDuration()==null )?  "":licenceMetadata.getDuration());
 			licenseeTextField.setValue( (licenceMetadata.getLicensee()==null )?  "":licenceMetadata.getLicensee());
 			licensorTextField.setValue( (licenceMetadata.getLicensor()==null )?  "":licenceMetadata.getLicensor());
 
-			maxSizeSystemIdsTextField.setValue( (licenceMetadata.getMaxSizeSystemIds()==null )?  "": Integer.toString(licenceMetadata.getMaxSizeSystemIds()));
+			maxSizeSystemIdsTextField.setValue( (licenceMetadata.getMaxSizeSystemIds()==null )?  "": licenceMetadata.getMaxSizeSystemIds());
 
 			// display systemIds if present
 			systemIdsVerticalLayout.removeAllComponents();
@@ -123,7 +123,11 @@ public class LicenceDescriptorPanel extends CustomComponent {
 			// add error messages if system ids defined when not expected
 			Label l1 = new Label();
 			l1.setContentMode(ContentMode.HTML);
-			if(licenceMetadata.getMaxSizeSystemIds()==null || licenceMetadata.getMaxSizeSystemIds()==0) {
+			Integer licenceMetadataMaxSizeSystemIds=null;
+			try {
+				licenceMetadataMaxSizeSystemIds = Integer.parseInt(licenceMetadata.getMaxSizeSystemIds());
+			} catch (Exception e){}
+			if(licenceMetadataMaxSizeSystemIds==null || licenceMetadataMaxSizeSystemIds==0) {
 				// if maxSizeSystemIds=0 check if systemId's list has entries (an error)
 				if(licenceMetadata.getSystemIds()==null || licenceMetadata.getSystemIds().isEmpty()){
 					l1.setValue("<div style=\"color: green;\">"+ "All SystemId's Accepted"+"</div>");
@@ -136,7 +140,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 			} else if (licenceMetadata.getSystemIds()==null || licenceMetadata.getSystemIds().isEmpty()){
 				l1.setValue("<div style=\"color: green;\">"+ "No SystemId's Defined"+"</div>");
 				systemIdsVerticalLayout.addComponent(l1);
-			} else if (licenceMetadata.getSystemIds().size() > licenceMetadata.getMaxSizeSystemIds()){
+			} else if (licenceMetadata.getSystemIds().size() > licenceMetadataMaxSizeSystemIds){
 				l1.setValue("<div style=\"color: red;\">Licence Error: more system id's defined  in licence ("+licenceMetadata.getSystemIds().size()
 						+ ") than allowed in maxSizeSystemIds="+licenceMetadata.getMaxSizeSystemIds()+"</div>");
 				systemIdsVerticalLayout.addComponent(l1);

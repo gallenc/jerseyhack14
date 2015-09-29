@@ -163,7 +163,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		
 		/**
 		 * Provides shortcodes for retrieving licence metadata from licence generator for use in product definition
-		 * shortcodes [osgi_licence_metadata] retrieving product description from licence generator every time page viewed
+		 * shortcodes [osgi_licence_metadata] retrieving licence specification from licence generator every time page viewed
 		 *
 		 * @param unknown $atts        	
 		 */
@@ -182,11 +182,11 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 				$user_can_modify_metadata = (is_user_logged_in () && current_user_can ( 'view_shop_sensitive_data' ));
 				
 				if ($this->osgipub_osgi_debug) {
-					$content .= "<p>debug: Running osgi_product_description shortcode </p>\n";
+					$content .= "<p>debug: Running osgi_licence_metadata_shortcode shortcode </p>\n";
 					if ($user_can_modify_metadata) {
-						$content .= "<p>debug: osgi_product_description shortcode: user permitted to modify licence metadata</p>\n";
+						$content .= "<p>debug: osgi_licence_metadata_shortcode: user permitted to modify licence metadata</p>\n";
 					} else
-						$content .= "<p>debug: osgi_product_description shortcode: user NOT permitted to modify licence metadata</p>";
+						$content .= "<p>debug: osgi_licence_metadata_shortcode: user NOT permitted to modify licence metadata</p>";
 					$content .= "<p>debug: Attributes:";
 					if ("" != $atts)
 						foreach ( $atts as $key => $value ) {
@@ -272,7 +272,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 		/**
 		 * provides shortcodes for retrieving product description from licence generator
 		 * shortcodes [osgi_product_description] retrieving product description from licence generator every time page viewed
-		 * shortcodes [osgi_licence_list retrieve="if_new"] only retreives a new product descriptino the first time page is viewed
+		 * shortcodes [osgi_licence_list retrieve="if_new"] only retreives a new product description the first time page is viewed
 		 *
 		 * @param unknown $atts        	
 		 */
@@ -1085,7 +1085,7 @@ if (! class_exists ( 'EDD_Downloads_As_Osgi' )) {
 					array (
 							'id' => 'osgipub_osgi_licence_pub_url',
 							'name' => __ ( 'Licence Publisher URL', 'edd' ),
-							'desc' => __ ( 'Set the base url URL of the OSGi licence publisher service', 'edd-osgi' ),
+							'desc' => __ ( 'Set the base URL of the OSGi licence publisher service. (do not append backslash / at end)', 'edd-osgi' ),
 							'type' => 'text',
 							'size' => 'regular',
 							'std' => 'http://localhost:8181' 

@@ -53,13 +53,13 @@ This is accessed at
 
 For example the following get command lists the installed products
 
-http://localhost:8181/pluginmgr/rest/product-reg/list
+http://localhost:8181/licencemgr/rest/product-reg/list
 
 A test page is provided which illustrates the use of the ReST interface.
 
 (The source of this page includes javascript examples for handling post XML messages).
 
-http://localhost:8181/pluginmgr/diagnostics/licence-mgr-rest-diagnostics.html
+http://localhost:8181/licencemgr/diagnostics/licence-mgr-rest-diagnostics.html
 
 ## Installation in stand alone Karaf
 
