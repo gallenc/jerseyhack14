@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<!--  Copyright 2014 OpenNMS Group Inc., Entimoss ltd. -->
+<!--  Licensed under the Apache License, Version 2.0 (the "License"); -->
+<!--  you may not use this file except in compliance with the License. -->
+<!--  You may obtain a copy of the License at -->
+<!-- -->
+<!--     http://www.apache.org/licenses/LICENSE-2.0 -->
+<!-- -->
+<!--  Unless required by applicable law or agreed to in writing, software -->
+<!--  distributed under the License is distributed on an "AS IS" BASIS, -->
+<!--  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. -->
+<!--  See the License for the specific language governing permissions and -->
+<!--  limitations under the License. -->
+<html>
+<head>
+<title>Plugin Manager Test Page</title>
+<meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="Content-Style-Type" content="text/css" />
+<meta http-equiv="Content-Script-Type" content="text/javascript" />
+<!-- https://code.google.com/p/javascriptbase64/ MIT licence -->
+<script src="../diagnostics/base64.js"></script>
+<script>
+	function onLoad() {
+		// default values for test page
+		var user = "admin";
+		var password = "admin";
+		
+		// test pluginId
+		var defaultPluginId="32e396e36b28ef5d-a48ef1cb";
+
+        // username password default
+		document.getElementById('user').value = user;
+		document.getElementById('password').value = password;
+				
+		//plugin manager
+		document.getElementById('pluginId1').value = defaultPluginId;
+
+	}
+
+    // uses HTML POST to send an xml message and asynchronouly receive a reply
+	function sendPOSTXMLDoc(postRequest, xmlMessage) {
+
+		//clear response panel
+		document.getElementById("eventResponse").value = "";
+		document.getElementById("httpresponsecode").value = "";
+
+		var user = document.getElementById('user').value;
+		var password = document.getElementById('password').value;
+
+		var xmlhttp;
+		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		} else {// code for IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				document.getElementById("httpresponsecode").value = xmlhttp.status;
+				document.getElementById("eventResponse").value = xmlhttp.responseText;
+			} else if (xmlhttp.readyState == 4) {
+				document.getElementById("httpresponsecode").value = xmlhttp.status;
+				document.getElementById("eventResponse").value = xmlhttp.responseText;
+			}
+		};
+
+		xmlhttp.open("POST", postRequest, true);
+		xmlhttp.setRequestHeader("Content-type", "application/xml");
+		xmlhttp.setRequestHeader("Authorization", "Basic "
+				+ Base64.encode(user + ":" + password));
+		xmlhttp.send(xmlMessage);
+	}
+
+    // uses HTML GET to send an xml message and asynchronouly receive a reply
+	function sendGETXMLDoc(getRequest) {
+
+		//clear response panel
+		document.getElementById("eventResponse").value = "";
+		document.getElementById("httpresponsecode").value = "";
+
+		var user = document.getElementById('user').value;
+		var password = document.getElementById('password').value;
+
+		var xmlhttp;
+		if (window.XMLHttpRequest) {// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		} else {// code for IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+
+		xmlhttp.onreadystatechange = function() {
+			if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+				document.getElementById("httpresponsecode").value = xmlhttp.status;
+				document.getElementById("eventResponse").value = xmlhttp.responseText;
+			} else if (xmlhttp.readyState == 4) {
+				document.getElementById("httpresponsecode").value = xmlhttp.status;
+				document.getElementById("eventResponse").value = xmlhttp.responseText;
+			}
+		};
+
+		xmlhttp.open("GET", getRequest, true);
+		xmlhttp.setRequestHeader("Content-type", "application/xml");
+		xmlhttp.setRequestHeader("Authorization", "Basic "
+				+ Base64.encode(user + ":" + password));
+		xmlhttp.send();
+	}
+
+// page specific post requests NOT USED BUT AS EXAMPLE
+// 	function publishProductspec() {
+// 		var postRequest = "../rest/product-pub/addproductspec"
+// 		var xmlMessage = document.getElementById('publishProductMetadata').value;
+// 		sendPOSTXMLDoc(postRequest, xmlMessage);
+// 	}
+
+	
+</script>
+<!-- This positions the response text always visible on the right when scrolling -->
+<style type="text/css">
+#main-container {
+    width:990px;
+}
+#left-column {
+    width:500px;
+    float:left;
+    margin-left: 15px;
+}
+#right-column {
+    position: fixed;
+	left: 850px;
+    top:  20px;
+}
+
+</style>
+</head>
+<body onload="onLoad()">
+<div id="main-container">
+ <div id="left-column">
+	<h1>Plugin Manager ReST Test Page</h1>
+	<p>This page provides very simple tests for the plugin manager service</p>
+
+	<form name="usrform">
+		<input type="text" id="user"> user (http basic authentication
+		user name)<BR>
+		<input type="text" id="password"> password
+		(http basic authentication password)<BR>
+	</form>
+
+	<h2>Plugin Manager</h2>
+	<p>The Plugin Manager service manages plugin installs in remote karaf instances .</p>
+
+	<table border=1>
+		<tr>
+			<th style="width: 300px">Command</th>
+			<th style="width: 300px">Example</th>
+		</tr>
+		<tr>
+			<td>/manifest-list (GET systemId)
+				<p>returns manifest list of product specs to install for a given systemId if found</p>
+			</td>
+			<td>URL Command Example:<BR><a href="../rest/manifest-list?systemId=">[baseUrl:port]/pluginmgr/rest/rest/manifest-list?systemId=</a>
+			<BR><BR>Button command Example:<BR>
+			<input type="text" id="pluginId1" form="usrform" style="width: 500px; "> productId<BR><BR>
+			<button type="button" onclick="sendGETXMLDoc('../rest/manifest-list?systemId='+document.getElementById('pluginId1').value)">Get Product Manifest for systemId </button>
+			</td>
+		</tr>
+		
+	</table>
+</div> 
+
+ <div id="right-column">
+	<h2>Command Response</h2>
+	<h3>Http response code</h3>
+	<textarea rows="1" cols="10" id="httpresponsecode"
+		style="resize: none;"></textarea>
+	<h3>Http response content</h3>
+	<textarea rows="20" cols="50" id="eventResponse" ></textarea>
+	<BR>
+</div>
+
+</div>
+</body>
+</html>

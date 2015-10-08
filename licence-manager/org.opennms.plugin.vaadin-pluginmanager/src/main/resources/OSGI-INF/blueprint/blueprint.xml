@@ -26,7 +26,27 @@
 
   <!-- Provides OpenNMS headers for admin pages -->
   <reference id="onmsHeaderProvider" interface="org.opennms.web.api.OnmsHeaderProvider" availability="optional" />
+  
+  <!-- configure the rest service for plugin manager -->
+  <!-- ReST Servelet configuration for jersey -->
+  <service interface="javax.servlet.http.HttpServlet">
+    <service-properties>
+      <entry key="alias" value="/pluginmgr/rest" />
+    </service-properties>
+    <bean class="com.sun.jersey.spi.container.servlet.ServletContainer">
+      <argument ref="pluginManagerRestApplication" />
+    </bean>
+  </service>
 
+  <bean id="pluginManagerRestApplication" class="org.opennms.features.pluginmgr.rest.impl.PluginManagerRestApplication" destroy-method="destroyMethod"/>
+
+  <!-- ServiceLoader(FeaturesService featuresService) -->
+  <bean id="serviceLoader" class="org.opennms.features.pluginmgr.rest.impl.ServiceLoader">
+    <argument ref="pluginManagerImpl" />
+  </bean>
+
+  <!-- configures the main ui for plugin application -->
+  
   <!-- Main Plugin UI -->
   <bean id="pluginManagerAdminApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.PluginManagerAdminApplicationFactory">
     <property name="pluginManager" ref="pluginManagerImpl" />
@@ -35,6 +55,7 @@
       <map>
         <entry key="Licence Manager Diagnostics" value="/opennms/admin/plugin-manager-licence-diagnostics" />
         <entry key="Feature Manager Diagnostics" value="/opennms/admin/plugin-manager-feature-diagnostics" />
+        <entry key="Plugin Manager Diagnostics" value="/opennms/admin/plugin-manager-plugin-diagnostics" />
       </map>
     </property>
   </bean>
@@ -58,7 +79,7 @@
   </service>
 
   <!-- feature Diagnostics page -->
-  <bean id="featureDiagnisticsApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.SimpleIframeApplicationFactory">
+  <bean id="featureDiagnosticsApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.SimpleIframeApplicationFactory">
     <property name="headerProvider" ref="onmsHeaderProvider" />
     <property name="iframePageUrl" value="/opennms/featuremgr/diagnostics/feature-mgr-rest-diagnostics.html" />
     <property name="headerLinks">
@@ -68,14 +89,14 @@
     </property>
   </bean>
 
-  <service id="featureDiagnisticsService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="featureDiagnisticsApplicationFactory">
+  <service id="featureDiagnosticsService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="featureDiagnosticsApplicationFactory">
     <service-properties>
       <entry key="alias" value="/admin/plugin-manager-feature-diagnostics" />
     </service-properties>
   </service>
 
   <!-- Licence Diagnostics page -->
-  <bean id="licenceDiagnisticsApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.SimpleIframeApplicationFactory">
+  <bean id="licenceDiagnosticsApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.SimpleIframeApplicationFactory">
     <property name="headerProvider" ref="onmsHeaderProvider" />
     <property name="iframePageUrl" value="/opennms/licencemgr/diagnostics/licence-mgr-rest-diagnostics.html" />
     <property name="headerLinks">
@@ -85,11 +106,37 @@
     </property>
   </bean>
 
-  <service id="licenceDiagnisticsService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="licenceDiagnisticsApplicationFactory">
+  <service id="licenceDiagnosticsService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="licenceDiagnosticsApplicationFactory">
     <service-properties>
       <entry key="alias" value="/admin/plugin-manager-licence-diagnostics" />
     </service-properties>
   </service>
+  
+  <!-- Plugin Diagnostics page -->
+  <bean id="pluginDiagnosticsApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.SimpleIframeApplicationFactory">
+    <property name="headerProvider" ref="onmsHeaderProvider" />
+    <property name="iframePageUrl" value="/opennms/pluginmgr/diagnostics/plugin-mgr-rest-diagnostics.html" />
+    <property name="headerLinks">
+      <map>
+        <entry key="Return to Plugin Manager" value="/opennms/admin/plugin-manager" />
+      </map>
+    </property>
+  </bean>
+
+  <service id="pluginDiagnosticsService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="pluginDiagnosticsApplicationFactory">
+    <service-properties>
+      <entry key="alias" value="/admin/plugin-manager-plugin-diagnostics" />
+    </service-properties>
+  </service> 
+  
+  <!-- Maps in the test resource files for serving basic test pages -->
+  <bean id="testResourceMapping" class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
+    <property name="alias" value="/pluginmgr/diagnostics" />
+    <property name="path" value="/diagnostics" />
+  </bean>
+
+  <service id="testResources" ref="testResourceMapping" interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping" />
+  
 
   <!-- Setting up link to plugin manager in admin page -->
 
@@ -106,6 +153,7 @@
       <entry key="registration.export" value="true" />
     </service-properties>
   </service>
+  
 
   <!-- load default properties from  org.opennms.features.pluginmgr.config.cfg if exists -->
   <cm:property-placeholder persistent-id="org.opennms.features.pluginmgr.config" update-strategy="reload">
