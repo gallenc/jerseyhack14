@@ -26,13 +26,13 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.vaadin.config;
+package org.opennms.features.pluginmgr.vaadin.config;
 
 
 import java.util.Map;
 
-import org.opennms.features.vaadin.config.model.SessionPluginModel;
-import org.opennms.features.vaadin.config.model.PluginModel;
+import org.opennms.features.pluginmgr.PluginManager;
+import org.opennms.features.pluginmgr.SessionPluginManager;
 import org.opennms.vaadin.extender.AbstractApplicationFactory;
 import org.opennms.web.api.OnmsHeaderProvider;
 
@@ -45,7 +45,7 @@ public class PluginManagerAdminApplicationFactory extends AbstractApplicationFac
 	
     private OnmsHeaderProvider m_headerProvider;
     
-    private PluginModel pluginModel;
+    private PluginManager pluginManager;
     
     // headerLinks map of key= name and value=url for links to be placed in header of page
     private Map<String, String> headerLinks;
@@ -59,12 +59,12 @@ public class PluginManagerAdminApplicationFactory extends AbstractApplicationFac
 		this.m_headerProvider = headerProvider;
 	}
 
-	public PluginModel getPluginModel() {
-		return pluginModel;
+	public PluginManager getPluginManager() {
+		return pluginManager;
 	}
 
-	public void setPluginModel(PluginModel pluginModel) {
-		this.pluginModel = pluginModel;
+	public void setPluginManager(PluginManager pluginManager) {
+		this.pluginManager = pluginManager;
 	}
 	
 	/**
@@ -94,9 +94,9 @@ public class PluginManagerAdminApplicationFactory extends AbstractApplicationFac
         pluginManagerAdminApplication.setHeaderLinks(headerLinks);
         
         //local plugin model persists data for session instance
-        SessionPluginModel sessionPluginModel=new SessionPluginModel();
-        sessionPluginModel.setPluginModel(pluginModel);
-        pluginManagerAdminApplication.setSessionPluginModel(sessionPluginModel);
+        SessionPluginManager sessionPluginManager=new SessionPluginManager();
+        sessionPluginManager.setPluginManager(pluginManager);
+        pluginManagerAdminApplication.setSessionPluginManager(sessionPluginManager);
         return pluginManagerAdminApplication;
     }
 

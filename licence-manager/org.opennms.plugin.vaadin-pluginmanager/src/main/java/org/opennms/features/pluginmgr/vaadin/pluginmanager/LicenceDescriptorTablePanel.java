@@ -1,4 +1,4 @@
-package org.opennms.features.vaadin.pluginmanager;
+package org.opennms.features.pluginmgr.vaadin.pluginmanager;
 
 import java.util.HashMap;
 import java.util.List;

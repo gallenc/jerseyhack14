@@ -1,4 +1,4 @@
-package org.opennms.features.vaadin.config.model;
+package org.opennms.features.pluginmgr;
 
 import java.util.Date;
 import java.util.SortedMap;
@@ -7,17 +7,17 @@ import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
 
 /**
- * this model is a proxy for the PluginModel shared by all ui sessions. 
+ * this model is a proxy for the PluginManagerImpl shared by all ui sessions. 
  * It allows some extra variables to be persisted and changed within a session
  * so that a session can choose which karaf instance is being operated on
  * @author admin
  *
  */
-public class SessionPluginModel {
+public class SessionPluginManager {
 
 	private String karafInstance="localhost"; //default value
 
-	private PluginModel pluginModel=null;
+	private PluginManager pluginManager=null;
 
 	/** 
 	 * gets the karaf instance which will be used for other commands
@@ -37,22 +37,22 @@ public class SessionPluginModel {
 	
 	
 	public  Date getAvailablePluginsLastUpdated(){
-		return pluginModel.getAvailablePluginsLastUpdated();
+		return pluginManager.getAvailablePluginsLastUpdated();
 	}
 	
 	public  Date getKarafInstanceLastUpdated(){
-		return pluginModel.getKarafInstanceLastUpdated(karafInstance);
+		return pluginManager.getKarafInstanceLastUpdated(karafInstance);
 	}
 
 	/**
-	 * @return the pluginModel
+	 * @return the pluginManager
 	 */
-	public PluginModel getPluginModel() {
-		return pluginModel;
+	public PluginManager getPluginManager() {
+		return pluginManager;
 	}
 
-	public void setPluginModel(PluginModel pluginModel) {
-		this.pluginModel=pluginModel;
+	public void setPluginManager(PluginManager pluginManager) {
+		this.pluginManager=pluginManager;
 
 	}
 
@@ -60,21 +60,21 @@ public class SessionPluginModel {
 	 * reloads the data from the selected karaf instance
 	 */
 	public void refreshKarafEntry(){
-		pluginModel.refreshKarafEntry(karafInstance);
+		pluginManager.refreshKarafEntry(karafInstance);
 	}
 	
 	/**
 	 * reloads the data from the selected karaf instance
 	 */
 	public void refreshAvailablePlugins(){
-		pluginModel.refreshAvailablePlugins();
+		pluginManager.refreshAvailablePlugins();
 	}
 
 	/**
 	 * @return the availablePlugins
 	 */
 	public ProductSpecList getAvailablePlugins() {
-		return pluginModel.getAvailablePlugins();
+		return pluginManager.getAvailablePlugins();
 	}
 
 
@@ -83,7 +83,7 @@ public class SessionPluginModel {
 	 * @return the installedPlugins
 	 */
 	public ProductSpecList getInstalledPlugins() {
-		return pluginModel.getInstalledPlugins(karafInstance);
+		return pluginManager.getInstalledPlugins(karafInstance);
 	}
 
 
@@ -91,7 +91,7 @@ public class SessionPluginModel {
 	 * @return the installedLicenceList
 	 */
 	public LicenceList getInstalledLicenceList() {
-		return pluginModel.getInstalledLicenceList(karafInstance);
+		return pluginManager.getInstalledLicenceList(karafInstance);
 
 	}
 
@@ -99,28 +99,28 @@ public class SessionPluginModel {
 	 * @return the systemId
 	 */
 	public String getSystemId() {
-		return pluginModel.getSystemId(karafInstance);
+		return pluginManager.getSystemId(karafInstance);
 	}
 
 	/**
 	 * @param systemId the systemId to set
 	 */
 	public void setSystemId(String systemId) {
-		pluginModel.setSystemId(systemId, karafInstance);
+		pluginManager.setSystemId(systemId, karafInstance);
 	}
 
 	/**
 	 * @return the pluginServerPassword
 	 */
 	public String getPluginServerPassword() {
-		return pluginModel.getPluginServerPassword();
+		return pluginManager.getPluginServerPassword();
 	}
 
 	/**
 	 * @return the pluginServerUsername
 	 */
 	public String getPluginServerUsername() {
-		return pluginModel.getPluginServerUsername();
+		return pluginManager.getPluginServerUsername();
 	}
 
 
@@ -128,7 +128,7 @@ public class SessionPluginModel {
 	 * @return the pluginServerUrl
 	 */
 	public String getPluginServerUrl() {
-		return pluginModel.getPluginServerUrl();
+		return pluginManager.getPluginServerUrl();
 
 	}
 
@@ -136,64 +136,64 @@ public class SessionPluginModel {
 	 * @return the licenceShoppingCartUrl
 	 */
 	public String getLicenceShoppingCartUrl(){
-		return pluginModel.getLicenceShoppingCartUrl();
+		return pluginManager.getLicenceShoppingCartUrl();
 	}
 
 	/**
-	 * Sets basic data for PluginModel and persists all at once
+	 * Sets basic data for PluginManager and persists all at once
 	 * @param pluginServerUsername
 	 * @param pluginServerPassword
 	 * @param pluginServerUrl
 	 * @param licenceShoppingCartUrl
 	 */
-	public synchronized void setPluginModelBasicData(String pluginServerUsername, String pluginServerPassword, String pluginServerUrl, String licenceShoppingCartUrl){
-		pluginModel.setPluginModelBasicData(pluginServerUsername, pluginServerPassword, pluginServerUrl, licenceShoppingCartUrl);
+	public synchronized void setPluginManagerBasicData(String pluginServerUsername, String pluginServerPassword, String pluginServerUrl, String licenceShoppingCartUrl){
+		pluginManager.setPluginManagerBasicData(pluginServerUsername, pluginServerPassword, pluginServerUrl, licenceShoppingCartUrl);
 	}
 
 
 	public String generateRandomManifestSystemId(){
-		return pluginModel.generateRandomManifestSystemId(karafInstance);
+		return pluginManager.generateRandomManifestSystemId(karafInstance);
 
 	}
 
 	public void addLicence(String licenceStr){
-		pluginModel.addLicence(licenceStr, karafInstance);
+		pluginManager.addLicence(licenceStr, karafInstance);
 	}
 
 	public void removeLicence(String selectedLicenceId) {
-		pluginModel.removeLicence(selectedLicenceId, karafInstance);
+		pluginManager.removeLicence(selectedLicenceId, karafInstance);
 	}
 
 	public void installPlugin(String selectedProductId) {
-		pluginModel.installPlugin(selectedProductId, karafInstance);
+		pluginManager.installPlugin(selectedProductId, karafInstance);
 
 	}
 
 	public void unInstallPlugin(String selectedProductId) {
-		pluginModel.unInstallPlugin(selectedProductId, karafInstance);
+		pluginManager.unInstallPlugin(selectedProductId, karafInstance);
 
 	}
 	
 	public ProductSpecList getPluginsManifest() {
-		return pluginModel.getPluginsManifest(karafInstance);
+		return pluginManager.getPluginsManifest(karafInstance);
 	}
 	
 	public void addPluginToManifest(String selectedProductId) {
-		pluginModel.addPluginToManifest(selectedProductId, karafInstance);
+		pluginManager.addPluginToManifest(selectedProductId, karafInstance);
 		
 	}
 	
 	public void removePluginFromManifest(String selectedProductId) {
-		pluginModel.removePluginFromManifest( selectedProductId,karafInstance);
+		pluginManager.removePluginFromManifest( selectedProductId,karafInstance);
 	}
 	
 	
 	public void setManifestSystemId(String manifestSystemId){
-		pluginModel.setManifestSystemId(manifestSystemId,karafInstance);
+		pluginManager.setManifestSystemId(manifestSystemId,karafInstance);
 	}
 	
 	public String getManifestSystemId(){
-		return pluginModel.getManifestSystemId(karafInstance);
+		return pluginManager.getManifestSystemId(karafInstance);
 	}
 	
 	/**
@@ -201,7 +201,7 @@ public class SessionPluginModel {
 	 * @return Map of key = karafInstanceName, value = karafInstanceUrl
 	 */
 	public SortedMap<String,String> getKarafInstances(){
-		return pluginModel.getKarafInstances();
+		return pluginManager.getKarafInstances();
 	}
 
 

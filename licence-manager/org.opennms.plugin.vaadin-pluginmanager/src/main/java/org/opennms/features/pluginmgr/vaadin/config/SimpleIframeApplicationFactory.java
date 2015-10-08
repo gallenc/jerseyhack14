@@ -26,7 +26,7 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.vaadin.config;
+package org.opennms.features.pluginmgr.vaadin.config;
 
 
 import java.util.Map;

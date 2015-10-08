@@ -26,7 +26,7 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.vaadin.config;
+package org.opennms.features.pluginmgr.vaadin.config;
 
 //import org.opennms.features.vaadin.datacollection.SnmpCollectionPanel;
 //import org.opennms.netmgt.config.api.DataCollectionConfigDao;
@@ -37,7 +37,7 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 
-import org.opennms.features.vaadin.pluginmanager.internal.HttpServletRequestVaadinImpl;
+import org.opennms.features.pluginmgr.vaadin.pluginmanager.internal.HttpServletRequestVaadinImpl;
 import org.opennms.web.api.OnmsHeaderProvider;
 
 import com.vaadin.annotations.Theme;

@@ -26,7 +26,7 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.vaadin.pluginmanager;
+package org.opennms.features.pluginmgr.vaadin.pluginmanager;
 
 import org.opennms.web.navigate.PageNavEntry;
 

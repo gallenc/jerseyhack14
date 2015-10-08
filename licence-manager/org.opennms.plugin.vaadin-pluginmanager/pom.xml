@@ -18,7 +18,7 @@
   </description>
   <properties>
     <bundle.symbolicName>org.opennms.plugin.vaadin-pluginmanager</bundle.symbolicName>
-    <bundle.namespace>org.opennms.features.vaadin</bundle.namespace>
+    <bundle.namespace>org.opennms.features.pluginmgr</bundle.namespace>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <licencemgr-version>1.0-SNAPSHOT</licencemgr-version>
   </properties>

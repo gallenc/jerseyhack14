@@ -1,6 +1,6 @@
 
 
-package org.opennms.features.vaadin.config.model;
+package org.opennms.features.pluginmgr.model;
 
 import java.util.Date;
 

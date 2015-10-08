@@ -26,7 +26,7 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.vaadin.config;
+package org.opennms.features.pluginmgr.vaadin.config;
 
 //import org.opennms.features.vaadin.datacollection.SnmpCollectionPanel;
 //import org.opennms.netmgt.config.api.DataCollectionConfigDao;
@@ -37,9 +37,9 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Map;
 
-import org.opennms.features.vaadin.config.model.SessionPluginModel;
-import org.opennms.features.vaadin.pluginmanager.PluginManagerUIMainPanel;
-import org.opennms.features.vaadin.pluginmanager.internal.HttpServletRequestVaadinImpl;
+import org.opennms.features.pluginmgr.SessionPluginManager;
+import org.opennms.features.pluginmgr.vaadin.pluginmanager.PluginManagerUIMainPanel;
+import org.opennms.features.pluginmgr.vaadin.pluginmanager.internal.HttpServletRequestVaadinImpl;
 import org.opennms.web.api.OnmsHeaderProvider;
 
 import com.vaadin.annotations.Theme;
@@ -81,14 +81,14 @@ public class PluginManagerAdminApplication extends UI {
 	private VaadinRequest m_request;
 	private VerticalLayout m_rootLayout;
 
-	private SessionPluginModel sessionPluginModel;
+	private SessionPluginManager sessionPluginManager;
 	
-	public SessionPluginModel getSessionPluginModel() {
-		return sessionPluginModel;
+	public SessionPluginManager getSessionPluginManager() {
+		return sessionPluginManager;
 	}
 
-	public void setSessionPluginModel(SessionPluginModel sessionPluginModel) {
-		this.sessionPluginModel = sessionPluginModel;
+	public void setSessionPluginManager(SessionPluginManager sessionPluginManager) {
+		this.sessionPluginManager = sessionPluginManager;
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class PluginManagerAdminApplication extends UI {
 			m_rootLayout.addComponent(horizontalLayout1);
 		}
 
-		PluginManagerUIMainPanel pluginManagerUIMainPanel = new PluginManagerUIMainPanel(sessionPluginModel);
+		PluginManagerUIMainPanel pluginManagerUIMainPanel = new PluginManagerUIMainPanel(sessionPluginManager);
 		
 		m_rootLayout.addComponent(pluginManagerUIMainPanel);
 

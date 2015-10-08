@@ -1,4 +1,4 @@
-package org.opennms.features.vaadin.config.model;
+package org.opennms.features.pluginmgr;
 
 
 import java.io.File;
@@ -13,6 +13,8 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
+import org.opennms.features.pluginmgr.model.KarafEntryJaxb;
+import org.opennms.features.pluginmgr.model.PluginModelJaxb;
 import org.opennms.karaf.featuremgr.rest.client.jerseyimpl.FeaturesServiceClientRestJerseyImpl;
 import org.opennms.karaf.licencemgr.StringCrc32Checksum;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceEntry;
@@ -23,7 +25,7 @@ import org.opennms.karaf.licencemgr.rest.client.jerseyimpl.LicenceManagerClientR
 import org.opennms.karaf.licencemgr.rest.client.jerseyimpl.ProductRegisterClientRestJerseyImpl;
 
 
-public class PluginModel {
+public class PluginManagerImpl implements PluginManager {
 
 	private static String PRODUCT_PUB_BASE_PATH = "/licencemgr/rest/product-pub";
 	private static String PRODUCT_REG_BASE_PATH = "/licencemgr/rest/product-reg";
@@ -54,78 +56,76 @@ public class PluginModel {
 	}
 
 
-	/**
-	 * returns the password of the remote plugin server
-	 * @return the pluginServerPassword
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getPluginServerPassword()
 	 */
+	@Override
 	public synchronized  String getPluginServerPassword() {
 		return pluginModelJaxb.getPluginServerPassword();
 	}
 
-	/**
-	 * 
-	 * @param pluginServerPassword
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#setPluginServerPassword(java.lang.String)
 	 */
+	@Override
 	public void setPluginServerPassword(String pluginServerPassword){
 		pluginModelJaxb.setPluginServerPassword(pluginServerPassword);
 	}
 
-	/**
-	 * gets the username to access the plugin server
-	 * @return the pluginServerUsername
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getPluginServerUsername()
 	 */
+	@Override
 	public synchronized String getPluginServerUsername() {
 		return pluginModelJaxb.getPluginServerUsername();
 	}
 
-	/**
-	 * 
-	 * @param pluginServerUsername
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#setPluginServerUsername(java.lang.String)
 	 */
+	@Override
 	public void setPluginServerUsername(String pluginServerUsername){
 		pluginModelJaxb.setPluginServerUsername(pluginServerUsername);
 	}
 
-	/**
-	 * gets the url to access the plugin server
-	 * @return the pluginServerUrl
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getPluginServerUrl()
 	 */
+	@Override
 	public synchronized String getPluginServerUrl() {
 		return pluginModelJaxb.getPluginServerUrl();
 	}
 
-	/**
-	 * 
-	 * @param pluginServerUrl
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#setPluginServerUrl(java.lang.String)
 	 */
+	@Override
 	public void setPluginServerUrl(String pluginServerUrl){
 		pluginModelJaxb.setPluginServerUrl(pluginServerUrl);
 	}
 
-	/**
-	 * @return the licenceShoppingCartUrl
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getLicenceShoppingCartUrl()
 	 */
+	@Override
 	public synchronized String getLicenceShoppingCartUrl() {
 		return pluginModelJaxb.getLicenceShoppingCartUrl();
 	}
 
-	/**
-	 * 
-	 * @param licenceShoppingCartUrl
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#setLicenceShoppingCartUrl(java.lang.String)
 	 */
+	@Override
 	public void setLicenceShoppingCartUrl(String licenceShoppingCartUrl){
 		pluginModelJaxb.setLicenceShoppingCartUrl(licenceShoppingCartUrl);
 	}
 
 
-	/**
-	 * Sets basic data for PluginModel and persists all at once
-	 * @param pluginServerUsername
-	 * @param pluginServerPassword
-	 * @param pluginServerUrl
-	 * @param licenceShoppingCartUrl
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#setPluginManagerBasicData(java.lang.String, java.lang.String, java.lang.String, java.lang.String)
 	 */
-	public synchronized void setPluginModelBasicData(String pluginServerUsername, String pluginServerPassword, String pluginServerUrl, String licenceShoppingCartUrl){
+	@Override
+	public synchronized void setPluginManagerBasicData(String pluginServerUsername, String pluginServerPassword, String pluginServerUrl, String licenceShoppingCartUrl){
 		pluginModelJaxb.setPluginServerUsername(pluginServerUsername);
 		pluginModelJaxb.setPluginServerPassword(pluginServerPassword);
 		pluginModelJaxb.setPluginServerUrl(pluginServerUrl);
@@ -134,10 +134,10 @@ public class PluginModel {
 	}
 
 
-	/**
-	 * returns list of karaf instances which can be addressed by ui
-	 * @return Map of key = karafInstanceName, value = karafInstanceUrl
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getKarafInstances()
 	 */
+	@Override
 	public synchronized SortedMap<String,String> getKarafInstances(){
 
 		//TODO GET DATA FROM OPENNMS
@@ -150,9 +150,10 @@ public class PluginModel {
 
 	}
 
-	/**
-	 * 
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#refreshAvailablePlugins()
 	 */
+	@Override
 	public synchronized void refreshAvailablePlugins() {
 
 		ProductRegisterClientRestJerseyImpl productRegisterClient = new ProductRegisterClientRestJerseyImpl();
@@ -178,10 +179,10 @@ public class PluginModel {
 
 
 
-	/**
-	 * returns list of available plugins obtained from the plugin server
-	 * @return the availablePlugins
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getAvailablePlugins()
 	 */
+	@Override
 	public synchronized ProductSpecList getAvailablePlugins() {
 
 		if (pluginModelJaxb.getAvailablePlugins()==null 
@@ -191,10 +192,10 @@ public class PluginModel {
 		return pluginModelJaxb.getAvailablePlugins();
 	}
 
-	/**
-	 * refreshes complete KarafEntryJaxb from remote karaf server
-	 * throws exception if cannot refresh entry
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#refreshKarafEntry(java.lang.String)
 	 */
+	@Override
 	public synchronized  KarafEntryJaxb refreshKarafEntry(String karafInstance){
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 
@@ -282,12 +283,10 @@ public class PluginModel {
 		return karafEntryJaxb;
 	}
 
-	/**
-	 * returns the time the karaf instance date was last updated from the instance
-	 * returns null if never updated
-	 * @param karafInstance
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getKarafInstanceLastUpdated(java.lang.String)
 	 */
+	@Override
 	public synchronized Date getKarafInstanceLastUpdated(String karafInstance){
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
@@ -297,19 +296,18 @@ public class PluginModel {
 		return karafEntry.getKarafInstanceLastUpdated();
 	}
 
-	/**
-	 * returns the time when the available plugins were last updated.
-	 * null if never updated
-	 * @return
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getAvailablePluginsLastUpdated()
 	 */
+	@Override
 	public synchronized Date getAvailablePluginsLastUpdated() {
 		return pluginModelJaxb.getAvailablePluginsLastUpdated();
 	}
 
-	/**
-	 * returns the plugins installed in the given karaf instance
-	 * @return the installedPlugins
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getInstalledPlugins(java.lang.String)
 	 */
+	@Override
 	public synchronized ProductSpecList getInstalledPlugins(String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
@@ -320,10 +318,10 @@ public class PluginModel {
 	}
 
 
-	/**
-	 * returns the licenses installed in the karaf instance
-	 * @return the installedLicenceList
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getInstalledLicenceList(java.lang.String)
 	 */
+	@Override
 	public synchronized LicenceList getInstalledLicenceList(String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
@@ -334,10 +332,10 @@ public class PluginModel {
 	}
 
 
-	/**
-	 * returns the system id of the karaf instance
-	 * @return the systemId
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getSystemId(java.lang.String)
 	 */
+	@Override
 	public synchronized String getSystemId(String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
@@ -347,10 +345,10 @@ public class PluginModel {
 		return karafEntry.getSystemId();
 	}
 
-	/**
-	 * sets the system id of the karaf instance
-	 * @param systemId the systemId to set
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#setSystemId(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public synchronized void setSystemId(String systemId, String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(systemId==null) throw new RuntimeException("systemId cannot be null");
@@ -377,11 +375,10 @@ public class PluginModel {
 
 	}
 
-	/**
-	 * generates a random system id for the karaf instance
-	 * @param karafInstance
-	 * @return new system id
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#generateRandomManifestSystemId(java.lang.String)
 	 */
+	@Override
 	public synchronized String generateRandomManifestSystemId(String karafInstance){
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 
@@ -427,11 +424,10 @@ public class PluginModel {
 		//		}
 	}
 
-	/**
-	 * adds a licence to the karaf instance
-	 * @param licenceStr
-	 * @param karafInstance
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#addLicence(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public synchronized void addLicence(String licenceStr,String karafInstance){
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(licenceStr==null) throw new RuntimeException("licenceStr cannot be null");
@@ -459,11 +455,10 @@ public class PluginModel {
 
 	}
 
-	/**
-	 * 
-	 * @param selectedLicenceId
-	 * @param karafInstance
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#removeLicence(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public void removeLicence(String selectedLicenceId, String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(selectedLicenceId==null) throw new RuntimeException("selectedLicenceId cannot be null");
@@ -491,11 +486,10 @@ public class PluginModel {
 
 	}
 
-	/**
-	 * installs a plugin for the product id in the selected karaf instance
-	 * @param selectedProductId
-	 * @param karafInstance
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#installPlugin(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public synchronized void installPlugin(String selectedProductId,String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
@@ -543,11 +537,10 @@ public class PluginModel {
 
 	}
 
-	/**
-	 * uninstalls a plugin for the product id in the selected karaf instance
-	 * @param selectedProductId
-	 * @param karafInstance
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#unInstallPlugin(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public synchronized void unInstallPlugin(String selectedProductId,String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
@@ -593,10 +586,10 @@ public class PluginModel {
 	}
 
 
-	/**
-	 * returns the manifest of plugins scheduled to be installed in the given karaf instance
-	 * @return the installedPlugins
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getPluginsManifest(java.lang.String)
 	 */
+	@Override
 	public synchronized ProductSpecList getPluginsManifest(String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if (! pluginModelJaxb.getKarafManifestMap().containsKey(karafInstance)){
@@ -605,11 +598,10 @@ public class PluginModel {
 		return pluginModelJaxb.getKarafManifestMap().get(karafInstance);
 	}
 
-	/**
-	 * adds a plugin to the manifest of plugins scheduled to be installed in the given karaf instance
-	 * @param selectedProductId
-	 * @param karafInstance
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#addPluginToManifest(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public synchronized void addPluginToManifest(String selectedProductId,String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
@@ -634,11 +626,10 @@ public class PluginModel {
 		persist();
 	}
 
-	/**
-	 * removes a plugin to the manifest of plugins scheduled to be installed in the given karaf instance
-	 * @param selectedProductId
-	 * @param karafInstance
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#removePluginFromManifest(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public synchronized void removePluginFromManifest(String selectedProductId,String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
@@ -657,11 +648,10 @@ public class PluginModel {
 		}
 	}
 
-	/**
-	 * sets the manifestSystemId for a given karafInstance
-	 * @param manifestSystemId
-	 * @param karafInstance
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#setManifestSystemId(java.lang.String, java.lang.String)
 	 */
+	@Override
 	public synchronized void setManifestSystemId(String manifestSystemId,String karafInstance){
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(manifestSystemId==null) throw new RuntimeException("manifestSystemId cannot be null");
@@ -675,11 +665,10 @@ public class PluginModel {
 
 	}
 
-	/**
-	 * gets the manifestSystemId for a given karafInstance or null if no entry for karafInstance
-	 * @param manifestSystemId
-	 * @param karafInstance
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getManifestSystemId(java.lang.String)
 	 */
+	@Override
 	public synchronized String getManifestSystemId(String karafInstance){
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 
