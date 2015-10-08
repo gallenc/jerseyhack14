@@ -151,8 +151,8 @@ public class SessionPluginModel {
 	}
 
 
-	public String generateRandomSystemId(){
-		return pluginModel.generateRandomSystemId(karafInstance);
+	public String generateRandomManifestSystemId(){
+		return pluginModel.generateRandomManifestSystemId(karafInstance);
 
 	}
 
@@ -173,7 +173,29 @@ public class SessionPluginModel {
 		pluginModel.unInstallPlugin(selectedProductId, karafInstance);
 
 	}
-
+	
+	public ProductSpecList getPluginsManifest() {
+		return pluginModel.getPluginsManifest(karafInstance);
+	}
+	
+	public void addPluginToManifest(String selectedProductId) {
+		pluginModel.addPluginToManifest(selectedProductId, karafInstance);
+		
+	}
+	
+	public void removePluginFromManifest(String selectedProductId) {
+		pluginModel.removePluginFromManifest( selectedProductId,karafInstance);
+	}
+	
+	
+	public void setManifestSystemId(String manifestSystemId){
+		pluginModel.setManifestSystemId(manifestSystemId,karafInstance);
+	}
+	
+	public String getManifestSystemId(){
+		return pluginModel.getManifestSystemId(karafInstance);
+	}
+	
 	/**
 	 * returns list of karaf instances which can be addressed by ui
 	 * @return Map of key = karafInstanceName, value = karafInstanceUrl

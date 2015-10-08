@@ -34,6 +34,12 @@ public class PluginModelJaxb {
 	@XmlElementWrapper(name="karafDataMap")
 	private SortedMap<String, KarafEntryJaxb> karafDataMap = new TreeMap<String, KarafEntryJaxb>();
 	
+	@XmlElementWrapper(name="karafManifestMap")
+	private SortedMap<String, ProductSpecList> karafManifestMap = new TreeMap<String, ProductSpecList>();
+	
+	@XmlElementWrapper(name="karafManifestSystemIdMap")
+	private SortedMap<String, String> karafManifestSystemIdMap = new TreeMap<String, String>();
+
 	@XmlElement(name="availablePlugins")
 	private ProductSpecList availablePlugins;
 	
@@ -142,6 +148,41 @@ public class PluginModelJaxb {
 	 */
 	public void setAvailablePluginsLastUpdated(Date availablePluginsLastUpdated) {
 		this.availablePluginsLastUpdated = availablePluginsLastUpdated;
+	}
+
+	/**
+	 * karaf manifest map contains the a map of product manifests 
+	 * key = karaf instance
+	 * value = list of product specs to try and install in system
+	 * @return the karafManifestMap
+	 */
+	public SortedMap<String, ProductSpecList> getKarafManifestMap() {
+		return karafManifestMap;
+	}
+
+	/**
+	 * @param karafManifestMap the karafManifestMap to set
+	 */
+	public void setKarafManifestMap( SortedMap<String, ProductSpecList> karafManifestMap) {
+		this.karafManifestMap = karafManifestMap;
+	}
+
+	/**
+	 * karaf KarafManifestSystemIdMap contains the a map of manifestSystemId's to karaf instances 
+	 * key = karaf instance
+	 * value = ManifestSystemId
+	 * @return the karafManifestSystemIdMap
+	 */
+	public SortedMap<String, String> getKarafManifestSystemIdMap() {
+		return karafManifestSystemIdMap;
+	}
+
+	/**
+	 * @param karafManifestSystemIdMap the karafManifestSystemIdMap to set
+	 */
+	public void setKarafManifestSystemIdMap(
+			SortedMap<String, String> karafManifestSystemIdMap) {
+		this.karafManifestSystemIdMap = karafManifestSystemIdMap;
 	}
 
 

@@ -4,6 +4,7 @@ package org.opennms.features.vaadin.config.model;
 import java.io.File;
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
@@ -13,6 +14,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.opennms.karaf.featuremgr.rest.client.jerseyimpl.FeaturesServiceClientRestJerseyImpl;
+import org.opennms.karaf.licencemgr.StringCrc32Checksum;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceEntry;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
@@ -197,7 +199,7 @@ public class PluginModel {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 
 		SortedMap<String, String> karafInstances = getKarafInstances();
-		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("opennms does not know karafInstance="+karafInstance);
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 		String karafInstanceUrl=karafInstances.get(karafInstance);
 
 		KarafEntryJaxb karafEntryJaxb= new KarafEntryJaxb();
@@ -239,7 +241,7 @@ public class PluginModel {
 			ProductSpecList installedPlugins;
 			try {
 				installedPlugins = productRegisterClient.getList();
-				
+
 				List<LicenceEntry> licenceList = karafEntryJaxb.getInstalledLicenceList().getLicenceList();
 
 				// tests if plugins need a licence and if the licence is authenticated
@@ -354,7 +356,7 @@ public class PluginModel {
 		if(systemId==null) throw new RuntimeException("systemId cannot be null");
 
 		SortedMap<String, String> karafInstances = getKarafInstances();
-		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("opennms does not know karafInstance="+karafInstance);
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 		String karafInstanceUrl=karafInstances.get(karafInstance);
 
 		// setting systemId for karaf instance
@@ -376,35 +378,53 @@ public class PluginModel {
 	}
 
 	/**
-	 * generates and installs a random system id for the karaf instance
+	 * generates a random system id for the karaf instance
 	 * @param karafInstance
 	 * @return new system id
 	 */
-	public synchronized String generateRandomSystemId(String karafInstance){
+	public synchronized String generateRandomManifestSystemId(String karafInstance){
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 
 		SortedMap<String, String> karafInstances = getKarafInstances();
-		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("opennms does not know karafInstance="+karafInstance);
-		String karafInstanceUrl=karafInstances.get(karafInstance);
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 
-		// setting systemId for karaf instance
-		LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
-		licenceManagerClient.setBaseUrl(karafInstanceUrl);
-		licenceManagerClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
-		licenceManagerClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
-		licenceManagerClient.setBasePath(LICENCE_MGR_BASE_PATH);
+		// create random object
+		Random randomgen = new Random();
 
-		String systemId=null;
-		try {
-			systemId = licenceManagerClient.makeSystemInstance();
-			refreshKarafEntry(karafInstance);
-			return systemId;
-		} catch (Exception e) {
-			throw new RuntimeException("problem generating new random systemId for "
-					+ "karafInstance="+karafInstance
-					+ " karafInstanceUrl="+karafInstanceUrl
-					+ ": ", e);
-		}
+		// get next long value 
+		long systemIdValue = randomgen.nextLong();
+
+		// make hex string
+		String hexSystemIdString=Long.toHexString(systemIdValue);
+		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
+		String manifestSystemId = stringCrc32Checksum.addCRC(hexSystemIdString);
+		
+		this.setManifestSystemId(manifestSystemId, karafInstance);
+		
+		return manifestSystemId;
+
+		//TODO REMOVE - no longer using remote licence manager to do this
+
+		//		String karafInstanceUrl=karafInstances.get(karafInstance);
+		//
+		//		// setting systemId for karaf instance
+		//		LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
+		//		licenceManagerClient.setBaseUrl(karafInstanceUrl);
+		//		licenceManagerClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
+		//		licenceManagerClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
+		//		licenceManagerClient.setBasePath(LICENCE_MGR_BASE_PATH);
+		//
+		//		String systemId=null;
+		//		try {
+		//			systemId = licenceManagerClient.makeSystemInstance();
+		//			refreshKarafEntry(karafInstance);
+		//			return systemId;
+		//		} catch (Exception e) {
+		//			throw new RuntimeException("problem generating new random systemId for "
+		//					+ "karafInstance="+karafInstance
+		//					+ " karafInstanceUrl="+karafInstanceUrl
+		//					+ ": ", e);
+		//		}
 	}
 
 	/**
@@ -417,7 +437,7 @@ public class PluginModel {
 		if(licenceStr==null) throw new RuntimeException("licenceStr cannot be null");
 
 		SortedMap<String, String> karafInstances = getKarafInstances();
-		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("opennms does not know karafInstance="+karafInstance);
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 		String karafInstanceUrl=karafInstances.get(karafInstance);
 
 		// setting systemId for karaf instance
@@ -449,7 +469,7 @@ public class PluginModel {
 		if(selectedLicenceId==null) throw new RuntimeException("selectedLicenceId cannot be null");
 
 		SortedMap<String, String> karafInstances = getKarafInstances();
-		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("opennms does not know karafInstance="+karafInstance);
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 		String karafInstanceUrl=karafInstances.get(karafInstance);
 
 		// setting systemId for karaf instance
@@ -481,7 +501,7 @@ public class PluginModel {
 		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
 
 		SortedMap<String, String> karafInstances = getKarafInstances();
-		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("opennms does not know karafInstance="+karafInstance);
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 		String karafInstanceUrl=karafInstances.get(karafInstance);
 
 		ProductMetadata productMetadata=null;
@@ -533,7 +553,7 @@ public class PluginModel {
 		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
 
 		SortedMap<String, String> karafInstances = getKarafInstances();
-		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("opennms does not know karafInstance="+karafInstance);
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 		String karafInstanceUrl=karafInstances.get(karafInstance);
 
 		ProductMetadata productMetadata=null;
@@ -571,6 +591,102 @@ public class PluginModel {
 		}
 
 	}
+
+
+	/**
+	 * returns the manifest of plugins scheduled to be installed in the given karaf instance
+	 * @return the installedPlugins
+	 */
+	public synchronized ProductSpecList getPluginsManifest(String karafInstance) {
+		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
+		if (! pluginModelJaxb.getKarafManifestMap().containsKey(karafInstance)){
+			return new ProductSpecList(); // retrun empy list if no entry found
+		} 
+		return pluginModelJaxb.getKarafManifestMap().get(karafInstance);
+	}
+
+	/**
+	 * adds a plugin to the manifest of plugins scheduled to be installed in the given karaf instance
+	 * @param selectedProductId
+	 * @param karafInstance
+	 */
+	public synchronized void addPluginToManifest(String selectedProductId,String karafInstance) {
+		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
+		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
+
+		SortedMap<String, String> karafInstances = getKarafInstances();
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
+
+		ProductMetadata productMetadata=null;
+		for (ProductMetadata pMetadata : pluginModelJaxb.getAvailablePlugins().getProductSpecList()){
+			if (selectedProductId.equals(pMetadata.getProductId())) {
+				productMetadata=pMetadata;
+				break;
+			}
+		}
+		if(productMetadata==null) throw new RuntimeException("cannot install unknown available productId="+selectedProductId);
+		if(productMetadata.getFeatureRepository()==null) throw new RuntimeException("feature repository cannot be null for productId="+selectedProductId);
+
+		if (! pluginModelJaxb.getKarafManifestMap().containsKey(karafInstance)) {
+			pluginModelJaxb.getKarafManifestMap().put(karafInstance, new ProductSpecList());
+		}
+		pluginModelJaxb.getKarafManifestMap().get(karafInstance).getProductSpecList().add(productMetadata);
+		persist();
+	}
+
+	/**
+	 * removes a plugin to the manifest of plugins scheduled to be installed in the given karaf instance
+	 * @param selectedProductId
+	 * @param karafInstance
+	 */
+	public synchronized void removePluginFromManifest(String selectedProductId,String karafInstance) {
+		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
+		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
+
+		if (pluginModelJaxb.getKarafManifestMap().containsKey(karafInstance)) {
+			List<ProductMetadata> productSpecList = pluginModelJaxb.getKarafManifestMap().get(karafInstance).getProductSpecList();
+			ProductMetadata productMetadata=null;
+			for (ProductMetadata pMetadata : productSpecList){
+				if (selectedProductId.equals(pMetadata.getProductId())) {
+					productMetadata=pMetadata;
+					break;
+				}
+			}
+			if (productMetadata!=null) productSpecList.remove(productMetadata);
+			persist();
+		}
+	}
+
+	/**
+	 * sets the manifestSystemId for a given karafInstance
+	 * @param manifestSystemId
+	 * @param karafInstance
+	 */
+	public synchronized void setManifestSystemId(String manifestSystemId,String karafInstance){
+		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
+		if(manifestSystemId==null) throw new RuntimeException("manifestSystemId cannot be null");
+
+		SortedMap<String, String> karafInstances = getKarafInstances();
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
+
+		pluginModelJaxb.getKarafManifestSystemIdMap().put(karafInstance, manifestSystemId);
+
+		persist();
+
+	}
+
+	/**
+	 * gets the manifestSystemId for a given karafInstance or null if no entry for karafInstance
+	 * @param manifestSystemId
+	 * @param karafInstance
+	 */
+	public synchronized String getManifestSystemId(String karafInstance){
+		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
+
+		return pluginModelJaxb.getKarafManifestSystemIdMap().get(karafInstance);
+
+	}
+
 
 	/**
 	 * persists the plugin data to the file indicated by fileUri

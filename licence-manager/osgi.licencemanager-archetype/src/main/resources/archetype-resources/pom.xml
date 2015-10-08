@@ -21,6 +21,8 @@
     <productId>${rootArtifactId}/${symbol_dollar}{project.version}</productId>
     <!-- <licenceClassPath>org.opennms.co.uk.newfeature</licenceClassPath> -->
     <licenceClassPath>${package}</licenceClassPath>
+    
+    <org.opennms.plugin.licencemanager.version>1.0-SNAPSHOT</org.opennms.plugin.licencemanager.version>
 
   </properties>
   
