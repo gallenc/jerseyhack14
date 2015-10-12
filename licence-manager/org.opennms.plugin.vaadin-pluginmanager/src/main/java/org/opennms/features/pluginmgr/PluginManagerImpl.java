@@ -14,7 +14,9 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.opennms.features.pluginmgr.model.KarafEntryJaxb;
+import org.opennms.features.pluginmgr.model.KarafManifestEntryJaxb;
 import org.opennms.features.pluginmgr.model.PluginModelJaxb;
+import org.opennms.features.pluginmgr.vaadin.config.SimpleStackTrace;
 import org.opennms.karaf.featuremgr.rest.client.jerseyimpl.FeaturesServiceClientRestJerseyImpl;
 import org.opennms.karaf.licencemgr.StringCrc32Checksum;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceEntry;
@@ -330,6 +332,46 @@ public class PluginManagerImpl implements PluginManager {
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
 		return karafEntry.getInstalledLicenceList();
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getInstalledLicenceList(java.lang.String)
+	 */
+	@Override
+	public synchronized void updateInstalledLicenceList(LicenceList licenceList, String karafInstance) {
+		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
+		if(licenceList==null) throw new RuntimeException("licenceList cannot be null");
+		
+		SortedMap<String, String> karafInstances = getKarafInstances();
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
+				
+		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
+			throw new RuntimeException("no karaf entry entry exists for karafInstance="+karafInstance);
+		} 
+		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
+		karafEntry.getInstalledLicenceList().getLicenceList().clear();
+		karafEntry.getInstalledLicenceList().getLicenceList().addAll(licenceList.getLicenceList());
+		persist();
+	}
+	
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#getInstalledLicenceList(java.lang.String)
+	 */
+	@Override
+	public synchronized void updateInstalledPlugins(ProductSpecList installedPlugins, String karafInstance) {
+		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
+		if(installedPlugins==null) throw new RuntimeException("installedPlugins cannot be null");
+		
+		SortedMap<String, String> karafInstances = getKarafInstances();
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
+				
+		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
+			throw new RuntimeException("no karaf entry entry exists for karafInstance="+karafInstance);
+		} 
+		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
+		karafEntry.getInstalledPlugins().getProductSpecList().clear();
+		karafEntry.getInstalledPlugins().getProductSpecList().addAll(installedPlugins.getProductSpecList());
+		persist();
+	}
 
 
 	/* (non-Javadoc)
@@ -577,7 +619,7 @@ public class PluginManagerImpl implements PluginManager {
 			featuresServiceClient.featuresUninstall(name, version);
 			refreshKarafEntry(karafInstance);
 		} catch (Exception e) {
-			throw new RuntimeException("problem installing product "+selectedProductId
+			throw new RuntimeException("problem un-installing product "+selectedProductId
 					+ " for karafInstance="+karafInstance
 					+ " karafInstanceUrl="+karafInstanceUrl
 					+ ": ", e);
@@ -592,10 +634,12 @@ public class PluginManagerImpl implements PluginManager {
 	@Override
 	public synchronized ProductSpecList getPluginsManifest(String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
-		if (! pluginModelJaxb.getKarafManifestMap().containsKey(karafInstance)){
-			return new ProductSpecList(); // retrun empy list if no entry found
+		if (! pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)){
+			return new ProductSpecList(); // return empty list if no entry found
 		} 
-		return pluginModelJaxb.getKarafManifestMap().get(karafInstance);
+		ProductSpecList pluginManifest = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance).getPluginManifest();
+		if (pluginManifest==null) return new ProductSpecList(); // return empty list if no entry found
+		return pluginManifest;
 	}
 
 	/* (non-Javadoc)
@@ -619,10 +663,10 @@ public class PluginManagerImpl implements PluginManager {
 		if(productMetadata==null) throw new RuntimeException("cannot install unknown available productId="+selectedProductId);
 		if(productMetadata.getFeatureRepository()==null) throw new RuntimeException("feature repository cannot be null for productId="+selectedProductId);
 
-		if (! pluginModelJaxb.getKarafManifestMap().containsKey(karafInstance)) {
-			pluginModelJaxb.getKarafManifestMap().put(karafInstance, new ProductSpecList());
+		if (! pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)) {
+			pluginModelJaxb.getKarafManifestEntryMap().put(karafInstance, new KarafManifestEntryJaxb());
 		}
-		pluginModelJaxb.getKarafManifestMap().get(karafInstance).getProductSpecList().add(productMetadata);
+		pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance).getPluginManifest().getProductSpecList().add(productMetadata);
 		persist();
 	}
 
@@ -634,8 +678,8 @@ public class PluginManagerImpl implements PluginManager {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
 
-		if (pluginModelJaxb.getKarafManifestMap().containsKey(karafInstance)) {
-			List<ProductMetadata> productSpecList = pluginModelJaxb.getKarafManifestMap().get(karafInstance).getProductSpecList();
+		if (pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)) {
+			List<ProductMetadata> productSpecList = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance).getPluginManifest().getProductSpecList();
 			ProductMetadata productMetadata=null;
 			for (ProductMetadata pMetadata : productSpecList){
 				if (selectedProductId.equals(pMetadata.getProductId())) {
@@ -659,7 +703,13 @@ public class PluginManagerImpl implements PluginManager {
 		SortedMap<String, String> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 
-		pluginModelJaxb.getKarafManifestSystemIdMap().put(karafInstance, manifestSystemId);
+		if (! pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)){
+			pluginModelJaxb.getKarafManifestEntryMap().put(karafInstance, new KarafManifestEntryJaxb());
+		}
+		
+		KarafManifestEntryJaxb karafManifestEntryJaxb = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
+		
+		karafManifestEntryJaxb.setManifestSystemId(manifestSystemId);
 
 		persist();
 
@@ -672,10 +722,70 @@ public class PluginManagerImpl implements PluginManager {
 	public synchronized String getManifestSystemId(String karafInstance){
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 
-		return pluginModelJaxb.getKarafManifestSystemIdMap().get(karafInstance);
+		KarafManifestEntryJaxb karafManifestEntry = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
+		
+		if (karafManifestEntry==null) return null;
+		
+		return karafManifestEntry.getManifestSystemId();
 
 	}
 
+	@Override
+	public Boolean getRemoteAccessable(String karafInstance) {
+		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
+		
+		KarafManifestEntryJaxb karafManifestEntry = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
+		
+		if (karafManifestEntry==null) return null;
+		
+		return karafManifestEntry.getRemoteAccessable();
+	}
+
+	@Override
+	public void setRemoteAccessable(Boolean remoteAccessable, String karafInstance) {
+		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
+		
+		SortedMap<String, String> karafInstances = getKarafInstances();
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
+
+		if (! pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)){
+			pluginModelJaxb.getKarafManifestEntryMap().put(karafInstance, new KarafManifestEntryJaxb());
+		}
+		KarafManifestEntryJaxb karafManifestEntryJaxb = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
+		
+		karafManifestEntryJaxb.setRemoteAccessable(remoteAccessable);
+
+		persist();
+	}
+
+	@Override
+	public Boolean getIsPluginManagerParent(String karafInstance) {
+		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
+		
+		KarafManifestEntryJaxb karafManifestEntry = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
+		
+		if (karafManifestEntry==null) return null;
+		
+		return karafManifestEntry.getIsPluginManagerParent();
+	}
+
+	@Override
+	public void setIsPluginManagerParent(Boolean isPluginManagerParent, 	String karafInstance) {
+		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
+
+		SortedMap<String, String> karafInstances = getKarafInstances();
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
+
+		if (! pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)){
+			pluginModelJaxb.getKarafManifestEntryMap().put(karafInstance, new KarafManifestEntryJaxb());
+		}
+		
+		KarafManifestEntryJaxb karafManifestEntryJaxb = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
+		
+		karafManifestEntryJaxb.setIsPluginManagerParent(isPluginManagerParent);
+
+		persist();
+	}
 
 	/**
 	 * persists the plugin data to the file indicated by fileUri
@@ -727,7 +837,7 @@ public class PluginManagerImpl implements PluginManager {
 			}
 			System.out.println("Plugin Manager Started");
 		} catch (JAXBException e) {
-			System.out.println("Plugin Manager Problem Starting: "+ e.getMessage());
+			System.out.println("Plugin Manager Problem Starting: "+ SimpleStackTrace.errorToString(e));
 			throw new RuntimeException("Problem loading Plugin Manager Data",e);
 		}
 	}
@@ -738,9 +848,6 @@ public class PluginManagerImpl implements PluginManager {
 	public synchronized void close() {
 		System.out.println("Plugin Manager Shutting Down ");
 	}
-
-
-
 
 
 }

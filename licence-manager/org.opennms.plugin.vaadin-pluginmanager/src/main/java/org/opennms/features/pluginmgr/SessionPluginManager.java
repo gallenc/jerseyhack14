@@ -35,6 +35,10 @@ public class SessionPluginManager {
 		this.karafInstance = karafInstance;
 	}
 	
+	public String getKarafUrl(){
+		return pluginManager.getKarafInstances().get(karafInstance);
+	}
+	
 	
 	public  Date getAvailablePluginsLastUpdated(){
 		return pluginManager.getAvailablePluginsLastUpdated();

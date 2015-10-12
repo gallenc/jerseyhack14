@@ -3,6 +3,8 @@ package org.opennms.features.pluginmgr;
 import java.util.Date;
 import java.util.SortedMap;
 
+import javax.xml.bind.annotation.XmlElement;
+
 import org.opennms.features.pluginmgr.model.KarafEntryJaxb;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
@@ -116,6 +118,22 @@ public interface PluginManager {
 	 * @return the installedLicenceList
 	 */
 	public LicenceList getInstalledLicenceList(String karafInstance);
+	
+	/**
+	 * updates the installed licence list in for the karaf instance 
+	 * if the karaf instance is known to the system
+	 * @param licenceList
+	 * @param karafInstance
+	 */
+	public void updateInstalledLicenceList(LicenceList licenceList, String karafInstance);
+	
+	/**
+	 * updates the installed plugins list in for the karaf instance 
+	 * if the karaf instance is known to the system
+	 * @param installedPlugins
+	 * @param karafInstance
+	 */
+	public void updateInstalledPlugins(ProductSpecList installedPlugins, String karafInstance);
 
 	/**
 	 * returns the system id of the karaf instance
@@ -169,6 +187,7 @@ public interface PluginManager {
 
 	/**
 	 * returns the manifest of plugins scheduled to be installed in the given karaf instance
+	 * returns an empty list if no entries are found
 	 * @return the installedPlugins
 	 */
 	public ProductSpecList getPluginsManifest(String karafInstance);
@@ -203,5 +222,37 @@ public interface PluginManager {
 	 * @param karafInstance
 	 */
 	public String getManifestSystemId(String karafInstance);
+	
+	/**
+	 * remoteAccessable tells the plugin manager that this karaf instance is updatable using ReST
+	 * @param karafInstance
+	 * @return Boolen true this karaf instance is updatable using ReST
+	 */
+	public Boolean getRemoteAccessable(String karafInstance);
+	
+	/**
+	 * remoteAccessable tells the plugin manager that this karaf instance is updatable using ReST
+	 * @param remoteAccessable
+	 * @param karafInstance
+	 */
+	public void setRemoteAccessable(Boolean remoteAccessable, String karafInstance);
+	
+	/**
+	 * isPluginManagerParent tells the plugin manager that this karaf instance is a parent and should not have licences and installed plugins
+	 * updated from an external ReST push
+	 * @param karafInstance
+	 * @return
+	 */
+	public Boolean getIsPluginManagerParent(String karafInstance);
+	
+	/**
+	 * isPluginManagerParent tells the plugin manager that this karaf instance is a parent and should not have licences and installed plugins
+	 * @param isPluginManagerParent
+	 * @param karafInstance
+	 * @return
+	 */
+	public void setIsPluginManagerParent(Boolean isPluginManagerParent, String karafInstance);
+	
+	
 
 }
