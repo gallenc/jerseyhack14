@@ -830,7 +830,7 @@ public class PluginManagerImpl implements PluginManager {
 
 				pluginModelJaxb = loadedPluginModelJaxb;
 
-				System.out.println("Plugin Manager successfully loaded historic data from file="+pluginManagerFile.getAbsolutePath());
+				System.out.println("Plugin Manager Successfully loaded historic data from file="+pluginManagerFile.getAbsolutePath());
 			} else {
 				System.out.println("Plugin Manager data file="+pluginManagerFile.getAbsolutePath()+" does not exist. A new one will be created.");
 				persist(); // persists first version of plugin model
