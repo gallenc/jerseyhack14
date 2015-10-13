@@ -224,34 +224,34 @@ public interface PluginManager {
 	public String getManifestSystemId(String karafInstance);
 	
 	/**
-	 * remoteAccessable tells the plugin manager that this karaf instance is updatable using ReST
+	 * remoteIsAccessible tells the plugin manager that this karaf instance is updatable using ReST
 	 * @param karafInstance
 	 * @return Boolen true this karaf instance is updatable using ReST
 	 */
-	public Boolean getRemoteAccessable(String karafInstance);
+	public Boolean getRemoteIsAccessible(String karafInstance);
 	
 	/**
-	 * remoteAccessable tells the plugin manager that this karaf instance is updatable using ReST
-	 * @param remoteAccessable
+	 * remoteIsAccessible tells the plugin manager that this karaf instance is updatable using ReST
+	 * @param remoteIsAccessible
 	 * @param karafInstance
 	 */
-	public void setRemoteAccessable(Boolean remoteAccessable, String karafInstance);
+	public void setRemoteIsAccessible(Boolean remoteIsAccessible, String karafInstance);
 	
 	/**
-	 * isPluginManagerParent tells the plugin manager that this karaf instance is a parent and should not have licences and installed plugins
+	 * allowUpdateMessages tells the plugin manager that this karaf instance is a parent and should not have licences and installed plugins
 	 * updated from an external ReST push
 	 * @param karafInstance
 	 * @return
 	 */
-	public Boolean getIsPluginManagerParent(String karafInstance);
+	public Boolean getAllowUpdateMessages(String karafInstance);
 	
 	/**
-	 * isPluginManagerParent tells the plugin manager that this karaf instance is a parent and should not have licences and installed plugins
-	 * @param isPluginManagerParent
+	 * allowUpdateMessages tells the plugin manager that this karaf instance is a parent and should not have licences and installed plugins
+	 * @param allowUpdateMessages
 	 * @param karafInstance
 	 * @return
 	 */
-	public void setIsPluginManagerParent(Boolean isPluginManagerParent, String karafInstance);
+	public void setAllowUpdateMessages(Boolean allowUpdateMessages, String karafInstance);
 	
 	
 

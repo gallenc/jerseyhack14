@@ -35,6 +35,15 @@ public class AddLicencePanel extends CustomComponent {
 	private SessionPluginManager sessionPluginManager;
 
 	private TextArea systemMessages;
+	
+	private boolean remoteUpdateControlsEnabled=true;
+
+	public void setRemoteUpdateControlsEnabled(boolean remoteUpdateControlsEnabled) {
+		this.remoteUpdateControlsEnabled = remoteUpdateControlsEnabled;
+		// set state of update control buttons to remoteUpdateControlsEnabled 
+		installLicenceButton.setEnabled(remoteUpdateControlsEnabled);
+	}
+	
 	/**
 	 * The constructor should first build the main layout, set the
 	 * composition root and then do any custom initialization.
@@ -59,7 +68,7 @@ public class AddLicencePanel extends CustomComponent {
 					if (!licenceDescriptorPanel.setLicenceString(licenceStr)) throw new RuntimeException("invalid licence string");
 					systemMessages.setValue("licence string verified");
 				} catch (Exception e){
-					systemMessages.setValue(SimpleStackTrace.errorToString(e));
+					systemMessages.setValue("Problem verifying licence string. Exception:\n"+SimpleStackTrace.errorToString(e));
 				}
 				licenceDescriptorPanel.markAsDirty();
 			}
@@ -74,7 +83,7 @@ public class AddLicencePanel extends CustomComponent {
 					licenceDescriptorPanel.setLicenceString("");
 					systemMessages.setValue("licence string cleared");
 				} catch (Exception e){
-					systemMessages.setValue(SimpleStackTrace.errorToString(e));
+					systemMessages.setValue("Problem clearing licence string. Exception:\n"+SimpleStackTrace.errorToString(e));
 				}
 				licenceDescriptorPanel.markAsDirty();
 			}
@@ -92,7 +101,7 @@ public class AddLicencePanel extends CustomComponent {
 					sessionPluginManager.addLicence(licenceStr);
 					systemMessages.setValue("licence added to installed licence list");
 				} catch (Exception e){
-					systemMessages.setValue(SimpleStackTrace.errorToString(e));
+					systemMessages.setValue("Problem adding licence to installed licence list. Exception:\n"+SimpleStackTrace.errorToString(e));
 				}
 				licenceDescriptorPanel.markAsDirty();
 			}

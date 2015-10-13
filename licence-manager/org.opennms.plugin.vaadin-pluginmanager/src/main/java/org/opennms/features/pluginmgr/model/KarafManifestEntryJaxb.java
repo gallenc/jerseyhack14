@@ -11,11 +11,11 @@ import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
 @XmlAccessorType(XmlAccessType.NONE)
 public class KarafManifestEntryJaxb {
 	
-	@XmlElement(name="remoteAccessable")
-	private Boolean remoteAccessable=true;
+	@XmlElement(name="remoteIsAccessible")
+	private Boolean remoteIsAccessible=true;
 	
-	@XmlElement(name="isPluginManagerParent")
-	private Boolean isPluginManagerParent=false;
+	@XmlElement(name="allowUpdateMessages")
+	private Boolean allowUpdateMessages=false;
 	
 	@XmlElement(name="pluginManifest")
 	private ProductSpecList pluginManifest=new ProductSpecList();
@@ -24,31 +24,31 @@ public class KarafManifestEntryJaxb {
 	private String manifestSystemId=null;
 	
 	/**
-	 * @return the remoteAccessable
+	 * @return the remoteIsAccessible
 	 */
-	public Boolean getRemoteAccessable() {
-		return remoteAccessable;
+	public Boolean getRemoteIsAccessible() {
+		return remoteIsAccessible;
 	}
 
 	/**
-	 * @param remoteAccessable the remoteAccessable to set
+	 * @param remoteIsAccessible the remoteIsAccessible to set
 	 */
-	public void setRemoteAccessable(Boolean remoteAccessable) {
-		this.remoteAccessable = remoteAccessable;
+	public void setRemoteIsAccessible(Boolean remoteIsAccessible) {
+		this.remoteIsAccessible = remoteIsAccessible;
 	}
 
 	/**
-	 * @return the isPluginManagerParent
+	 * @return the allowUpdateMessages
 	 */
-	public Boolean getIsPluginManagerParent() {
-		return isPluginManagerParent;
+	public Boolean getAllowUpdateMessages() {
+		return allowUpdateMessages;
 	}
 
 	/**
-	 * @param isPluginManagerParent the isPluginManagerParent to set
+	 * @param allowUpdateMessages the allowUpdateMessages to set
 	 */
-	public void setIsPluginManagerParent(Boolean isPluginManagerParent) {
-		this.isPluginManagerParent = isPluginManagerParent;
+	public void setAllowUpdateMessages(Boolean allowUpdateMessages) {
+		this.allowUpdateMessages = allowUpdateMessages;
 	}
 
 	/**

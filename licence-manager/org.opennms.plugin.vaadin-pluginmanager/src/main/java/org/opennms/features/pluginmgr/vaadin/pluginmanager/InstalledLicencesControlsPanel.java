@@ -29,6 +29,15 @@ public class InstalledLicencesControlsPanel extends CustomComponent {
 
 	private TextArea systemMessages;
 
+	private boolean remoteUpdateControlsEnabled=true;
+
+
+	public void setRemoteUpdateControlsEnabled(boolean remoteUpdateControlsEnabled) {
+		this.remoteUpdateControlsEnabled = remoteUpdateControlsEnabled;
+		// set state of update control buttons to remoteUpdateControlsEnabled 
+		uninstallLicenceButton.setEnabled(remoteUpdateControlsEnabled);
+	}
+
 
 	public void setSessionPluginManager(SessionPluginManager sessionPluginManager) {
 		this.sessionPluginManager = sessionPluginManager;

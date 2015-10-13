@@ -731,18 +731,18 @@ public class PluginManagerImpl implements PluginManager {
 	}
 
 	@Override
-	public Boolean getRemoteAccessable(String karafInstance) {
+	public Boolean getRemoteIsAccessible(String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		
 		KarafManifestEntryJaxb karafManifestEntry = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
 		
-		if (karafManifestEntry==null) return null;
+		if (karafManifestEntry==null) return true;
 		
-		return karafManifestEntry.getRemoteAccessable();
+		return karafManifestEntry.getRemoteIsAccessible();
 	}
 
 	@Override
-	public void setRemoteAccessable(Boolean remoteAccessable, String karafInstance) {
+	public void setRemoteIsAccessible(Boolean remoteIsAccessible, String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		
 		SortedMap<String, String> karafInstances = getKarafInstances();
@@ -753,24 +753,24 @@ public class PluginManagerImpl implements PluginManager {
 		}
 		KarafManifestEntryJaxb karafManifestEntryJaxb = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
 		
-		karafManifestEntryJaxb.setRemoteAccessable(remoteAccessable);
+		karafManifestEntryJaxb.setRemoteIsAccessible(remoteIsAccessible);
 
 		persist();
 	}
 
 	@Override
-	public Boolean getIsPluginManagerParent(String karafInstance) {
+	public Boolean getAllowUpdateMessages(String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		
 		KarafManifestEntryJaxb karafManifestEntry = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
 		
-		if (karafManifestEntry==null) return null;
+		if (karafManifestEntry==null) return true;
 		
-		return karafManifestEntry.getIsPluginManagerParent();
+		return karafManifestEntry.getAllowUpdateMessages();
 	}
 
 	@Override
-	public void setIsPluginManagerParent(Boolean isPluginManagerParent, 	String karafInstance) {
+	public void setAllowUpdateMessages(Boolean allowUpdateMessages, 	String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 
 		SortedMap<String, String> karafInstances = getKarafInstances();
@@ -782,7 +782,7 @@ public class PluginManagerImpl implements PluginManager {
 		
 		KarafManifestEntryJaxb karafManifestEntryJaxb = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
 		
-		karafManifestEntryJaxb.setIsPluginManagerParent(isPluginManagerParent);
+		karafManifestEntryJaxb.setAllowUpdateMessages(allowUpdateMessages);
 
 		persist();
 	}

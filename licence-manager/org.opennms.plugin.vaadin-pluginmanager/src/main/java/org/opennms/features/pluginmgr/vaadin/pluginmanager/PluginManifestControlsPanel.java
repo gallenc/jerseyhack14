@@ -33,6 +33,14 @@ public class PluginManifestControlsPanel extends CustomComponent {
 	private TextArea systemMessages;
 	
 	private PluginManagerUIMainPanel pluginManagerUIMainPanel=null;
+	
+	private boolean remoteUpdateControlsEnabled=true;
+
+	public void setRemoteUpdateControlsEnabled(boolean remoteUpdateControlsEnabled) {
+		this.remoteUpdateControlsEnabled = remoteUpdateControlsEnabled;
+		// set state of update control buttons to remoteUpdateControlsEnabled 
+		installManifestPluginButton.setEnabled(remoteUpdateControlsEnabled);
+	}
 
 
 	public void setSessionPluginManager(SessionPluginManager sessionPluginManager) {

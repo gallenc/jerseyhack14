@@ -200,6 +200,26 @@ public class SessionPluginManager {
 		return pluginManager.getManifestSystemId(karafInstance);
 	}
 	
+	public Boolean getRemoteIsAccessible(){
+		return pluginManager.getRemoteIsAccessible(karafInstance);
+	}
+	
+
+	public void setRemoteIsAccessible(Boolean remoteIsAccessible){
+		pluginManager.setRemoteIsAccessible(remoteIsAccessible, karafInstance);
+	}
+
+	
+	public Boolean getAllowUpdateMessages(){
+		return pluginManager.getAllowUpdateMessages(karafInstance);
+	}
+	
+
+	public void setAllowUpdateMessages(Boolean allowUpdateMessages){
+		pluginManager.setAllowUpdateMessages(allowUpdateMessages, karafInstance);
+	}
+
+	
 	/**
 	 * returns list of karaf instances which can be addressed by ui
 	 * @return Map of key = karafInstanceName, value = karafInstanceUrl

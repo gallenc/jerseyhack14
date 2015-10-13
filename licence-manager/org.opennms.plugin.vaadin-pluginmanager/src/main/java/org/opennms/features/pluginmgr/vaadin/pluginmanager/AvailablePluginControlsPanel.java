@@ -30,6 +30,14 @@ public class AvailablePluginControlsPanel extends CustomComponent {
 	private ProductDescriptorTablePanel productDescriptorTablePanel=null;
 
 	private TextArea systemMessages;
+	
+	private boolean remoteUpdateControlsEnabled=true;
+
+	public void setRemoteUpdateControlsEnabled(boolean remoteUpdateControlsEnabled) {
+		this.remoteUpdateControlsEnabled = remoteUpdateControlsEnabled;
+		// set state of update control buttons to remoteUpdateControlsEnabled 
+		installPluginButton.setEnabled(remoteUpdateControlsEnabled);
+	}
 
 
 	public void setSessionPluginManager(SessionPluginManager sessionPluginManager) {
