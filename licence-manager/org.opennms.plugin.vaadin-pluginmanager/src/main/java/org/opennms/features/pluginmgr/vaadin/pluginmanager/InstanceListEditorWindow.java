@@ -1,11 +1,14 @@
 package org.opennms.features.pluginmgr.vaadin.pluginmanager;
 
 import org.opennms.features.pluginmgr.SessionPluginManager;
+import org.opennms.features.pluginmgr.vaadin.config.SimpleStackTrace;
+import org.osgi.service.blueprint.container.BlueprintContainer;
 
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Label;
+import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
@@ -19,7 +22,7 @@ public class InstanceListEditorWindow extends Window {
 	
 
 	public InstanceListEditorWindow(SessionPluginManager sessionPluginManager) {
-        super("Subs on Sale"); // Set window caption
+        super("Karaf List Editor"); // Set window caption
         
 		this.sessionPluginManager=sessionPluginManager;
 		
@@ -27,16 +30,28 @@ public class InstanceListEditorWindow extends Window {
         // Disable the close button
         setClosable(false);
 
-        // Some basic content for the window
-        VerticalLayout content1 = new VerticalLayout();
-        setContent(content1);
+        // get editor from blueprint or use SimpleInstanceListEditor
+        InstanceListEditor instanceListEditor= new SimpleInstanceListEditor();
+        try {
+        	BlueprintContainer container = sessionPluginManager.getBlueprintContainer();
+        	InstanceListEditor factoryInstanceListEditor = (InstanceListEditor) container.getComponentInstance("instanceListEditor");
+        	if (factoryInstanceListEditor!=null ) {
+        		instanceListEditor = factoryInstanceListEditor;
+        	} else {
+        		//TODO LOG MESSAGE
+        		System.out.println("instanceListEditor not defined in blueprintContainer. Using SimpleInstanceListEditor");
+        	}
+        } catch (Exception e) {
+            //TODO LOG MESSAGE
+            System.out.println("problem loading InstanceListEditor from blueprintContainer: "+e.getMessage());
+        }
         
-        InstanceListEditor content = new SimpleInstanceListEditor();
-        content.setSessionPluginManager(sessionPluginManager);
-        content.setParentWindow(this);
+        instanceListEditor.setSessionPluginManager(sessionPluginManager);
+        instanceListEditor.setParentWindow(this);
         
-        content1.addComponent(content);
-
+        VerticalLayout verticalLayout1 = new VerticalLayout();
+        verticalLayout1.addComponent(instanceListEditor);
+        setContent(verticalLayout1);
 
     }
 

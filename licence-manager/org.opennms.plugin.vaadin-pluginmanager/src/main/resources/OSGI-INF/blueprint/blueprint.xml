@@ -61,7 +61,7 @@
     </property>
   </bean>
   
-  <!-- wires in the list editor -->
+  <!-- wires in the list editor prototype -->
   <bean id="instanceListEditor" class="org.opennms.features.pluginmgr.vaadin.pluginmanager.SimpleInstanceListEditor" scope="prototype"/>
   
 

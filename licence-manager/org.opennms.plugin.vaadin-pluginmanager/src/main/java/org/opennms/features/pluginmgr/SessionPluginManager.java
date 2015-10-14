@@ -42,7 +42,6 @@ public class SessionPluginManager {
 		return pluginManager.getKarafInstances().get(karafInstance);
 	}
 	
-	
 	public  Date getAvailablePluginsLastUpdated(){
 		return pluginManager.getAvailablePluginsLastUpdated();
 	}
