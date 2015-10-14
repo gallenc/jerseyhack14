@@ -40,7 +40,7 @@ public class PluginManagerImpl implements PluginManager {
 	private String fileUri="./pluginmodeldata.xml";
 
 	private PluginModelJaxb pluginModelJaxb = new PluginModelJaxb();
-
+	
 	/**
 	 * fileUri is the location of the persisted plugin data
 	 * @return

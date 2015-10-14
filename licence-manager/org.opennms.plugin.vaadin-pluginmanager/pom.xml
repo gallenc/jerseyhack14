@@ -188,6 +188,14 @@
       <artifactId>commons-lang</artifactId>
     </dependency>
 
+    <!-- BlueprintContainer from Apache Aries -->
+    <dependency>
+      <groupId>org.apache.aries.blueprint</groupId>
+      <artifactId>org.apache.aries.blueprint.core</artifactId>
+      <version>1.4.1</version> <!-- from Karaf -->
+      <scope>provided</scope>
+    </dependency>
+
 
     <!-- licence / feature manager dependencies -->
     <dependency>
@@ -210,11 +218,11 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
-<!--     <dependency> -->
-<!--       <groupId>org.opennms.core.test-api</groupId> -->
-<!--       <artifactId>org.opennms.core.test-api.lib</artifactId> -->
-<!--       <scope>test</scope> -->
-<!--     </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>org.opennms.core.test-api</groupId> -->
+    <!-- <artifactId>org.opennms.core.test-api.lib</artifactId> -->
+    <!-- <scope>test</scope> -->
+    <!-- </dependency> -->
 
     <!-- to allow us to import opennms header -->
     <!-- <dependency> -->

@@ -277,9 +277,10 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 			private static final long serialVersionUID = 1L;
 
 			public void buttonClick(ClickEvent event) {
-		    	SimpleInstanceListEditorWindow sub = new SimpleInstanceListEditorWindow();
+		    	InstanceListEditorWindow instanceListEditorWindow = new InstanceListEditorWindow(sessionPluginManager);
+		    	
 		        // Add it to the root component
-		        UI.getCurrent().addWindow(sub);
+		        UI.getCurrent().addWindow(instanceListEditorWindow);
 		    }
 		});
 

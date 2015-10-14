@@ -49,6 +49,7 @@
   
   <!-- Main Plugin UI -->
   <bean id="pluginManagerAdminApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.PluginManagerAdminApplicationFactory">
+    <property name="blueprintContainer" ref="blueprintContainer"/> <!-- predefined -->
     <property name="pluginManager" ref="pluginManagerImpl" />
     <property name="headerProvider" ref="onmsHeaderProvider" />
     <property name="headerLinks">
@@ -59,6 +60,10 @@
       </map>
     </property>
   </bean>
+  
+  <!-- wires in the list editor -->
+  <bean id="instanceListEditor" class="org.opennms.features.pluginmgr.vaadin.pluginmanager.SimpleInstanceListEditor" scope="prototype"/>
+  
 
   <!-- plugin manager service -->
   <service ref="pluginManagerImpl" interface="org.opennms.features.pluginmgr.PluginManager" />
@@ -71,6 +76,7 @@
     <property name="pluginServerUrl" value="${pluginServerUrl}" />
     <property name="licenceShoppingCartUrl" value="${licenceShoppingCartUrl}" />
   </bean>
+  
 
   <service id="pluginManagerRestService" interface="org.opennms.vaadin.extender.ApplicationFactory" ref="pluginManagerAdminApplicationFactory">
     <service-properties>

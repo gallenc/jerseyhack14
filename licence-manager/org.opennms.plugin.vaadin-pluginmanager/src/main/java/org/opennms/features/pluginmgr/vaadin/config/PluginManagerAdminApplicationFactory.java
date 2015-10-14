@@ -35,6 +35,7 @@ import org.opennms.features.pluginmgr.PluginManager;
 import org.opennms.features.pluginmgr.SessionPluginManager;
 import org.opennms.vaadin.extender.AbstractApplicationFactory;
 import org.opennms.web.api.OnmsHeaderProvider;
+import org.osgi.service.blueprint.container.BlueprintContainer;
 
 import com.vaadin.ui.UI;
 
@@ -43,9 +44,12 @@ import com.vaadin.ui.UI;
  */
 public class PluginManagerAdminApplicationFactory extends AbstractApplicationFactory {
 	
-    private OnmsHeaderProvider m_headerProvider;
+
+	private OnmsHeaderProvider m_headerProvider;
     
     private PluginManager pluginManager;
+    
+    private BlueprintContainer blueprintContainer;
     
     // headerLinks map of key= name and value=url for links to be placed in header of page
     private Map<String, String> headerLinks;
@@ -83,6 +87,20 @@ public class PluginManagerAdminApplicationFactory extends AbstractApplicationFac
 		this.headerLinks = headerLinks;
 	}
 
+    /**
+	 * @return the blueprintContainer
+	 */
+	public BlueprintContainer getBlueprintContainer() {
+		return blueprintContainer;
+	}
+
+	/**
+	 * @param blueprintContainer the blueprintContainer to set
+	 */
+	public void setBlueprintContainer(BlueprintContainer blueprintContainer) {
+		this.blueprintContainer = blueprintContainer;
+	}
+
 	
     /* (non-Javadoc)
      * @see org.opennms.vaadin.extender.AbstractApplicationFactory#getUI()
@@ -96,6 +114,7 @@ public class PluginManagerAdminApplicationFactory extends AbstractApplicationFac
         //local plugin model persists data for session instance
         SessionPluginManager sessionPluginManager=new SessionPluginManager();
         sessionPluginManager.setPluginManager(pluginManager);
+        sessionPluginManager.setBlueprintContainer(blueprintContainer);
         pluginManagerAdminApplication.setSessionPluginManager(sessionPluginManager);
         return pluginManagerAdminApplication;
     }

@@ -1,5 +1,7 @@
 package org.opennms.features.pluginmgr.vaadin.pluginmanager;
 
+import org.opennms.features.pluginmgr.SessionPluginManager;
+
 import com.vaadin.ui.Button;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -7,12 +9,20 @@ import com.vaadin.ui.Label;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 
-public class SimpleInstanceListEditorWindow extends Window {
+public class InstanceListEditorWindow extends Window {
 	
-	private static final long serialVersionUID = 1L;
 
-	public SimpleInstanceListEditorWindow() {
+
+	private static final long serialVersionUID = 1L;
+	
+	private SessionPluginManager sessionPluginManager=null;
+	
+
+	public InstanceListEditorWindow(SessionPluginManager sessionPluginManager) {
         super("Subs on Sale"); // Set window caption
+        
+		this.sessionPluginManager=sessionPluginManager;
+		
         center();
         // Disable the close button
         setClosable(false);
@@ -21,17 +31,14 @@ public class SimpleInstanceListEditorWindow extends Window {
         VerticalLayout content1 = new VerticalLayout();
         setContent(content1);
         
-        SimpleInstanceListEditorWindow2 content = new SimpleInstanceListEditorWindow2();
+        InstanceListEditor content = new SimpleInstanceListEditor();
+        content.setSessionPluginManager(sessionPluginManager);
+        content.setParentWindow(this);
+        
         content1.addComponent(content);
 
-        // Trivial logic for closing the sub-window
-        Button ok = new Button("OK");
-        ok.addClickListener(new ClickListener() {
- 			private static final long serialVersionUID = 1L;
-			public void buttonClick(ClickEvent event) {
-                close(); // Close the sub-window
-            }
-        });
-        content1.addComponent(ok);
+
     }
+
+
 }

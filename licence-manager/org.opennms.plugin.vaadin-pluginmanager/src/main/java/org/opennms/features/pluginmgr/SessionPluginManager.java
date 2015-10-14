@@ -5,6 +5,7 @@ import java.util.SortedMap;
 
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
+import org.osgi.service.blueprint.container.BlueprintContainer;
 
 /**
  * this model is a proxy for the PluginManagerImpl shared by all ui sessions. 
@@ -18,6 +19,8 @@ public class SessionPluginManager {
 	private String karafInstance="localhost"; //default value
 
 	private PluginManager pluginManager=null;
+	
+	private BlueprintContainer blueprintContainer=null;
 
 	/** 
 	 * gets the karaf instance which will be used for other commands
@@ -226,6 +229,19 @@ public class SessionPluginManager {
 	 */
 	public SortedMap<String,String> getKarafInstances(){
 		return pluginManager.getKarafInstances();
+	}
+
+	
+	
+	public void setBlueprintContainer(BlueprintContainer blueprintContainer) {
+	    this.blueprintContainer=blueprintContainer;
+	}
+
+	/**
+	 * @return the blueprintContainer
+	 */
+	public BlueprintContainer getBlueprintContainer() {
+		return blueprintContainer;
 	}
 
 
