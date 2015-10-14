@@ -3,6 +3,7 @@ package org.opennms.features.pluginmgr;
 import java.util.Date;
 import java.util.SortedMap;
 
+import org.opennms.features.pluginmgr.model.KarafManifestEntryJaxb;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
 import org.osgi.service.blueprint.container.BlueprintContainer;
@@ -39,7 +40,7 @@ public class SessionPluginManager {
 	}
 	
 	public String getKarafUrl(){
-		return pluginManager.getKarafInstances().get(karafInstance);
+		return pluginManager.getKarafInstances().get(karafInstance).getKarafInstanceUrl();
 	}
 	
 	public  Date getAvailablePluginsLastUpdated(){
@@ -224,9 +225,9 @@ public class SessionPluginManager {
 	
 	/**
 	 * returns list of karaf instances which can be addressed by ui
-	 * @return Map of key = karafInstanceName, value = karafInstanceUrl
+	 * @return Map of key = karafInstanceName, value = KarafManifestEntryJaxb
 	 */
-	public SortedMap<String,String> getKarafInstances(){
+	public SortedMap<String, KarafManifestEntryJaxb> getKarafInstances(){
 		return pluginManager.getKarafInstances();
 	}
 

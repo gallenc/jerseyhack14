@@ -140,13 +140,22 @@ public class PluginManagerImpl implements PluginManager {
 	 * @see org.opennms.features.pluginmgr.PluginManager#getKarafInstances()
 	 */
 	@Override
-	public synchronized SortedMap<String,String> getKarafInstances(){
+	public synchronized SortedMap<String, KarafManifestEntryJaxb> getKarafInstances(){
 
-		//TODO GET DATA FROM OPENNMS
-
-		SortedMap<String,String> karafInstances= new TreeMap<String,String>();
-
-		karafInstances.put("localhost", "http://localhost:8980/opennms");
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = pluginModelJaxb.getKarafManifestEntryMap();
+		
+		// creates a localhost entry if doesn't exist in karafInstances
+		// TODO SET DEFAULTS IN BLUEPRINT
+		if (! karafInstances.containsKey("localhost")){
+			KarafManifestEntryJaxb localhostManifest= new KarafManifestEntryJaxb();
+			localhostManifest.setKarafInstanceName("localhost");
+			localhostManifest.setKarafInstanceUserName("admin");
+			localhostManifest.setKarafInstancePassword("admin");
+			localhostManifest.setKarafInstanceUrl("http://localhost:8980/opennms");
+			
+			karafInstances.put("localhost",localhostManifest);
+			persist();
+		}
 
 		return karafInstances;
 
@@ -201,22 +210,21 @@ public class PluginManagerImpl implements PluginManager {
 	public synchronized  KarafEntryJaxb refreshKarafEntry(String karafInstance){
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 
-		SortedMap<String, String> karafInstances = getKarafInstances();
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
-		String karafInstanceUrl=karafInstances.get(karafInstance);
+		
+		KarafManifestEntryJaxb karafManifest = karafInstances.get(karafInstance);
+		String karafInstanceUrl=karafManifest.getKarafInstanceUrl();
 
 		KarafEntryJaxb karafEntryJaxb= new KarafEntryJaxb();
 
 		try{
 
-			karafEntryJaxb.setKarafInstanceName(karafInstance);
-			karafEntryJaxb.setKarafInstanceUrl(karafInstanceUrl);
-
 			// getting karaf installed licences and system id
 			LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
 			licenceManagerClient.setBaseUrl(karafInstanceUrl);
-			licenceManagerClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
-			licenceManagerClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
+			licenceManagerClient.setUserName(karafManifest.getKarafInstanceUserName());
+			licenceManagerClient.setPassword(karafManifest.getKarafInstancePassword());
 
 			licenceManagerClient.setBasePath(LICENCE_MGR_BASE_PATH);
 			LicenceList installedLicenceList;
@@ -235,8 +243,8 @@ public class PluginManagerImpl implements PluginManager {
 			// getting installed plugins
 			ProductRegisterClientRestJerseyImpl productRegisterClient = new ProductRegisterClientRestJerseyImpl();
 			productRegisterClient.setBaseUrl(karafInstanceUrl);
-			productRegisterClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
-			productRegisterClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
+			productRegisterClient.setUserName(karafManifest.getKarafInstanceUserName());
+			productRegisterClient.setPassword(karafManifest.getKarafInstancePassword());
 
 			// getting karaf installed plugins
 			productRegisterClient.setBasePath(PRODUCT_REG_BASE_PATH);
@@ -341,7 +349,7 @@ public class PluginManagerImpl implements PluginManager {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(licenceList==null) throw new RuntimeException("licenceList cannot be null");
 		
-		SortedMap<String, String> karafInstances = getKarafInstances();
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 				
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
@@ -361,7 +369,7 @@ public class PluginManagerImpl implements PluginManager {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(installedPlugins==null) throw new RuntimeException("installedPlugins cannot be null");
 		
-		SortedMap<String, String> karafInstances = getKarafInstances();
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 				
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
@@ -395,15 +403,16 @@ public class PluginManagerImpl implements PluginManager {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(systemId==null) throw new RuntimeException("systemId cannot be null");
 
-		SortedMap<String, String> karafInstances = getKarafInstances();
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
-		String karafInstanceUrl=karafInstances.get(karafInstance);
+		KarafManifestEntryJaxb karafManifest = karafInstances.get(karafInstance);
+		String karafInstanceUrl=karafManifest.getKarafInstanceUrl();
 
 		// setting systemId for karaf instance
 		LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
 		licenceManagerClient.setBaseUrl(karafInstanceUrl);
-		licenceManagerClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
-		licenceManagerClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
+		licenceManagerClient.setUserName(karafManifest.getKarafInstanceUserName());
+		licenceManagerClient.setPassword(karafManifest.getKarafInstancePassword());
 		licenceManagerClient.setBasePath(LICENCE_MGR_BASE_PATH);
 		try {
 			licenceManagerClient.setSystemId(systemId);
@@ -424,7 +433,7 @@ public class PluginManagerImpl implements PluginManager {
 	public synchronized String generateRandomManifestSystemId(String karafInstance){
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 
-		SortedMap<String, String> karafInstances = getKarafInstances();
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 
 		// create random object
@@ -474,15 +483,16 @@ public class PluginManagerImpl implements PluginManager {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(licenceStr==null) throw new RuntimeException("licenceStr cannot be null");
 
-		SortedMap<String, String> karafInstances = getKarafInstances();
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
-		String karafInstanceUrl=karafInstances.get(karafInstance);
+		KarafManifestEntryJaxb karafManifest = karafInstances.get(karafInstance);
+		String karafInstanceUrl=karafManifest.getKarafInstanceUrl();
 
 		// setting systemId for karaf instance
 		LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
 		licenceManagerClient.setBaseUrl(karafInstanceUrl);
-		licenceManagerClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
-		licenceManagerClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
+		licenceManagerClient.setUserName(karafManifest.getKarafInstanceUserName());
+		licenceManagerClient.setPassword(karafManifest.getKarafInstancePassword());
 		licenceManagerClient.setBasePath(LICENCE_MGR_BASE_PATH);
 
 		try {
@@ -505,15 +515,16 @@ public class PluginManagerImpl implements PluginManager {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(selectedLicenceId==null) throw new RuntimeException("selectedLicenceId cannot be null");
 
-		SortedMap<String, String> karafInstances = getKarafInstances();
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
-		String karafInstanceUrl=karafInstances.get(karafInstance);
+		KarafManifestEntryJaxb karafManifest = karafInstances.get(karafInstance);
+		String karafInstanceUrl=karafManifest.getKarafInstanceUrl();
 
 		// setting systemId for karaf instance
 		LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
 		licenceManagerClient.setBaseUrl(karafInstanceUrl);
-		licenceManagerClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
-		licenceManagerClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
+		licenceManagerClient.setUserName(karafManifest.getKarafInstanceUserName());
+		licenceManagerClient.setPassword(karafManifest.getKarafInstancePassword());
 		licenceManagerClient.setBasePath(LICENCE_MGR_BASE_PATH);
 
 		try {
@@ -536,9 +547,10 @@ public class PluginManagerImpl implements PluginManager {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
 
-		SortedMap<String, String> karafInstances = getKarafInstances();
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
-		String karafInstanceUrl=karafInstances.get(karafInstance);
+		KarafManifestEntryJaxb karafManifest = karafInstances.get(karafInstance);
+		String karafInstanceUrl=karafManifest.getKarafInstanceUrl();
 
 		ProductMetadata productMetadata=null;
 		for (ProductMetadata pMetadata : pluginModelJaxb.getAvailablePlugins().getProductSpecList()){
@@ -552,8 +564,8 @@ public class PluginManagerImpl implements PluginManager {
 
 		FeaturesServiceClientRestJerseyImpl featuresServiceClient = new FeaturesServiceClientRestJerseyImpl(); 
 		featuresServiceClient.setBaseUrl(karafInstanceUrl);
-		featuresServiceClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
-		featuresServiceClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
+		featuresServiceClient.setUserName(karafManifest.getKarafInstanceUserName());
+		featuresServiceClient.setPassword(karafManifest.getKarafInstancePassword());
 		featuresServiceClient.setBasePath(FEATURE_MGR_BASE_PATH);
 
 		try {
@@ -587,9 +599,10 @@ public class PluginManagerImpl implements PluginManager {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
 
-		SortedMap<String, String> karafInstances = getKarafInstances();
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
-		String karafInstanceUrl=karafInstances.get(karafInstance);
+		KarafManifestEntryJaxb karafManifest = karafInstances.get(karafInstance);
+		String karafInstanceUrl=karafManifest.getKarafInstanceUrl();
 
 		ProductMetadata productMetadata=null;
 		for (ProductMetadata pMetadata : pluginModelJaxb.getAvailablePlugins().getProductSpecList()){
@@ -603,8 +616,8 @@ public class PluginManagerImpl implements PluginManager {
 
 		FeaturesServiceClientRestJerseyImpl featuresServiceClient = new FeaturesServiceClientRestJerseyImpl(); 
 		featuresServiceClient.setBaseUrl(karafInstanceUrl);
-		featuresServiceClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
-		featuresServiceClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
+		featuresServiceClient.setUserName(karafManifest.getKarafInstanceUserName());
+		featuresServiceClient.setPassword(karafManifest.getKarafInstancePassword());
 		featuresServiceClient.setBasePath(FEATURE_MGR_BASE_PATH);
 
 		try {
@@ -650,7 +663,7 @@ public class PluginManagerImpl implements PluginManager {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(selectedProductId==null) throw new RuntimeException("selectedProductId cannot be null");
 
-		SortedMap<String, String> karafInstances = getKarafInstances();
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 
 		ProductMetadata productMetadata=null;
@@ -700,7 +713,7 @@ public class PluginManagerImpl implements PluginManager {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(manifestSystemId==null) throw new RuntimeException("manifestSystemId cannot be null");
 
-		SortedMap<String, String> karafInstances = getKarafInstances();
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 
 		if (! pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)){
@@ -745,7 +758,7 @@ public class PluginManagerImpl implements PluginManager {
 	public void setRemoteIsAccessible(Boolean remoteIsAccessible, String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		
-		SortedMap<String, String> karafInstances = getKarafInstances();
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 
 		if (! pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)){
@@ -773,7 +786,7 @@ public class PluginManagerImpl implements PluginManager {
 	public void setAllowUpdateMessages(Boolean allowUpdateMessages, 	String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 
-		SortedMap<String, String> karafInstances = getKarafInstances();
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 
 		if (! pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)){

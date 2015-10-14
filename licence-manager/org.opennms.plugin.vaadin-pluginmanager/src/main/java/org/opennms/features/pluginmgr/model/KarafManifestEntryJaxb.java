@@ -11,6 +11,19 @@ import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
 @XmlAccessorType(XmlAccessType.NONE)
 public class KarafManifestEntryJaxb {
 	
+
+	@XmlElement(name="karafInstanceName")
+	private String karafInstanceName = null;
+	
+	@XmlElement(name="karafInstanceUrl")
+	private String karafInstanceUrl = null;
+	
+	@XmlElement(name="karafInstanceUserName")
+	private String karafInstanceUserName = "admin"; //default
+	
+	@XmlElement(name="karafInstancePassword")
+	private String karafInstancePassword = "admin"; //default
+	
 	@XmlElement(name="remoteIsAccessible")
 	private Boolean remoteIsAccessible=true;
 	
@@ -23,6 +36,63 @@ public class KarafManifestEntryJaxb {
 	@XmlElement(name="manifestSystemId")
 	private String manifestSystemId=null;
 	
+	/**
+	 * @return the karafInstanceName
+	 */
+	public String getKarafInstanceName() {
+		return karafInstanceName;
+	}
+
+	/**
+	 * @param karafInstanceName the karafInstanceName to set
+	 */
+	public void setKarafInstanceName(String karafInstanceName) {
+		this.karafInstanceName = karafInstanceName;
+	}
+
+	/**
+	 * @return the karafInstanceUrl
+	 */
+	public String getKarafInstanceUrl() {
+		return karafInstanceUrl;
+	}
+
+	/**
+	 * @param karafInstanceUrl the karafInstanceUrl to set
+	 */
+	public void setKarafInstanceUrl(String karafInstanceUrl) {
+		this.karafInstanceUrl = karafInstanceUrl;
+	}
+	
+	/**
+	 * @return the karafInstanceUserName
+	 */
+	public String getKarafInstanceUserName() {
+		return karafInstanceUserName;
+	}
+
+	/**
+	 * @param karafInstanceUserName the karafInstanceUserName to set
+	 */
+	public void setKarafInstanceUserName(String karafInstanceUserName) {
+		this.karafInstanceUserName = karafInstanceUserName;
+	}
+
+	/**
+	 * @return the karafInstancePassword
+	 */
+	public String getKarafInstancePassword() {
+		return karafInstancePassword;
+	}
+
+	/**
+	 * @param karafInstancePassword the karafInstancePassword to set
+	 */
+	public void setKarafInstancePassword(String karafInstancePassword) {
+		this.karafInstancePassword = karafInstancePassword;
+	}
+
+
 	/**
 	 * @return the remoteIsAccessible
 	 */

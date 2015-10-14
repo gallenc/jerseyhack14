@@ -20,12 +20,6 @@ public class KarafEntryJaxb {
 	@XmlElement(name="karafInstanceLastUpdated")
 	private Date karafInstanceLastUpdated = null;
 
-	@XmlElement(name="karafInstanceName")
-	private String karafInstanceName = null;
-	
-	@XmlElement(name="karafInstanceUrl")
-	private String karafInstanceUrl = null;
-
 	@XmlElement(name="systemId")
 	private String systemId = null;
 	
@@ -47,34 +41,6 @@ public class KarafEntryJaxb {
 	 */
 	public void setKarafInstanceLastUpdated(Date karafInstanceLastUpdated) {
 		this.karafInstanceLastUpdated = karafInstanceLastUpdated;
-	}
-	
-	/**
-	 * @return the karafInstanceName
-	 */
-	public String getKarafInstanceName() {
-		return karafInstanceName;
-	}
-
-	/**
-	 * @param karafInstanceName the karafInstanceName to set
-	 */
-	public void setKarafInstanceName(String karafInstanceName) {
-		this.karafInstanceName = karafInstanceName;
-	}
-
-	/**
-	 * @return the karafInstanceUrl
-	 */
-	public String getKarafInstanceUrl() {
-		return karafInstanceUrl;
-	}
-
-	/**
-	 * @param karafInstanceUrl the karafInstanceUrl to set
-	 */
-	public void setKarafInstanceUrl(String karafInstanceUrl) {
-		this.karafInstanceUrl = karafInstanceUrl;
 	}
 
 	/**
