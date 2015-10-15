@@ -641,7 +641,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		// editInstancelistButton
 		editInstancelistButton = new Button();
 		editInstancelistButton.setCaption("Edit Instance List");
-		editInstancelistButton.setImmediate(false);
+		editInstancelistButton.setImmediate(true);
 		editInstancelistButton
 				.setDescription("Opens a new dialog to update the instance list");
 		editInstancelistButton.setWidth("-1px");
@@ -680,7 +680,8 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		
 		// karafInstanceSelectedTextField
 		karafInstanceSelectedTextField = new TextField();
-		karafInstanceSelectedTextField.setCaption("Current Karaf Instance");
+		karafInstanceSelectedTextField
+				.setCaption("Current Karaf Instance Name");
 		karafInstanceSelectedTextField.setImmediate(true);
 		karafInstanceSelectedTextField.setWidth("-1px");
 		karafInstanceSelectedTextField.setHeight("-1px");
