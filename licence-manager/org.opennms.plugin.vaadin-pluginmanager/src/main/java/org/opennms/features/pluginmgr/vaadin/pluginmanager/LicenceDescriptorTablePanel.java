@@ -64,6 +64,9 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		setCompositionRoot(mainLayout);
 
 		// TODO add user code here
+		
+		licenceListSelect.setRows(LICENCE_LIST_SELECT_ROWS); 	// Show n items and a scrollbar if there are more
+		licenceListSelect.setNullSelectionAllowed(false);
 
 		// Feedback on value changes
 		licenceListSelect.addValueChangeListener(new Property.ValueChangeListener() {
@@ -110,16 +113,12 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 			lmap.put(lentry.getProductId(), lentry);
 		}
 
-		licenceListSelect.removeAllItems();
-
-		licenceListSelect.setRows(LICENCE_LIST_SELECT_ROWS); 	// Show n items and a scrollbar if there are more
-		licenceListSelect.setNullSelectionAllowed(false);
-
 		licencePanels.removeAllComponents();
 
 		for (String productId: lmap.keySet()){
-			// add items to the selector
-			licenceListSelect.addItem(productId);
+			
+			// update/add product ids to list select without throwing value change event
+			if (!licenceListSelect.containsId(productId)) licenceListSelect.addItem(productId);
 
 			// add a new licence descriptor panel and populate with LicenceMetadata(
 			LicenceDescriptorPanel licenceDescriptorPanel= new LicenceDescriptorPanel();
@@ -134,6 +133,12 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 			panelIds.put(productId, licenceDescriptorPanel);
 			licencePanels.addComponent(licenceDescriptorPanel);
 		}
+		
+		// update/remove product ids from list select without throwing value change event
+		for (Object itemid: licenceListSelect.getItemIds()){
+			if (! lmap.keySet().contains(itemid)) licenceListSelect.removeItem(itemid);
+		}
+
 		// selects first value for display
 		if (lmap.keySet().isEmpty()) {
 			//if there are no panels to display display an empty panel

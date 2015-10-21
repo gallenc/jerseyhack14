@@ -2,6 +2,7 @@ package org.opennms.features.pluginmgr.vaadin.pluginmanager;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.Set;
 
 import org.opennms.features.pluginmgr.SessionPluginManager;
 import org.opennms.features.pluginmgr.vaadin.config.SimpleStackTrace;
@@ -216,11 +217,15 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	public void updateDisplayValues(){
 
 		try{
-			// add available instances
-			karafListSelect.removeAllItems();
-			for (String instanceName: sessionPluginManager.getKarafInstances().keySet()){
-				karafListSelect.addItem(instanceName);
+
+			// update/add available instances without throwing value change event
+			Set<String> instanceNames = sessionPluginManager.getKarafInstances().keySet();
+			for (String instanceName: instanceNames ){
+				if (!karafListSelect.containsId(instanceName)) karafListSelect.addItem(instanceName);
 			};
+			for (Object itemid: karafListSelect.getItemIds()){
+				if (! instanceNames.contains(itemid)) karafListSelect.removeItem(itemid);
+			}
 
 			String karafInstanceSelected= (sessionPluginManager.getKarafInstance()==null) ? "" : sessionPluginManager.getKarafInstance().toString();
 			karafInstanceSelectedTextField.setValue(karafInstanceSelected);
@@ -309,13 +314,13 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		});
 
 		// check boxes
-		remoteIsAccessibleCheckBox.setValue(sessionPluginManager.getRemoteIsAccessible());
-		allowUpdateMessagesCheckBox.setValue(sessionPluginManager.getAllowUpdateMessages());
+		//remoteIsAccessibleCheckBox.setValue(sessionPluginManager.getRemoteIsAccessible());
+		//allowUpdateMessagesCheckBox.setValue(sessionPluginManager.getAllowUpdateMessages());
 
 		// SystemID Panel
-		systemIdTxtField.setValue(sessionPluginManager.getSystemId());
+		//systemIdTxtField.setValue(sessionPluginManager.getSystemId());
 
-		manifestSystemIdTextField.setValue(sessionPluginManager.getManifestSystemId());
+		//manifestSystemIdTextField.setValue(sessionPluginManager.getManifestSystemId());
 
 		updateSystemIdButton.addClickListener(new Button.ClickListener() {
 			private static final long serialVersionUID = 1L;
@@ -391,14 +396,14 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		});
 
 		// plugin Server Panel
-		pluginServerPasswordTxtField.setValue(sessionPluginManager.getPluginServerPassword());
-		pluginServerUsernameTxtField.setValue(sessionPluginManager.getPluginServerUsername());
-		pluginServerUrlTxtField.setValue(sessionPluginManager.getPluginServerUrl());
+		//pluginServerPasswordTxtField.setValue(sessionPluginManager.getPluginServerPassword());
+		//pluginServerUsernameTxtField.setValue(sessionPluginManager.getPluginServerUsername());
+		//pluginServerUrlTxtField.setValue(sessionPluginManager.getPluginServerUrl());
 
-		licenceShoppingCartUrlTxtField.setValue(sessionPluginManager.getLicenceShoppingCartUrl());
-		ExternalResource resource= new ExternalResource(sessionPluginManager.getLicenceShoppingCartUrl());
-		openShoppingCartLink.setResource(resource);
-		openShoppingCartLink.setTargetName("_blank"); // Open the URL in a new window/tab
+		//licenceShoppingCartUrlTxtField.setValue(sessionPluginManager.getLicenceShoppingCartUrl());
+		//ExternalResource resource= new ExternalResource(sessionPluginManager.getLicenceShoppingCartUrl());
+		//openShoppingCartLink.setResource(resource);
+		//openShoppingCartLink.setTargetName("_blank"); // Open the URL in a new window/tab
 
 		updatePluginServerButton.addClickListener(new Button.ClickListener() {
 			private static final long serialVersionUID = 1L;
@@ -436,9 +441,9 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		karafListSelect.setImmediate(true);
 
 		// add available instances
-		for (String instanceName: sessionPluginManager.getKarafInstances().keySet()){
-			karafListSelect.addItem(instanceName);
-		};
+		//for (String instanceName: sessionPluginManager.getKarafInstances().keySet()){
+		//	karafListSelect.addItem(instanceName);
+		//};
 
 
 		// Feedback on value changes
@@ -512,8 +517,8 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 
 		// Available Plugins Tab
 
-		ProductSpecList availablePluginsList = sessionPluginManager.getAvailablePlugins();
-		if (availablePluginsList!=null) availablePluginsPanel.addProductList(availablePluginsList);
+		//ProductSpecList availablePluginsList = sessionPluginManager.getAvailablePlugins();
+		//if (availablePluginsList!=null) availablePluginsPanel.addProductList(availablePluginsList);
 		availablePluginsControlsPanel= new AvailablePluginControlsPanel();
 		availablePluginsControlsPanel.setSessionPluginManager(sessionPluginManager);
 		availablePluginsControlsPanel.setProductDescriptorTablePanel(availablePluginsPanel);
@@ -522,8 +527,8 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 
 		// Installed Plugins Tab
 
-		ProductSpecList installedPluginsList = sessionPluginManager.getInstalledPlugins();
-		if (installedPluginsList!=null) installedPluginsPanel.addProductList(installedPluginsList);
+		//ProductSpecList installedPluginsList = sessionPluginManager.getInstalledPlugins();
+		//if (installedPluginsList!=null) installedPluginsPanel.addProductList(installedPluginsList);
 		installedPluginsControlsPanel= new InstalledPluginControlsPanel();
 		installedPluginsControlsPanel.setSessionPluginManager(sessionPluginManager);
 		installedPluginsControlsPanel.setProductDescriptorTablePanel(installedPluginsPanel);
@@ -531,8 +536,8 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		installedPluginsPanel.getControlsVerticalLayout().addComponent(installedPluginsControlsPanel);
 
 		// Plugin Manifest Table in Installed Plugins Tab
-		ProductSpecList pluginsManifestList = sessionPluginManager.getPluginsManifest();
-		if (pluginsManifestList!=null) pluginsManifestPanel.addProductList(pluginsManifestList);
+		//ProductSpecList pluginsManifestList = sessionPluginManager.getPluginsManifest();
+		//if (pluginsManifestList!=null) pluginsManifestPanel.addProductList(pluginsManifestList);
 		pluginManifestControlsPanel= new PluginManifestControlsPanel();
 		pluginManifestControlsPanel.setSessionPluginManager(sessionPluginManager);
 		pluginManifestControlsPanel.setProductDescriptorTablePanel(pluginsManifestPanel);
@@ -542,8 +547,8 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 
 		// Installed Licences Tab
 
-		LicenceList licencelist = sessionPluginManager.getInstalledLicenceList();
-		if (licencelist!=null) licenceDescriptorTablePanel.addLicenceList(licencelist);
+		//LicenceList licencelist = sessionPluginManager.getInstalledLicenceList();
+		//if (licencelist!=null) licenceDescriptorTablePanel.addLicenceList(licencelist);
 
 		installedLicencesControlsPanel= new InstalledLicencesControlsPanel();
 		installedLicencesControlsPanel.setSessionPluginManager(sessionPluginManager);		
@@ -577,15 +582,15 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		mainLayout.setWidth("100%");
 		mainLayout.setHeight("100%");
 		mainLayout.setMargin(true);
-
+		
 		// top-level component properties
 		setWidth("100.0%");
 		setHeight("100.0%");
-
+		
 		// pluginMgrHorSplitPanel_1
 		pluginMgrHorSplitPanel_1 = buildPluginMgrHorSplitPanel_1();
 		mainLayout.addComponent(pluginMgrHorSplitPanel_1);
-
+		
 		return mainLayout;
 	}
 
@@ -597,15 +602,15 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		pluginMgrHorSplitPanel_1.setImmediate(true);
 		pluginMgrHorSplitPanel_1.setWidth("100.0%");
 		pluginMgrHorSplitPanel_1.setHeight("100.0%");
-
+		
 		// generalSettingsPanel
 		generalSettingsPanel = buildGeneralSettingsPanel();
 		pluginMgrHorSplitPanel_1.addComponent(generalSettingsPanel);
-
+		
 		// featureSettingsPanel
 		featureSettingsPanel = buildFeatureSettingsPanel();
 		pluginMgrHorSplitPanel_1.addComponent(featureSettingsPanel);
-
+		
 		return pluginMgrHorSplitPanel_1;
 	}
 
@@ -618,15 +623,15 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		generalSettingsPanel.setWidth("-1px");
 		generalSettingsPanel.setHeight("-1px");
 		generalSettingsPanel.setMargin(true);
-
+		
 		// horizontalLayout_3
 		horizontalLayout_3 = buildHorizontalLayout_3();
 		generalSettingsPanel.addComponent(horizontalLayout_3);
-
+		
 		// verticalLayout_6
 		verticalLayout_6 = buildVerticalLayout_6();
 		generalSettingsPanel.addComponent(verticalLayout_6);
-
+		
 		return generalSettingsPanel;
 	}
 
@@ -640,15 +645,15 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		horizontalLayout_3.setHeight("-1px");
 		horizontalLayout_3.setMargin(true);
 		horizontalLayout_3.setSpacing(true);
-
+		
 		// verticalLayout_2
 		verticalLayout_2 = buildVerticalLayout_2();
 		horizontalLayout_3.addComponent(verticalLayout_2);
-
+		
 		// verticalLayout_4
 		verticalLayout_4 = buildVerticalLayout_4();
 		horizontalLayout_3.addComponent(verticalLayout_4);
-
+		
 		return horizontalLayout_3;
 	}
 
@@ -661,17 +666,17 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		verticalLayout_2.setHeight("-1px");
 		verticalLayout_2.setMargin(false);
 		verticalLayout_2.setSpacing(true);
-
+		
 		// editInstancelistButton
 		editInstancelistButton = new Button();
 		editInstancelistButton.setCaption("Edit Instance List");
 		editInstancelistButton.setImmediate(true);
 		editInstancelistButton
-		.setDescription("Opens a new dialog to update the instance list");
+				.setDescription("Opens a new dialog to update the instance list");
 		editInstancelistButton.setWidth("-1px");
 		editInstancelistButton.setHeight("-1px");
 		verticalLayout_2.addComponent(editInstancelistButton);
-
+		
 		// karafListSelect
 		karafListSelect = new ListSelect();
 		karafListSelect.setCaption("Karaf Instances");
@@ -680,7 +685,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		karafListSelect.setWidth("-1px");
 		karafListSelect.setHeight("-1px");
 		verticalLayout_2.addComponent(karafListSelect);
-
+		
 		return verticalLayout_2;
 	}
 
@@ -693,7 +698,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		verticalLayout_4.setHeight("-1px");
 		verticalLayout_4.setMargin(false);
 		verticalLayout_4.setSpacing(true);
-
+		
 		// reloadKarafDataButton
 		reloadKarafDataButton = new Button();
 		reloadKarafDataButton.setCaption("Reload Karaf Instance Data");
@@ -701,16 +706,16 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		reloadKarafDataButton.setWidth("-1px");
 		reloadKarafDataButton.setHeight("-1px");
 		verticalLayout_4.addComponent(reloadKarafDataButton);
-
+		
 		// karafInstanceSelectedTextField
 		karafInstanceSelectedTextField = new TextField();
 		karafInstanceSelectedTextField
-		.setCaption("Current Karaf Instance Name");
+				.setCaption("Current Karaf Instance Name");
 		karafInstanceSelectedTextField.setImmediate(true);
 		karafInstanceSelectedTextField.setWidth("-1px");
 		karafInstanceSelectedTextField.setHeight("-1px");
 		verticalLayout_4.addComponent(karafInstanceSelectedTextField);
-
+		
 		// currentKarafUrlTextField
 		currentKarafUrlTextField = new TextField();
 		currentKarafUrlTextField.setCaption("Current Karaf URL");
@@ -718,7 +723,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		currentKarafUrlTextField.setWidth("-1px");
 		currentKarafUrlTextField.setHeight("-1px");
 		verticalLayout_4.addComponent(currentKarafUrlTextField);
-
+		
 		// karafLastUpdatedTextField
 		karafLastUpdatedTextField = new TextField();
 		karafLastUpdatedTextField.setCaption("Current Instance Last Updated");
@@ -726,11 +731,11 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		karafLastUpdatedTextField.setWidth("-1px");
 		karafLastUpdatedTextField.setHeight("-1px");
 		verticalLayout_4.addComponent(karafLastUpdatedTextField);
-
+		
 		// systemIdPanel
 		systemIdPanel = buildSystemIdPanel();
 		verticalLayout_4.addComponent(systemIdPanel);
-
+		
 		return verticalLayout_4;
 	}
 
@@ -744,71 +749,71 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		systemIdPanel.setHeight("-1px");
 		systemIdPanel.setMargin(false);
 		systemIdPanel.setSpacing(true);
-
+		
 		// systemIdTxtField
 		systemIdTxtField = new TextField();
 		systemIdTxtField.setCaption("Current Instance System Id");
 		systemIdTxtField.setImmediate(true);
 		systemIdTxtField
-		.setDescription("Actual System Id of the selected Karaf Instance");
+				.setDescription("Actual System Id of the selected Karaf Instance");
 		systemIdTxtField.setWidth("-1px");
 		systemIdTxtField.setHeight("-1px");
 		systemIdPanel.addComponent(systemIdTxtField);
-
+		
 		// manifestSystemIdTextField
 		manifestSystemIdTextField = new TextField();
 		manifestSystemIdTextField.setCaption("Manifest System Id");
 		manifestSystemIdTextField.setImmediate(true);
 		manifestSystemIdTextField
-		.setDescription("System Id Expected for Manifest download");
+				.setDescription("System Id Expected for Manifest download");
 		manifestSystemIdTextField.setWidth("-1px");
 		manifestSystemIdTextField.setHeight("-1px");
 		systemIdPanel.addComponent(manifestSystemIdTextField);
-
+		
 		// updateSystemIdButton
 		updateSystemIdButton = new Button();
 		updateSystemIdButton.setCaption("Set Karaf  to Manifest System Id");
 		updateSystemIdButton.setImmediate(true);
 		updateSystemIdButton
-		.setDescription("Sets the systemId of the selected Karaf instance to the value in the System Id field");
+				.setDescription("Sets the systemId of the selected Karaf instance to the value in the System Id field");
 		updateSystemIdButton.setWidth("-1px");
 		updateSystemIdButton.setHeight("-1px");
 		systemIdPanel.addComponent(updateSystemIdButton);
-
+		
 		// generateRandomManifestSystemIdButton
 		generateRandomManifestSystemIdButton = new Button();
 		generateRandomManifestSystemIdButton
-		.setCaption("Generate Random Manifest System Id");
+				.setCaption("Generate Random Manifest System Id");
 		generateRandomManifestSystemIdButton.setImmediate(true);
 		generateRandomManifestSystemIdButton
-		.setDescription("Generates a new random system id and sets this value in the selected karaf instance");
+				.setDescription("Generates a new random system id and sets this value in the selected karaf instance");
 		generateRandomManifestSystemIdButton.setWidth("-1px");
 		generateRandomManifestSystemIdButton.setHeight("-1px");
 		systemIdPanel.addComponent(generateRandomManifestSystemIdButton);
-
+		
 		// remoteIsAccessibleCheckBox
 		remoteIsAccessibleCheckBox = new CheckBox();
 		remoteIsAccessibleCheckBox.setCaption("  Remote is Accessible");
 		remoteIsAccessibleCheckBox.setImmediate(false);
 		remoteIsAccessibleCheckBox
-		.setDescription("Check if Remote cannot be direcly updated using ReST commands. (i.e behind firewall)");
+				.setDescription("Check if Remote cannot be direcly updated using ReST commands. (i.e behind firewall)");
 		remoteIsAccessibleCheckBox.setWidth("-1px");
 		remoteIsAccessibleCheckBox.setHeight("-1px");
 		systemIdPanel.addComponent(remoteIsAccessibleCheckBox);
-
+		
 		// allowUpdateMessagesCheckBox
 		allowUpdateMessagesCheckBox = new CheckBox();
 		allowUpdateMessagesCheckBox
-		.setCaption("  Allow Status Update from Remote");
+				.setCaption("  Allow Status Update from Remote");
 		allowUpdateMessagesCheckBox.setImmediate(false);
 		allowUpdateMessagesCheckBox
-		.setDescription("Status update messages are allowed from remote");
+				.setDescription("Status update messages are allowed from remote");
 		allowUpdateMessagesCheckBox.setWidth("-1px");
 		allowUpdateMessagesCheckBox.setHeight("-1px");
 		systemIdPanel.addComponent(allowUpdateMessagesCheckBox);
 		systemIdPanel.setComponentAlignment(allowUpdateMessagesCheckBox,
 				new Alignment(33));
-
+		
 		return systemIdPanel;
 	}
 
@@ -821,17 +826,17 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		verticalLayout_6.setWidth("-1px");
 		verticalLayout_6.setHeight("-1px");
 		verticalLayout_6.setMargin(false);
-
+		
 		// horizontalLayout_2
 		horizontalLayout_2 = buildHorizontalLayout_2();
 		verticalLayout_6.addComponent(horizontalLayout_2);
 		verticalLayout_6.setComponentAlignment(horizontalLayout_2,
 				new Alignment(9));
-
+		
 		// horizontalLayout_4
 		horizontalLayout_4 = buildHorizontalLayout_4();
 		verticalLayout_6.addComponent(horizontalLayout_4);
-
+		
 		return verticalLayout_6;
 	}
 
@@ -844,7 +849,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		horizontalLayout_2.setHeight("-1px");
 		horizontalLayout_2.setMargin(true);
 		horizontalLayout_2.setSpacing(true);
-
+		
 		// reloadAvailablePluginsButton
 		reloadAvailablePluginsButton = new Button();
 		reloadAvailablePluginsButton.setCaption("Reload Available Plugins");
@@ -854,16 +859,16 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		horizontalLayout_2.addComponent(reloadAvailablePluginsButton);
 		horizontalLayout_2.setComponentAlignment(reloadAvailablePluginsButton,
 				new Alignment(9));
-
+		
 		// availablepluginsLastUpdatedTextField
 		availablepluginsLastUpdatedTextField = new TextField();
 		availablepluginsLastUpdatedTextField
-		.setCaption("Available Pugins Last Updated");
+				.setCaption("Available Pugins Last Updated");
 		availablepluginsLastUpdatedTextField.setImmediate(true);
 		availablepluginsLastUpdatedTextField.setWidth("-1px");
 		availablepluginsLastUpdatedTextField.setHeight("-1px");
 		horizontalLayout_2.addComponent(availablepluginsLastUpdatedTextField);
-
+		
 		return horizontalLayout_2;
 	}
 
@@ -876,11 +881,11 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		horizontalLayout_4.setHeight("-1px");
 		horizontalLayout_4.setMargin(false);
 		horizontalLayout_4.setSpacing(true);
-
+		
 		// pluginServerConfigPanel
 		pluginServerConfigPanel = buildPluginServerConfigPanel();
 		horizontalLayout_4.addComponent(pluginServerConfigPanel);
-
+		
 		return horizontalLayout_4;
 	}
 
@@ -891,16 +896,16 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		pluginServerConfigPanel.setCaption("Available Plugins Server Settings");
 		pluginServerConfigPanel.setImmediate(true);
 		pluginServerConfigPanel
-		.setDescription("External server listing plugins");
+				.setDescription("External server listing plugins");
 		pluginServerConfigPanel.setWidth("-1px");
 		pluginServerConfigPanel.setHeight("-1px");
 		pluginServerConfigPanel.setMargin(true);
 		pluginServerConfigPanel.setSpacing(true);
-
+		
 		// horizontalLayout_6
 		horizontalLayout_6 = buildHorizontalLayout_6();
 		pluginServerConfigPanel.addComponent(horizontalLayout_6);
-
+		
 		// pluginServerUsernameTxtField
 		pluginServerUsernameTxtField = new TextField();
 		pluginServerUsernameTxtField.setCaption("Plugin Server Username");
@@ -908,7 +913,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		pluginServerUsernameTxtField.setWidth("-1px");
 		pluginServerUsernameTxtField.setHeight("-1px");
 		pluginServerConfigPanel.addComponent(pluginServerUsernameTxtField);
-
+		
 		// pluginServerPasswordTxtField
 		pluginServerPasswordTxtField = new TextField();
 		pluginServerPasswordTxtField.setCaption("Plugin Server Password");
@@ -916,11 +921,11 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		pluginServerPasswordTxtField.setWidth("-1px");
 		pluginServerPasswordTxtField.setHeight("-1px");
 		pluginServerConfigPanel.addComponent(pluginServerPasswordTxtField);
-
+		
 		// horizontalLayout_5
 		horizontalLayout_5 = buildHorizontalLayout_5();
 		pluginServerConfigPanel.addComponent(horizontalLayout_5);
-
+		
 		return pluginServerConfigPanel;
 	}
 
@@ -933,7 +938,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		horizontalLayout_6.setHeight("-1px");
 		horizontalLayout_6.setMargin(false);
 		horizontalLayout_6.setSpacing(true);
-
+		
 		// pluginServerUrlTxtField
 		pluginServerUrlTxtField = new TextField();
 		pluginServerUrlTxtField.setCaption("Plugin Server URL");
@@ -941,7 +946,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		pluginServerUrlTxtField.setWidth("-1px");
 		pluginServerUrlTxtField.setHeight("-1px");
 		horizontalLayout_6.addComponent(pluginServerUrlTxtField);
-
+		
 		// updatePluginServerButton
 		updatePluginServerButton = new Button();
 		updatePluginServerButton.setCaption("Update Plugin Server Settings");
@@ -951,7 +956,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		horizontalLayout_6.addComponent(updatePluginServerButton);
 		horizontalLayout_6.setComponentAlignment(updatePluginServerButton,
 				new Alignment(9));
-
+		
 		return horizontalLayout_6;
 	}
 
@@ -964,7 +969,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		horizontalLayout_5.setHeight("-1px");
 		horizontalLayout_5.setMargin(false);
 		horizontalLayout_5.setSpacing(true);
-
+		
 		// licenceShoppingCartUrlTxtField
 		licenceShoppingCartUrlTxtField = new TextField();
 		licenceShoppingCartUrlTxtField.setCaption("Licence Shopping Cart URL");
@@ -972,7 +977,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		licenceShoppingCartUrlTxtField.setWidth("-1px");
 		licenceShoppingCartUrlTxtField.setHeight("-1px");
 		horizontalLayout_5.addComponent(licenceShoppingCartUrlTxtField);
-
+		
 		// openShoppingCartLink
 		openShoppingCartLink = new Link();
 		openShoppingCartLink.setCaption("Open Shopping Cart");
@@ -982,7 +987,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		horizontalLayout_5.addComponent(openShoppingCartLink);
 		horizontalLayout_5.setComponentAlignment(openShoppingCartLink,
 				new Alignment(9));
-
+		
 		return horizontalLayout_5;
 	}
 
@@ -996,7 +1001,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		featureSettingsPanel.setHeight("-1px");
 		featureSettingsPanel.setMargin(true);
 		featureSettingsPanel.setSpacing(true);
-
+		
 		// systemMessages
 		systemMessages = new TextArea();
 		systemMessages.setCaption("System Messages");
@@ -1004,11 +1009,11 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		systemMessages.setWidth("100.0%");
 		systemMessages.setHeight("-1px");
 		featureSettingsPanel.addComponent(systemMessages);
-
+		
 		// featuresTabSheet_1
 		featuresTabSheet_1 = buildFeaturesTabSheet_1();
 		featureSettingsPanel.addComponent(featuresTabSheet_1);
-
+		
 		return featureSettingsPanel;
 	}
 
@@ -1020,30 +1025,30 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		featuresTabSheet_1.setImmediate(true);
 		featuresTabSheet_1.setWidth("-1px");
 		featuresTabSheet_1.setHeight("-1px");
-
+		
 		// installedPluginsTab
 		installedPluginsTab = buildInstalledPluginsTab();
 		featuresTabSheet_1.addTab(installedPluginsTab, "Installed Plugins",
 				null);
-
+		
 		// pluginsManifestTab
 		pluginsManifestTab = buildPluginsManifestTab();
 		featuresTabSheet_1.addTab(pluginsManifestTab, "Plugins Manifest", null);
-
+		
 		// availablePluginsTab
 		availablePluginsTab = buildAvailablePluginsTab();
 		featuresTabSheet_1.addTab(availablePluginsTab, "Available Plugins",
 				null);
-
+		
 		// installedLicencesTab
 		installedLicencesTab = buildInstalledLicencesTab();
 		featuresTabSheet_1.addTab(installedLicencesTab, "Installed Licences",
 				null);
-
+		
 		// addLicenceTab
 		addLicenceTab = buildAddLicenceTab();
 		featuresTabSheet_1.addTab(addLicenceTab, "Add Licence", null);
-
+		
 		return featuresTabSheet_1;
 	}
 
@@ -1056,17 +1061,17 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		installedPluginsTab.setHeight("-1px");
 		installedPluginsTab.setMargin(true);
 		installedPluginsTab.setSpacing(true);
-
+		
 		// installedPluginsPanel
 		installedPluginsPanel = new ProductDescriptorTablePanel();
 		installedPluginsPanel.setCaption("Plugins Installed in Karaf");
 		installedPluginsPanel.setImmediate(true);
 		installedPluginsPanel
-		.setDescription("List of plugins which have been confirmed as installed in Karaf");
+				.setDescription("List of plugins which have been confirmed as installed in Karaf");
 		installedPluginsPanel.setWidth("100.0%");
 		installedPluginsPanel.setHeight("100.0%");
 		installedPluginsTab.addComponent(installedPluginsPanel);
-
+		
 		return installedPluginsTab;
 	}
 
@@ -1080,18 +1085,18 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		pluginsManifestTab.setHeight("-1px");
 		pluginsManifestTab.setMargin(true);
 		pluginsManifestTab.setSpacing(true);
-
+		
 		// pluginsManifestPanel
 		pluginsManifestPanel = new ProductDescriptorTablePanel();
 		pluginsManifestPanel
-		.setCaption("Manifest of plugins to be installed in Karaf");
+				.setCaption("Manifest of plugins to be installed in Karaf");
 		pluginsManifestPanel.setImmediate(true);
 		pluginsManifestPanel
-		.setDescription("List of plugins which will be installed when karaf requests manifest");
+				.setDescription("List of plugins which will be installed when karaf requests manifest");
 		pluginsManifestPanel.setWidth("100.0%");
 		pluginsManifestPanel.setHeight("100.0%");
 		pluginsManifestTab.addComponent(pluginsManifestPanel);
-
+		
 		return pluginsManifestTab;
 	}
 
@@ -1104,16 +1109,16 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		availablePluginsTab.setHeight("-1px");
 		availablePluginsTab.setMargin(true);
 		availablePluginsTab.setSpacing(true);
-
+		
 		// availablePluginsPanel
 		availablePluginsPanel = new ProductDescriptorTablePanel();
 		availablePluginsPanel
-		.setCaption("Plugins available from Plugin Server ");
+				.setCaption("Plugins available from Plugin Server ");
 		availablePluginsPanel.setImmediate(true);
 		availablePluginsPanel.setWidth("100.0%");
 		availablePluginsPanel.setHeight("100.0%");
 		availablePluginsTab.addComponent(availablePluginsPanel);
-
+		
 		return availablePluginsTab;
 	}
 
@@ -1126,14 +1131,14 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		installedLicencesTab.setWidth("-1px");
 		installedLicencesTab.setHeight("-1px");
 		installedLicencesTab.setMargin(true);
-
+		
 		// licenceDescriptorTablePanel
 		licenceDescriptorTablePanel = new LicenceDescriptorTablePanel();
 		licenceDescriptorTablePanel.setImmediate(true);
 		licenceDescriptorTablePanel.setWidth("100.0%");
 		licenceDescriptorTablePanel.setHeight("100.0%");
 		installedLicencesTab.addComponent(licenceDescriptorTablePanel);
-
+		
 		return installedLicencesTab;
 	}
 
@@ -1146,14 +1151,14 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		addLicenceTab.setWidth("-1px");
 		addLicenceTab.setHeight("-1px");
 		addLicenceTab.setMargin(true);
-
+		
 		// addLicencePanel
 		addLicencePanel = new AddLicencePanel();
 		addLicencePanel.setImmediate(true);
 		addLicencePanel.setWidth("100.0%");
 		addLicencePanel.setHeight("100.0%");
 		addLicenceTab.addComponent(addLicencePanel);
-
+		
 		return addLicenceTab;
 	}
 

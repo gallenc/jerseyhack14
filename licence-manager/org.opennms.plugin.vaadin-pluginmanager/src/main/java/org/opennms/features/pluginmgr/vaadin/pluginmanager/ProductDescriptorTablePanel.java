@@ -63,6 +63,9 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 
 		// TODO add user code here
 
+		productListSelect.setRows(PRODUCT_LIST_SELECT_ROWS); 	// Show n items and a scrollbar if there are more
+		productListSelect.setNullSelectionAllowed(false);
+
 		// Feedback on value changes
 		productListSelect.addValueChangeListener(new Property.ValueChangeListener() {
 			private static final long serialVersionUID = 4777915807221505438L;
@@ -115,16 +118,12 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 			pmap.put(pmeta.getProductId(), pmeta);
 		}
 
-		productListSelect.removeAllItems();
-
-		productListSelect.setRows(PRODUCT_LIST_SELECT_ROWS); 	// Show n items and a scrollbar if there are more
-		productListSelect.setNullSelectionAllowed(false);
-
 		productPanels.removeAllComponents();
-
+		
 		for (String productId: pmap.keySet()){
-			// add items to the selector
-			productListSelect.addItem(productId);
+			
+			// update/add product ids to list select without throwing value change event
+			if (!productListSelect.containsId(productId)) productListSelect.addItem(productId);
 
 			// add a new product descriptor panel and populate with ProductMetadata(
 			ProductDescriptorPanel productDescriptorPanel= new ProductDescriptorPanel();
@@ -136,6 +135,11 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 
 			panelIds.put(productId, productDescriptorPanel);
 			productPanels.addComponent(productDescriptorPanel);
+		}
+		
+		// update/remove product ids from list select without throwing value change event
+		for (Object itemid: productListSelect.getItemIds()){
+			if (! pmap.keySet().contains(itemid)) productListSelect.removeItem(itemid);
 		}
 		
 		if (pmap.keySet().isEmpty()) {
