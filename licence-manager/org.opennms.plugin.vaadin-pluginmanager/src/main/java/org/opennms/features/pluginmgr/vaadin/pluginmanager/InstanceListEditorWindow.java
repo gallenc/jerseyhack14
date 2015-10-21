@@ -42,8 +42,7 @@ public class InstanceListEditorWindow extends Window {
         		System.out.println("instanceListEditor not defined in blueprintContainer. Using SimpleInstanceListEditor");
         	}
         } catch (Exception e) {
-            //TODO LOG MESSAGE
-            System.out.println("problem loading InstanceListEditor from blueprintContainer: "+e.getMessage());
+            throw new RuntimeException("problem loading InstanceListEditor from blueprintContainer: ", e);
         }
         
         instanceListEditor.setSessionPluginManager(sessionPluginManager);

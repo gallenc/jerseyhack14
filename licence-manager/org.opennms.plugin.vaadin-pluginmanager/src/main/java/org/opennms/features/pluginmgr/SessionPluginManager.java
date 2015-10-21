@@ -27,7 +27,7 @@ public class SessionPluginManager {
 	 * gets the karaf instance which will be used for other commands
 	 * @return
 	 */
-	public String getKarafInstance() {
+	public synchronized String getKarafInstance() {
 		return karafInstance;
 	}
 
@@ -35,7 +35,7 @@ public class SessionPluginManager {
 	 * sets the karaf instance which will be used for other commands
 	 * @param karafInstance
 	 */
-	public void setKarafInstance(String karafInstance) {
+	public synchronized void setKarafInstance(String karafInstance) {
 		this.karafInstance = karafInstance;
 	}
 	
@@ -60,6 +60,10 @@ public class SessionPluginManager {
 
 	public void setPluginManager(PluginManager pluginManager) {
 		this.pluginManager=pluginManager;
+		
+		if(pluginManager.getKarafInstances().isEmpty()){
+			setKarafInstance("");
+		} else setKarafInstance(pluginManager.getKarafInstances().firstKey());
 
 	}
 
@@ -230,8 +234,42 @@ public class SessionPluginManager {
 	public SortedMap<String, KarafManifestEntryJaxb> getKarafInstances(){
 		return pluginManager.getKarafInstances();
 	}
-
 	
+	/**
+	 * adds new karaf instance based on karafManifestEntryJaxb
+	 * changes default 
+	 * throws exception entry already exists or name not set
+	 * @param karafManifestEntryJaxb
+	 */
+	public void addNewKarafInstance(KarafManifestEntryJaxb karafManifestEntryJaxb){
+		
+		String kInstance=karafManifestEntryJaxb.getKarafInstanceName();
+		if(kInstance==null || "".equals(kInstance))  throw new RuntimeException("cannot add new karaf instance - karafInstanceName in karafManifestEntryJaxb cannot be null or empty");
+		
+		if("localhost".equals(kInstance)) throw new RuntimeException("cannot add localhost karaf instance to plugin manager");
+
+		pluginManager.addNewKarafInstance(karafManifestEntryJaxb);
+		
+		setKarafInstance(kInstance);
+	}
+	
+
+	public void deleteKarafInstance(String kInstance){
+		if(kInstance==null || "".equals(kInstance))  throw new RuntimeException("cannot add new karaf instance - karafInstanceName in karafManifestEntryJaxb cannot be null or empty");
+		if("localhost".equals(kInstance)) throw new RuntimeException("cannot delete localhost karaf instance from plugin manager");
+		pluginManager.deleteKarafInstance(karafInstance);
+		
+		if (kInstance.equals(getKarafInstance())) {
+			if(pluginManager.getKarafInstances().isEmpty()){
+				setKarafInstance("");
+			} else setKarafInstance(pluginManager.getKarafInstances().firstKey());
+		}
+	}
+
+	public void updateAccessData(String karafInstanceUrl, String karafInstanceUserName, String karafInstancePassword){
+		pluginManager.updateAccessData(karafInstanceUrl, karafInstanceUserName, karafInstancePassword, karafInstance);
+	}
+
 	
 	public void setBlueprintContainer(BlueprintContainer blueprintContainer) {
 	    this.blueprintContainer=blueprintContainer;

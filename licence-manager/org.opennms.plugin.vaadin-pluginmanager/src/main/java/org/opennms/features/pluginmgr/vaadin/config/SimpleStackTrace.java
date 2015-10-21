@@ -5,10 +5,10 @@ import java.io.StringWriter;
 
 public class SimpleStackTrace {
 	
-	public static String errorToString(Exception e){
+	public static String errorToString(Throwable throwable){
 		StringWriter sw = new StringWriter();
 		sw.append("Reported Exception:");
-		e.printStackTrace(new PrintWriter(sw));
+		throwable.printStackTrace(new PrintWriter(sw));
 		return sw.toString();
 	}
 

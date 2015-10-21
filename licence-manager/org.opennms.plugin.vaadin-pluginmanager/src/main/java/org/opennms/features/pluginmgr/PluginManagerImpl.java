@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Random;
 import java.util.SortedMap;
-import java.util.TreeMap;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -40,7 +39,7 @@ public class PluginManagerImpl implements PluginManager {
 	private String fileUri="./pluginmodeldata.xml";
 
 	private PluginModelJaxb pluginModelJaxb = new PluginModelJaxb();
-	
+
 	/**
 	 * fileUri is the location of the persisted plugin data
 	 * @return
@@ -70,7 +69,7 @@ public class PluginManagerImpl implements PluginManager {
 	 * @see org.opennms.features.pluginmgr.PluginManager#setPluginServerPassword(java.lang.String)
 	 */
 	@Override
-	public void setPluginServerPassword(String pluginServerPassword){
+	public synchronized void setPluginServerPassword(String pluginServerPassword){
 		pluginModelJaxb.setPluginServerPassword(pluginServerPassword);
 	}
 
@@ -86,7 +85,7 @@ public class PluginManagerImpl implements PluginManager {
 	 * @see org.opennms.features.pluginmgr.PluginManager#setPluginServerUsername(java.lang.String)
 	 */
 	@Override
-	public void setPluginServerUsername(String pluginServerUsername){
+	public synchronized void setPluginServerUsername(String pluginServerUsername){
 		pluginModelJaxb.setPluginServerUsername(pluginServerUsername);
 	}
 
@@ -102,7 +101,7 @@ public class PluginManagerImpl implements PluginManager {
 	 * @see org.opennms.features.pluginmgr.PluginManager#setPluginServerUrl(java.lang.String)
 	 */
 	@Override
-	public void setPluginServerUrl(String pluginServerUrl){
+	public synchronized void setPluginServerUrl(String pluginServerUrl){
 		pluginModelJaxb.setPluginServerUrl(pluginServerUrl);
 	}
 
@@ -118,7 +117,7 @@ public class PluginManagerImpl implements PluginManager {
 	 * @see org.opennms.features.pluginmgr.PluginManager#setLicenceShoppingCartUrl(java.lang.String)
 	 */
 	@Override
-	public void setLicenceShoppingCartUrl(String licenceShoppingCartUrl){
+	public synchronized void setLicenceShoppingCartUrl(String licenceShoppingCartUrl){
 		pluginModelJaxb.setLicenceShoppingCartUrl(licenceShoppingCartUrl);
 	}
 
@@ -143,7 +142,7 @@ public class PluginManagerImpl implements PluginManager {
 	public synchronized SortedMap<String, KarafManifestEntryJaxb> getKarafInstances(){
 
 		SortedMap<String, KarafManifestEntryJaxb> karafInstances = pluginModelJaxb.getKarafManifestEntryMap();
-		
+
 		// creates a localhost entry if doesn't exist in karafInstances
 		// TODO SET DEFAULTS IN BLUEPRINT
 		if (! karafInstances.containsKey("localhost")){
@@ -152,7 +151,7 @@ public class PluginManagerImpl implements PluginManager {
 			localhostManifest.setKarafInstanceUserName("admin");
 			localhostManifest.setKarafInstancePassword("admin");
 			localhostManifest.setKarafInstanceUrl("http://localhost:8980/opennms");
-			
+
 			karafInstances.put("localhost",localhostManifest);
 			persist();
 		}
@@ -212,85 +211,99 @@ public class PluginManagerImpl implements PluginManager {
 
 		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
-		
+
 		KarafManifestEntryJaxb karafManifest = karafInstances.get(karafInstance);
 		String karafInstanceUrl=karafManifest.getKarafInstanceUrl();
 
-		KarafEntryJaxb karafEntryJaxb= new KarafEntryJaxb();
-
-		try{
-
-			// getting karaf installed licences and system id
-			LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
-			licenceManagerClient.setBaseUrl(karafInstanceUrl);
-			licenceManagerClient.setUserName(karafManifest.getKarafInstanceUserName());
-			licenceManagerClient.setPassword(karafManifest.getKarafInstancePassword());
-
-			licenceManagerClient.setBasePath(LICENCE_MGR_BASE_PATH);
-			LicenceList installedLicenceList;
-			try {
-				installedLicenceList = licenceManagerClient.getLicenceMap();
-				karafEntryJaxb.setInstalledLicenceList(installedLicenceList);
-				String systemId = licenceManagerClient.getSystemId();
-				karafEntryJaxb.setSystemId(systemId);
-			} catch (Exception e) {
-				throw new RuntimeException("problem refreshing installed licences for "
-						+ "karafInstance="+karafInstance
-						+ " karafInstanceUrl="+karafInstanceUrl
-						+ ": ", e);
+		// only update remote if accessible
+		// else just return current value
+		if (karafManifest.getRemoteIsAccessible()==null || ! karafManifest.getRemoteIsAccessible()){
+			if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
+				// if there is no entry, create an empty one
+				KarafEntryJaxb karafEntryJaxb= new KarafEntryJaxb();
+				pluginModelJaxb.getKarafDataMap().put(karafInstance, karafEntryJaxb);
 			}
+			return pluginModelJaxb.getKarafDataMap().get(karafInstance);
+			
+		} else {
 
-			// getting installed plugins
-			ProductRegisterClientRestJerseyImpl productRegisterClient = new ProductRegisterClientRestJerseyImpl();
-			productRegisterClient.setBaseUrl(karafInstanceUrl);
-			productRegisterClient.setUserName(karafManifest.getKarafInstanceUserName());
-			productRegisterClient.setPassword(karafManifest.getKarafInstancePassword());
+			KarafEntryJaxb karafEntryJaxb= new KarafEntryJaxb();
 
-			// getting karaf installed plugins
-			productRegisterClient.setBasePath(PRODUCT_REG_BASE_PATH);
+			try{
 
-			ProductSpecList installedPlugins;
-			try {
-				installedPlugins = productRegisterClient.getList();
+				// getting karaf installed licences and system id
+				LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
+				licenceManagerClient.setBaseUrl(karafInstanceUrl);
+				licenceManagerClient.setUserName(karafManifest.getKarafInstanceUserName());
+				licenceManagerClient.setPassword(karafManifest.getKarafInstancePassword());
 
-				List<LicenceEntry> licenceList = karafEntryJaxb.getInstalledLicenceList().getLicenceList();
-
-				// tests if plugins need a licence and if the licence is authenticated
-				for (ProductMetadata installedPlugin: installedPlugins.getProductSpecList()){
-					if (installedPlugin.getLicenceKeyRequired()!=null && installedPlugin.getLicenceKeyRequired() == true){
-						// if plugin needs a licence then check if licence is already verified
-						// ignores exception if no licence is installed
-						Boolean licenceKeyAuthenticated = false;
-						for (LicenceEntry licenceEntry :licenceList){
-							if (licenceEntry.getProductId().equals(installedPlugin.getProductId())){
-								// only check where licence is installed
-								// note will throw exception if licence is not installed when checked
-								licenceKeyAuthenticated = licenceManagerClient.isAuthenticated(installedPlugin.getProductId());
-							}
-						}
-						installedPlugin.setLicenceKeyAuthenticated(licenceKeyAuthenticated);
-					}
+				licenceManagerClient.setBasePath(LICENCE_MGR_BASE_PATH);
+				LicenceList installedLicenceList;
+				try {
+					installedLicenceList = licenceManagerClient.getLicenceMap();
+					karafEntryJaxb.setInstalledLicenceList(installedLicenceList);
+					String systemId = licenceManagerClient.getSystemId();
+					karafEntryJaxb.setSystemId(systemId);
+				} catch (Exception e) {
+					throw new RuntimeException("problem refreshing installed licences for "
+							+ "karafInstance="+karafInstance
+							+ " karafInstanceUrl="+karafInstanceUrl
+							+ ": ", e);
 				}
 
-				karafEntryJaxb.setInstalledPlugins(installedPlugins);
-			} catch (Exception e) {
-				throw new RuntimeException("problem refreshing installed plugins for "
-						+ "karafInstance="+karafInstance
-						+ " karafInstanceUrl="+karafInstanceUrl
-						+ ": ", e);
+				// getting installed plugins
+				ProductRegisterClientRestJerseyImpl productRegisterClient = new ProductRegisterClientRestJerseyImpl();
+				productRegisterClient.setBaseUrl(karafInstanceUrl);
+				productRegisterClient.setUserName(karafManifest.getKarafInstanceUserName());
+				productRegisterClient.setPassword(karafManifest.getKarafInstancePassword());
+
+				// getting karaf installed plugins
+				productRegisterClient.setBasePath(PRODUCT_REG_BASE_PATH);
+
+				ProductSpecList installedPlugins;
+				try {
+					installedPlugins = productRegisterClient.getList();
+
+					List<LicenceEntry> licenceList = karafEntryJaxb.getInstalledLicenceList().getLicenceList();
+
+					// tests if plugins need a licence and if the licence is authenticated
+					for (ProductMetadata installedPlugin: installedPlugins.getProductSpecList()){
+						if (installedPlugin.getLicenceKeyRequired()!=null && installedPlugin.getLicenceKeyRequired() == true){
+							// if plugin needs a licence then check if licence is already verified
+							// ignores exception if no licence is installed
+							Boolean licenceKeyAuthenticated = false;
+							for (LicenceEntry licenceEntry :licenceList){
+								if (licenceEntry.getProductId().equals(installedPlugin.getProductId())){
+									// only check where licence is installed
+									// note will throw exception if licence is not installed when checked
+									licenceKeyAuthenticated = licenceManagerClient.isAuthenticated(installedPlugin.getProductId());
+								}
+							}
+							installedPlugin.setLicenceKeyAuthenticated(licenceKeyAuthenticated);
+						}
+					}
+
+					karafEntryJaxb.setInstalledPlugins(installedPlugins);
+				} catch (Exception e) {
+					throw new RuntimeException("problem refreshing installed plugins for "
+							+ "karafInstance="+karafInstance
+							+ " karafInstanceUrl="+karafInstanceUrl
+							+ ": ", e);
+				}
+
+				karafEntryJaxb.setKarafInstanceLastUpdated(new Date());
+
+				pluginModelJaxb.getKarafDataMap().put(karafInstance, karafEntryJaxb);
+
+				persist();
+
+			} catch (Exception e){
+				throw new RuntimeException("problem updating data from karaf Instance"+karafInstance, e);
 			}
 
-			karafEntryJaxb.setKarafInstanceLastUpdated(new Date());
+			return karafEntryJaxb;
 
-			pluginModelJaxb.getKarafDataMap().put(karafInstance, karafEntryJaxb);
-
-			persist();
-
-		} catch (Exception e){
-			throw new RuntimeException("problem updating data from karaf Instance"+karafInstance, e);
-		}
-
-		return karafEntryJaxb;
+		} 
 	}
 
 	/* (non-Javadoc)
@@ -303,6 +316,7 @@ public class PluginManagerImpl implements PluginManager {
 			refreshKarafEntry(karafInstance);
 		} 
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
+		if (karafEntry==null) return null;
 		return karafEntry.getKarafInstanceLastUpdated();
 	}
 
@@ -324,6 +338,7 @@ public class PluginManagerImpl implements PluginManager {
 			refreshKarafEntry(karafInstance);
 		} 
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
+		if (karafEntry==null ) return null;
 		return karafEntry.getInstalledPlugins();
 	}
 
@@ -338,9 +353,10 @@ public class PluginManagerImpl implements PluginManager {
 			refreshKarafEntry(karafInstance);
 		} 
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
+		if (karafEntry==null ) return null;
 		return karafEntry.getInstalledLicenceList();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opennms.features.pluginmgr.PluginManager#getInstalledLicenceList(java.lang.String)
 	 */
@@ -348,10 +364,10 @@ public class PluginManagerImpl implements PluginManager {
 	public synchronized void updateInstalledLicenceList(LicenceList licenceList, String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(licenceList==null) throw new RuntimeException("licenceList cannot be null");
-		
+
 		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
-				
+
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
 			throw new RuntimeException("no karaf entry entry exists for karafInstance="+karafInstance);
 		} 
@@ -360,7 +376,7 @@ public class PluginManagerImpl implements PluginManager {
 		karafEntry.getInstalledLicenceList().getLicenceList().addAll(licenceList.getLicenceList());
 		persist();
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see org.opennms.features.pluginmgr.PluginManager#getInstalledLicenceList(java.lang.String)
 	 */
@@ -368,10 +384,10 @@ public class PluginManagerImpl implements PluginManager {
 	public synchronized void updateInstalledPlugins(ProductSpecList installedPlugins, String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(installedPlugins==null) throw new RuntimeException("installedPlugins cannot be null");
-		
+
 		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
-				
+
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
 			throw new RuntimeException("no karaf entry entry exists for karafInstance="+karafInstance);
 		} 
@@ -392,6 +408,7 @@ public class PluginManagerImpl implements PluginManager {
 			refreshKarafEntry(karafInstance);
 		} 
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
+		if (karafEntry==null ) return null;
 		return karafEntry.getSystemId();
 	}
 
@@ -407,6 +424,11 @@ public class PluginManagerImpl implements PluginManager {
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 		KarafManifestEntryJaxb karafManifest = karafInstances.get(karafInstance);
 		String karafInstanceUrl=karafManifest.getKarafInstanceUrl();
+
+		// only update remote if accessible
+		if (karafManifest.getRemoteIsAccessible()==null || ! karafManifest.getRemoteIsAccessible()){
+			throw new RuntimeException("karafInstance="+karafInstance+" is not accessable remotely");
+		}
 
 		// setting systemId for karaf instance
 		LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
@@ -446,33 +468,11 @@ public class PluginManagerImpl implements PluginManager {
 		String hexSystemIdString=Long.toHexString(systemIdValue);
 		StringCrc32Checksum stringCrc32Checksum = new StringCrc32Checksum();
 		String manifestSystemId = stringCrc32Checksum.addCRC(hexSystemIdString);
-		
+
 		this.setManifestSystemId(manifestSystemId, karafInstance);
-		
+
 		return manifestSystemId;
 
-		//TODO REMOVE - no longer using remote licence manager to do this
-
-		//		String karafInstanceUrl=karafInstances.get(karafInstance);
-		//
-		//		// setting systemId for karaf instance
-		//		LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
-		//		licenceManagerClient.setBaseUrl(karafInstanceUrl);
-		//		licenceManagerClient.setUserName(this.getPluginServerUsername()); //TODO NEED LOCAL PASSWORD / NAME
-		//		licenceManagerClient.setPassword(this.getPluginServerPassword()); //TODO NEED LOCAL PASSWORD / NAME
-		//		licenceManagerClient.setBasePath(LICENCE_MGR_BASE_PATH);
-		//
-		//		String systemId=null;
-		//		try {
-		//			systemId = licenceManagerClient.makeSystemInstance();
-		//			refreshKarafEntry(karafInstance);
-		//			return systemId;
-		//		} catch (Exception e) {
-		//			throw new RuntimeException("problem generating new random systemId for "
-		//					+ "karafInstance="+karafInstance
-		//					+ " karafInstanceUrl="+karafInstanceUrl
-		//					+ ": ", e);
-		//		}
 	}
 
 	/* (non-Javadoc)
@@ -487,6 +487,11 @@ public class PluginManagerImpl implements PluginManager {
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 		KarafManifestEntryJaxb karafManifest = karafInstances.get(karafInstance);
 		String karafInstanceUrl=karafManifest.getKarafInstanceUrl();
+
+		// only update remote if accessible
+		if (karafManifest.getRemoteIsAccessible()==null || ! karafManifest.getRemoteIsAccessible()){
+			throw new RuntimeException("karafInstance="+karafInstance+" is not accessable remotely");
+		}
 
 		// setting systemId for karaf instance
 		LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
@@ -511,7 +516,7 @@ public class PluginManagerImpl implements PluginManager {
 	 * @see org.opennms.features.pluginmgr.PluginManager#removeLicence(java.lang.String, java.lang.String)
 	 */
 	@Override
-	public void removeLicence(String selectedLicenceId, String karafInstance) {
+	public synchronized void removeLicence(String selectedLicenceId, String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(selectedLicenceId==null) throw new RuntimeException("selectedLicenceId cannot be null");
 
@@ -519,6 +524,11 @@ public class PluginManagerImpl implements PluginManager {
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 		KarafManifestEntryJaxb karafManifest = karafInstances.get(karafInstance);
 		String karafInstanceUrl=karafManifest.getKarafInstanceUrl();
+
+		// only update remote if accessible
+		if (karafManifest.getRemoteIsAccessible()==null || ! karafManifest.getRemoteIsAccessible()){
+			throw new RuntimeException("karafInstance="+karafInstance+" is not accessable remotely");
+		}
 
 		// setting systemId for karaf instance
 		LicenceManagerClientRestJerseyImpl licenceManagerClient = new LicenceManagerClientRestJerseyImpl();
@@ -551,6 +561,11 @@ public class PluginManagerImpl implements PluginManager {
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 		KarafManifestEntryJaxb karafManifest = karafInstances.get(karafInstance);
 		String karafInstanceUrl=karafManifest.getKarafInstanceUrl();
+
+		// only update remote if accessible
+		if (karafManifest.getRemoteIsAccessible()==null || ! karafManifest.getRemoteIsAccessible()){
+			throw new RuntimeException("karafInstance="+karafInstance+" is not accessable remotely");
+		}
 
 		ProductMetadata productMetadata=null;
 		for (ProductMetadata pMetadata : pluginModelJaxb.getAvailablePlugins().getProductSpecList()){
@@ -603,6 +618,11 @@ public class PluginManagerImpl implements PluginManager {
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 		KarafManifestEntryJaxb karafManifest = karafInstances.get(karafInstance);
 		String karafInstanceUrl=karafManifest.getKarafInstanceUrl();
+
+		// only update remote if accessible
+		if (karafManifest.getRemoteIsAccessible()==null || ! karafManifest.getRemoteIsAccessible()){
+			throw new RuntimeException("karafInstance="+karafInstance+" is not accessable remotely");
+		}
 
 		ProductMetadata productMetadata=null;
 		for (ProductMetadata pMetadata : pluginModelJaxb.getAvailablePlugins().getProductSpecList()){
@@ -719,9 +739,9 @@ public class PluginManagerImpl implements PluginManager {
 		if (! pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)){
 			pluginModelJaxb.getKarafManifestEntryMap().put(karafInstance, new KarafManifestEntryJaxb());
 		}
-		
+
 		KarafManifestEntryJaxb karafManifestEntryJaxb = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
-		
+
 		karafManifestEntryJaxb.setManifestSystemId(manifestSystemId);
 
 		persist();
@@ -736,28 +756,28 @@ public class PluginManagerImpl implements PluginManager {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 
 		KarafManifestEntryJaxb karafManifestEntry = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
-		
+
 		if (karafManifestEntry==null) return null;
-		
+
 		return karafManifestEntry.getManifestSystemId();
 
 	}
 
 	@Override
-	public Boolean getRemoteIsAccessible(String karafInstance) {
+	public synchronized Boolean getRemoteIsAccessible(String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
-		
+
 		KarafManifestEntryJaxb karafManifestEntry = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
-		
+
 		if (karafManifestEntry==null) return true;
-		
+
 		return karafManifestEntry.getRemoteIsAccessible();
 	}
 
 	@Override
-	public void setRemoteIsAccessible(Boolean remoteIsAccessible, String karafInstance) {
+	public synchronized void setRemoteIsAccessible(Boolean remoteIsAccessible, String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
-		
+
 		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 
@@ -765,25 +785,25 @@ public class PluginManagerImpl implements PluginManager {
 			pluginModelJaxb.getKarafManifestEntryMap().put(karafInstance, new KarafManifestEntryJaxb());
 		}
 		KarafManifestEntryJaxb karafManifestEntryJaxb = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
-		
+
 		karafManifestEntryJaxb.setRemoteIsAccessible(remoteIsAccessible);
 
 		persist();
 	}
 
 	@Override
-	public Boolean getAllowUpdateMessages(String karafInstance) {
+	public synchronized Boolean getAllowUpdateMessages(String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
-		
+
 		KarafManifestEntryJaxb karafManifestEntry = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
-		
+
 		if (karafManifestEntry==null) return true;
-		
+
 		return karafManifestEntry.getAllowUpdateMessages();
 	}
 
 	@Override
-	public void setAllowUpdateMessages(Boolean allowUpdateMessages, 	String karafInstance) {
+	public synchronized void setAllowUpdateMessages(Boolean allowUpdateMessages, 	String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 
 		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
@@ -792,12 +812,60 @@ public class PluginManagerImpl implements PluginManager {
 		if (! pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)){
 			pluginModelJaxb.getKarafManifestEntryMap().put(karafInstance, new KarafManifestEntryJaxb());
 		}
-		
+
 		KarafManifestEntryJaxb karafManifestEntryJaxb = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance);
-		
+
 		karafManifestEntryJaxb.setAllowUpdateMessages(allowUpdateMessages);
 
 		persist();
+	}
+
+	@Override
+	public synchronized void addNewKarafInstance( KarafManifestEntryJaxb karafManifestEntryJaxb) {
+		if(karafManifestEntryJaxb==null) throw new RuntimeException("cannot add new karaf instance -  karafManifestEntryJaxb cannot be null");
+
+		String karafInstance=karafManifestEntryJaxb.getKarafInstanceName();
+		if(karafInstance==null || "".equals(karafInstance))  throw new RuntimeException("cannot add new karaf instance - karafInstanceName in karafManifestEntryJaxb cannot be null or empty");
+
+		if("localhost".equals(karafInstance)) throw new RuntimeException("cannot add localhost karaf instance to plugin manager");
+
+		if (pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)){
+			throw new RuntimeException("cannot add new karaf instance - '"+karafInstance
+					+ "' is already defined in plugin manager");
+		}
+
+		pluginModelJaxb.getKarafManifestEntryMap().put(karafInstance, karafManifestEntryJaxb);
+		persist();
+
+	}
+
+	@Override
+	public synchronized void deleteKarafInstance(String karafInstance) {
+		if(karafInstance==null  || "".equals(karafInstance)) throw new RuntimeException("karafInstance cannot be null or empty");
+
+		if("localhost".equals(karafInstance)) throw new RuntimeException("cannot delete localhost karaf instance from plugin manager");
+
+		pluginModelJaxb.getKarafManifestEntryMap().remove(karafInstance);
+		pluginModelJaxb.getKarafDataMap().remove(karafInstance);
+
+		persist();
+	}
+
+	@Override
+	public synchronized void updateAccessData(String karafInstanceUrl, String karafInstanceUserName, String karafInstancePassword, String karafInstance){
+		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
+		if(karafInstanceUserName==null) throw new RuntimeException("username cannot be null");
+		if(karafInstancePassword==null) throw new RuntimeException("password cannot be null");
+
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
+
+		KarafManifestEntryJaxb ki = karafInstances.get(karafInstance);
+		ki.setKarafInstancePassword(karafInstancePassword);
+		ki.setKarafInstanceUserName(karafInstanceUserName);
+		ki.setKarafInstanceUrl(karafInstanceUrl);
+		persist();
+
 	}
 
 	/**
@@ -807,7 +875,7 @@ public class PluginManagerImpl implements PluginManager {
 		if (fileUri==null) throw new RuntimeException("persist failed - fileUri must be set for plugin manager");
 
 		try {
-
+			//TODO CREATE ROLLING FILE TO AVOID CORRUPTED FILE
 			File pluginModelFile = new File(fileUri);
 			JAXBContext jaxbContext = JAXBContext.newInstance(PluginModelJaxb.class);
 			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
@@ -861,6 +929,5 @@ public class PluginManagerImpl implements PluginManager {
 	public synchronized void close() {
 		System.out.println("Plugin Manager Shutting Down ");
 	}
-
 
 }

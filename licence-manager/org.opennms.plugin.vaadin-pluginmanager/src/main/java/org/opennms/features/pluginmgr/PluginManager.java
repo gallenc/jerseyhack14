@@ -254,6 +254,26 @@ public interface PluginManager {
 	 */
 	public void setAllowUpdateMessages(Boolean allowUpdateMessages, String karafInstance);
 	
+	/**
+	 * adds new karaf instance based on karafManifestEntryJaxb
+	 * throws exception entry already exists or name not set
+	 * @param karafManifestEntryJaxb
+	 */
+	public void addNewKarafInstance(KarafManifestEntryJaxb karafManifestEntryJaxb);
 	
+	/**
+	 * deletes karaf instance from plugin manager. Throws error and will not delete localhost instance.
+	 * @param karafInstance
+	 */
+	public void deleteKarafInstance(String karafInstance);
+
+	/** 
+	 * atomically updates password, username and instane url
+	 * @param karafInstanceUrl
+	 * @param karafInstanceUserName
+	 * @param karafInstancePassword
+	 * @param karafInstance
+	 */
+	void updateAccessData(String karafInstanceUrl, String karafInstanceUserName, String karafInstancePassword, String karafInstance);
 
 }

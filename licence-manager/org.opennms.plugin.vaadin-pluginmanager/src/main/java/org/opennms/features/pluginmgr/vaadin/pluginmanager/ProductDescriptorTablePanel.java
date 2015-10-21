@@ -1,5 +1,6 @@
 package org.opennms.features.pluginmgr.vaadin.pluginmanager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -102,7 +103,11 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 	}
 
 	public synchronized void addProductList(ProductSpecList productSpecList){
-		List<ProductMetadata> speclist = productSpecList.getProductSpecList();
+		
+		// default if empty entry
+		List<ProductMetadata> speclist = new ArrayList<ProductMetadata>();
+		
+		if (productSpecList!=null ) speclist = productSpecList.getProductSpecList();
 
 		Map<String,ProductMetadata> pmap = new TreeMap<String,ProductMetadata>();
 

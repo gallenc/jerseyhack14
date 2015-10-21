@@ -1,5 +1,6 @@
 package org.opennms.features.pluginmgr.vaadin.pluginmanager;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -98,7 +99,10 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 
 	public synchronized void addLicenceList(LicenceList licencelist){
 
-		List<LicenceEntry> llist = licencelist.getLicenceList();
+		// default if empty entry
+		List<LicenceEntry> llist= new ArrayList<LicenceEntry>();
+		
+		if (licencelist!=null) llist = licencelist.getLicenceList();
 
 		Map<String,LicenceEntry> lmap = new TreeMap<String,LicenceEntry>();
 
