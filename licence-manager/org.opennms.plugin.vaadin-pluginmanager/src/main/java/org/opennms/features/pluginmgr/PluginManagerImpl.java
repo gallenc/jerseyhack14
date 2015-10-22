@@ -151,6 +151,8 @@ public class PluginManagerImpl implements PluginManager {
 			localhostManifest.setKarafInstanceUserName("admin");
 			localhostManifest.setKarafInstancePassword("admin");
 			localhostManifest.setKarafInstanceUrl("http://localhost:8980/opennms");
+			localhostManifest.setRemoteIsAccessible(true);
+			localhostManifest.setAllowUpdateMessages(false);
 
 			karafInstances.put("localhost",localhostManifest);
 			persist();
@@ -298,7 +300,7 @@ public class PluginManagerImpl implements PluginManager {
 				persist();
 
 			} catch (Exception e){
-				throw new RuntimeException("problem updating data from karaf Instance"+karafInstance, e);
+				throw new RuntimeException("problem updating data from karaf Instance '"+karafInstance+"'" , e);
 			}
 
 			return karafEntryJaxb;
@@ -313,7 +315,7 @@ public class PluginManagerImpl implements PluginManager {
 	public synchronized Date getKarafInstanceLastUpdated(String karafInstance){
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
-			refreshKarafEntry(karafInstance);
+			return null;
 		} 
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
 		if (karafEntry==null) return null;
@@ -335,7 +337,7 @@ public class PluginManagerImpl implements PluginManager {
 	public synchronized ProductSpecList getInstalledPlugins(String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
-			refreshKarafEntry(karafInstance);
+			return null;
 		} 
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
 		if (karafEntry==null ) return null;
@@ -350,7 +352,7 @@ public class PluginManagerImpl implements PluginManager {
 	public synchronized LicenceList getInstalledLicenceList(String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
-			refreshKarafEntry(karafInstance);
+			return null;
 		} 
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
 		if (karafEntry==null ) return null;
@@ -405,7 +407,7 @@ public class PluginManagerImpl implements PluginManager {
 	public synchronized String getSystemId(String karafInstance) {
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
-			refreshKarafEntry(karafInstance);
+			return null;
 		} 
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
 		if (karafEntry==null ) return null;
@@ -852,10 +854,13 @@ public class PluginManagerImpl implements PluginManager {
 	}
 
 	@Override
-	public synchronized void updateAccessData(String karafInstanceUrl, String karafInstanceUserName, String karafInstancePassword, String karafInstance){
+	public synchronized void updateAccessData(String karafInstanceUrl, String karafInstanceUserName, String karafInstancePassword, Boolean remoteIsAccessible, Boolean allowUpdateMessages, String karafInstance){
+
 		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
 		if(karafInstanceUserName==null) throw new RuntimeException("username cannot be null");
 		if(karafInstancePassword==null) throw new RuntimeException("password cannot be null");
+		if(remoteIsAccessible==null) throw new RuntimeException("remoteIsAccessible cannot be null");
+		if(allowUpdateMessages==null) throw new RuntimeException("allowUpdateMessages cannot be null");
 
 		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
@@ -864,6 +869,9 @@ public class PluginManagerImpl implements PluginManager {
 		ki.setKarafInstancePassword(karafInstancePassword);
 		ki.setKarafInstanceUserName(karafInstanceUserName);
 		ki.setKarafInstanceUrl(karafInstanceUrl);
+		ki.setRemoteIsAccessible(remoteIsAccessible);
+		ki.setAllowUpdateMessages(allowUpdateMessages);	
+		
 		persist();
 
 	}

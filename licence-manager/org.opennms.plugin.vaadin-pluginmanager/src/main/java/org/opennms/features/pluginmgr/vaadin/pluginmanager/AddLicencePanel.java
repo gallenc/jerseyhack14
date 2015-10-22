@@ -34,7 +34,7 @@ public class AddLicencePanel extends CustomComponent {
 
 	private SessionPluginManager sessionPluginManager;
 
-	private TextArea systemMessages;
+	private SystemMessages systemMessages;
 	
 	private boolean remoteUpdateControlsEnabled=true;
 
@@ -116,17 +116,11 @@ public class AddLicencePanel extends CustomComponent {
 		this.sessionPluginManager = sessionPluginManager;
 	}
 
-	/**
-	 * @return the systemMessages
-	 */
-	public TextArea getSystemMessages() {
-		return systemMessages;
-	}
 
 	/**
 	 * @param systemMessages the systemMessages to set
 	 */
-	public void setSystemMessages(TextArea systemMessages) {
+	public void setSystemMessages(SystemMessages systemMessages) {
 		this.systemMessages = systemMessages;
 	}
 

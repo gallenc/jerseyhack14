@@ -268,12 +268,15 @@ public interface PluginManager {
 	public void deleteKarafInstance(String karafInstance);
 
 	/** 
-	 * atomically updates password, username and instane url
+	 * atomically updates password, username and instance url and whether the remote can be accessed behind a firewall
 	 * @param karafInstanceUrl
 	 * @param karafInstanceUserName
 	 * @param karafInstancePassword
+	 * @param remoteIsAccessible
+	 * @param allowUpdateMessages
 	 * @param karafInstance
 	 */
-	void updateAccessData(String karafInstanceUrl, String karafInstanceUserName, String karafInstancePassword, String karafInstance);
+	void updateAccessData(String karafInstanceUrl, String karafInstanceUserName, String karafInstancePassword, Boolean remoteIsAccessible, Boolean allowUpdateMessages, String karafInstance);
+
 
 }

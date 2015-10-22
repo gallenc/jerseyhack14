@@ -266,8 +266,8 @@ public class SessionPluginManager {
 		}
 	}
 
-	public void updateAccessData(String karafInstanceUrl, String karafInstanceUserName, String karafInstancePassword){
-		pluginManager.updateAccessData(karafInstanceUrl, karafInstanceUserName, karafInstancePassword, karafInstance);
+	public void updateAccessData(String karafInstanceUrl, String karafInstanceUserName, String karafInstancePassword, Boolean remoteIsAccessible, Boolean allowUpdateMessages ){
+		pluginManager.updateAccessData(karafInstanceUrl, karafInstanceUserName, karafInstancePassword, remoteIsAccessible, allowUpdateMessages,	karafInstance);
 	}
 
 	

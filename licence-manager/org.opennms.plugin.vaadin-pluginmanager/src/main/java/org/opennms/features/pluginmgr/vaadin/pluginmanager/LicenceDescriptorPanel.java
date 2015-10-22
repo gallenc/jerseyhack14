@@ -60,6 +60,24 @@ public class LicenceDescriptorPanel extends CustomComponent {
 	private TextArea licenceTextArea;
 
 	private static final long serialVersionUID = 1L;
+	
+	private boolean noUpdate=true; // sets fields to read only
+	
+	/**
+	 * if true sets all fields to read only
+	 * @return
+	 */
+	public boolean getNoUpdate() {
+		return noUpdate;
+	}
+
+	/**
+	 * if true sets all fields to read only
+	 * @param noUpdate
+	 */
+	public void setNoUpdate(boolean noUpdate) {
+		this.noUpdate = noUpdate;
+	}
 
 
 	/**
@@ -104,18 +122,39 @@ public class LicenceDescriptorPanel extends CustomComponent {
 				success=false;
 			} else success=true;
 
+			productIdTextField.setReadOnly(false);
 			productIdTextField.setValue( (licenceMetadata.getProductId()==null )?  "":licenceMetadata.getProductId());
+			productIdTextField.setReadOnly(noUpdate);
+
+			featureRepositoryTextField.setReadOnly(false);
 			featureRepositoryTextField.setValue( (licenceMetadata.getFeatureRepository()==null )?  "":licenceMetadata.getFeatureRepository());
-
+			featureRepositoryTextField.setReadOnly(noUpdate);
+			
 			Format formatter = new SimpleDateFormat("yyyy-MM-dd");
+			
+			startDateTextField.setReadOnly(false);
 			startDateTextField.setValue( (licenceMetadata.getStartDate()==null )?  "": formatter.format(licenceMetadata.getStartDate()));
+			startDateTextField.setReadOnly(noUpdate);
+			
+			expiryDateTextField.setReadOnly(false);
 			expiryDateTextField.setValue( (licenceMetadata.getExpiryDate()==null )?  "": formatter.format(licenceMetadata.getExpiryDate()));
+			expiryDateTextField.setReadOnly(noUpdate);
 
+			durationTextField.setReadOnly(false);
 			durationTextField.setValue( (licenceMetadata.getDuration()==null )?  "":licenceMetadata.getDuration());
+			durationTextField.setReadOnly(noUpdate);
+			
+			licenseeTextField.setReadOnly(false);
 			licenseeTextField.setValue( (licenceMetadata.getLicensee()==null )?  "":licenceMetadata.getLicensee());
+			licenseeTextField.setReadOnly(noUpdate);
+			
+			licensorTextField.setReadOnly(false);
 			licensorTextField.setValue( (licenceMetadata.getLicensor()==null )?  "":licenceMetadata.getLicensor());
+			licensorTextField.setReadOnly(noUpdate);
 
+			maxSizeSystemIdsTextField.setReadOnly(false);
 			maxSizeSystemIdsTextField.setValue( (licenceMetadata.getMaxSizeSystemIds()==null )?  "": licenceMetadata.getMaxSizeSystemIds());
+			maxSizeSystemIdsTextField.setReadOnly(noUpdate);
 
 			// display systemIds if present
 			systemIdsVerticalLayout.removeAllComponents();
@@ -172,6 +211,7 @@ public class LicenceDescriptorPanel extends CustomComponent {
 					optionField.setCaption(option.getName());
 					optionField.setValue(option.getValue());
 					optionField.setDescription(option.getDescription());
+					optionField.setReadOnly(noUpdate);
 					licenceOptionsVerticalLayout.addComponent(optionField);
 				}
 			}

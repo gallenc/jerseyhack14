@@ -30,7 +30,7 @@ public class InstalledPluginControlsPanel extends CustomComponent {
 
 	private ProductDescriptorTablePanel productDescriptorTablePanel=null;
 
-	private TextArea systemMessages;
+	private SystemMessages systemMessages;
 
 	private boolean remoteUpdateControlsEnabled=true;
 
@@ -111,7 +111,7 @@ public class InstalledPluginControlsPanel extends CustomComponent {
 		
 	}
 
-	public void setSystemMessages(TextArea systemMessages) {
+	public void setSystemMessages(SystemMessages systemMessages) {
 		this.systemMessages=systemMessages;
 
 	}

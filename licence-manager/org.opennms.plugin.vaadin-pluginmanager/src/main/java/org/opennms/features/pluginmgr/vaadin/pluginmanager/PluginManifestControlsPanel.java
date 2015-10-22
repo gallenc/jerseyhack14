@@ -30,7 +30,7 @@ public class PluginManifestControlsPanel extends CustomComponent {
 
 	private ProductDescriptorTablePanel productDescriptorTablePanel=null;
 
-	private TextArea systemMessages;
+	private SystemMessages systemMessages;
 	
 	private PluginManagerUIMainPanel pluginManagerUIMainPanel=null;
 	
@@ -108,7 +108,7 @@ public class PluginManifestControlsPanel extends CustomComponent {
 		
 	}
 
-	public void setSystemMessages(TextArea systemMessages) {
+	public void setSystemMessages(SystemMessages systemMessages) {
 		this.systemMessages=systemMessages;
 
 	}

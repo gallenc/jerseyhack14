@@ -27,7 +27,7 @@ public class InstalledLicencesControlsPanel extends CustomComponent {
 
 	private LicenceDescriptorTablePanel licenceDescriptorTablePanel=null;
 
-	private TextArea systemMessages;
+	private SystemMessages systemMessages;
 
 	private boolean remoteUpdateControlsEnabled=true;
 
@@ -80,7 +80,7 @@ public class InstalledLicencesControlsPanel extends CustomComponent {
 		});
 	}
 
-	public void setSystemMessages(TextArea systemMessages) {
+	public void setSystemMessages(SystemMessages systemMessages) {
 		this.systemMessages=systemMessages;
 
 	}
