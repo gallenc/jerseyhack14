@@ -246,6 +246,8 @@ public class PluginManagerImpl implements PluginManager {
 					karafEntryJaxb.setInstalledLicenceList(installedLicenceList);
 					String systemId = licenceManagerClient.getSystemId();
 					karafEntryJaxb.setSystemId(systemId);
+					// if the remote has a system id and manifest does not, set manifest to remote value
+					if(karafManifest.getManifestSystemId()==null) karafManifest.setManifestSystemId(systemId);
 				} catch (Exception e) {
 					throw new RuntimeException("problem refreshing installed licences for "
 							+ "karafInstance="+karafInstance
