@@ -1,7 +1,6 @@
 package org.opennms.features.pluginmgr.vaadin.pluginmanager;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -176,13 +175,14 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 		mainLayout = new HorizontalLayout();
 		mainLayout.setCaption("Product Details");
 		mainLayout.setImmediate(true);
-		mainLayout.setWidth("-1px");
-		mainLayout.setHeight("-1px");
+		mainLayout.setWidth("100%");
+		mainLayout.setHeight("100%");
 		mainLayout.setMargin(true);
+		mainLayout.setSpacing(true);
 		
 		// top-level component properties
-		setWidth("-1px");
-		setHeight("-1px");
+		setWidth("100.0%");
+		setHeight("100.0%");
 		
 		// verticalLayout_2
 		verticalLayout_2 = buildVerticalLayout_2();
@@ -203,24 +203,23 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 		// common part: create layout
 		verticalLayout_2 = new VerticalLayout();
 		verticalLayout_2.setImmediate(true);
-		verticalLayout_2.setWidth("-1px");
-		verticalLayout_2.setHeight("-1px");
+		verticalLayout_2.setWidth("100.0%");
+		verticalLayout_2.setHeight("100.0%");
 		verticalLayout_2.setMargin(true);
 		
 		// productListSelect
 		productListSelect = new ListSelect();
 		productListSelect.setCaption("Product Id");
 		productListSelect.setImmediate(true);
-		productListSelect.setWidth("-1px");
-		productListSelect.setHeight("-1px");
+		productListSelect.setWidth("100.0%");
+		productListSelect.setHeight("100.0%");
 		verticalLayout_2.addComponent(productListSelect);
-		verticalLayout_2.setExpandRatio(productListSelect, 1.0f);
 		
 		// controlsVerticalLayout
 		controlsVerticalLayout = new VerticalLayout();
 		controlsVerticalLayout.setImmediate(true);
-		controlsVerticalLayout.setWidth("-1px");
-		controlsVerticalLayout.setHeight("-1px");
+		controlsVerticalLayout.setWidth("100.0%");
+		controlsVerticalLayout.setHeight("100.0%");
 		controlsVerticalLayout.setMargin(false);
 		verticalLayout_2.addComponent(controlsVerticalLayout);
 		
@@ -233,15 +232,15 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 		// common part: create layout
 		verticalLayout_1 = new VerticalLayout();
 		verticalLayout_1.setImmediate(true);
-		verticalLayout_1.setWidth("-1px");
-		verticalLayout_1.setHeight("-1px");
+		verticalLayout_1.setWidth("100.0%");
+		verticalLayout_1.setHeight("100.0%");
 		verticalLayout_1.setMargin(false);
 		
 		// productPanels
 		productPanels = new VerticalLayout();
 		productPanels.setImmediate(true);
-		productPanels.setWidth("-1px");
-		productPanels.setHeight("-1px");
+		productPanels.setWidth("100.0%");
+		productPanels.setHeight("100.0%");
 		productPanels.setMargin(false);
 		verticalLayout_1.addComponent(productPanels);
 		verticalLayout_1.setExpandRatio(productPanels, 1.0f);

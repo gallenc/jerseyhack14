@@ -141,19 +141,20 @@ public class ProductDescriptorPanel extends CustomComponent {
 		// common part: create layout
 		mainLayout = new VerticalLayout();
 		mainLayout.setImmediate(true);
-		mainLayout.setWidth("-1px");
-		mainLayout.setHeight("-1px");
+		mainLayout.setWidth("100%");
+		mainLayout.setHeight("100%");
 		mainLayout.setMargin(true);
+		mainLayout.setSpacing(true);
 		
 		// top-level component properties
-		setWidth("-1px");
-		setHeight("-1px");
+		setWidth("100.0%");
+		setHeight("100.0%");
 		
 		// productNameTextField
 		productNameTextField = new TextField();
 		productNameTextField.setCaption("Product Name");
 		productNameTextField.setImmediate(true);
-		productNameTextField.setWidth("-1px");
+		productNameTextField.setWidth("100.0%");
 		productNameTextField.setHeight("-1px");
 		mainLayout.addComponent(productNameTextField);
 		
@@ -161,7 +162,7 @@ public class ProductDescriptorPanel extends CustomComponent {
 		productIdTextField = new TextField();
 		productIdTextField.setCaption("Product Id");
 		productIdTextField.setImmediate(true);
-		productIdTextField.setWidth("-1px");
+		productIdTextField.setWidth("100.0%");
 		productIdTextField.setHeight("-1px");
 		mainLayout.addComponent(productIdTextField);
 		
@@ -169,15 +170,15 @@ public class ProductDescriptorPanel extends CustomComponent {
 		productDescriptionTextArea = new TextArea();
 		productDescriptionTextArea.setCaption("Product Description");
 		productDescriptionTextArea.setImmediate(true);
-		productDescriptionTextArea.setWidth("-1px");
-		productDescriptionTextArea.setHeight("-1px");
+		productDescriptionTextArea.setWidth("100.0%");
+		productDescriptionTextArea.setHeight("6.0em");
 		mainLayout.addComponent(productDescriptionTextArea);
 		
 		// productUrlTextField
 		productUrlTextField = new TextField();
 		productUrlTextField.setCaption("Product URL");
 		productUrlTextField.setImmediate(true);
-		productUrlTextField.setWidth("-1px");
+		productUrlTextField.setWidth("100.0%");
 		productUrlTextField.setHeight("-1px");
 		mainLayout.addComponent(productUrlTextField);
 		
@@ -185,7 +186,7 @@ public class ProductDescriptorPanel extends CustomComponent {
 		featureRepositoryTextField = new TextField();
 		featureRepositoryTextField.setCaption("Feature Repository URL");
 		featureRepositoryTextField.setImmediate(true);
-		featureRepositoryTextField.setWidth("-1px");
+		featureRepositoryTextField.setWidth("100.0%");
 		featureRepositoryTextField.setHeight("-1px");
 		mainLayout.addComponent(featureRepositoryTextField);
 		
@@ -193,7 +194,7 @@ public class ProductDescriptorPanel extends CustomComponent {
 		licenceTypeTextField = new TextField();
 		licenceTypeTextField.setCaption("Licence Type");
 		licenceTypeTextField.setImmediate(true);
-		licenceTypeTextField.setWidth("-1px");
+		licenceTypeTextField.setWidth("100.0%");
 		licenceTypeTextField.setHeight("-1px");
 		licenceTypeTextField.setNullSettingAllowed(true);
 		mainLayout.addComponent(licenceTypeTextField);
@@ -202,7 +203,7 @@ public class ProductDescriptorPanel extends CustomComponent {
 		organizationTextField = new TextField();
 		organizationTextField.setCaption("Organization");
 		organizationTextField.setImmediate(true);
-		organizationTextField.setWidth("-1px");
+		organizationTextField.setWidth("100.0%");
 		organizationTextField.setHeight("-1px");
 		organizationTextField.setNullSettingAllowed(true);
 		mainLayout.addComponent(organizationTextField);
