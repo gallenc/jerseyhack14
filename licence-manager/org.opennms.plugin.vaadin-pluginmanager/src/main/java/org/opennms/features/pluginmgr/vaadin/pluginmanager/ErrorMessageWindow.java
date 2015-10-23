@@ -14,18 +14,20 @@ public class ErrorMessageWindow  extends Window {
 		public ErrorMessageWindow(SystemMessages systemMessages) {
 	        super("Full Log Message"); // Set window caption
 	        center();
+	        setHeight("75%");
+	        setWidth("75%");
 	        
 	        // Some basic content for the window
 	        VerticalLayout content = new VerticalLayout();
-	        content.setWidth("100%");
-			content.setHeight("100%");
-			
+	        content.setSizeFull();
+
 	        TextArea ta= new TextArea();
 	        ta.setWordwrap(true);
 			ta.setImmediate(true);
 			ta.setWidth("100%");
 			ta.setHeight("100%");
 	        content.addComponent(ta);
+			content.setExpandRatio(ta, 1.0f);
 	        
 	        if (systemMessages!=null) {
 	        	ta.setValue(systemMessages.getMessage());

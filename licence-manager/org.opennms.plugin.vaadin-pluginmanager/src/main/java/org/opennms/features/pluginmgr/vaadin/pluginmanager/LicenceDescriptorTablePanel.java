@@ -135,7 +135,8 @@ public class LicenceDescriptorTablePanel extends CustomComponent {
 		}
 		
 		// update/remove product ids from list select without throwing value change event
-		for (Object itemid: licenceListSelect.getItemIds()){
+		List<Object> itemIds = new ArrayList<Object>(licenceListSelect.getItemIds());
+		for (Object itemid: itemIds ){
 			if (! lmap.keySet().contains(itemid)) licenceListSelect.removeItem(itemid);
 		}
 

@@ -2,6 +2,8 @@ package org.opennms.features.pluginmgr.vaadin.pluginmanager;
 
 import java.text.Format;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import org.opennms.features.pluginmgr.SessionPluginManager;
@@ -219,17 +221,6 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 	}
 
 	public void updateDisplayValues(){
-		try{
-			refreshPanelValues(); // enter the panel values we already have
-			sessionPluginManager.refreshKarafEntry(); // update the values if we can
-			refreshPanelValues(); // refresh the display with new values if exception not thrown
-		} catch (Exception e){
-			systemMessages.setValue("\nproblem updating display values for "
-					+sessionPluginManager.getKarafInstance()+" :\n"+SimpleStackTrace.errorToString(e));
-		}
-	}
-
-	public void refreshPanelValues(){
 
 		try{
 
@@ -238,7 +229,8 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 			for (String instanceName: instanceNames ){
 				if (!karafListSelect.containsId(instanceName)) karafListSelect.addItem(instanceName);
 			};
-			for (Object itemid: karafListSelect.getItemIds()){
+			List<Object> itemIds = new ArrayList<Object>(karafListSelect.getItemIds());
+			for (Object itemid: itemIds){
 				if (! instanceNames.contains(itemid)) karafListSelect.removeItem(itemid);
 			}
 
@@ -320,7 +312,9 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		systemMessages.setMessageTextArea(this.systemMessagesTextArea);
 		
 		seeFullMessageButton.addClickListener(new ClickListener() {
-		    public void buttonClick(ClickEvent event) {
+			private static final long serialVersionUID = 1L;
+
+			public void buttonClick(ClickEvent event) {
 		        ErrorMessageWindow sub = new ErrorMessageWindow(systemMessages);
 		        // Add it to the root component
 		        UI.getCurrent().addWindow(sub);
@@ -374,6 +368,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 							+" updated to "+newManifestSystemId;
 
 					systemMessages.setValue(message);
+					sessionPluginManager.refreshKarafEntry(); // update the values if we can
 					updateDisplayValues();
 				} catch (Exception e){
 					systemMessages.setValue(message +"\nproblem updating systemId for karafInstance "
@@ -510,7 +505,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 				systemMessages.setValue("");
 				//reload data from plugin model
 				try{
-					sessionPluginManager.refreshKarafEntry();
+					sessionPluginManager.refreshKarafEntry(); // update the values if we can
 					systemMessages.setValue("karaf data for karaf instance "+ sessionPluginManager.getKarafInstance()+" successfully reloaded");
 				} catch (Exception e){
 					systemMessages.setValue("problem reloading data for karaf instance "+ sessionPluginManager.getKarafInstance()+" : "+SimpleStackTrace.errorToString(e));

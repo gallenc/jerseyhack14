@@ -1,6 +1,7 @@
 package org.opennms.features.pluginmgr.vaadin.pluginmanager;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -138,7 +139,8 @@ public class ProductDescriptorTablePanel extends CustomComponent {
 		}
 		
 		// update/remove product ids from list select without throwing value change event
-		for (Object itemid: productListSelect.getItemIds()){
+		List<Object> itemIds = new ArrayList<Object>(productListSelect.getItemIds());
+		for (Object itemid: itemIds){
 			if (! pmap.keySet().contains(itemid)) productListSelect.removeItem(itemid);
 		}
 		
