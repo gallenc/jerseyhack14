@@ -5,8 +5,8 @@
   <parent>
     <groupId>org.opennms.features.topology.build</groupId>
     <artifactId>compiled-bundle-settings</artifactId>
-    <!-- <version>17.0.0-SNAPSHOT</version> -->
-    <version>16.0.0</version>
+    <version>17.0.0-SNAPSHOT</version>
+    <!-- <version>16.0.0</version> -->
   </parent>
 
   <groupId>org.opennms.plugins</groupId>
@@ -177,6 +177,12 @@
       <groupId>org.opennms</groupId>
       <artifactId>opennms-web-api</artifactId>
       <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.ws.rs</groupId>
+          <artifactId>javax.ws.rs-api</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
 
     <dependency>
@@ -232,6 +238,38 @@
     <!-- <scope>provided</scope> -->
     <!-- </dependency> -->
 
+    <!-- jersey dependenceis - override -->
+    <!-- opennms Jersey implementation in Lib directory -->
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-server</artifactId>
+      <version>1.19</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-servlet</artifactId>
+      <!-- <version>1.18.1</version> NOTE the version in OpenNMS 16.0.0.0 is 1.18 -->
+      <version>1.19</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-core</artifactId>
+      <version>1.19</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>1.19</version>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
+      <version>1.1.1</version>
+    </dependency>
 
   </dependencies>
 

@@ -33,11 +33,12 @@
           <instructions>
             <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
             <Bundle-Version>${project.version}</Bundle-Version>
-<!--             <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency> -->
+            <!-- <Embed-Dependency>*;scope=compile|runtime</Embed-Dependency> -->
             <Export-Package>
-            org.opennms.karaf*;version=${project.version}
+              org.opennms.karaf*;version=${project.version}
             </Export-Package>
             <Import-Package>
+              com.sun.ws.rs.ext,
               org.apache.felix.service.command,
               org.apache.felix.gogo.commands,
               org.apache.karaf.shell.console,
@@ -115,15 +116,22 @@
       <artifactId>jersey-core</artifactId>
       <scope>compile</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-client</artifactId>
       <scope>compile</scope>
     </dependency>
-    
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
+      <scope>compile</scope>
+    </dependency>
+
+
+
   </dependencies>
-  
+
   <distributionManagement>
     <repository>
       <id>osgi-licenced-products</id>

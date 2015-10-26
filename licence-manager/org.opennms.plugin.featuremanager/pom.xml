@@ -36,26 +36,32 @@
       <dependency>
         <groupId>com.sun.jersey</groupId>
         <artifactId>jersey-server</artifactId>
-        <version>1.18.1</version>
+        <version>1.19</version>
       </dependency>
 
       <dependency>
         <groupId>com.sun.jersey</groupId>
         <artifactId>jersey-servlet</artifactId>
-        <!-- <version>1.18.1</version> NOTE the version in OpenNMS 14.0.0.0 is 1.18 -->
-        <version>1.18</version>
+        <!-- <version>1.18.1</version> NOTE the version in OpenNMS 16.0.0.0 is 1.18 -->
+        <version>1.19</version>
       </dependency>
 
       <dependency>
         <groupId>com.sun.jersey</groupId>
         <artifactId>jersey-core</artifactId>
-        <version>1.18</version>
+        <version>1.19</version>
       </dependency>
 
       <dependency>
         <groupId>com.sun.jersey</groupId>
         <artifactId>jersey-client</artifactId>
-        <version>1.18</version>
+        <version>1.19</version>
+      </dependency>
+      
+      <dependency>
+        <groupId>javax.ws.rs</groupId>
+        <artifactId>jsr311-api</artifactId>
+        <version>1.1.1</version>
       </dependency>
 
       <dependency>

@@ -6,9 +6,9 @@
     <artifactId>org.opennms.plugin.featuremanager.parent</artifactId>
     <version>1.0-SNAPSHOT</version>
   </parent>
-  
+
   <modelVersion>4.0.0</modelVersion>
-  
+
   <artifactId>org.opennms.plugin.featuremanager</artifactId>
   <packaging>bundle</packaging>
 
@@ -36,10 +36,16 @@
       <artifactId>jersey-core</artifactId>
       <scope>compile</scope>
     </dependency>
-    
+
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-client</artifactId>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
       <scope>compile</scope>
     </dependency>
 
@@ -63,7 +69,7 @@
             <Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
             <Bundle-Version>${project.version}</Bundle-Version>
             <Export-Package>
-            org.opennms.karaf.featuremgr*;version=${project.version}
+              org.opennms.karaf.featuremgr*;version=${project.version}
             </Export-Package>
             <Import-Package>
               org.apache.karaf.features*;version="[2,4)",
