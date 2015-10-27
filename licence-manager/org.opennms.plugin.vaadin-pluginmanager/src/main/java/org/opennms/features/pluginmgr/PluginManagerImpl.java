@@ -2,6 +2,7 @@ package org.opennms.features.pluginmgr;
 
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Random;
@@ -226,7 +227,7 @@ public class PluginManagerImpl implements PluginManager {
 				pluginModelJaxb.getKarafDataMap().put(karafInstance, karafEntryJaxb);
 			}
 			return pluginModelJaxb.getKarafDataMap().get(karafInstance);
-			
+
 		} else {
 
 			KarafEntryJaxb karafEntryJaxb= new KarafEntryJaxb();
@@ -572,12 +573,30 @@ public class PluginManagerImpl implements PluginManager {
 		}
 
 		ProductMetadata productMetadata=null;
-		for (ProductMetadata pMetadata : pluginModelJaxb.getAvailablePlugins().getProductSpecList()){
-			if (selectedProductId.equals(pMetadata.getProductId())) {
-				productMetadata=pMetadata;
-				break;
+
+		// try manifest plugins list first
+		if (pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance)!=null){
+			ProductSpecList karafInstancePluginManifest = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance).getPluginManifest();
+			if (karafInstancePluginManifest!=null){
+				for (ProductMetadata pMetadata : karafInstancePluginManifest.getProductSpecList()){
+					if (selectedProductId.equals(pMetadata.getProductId())) {
+						productMetadata=pMetadata;
+						break;
+					}
+				}
 			}
 		}
+
+		// then try available plugins
+		if (productMetadata==null) {
+			for (ProductMetadata pMetadata : pluginModelJaxb.getAvailablePlugins().getProductSpecList()){
+				if (selectedProductId.equals(pMetadata.getProductId())) {
+					productMetadata=pMetadata;
+					break;
+				}
+			}
+		}
+
 		if(productMetadata==null) throw new RuntimeException("cannot install unknown available productId="+selectedProductId);
 		if(productMetadata.getFeatureRepository()==null) throw new RuntimeException("feature repository cannot be null for productId="+selectedProductId);
 
@@ -628,16 +647,6 @@ public class PluginManagerImpl implements PluginManager {
 			throw new RuntimeException("karafInstance="+karafInstance+" is not accessable remotely");
 		}
 
-		ProductMetadata productMetadata=null;
-		for (ProductMetadata pMetadata : pluginModelJaxb.getAvailablePlugins().getProductSpecList()){
-			if (selectedProductId.equals(pMetadata.getProductId())) {
-				productMetadata=pMetadata;
-				break;
-			}
-		}
-		if(productMetadata==null) throw new RuntimeException("cannot install unknown available productId="+selectedProductId);
-		if(productMetadata.getFeatureRepository()==null) throw new RuntimeException("feature repository cannot be null for productId="+selectedProductId);
-
 		FeaturesServiceClientRestJerseyImpl featuresServiceClient = new FeaturesServiceClientRestJerseyImpl(); 
 		featuresServiceClient.setBaseUrl(karafInstanceUrl);
 		featuresServiceClient.setUserName(karafManifest.getKarafInstanceUserName());
@@ -652,7 +661,7 @@ public class PluginManagerImpl implements PluginManager {
 				version = selectedProductId.substring(i+1);
 				name =  selectedProductId.substring(0, selectedProductId.indexOf('/'));
 			}
-			//add feature
+			//remove feature
 			featuresServiceClient.featuresUninstall(name, version);
 			refreshKarafEntry(karafInstance);
 		} catch (Exception e) {
@@ -703,8 +712,56 @@ public class PluginManagerImpl implements PluginManager {
 		if (! pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)) {
 			pluginModelJaxb.getKarafManifestEntryMap().put(karafInstance, new KarafManifestEntryJaxb());
 		}
-		pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance).getPluginManifest().getProductSpecList().add(productMetadata);
+
+		ProductSpecList karafInstancePluginManifest = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance).getPluginManifest();
+
+		// remove any product metadata with duplicate productId's from the list
+		String productMetadataId=productMetadata.getProductId();
+		ArrayList<ProductMetadata> searchlist = new ArrayList<ProductMetadata>(karafInstancePluginManifest.getProductSpecList());
+		for (ProductMetadata searchProductMetadata : searchlist){
+			if (productMetadataId.equals(searchProductMetadata.getProductId())) {
+				karafInstancePluginManifest.getProductSpecList().remove(searchProductMetadata);
+			}
+		}
+
+		karafInstancePluginManifest.getProductSpecList().add(productMetadata);
+
 		persist();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.opennms.features.pluginmgr.PluginManager#addUserDefinedPluginToManifest(org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata, java.lang.String)
+	 */
+	@Override
+	public synchronized void addUserDefinedPluginToManifest(ProductMetadata newProductMetadata, String karafInstance) {
+		if(karafInstance==null) throw new RuntimeException("karafInstance cannot be null");
+		if(newProductMetadata==null) throw new RuntimeException("newProductMetadata cannot be null");
+		if(newProductMetadata.getProductId()==null || "".equals(newProductMetadata.getProductId())) 
+			throw new RuntimeException("newProductMetadata productId cannot be null or empty string");
+		if(newProductMetadata.getFeatureRepository()==null || "".equals(newProductMetadata.getFeatureRepository())) 
+			throw new RuntimeException("newProductMetadata featureRepository cannot be null or empty string");
+
+		SortedMap<String, KarafManifestEntryJaxb> karafInstances = getKarafInstances();
+		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
+
+		if (! pluginModelJaxb.getKarafManifestEntryMap().containsKey(karafInstance)) {
+			pluginModelJaxb.getKarafManifestEntryMap().put(karafInstance, new KarafManifestEntryJaxb());
+		}
+
+		ProductSpecList karafInstancePluginManifest = pluginModelJaxb.getKarafManifestEntryMap().get(karafInstance).getPluginManifest();
+
+		// remove any product metadata with duplicate productId's from the list
+		String newProductMetadataId=newProductMetadata.getProductId();
+		ArrayList<ProductMetadata> searchlist = new ArrayList<ProductMetadata>(karafInstancePluginManifest.getProductSpecList());
+		for (ProductMetadata searchProductMetadata : searchlist){
+			if (newProductMetadataId.equals(searchProductMetadata.getProductId())) {
+				karafInstancePluginManifest.getProductSpecList().remove(searchProductMetadata);
+			}
+		}
+
+		karafInstancePluginManifest.getProductSpecList().add(newProductMetadata);
+		persist();
+
 	}
 
 	/* (non-Javadoc)
@@ -873,7 +930,7 @@ public class PluginManagerImpl implements PluginManager {
 		ki.setKarafInstanceUrl(karafInstanceUrl);
 		ki.setRemoteIsAccessible(remoteIsAccessible);
 		ki.setAllowUpdateMessages(allowUpdateMessages);	
-		
+
 		persist();
 
 	}
@@ -939,5 +996,7 @@ public class PluginManagerImpl implements PluginManager {
 	public synchronized void close() {
 		System.out.println("Plugin Manager Shutting Down ");
 	}
+
+
 
 }

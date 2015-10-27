@@ -8,6 +8,7 @@ import javax.xml.bind.annotation.XmlElement;
 import org.opennms.features.pluginmgr.model.KarafEntryJaxb;
 import org.opennms.features.pluginmgr.model.KarafManifestEntryJaxb;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
+import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
 
 public interface PluginManager {
@@ -277,6 +278,15 @@ public interface PluginManager {
 	 * @param karafInstance
 	 */
 	void updateAccessData(String karafInstanceUrl, String karafInstanceUserName, String karafInstancePassword, Boolean remoteIsAccessible, Boolean allowUpdateMessages, String karafInstance);
+
+	/**
+	 * adds a user defined plugin directly to the manifest for the given karaf instance
+	 * the plugin is defined in the productMetadata
+	 * @param productMetadata
+	 * @param karafInstance
+	 */
+	public void addUserDefinedPluginToManifest(ProductMetadata productMetadata,
+			String karafInstance);
 
 
 }

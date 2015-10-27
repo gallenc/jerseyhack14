@@ -61,6 +61,7 @@ public class ProductDescriptorPanel extends CustomComponent {
 
 		// TODO add user code here
 		licenceAuthenticatedLabel.setContentMode(ContentMode.HTML);
+		licenceAuthenticatedLabel.setValue("");
 
 	}
 	

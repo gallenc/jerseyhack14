@@ -1075,7 +1075,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 		systemMessagesTextArea.setCaption("System Messages");
 		systemMessagesTextArea.setImmediate(true);
 		systemMessagesTextArea.setWidth("100.0%");
-		systemMessagesTextArea.setHeight("2.0em");
+		systemMessagesTextArea.setHeight("6.0em");
 		verticalLayout_7.addComponent(systemMessagesTextArea);
 		
 		// seeFullMessageButton

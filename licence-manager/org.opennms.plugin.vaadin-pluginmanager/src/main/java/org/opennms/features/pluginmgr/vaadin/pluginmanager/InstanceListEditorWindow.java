@@ -1,14 +1,8 @@
 package org.opennms.features.pluginmgr.vaadin.pluginmanager;
 
 import org.opennms.features.pluginmgr.SessionPluginManager;
-import org.opennms.features.pluginmgr.vaadin.config.SimpleStackTrace;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 
-import com.vaadin.ui.Button;
-import com.vaadin.ui.Button.ClickEvent;
-import com.vaadin.ui.Button.ClickListener;
-import com.vaadin.ui.Label;
-import com.vaadin.ui.TextArea;
 import com.vaadin.ui.VerticalLayout;
 import com.vaadin.ui.Window;
 

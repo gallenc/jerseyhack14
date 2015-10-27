@@ -5,6 +5,7 @@ import java.util.SortedMap;
 
 import org.opennms.features.pluginmgr.model.KarafManifestEntryJaxb;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
+import org.opennms.karaf.licencemgr.metadata.jaxb.ProductMetadata;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
 import org.osgi.service.blueprint.container.BlueprintContainer;
 
@@ -191,6 +192,11 @@ public class SessionPluginManager {
 	
 	public void addPluginToManifest(String selectedProductId) {
 		pluginManager.addPluginToManifest(selectedProductId, karafInstance);
+		
+	}
+	
+	public void addUserDefinedPluginToManifest(ProductMetadata productMetadata) {
+		pluginManager.addUserDefinedPluginToManifest(productMetadata, karafInstance);
 		
 	}
 	
