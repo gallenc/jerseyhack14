@@ -26,33 +26,38 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.pluginmgr.vaadin.config;
+package org.opennms.features.pluginmgr.vaadin.config.karaf;
 
 
 import java.util.Map;
 
+import org.opennms.features.pluginmgr.PluginManager;
+import org.opennms.features.pluginmgr.SessionPluginManager;
 import org.opennms.vaadin.extender.AbstractApplicationFactory;
-import org.opennms.web.api.OnmsHeaderProvider;
+import org.osgi.service.blueprint.container.BlueprintContainer;
 
 import com.vaadin.ui.UI;
 
 /**
  * A factory for creating Plugin Manager Administration Application objects.
  */
-public class SimpleIframeApplicationFactory extends AbstractApplicationFactory {
+public class PluginManagerAdminApplicationFactory extends AbstractApplicationFactory {
 	
-	private String iframePageUrl;
-	
-	private Map<String, String> headerLinks;
-	
-    private OnmsHeaderProvider m_headerProvider;
+    
+    private PluginManager pluginManager;
+    
+    private BlueprintContainer blueprintContainer;
+    
+    // headerLinks map of key= name and value=url for links to be placed in header of page
+    private Map<String, String> headerLinks;
 
-	public String getIframePageUrl() {
-		return iframePageUrl;
+	
+	public PluginManager getPluginManager() {
+		return pluginManager;
 	}
 
-	public void setIframePageUrl(String iframePageUrl) {
-		this.iframePageUrl = iframePageUrl;
+	public void setPluginManager(PluginManager pluginManager) {
+		this.pluginManager = pluginManager;
 	}
 	
 	/**
@@ -63,6 +68,7 @@ public class SimpleIframeApplicationFactory extends AbstractApplicationFactory {
 		return headerLinks;
 	}
 
+
 	/**
 	 * @param headerLinks map of key= name and value=url for links to be placed in header of page
 	 */
@@ -70,24 +76,35 @@ public class SimpleIframeApplicationFactory extends AbstractApplicationFactory {
 		this.headerLinks = headerLinks;
 	}
 
-	public OnmsHeaderProvider getHeaderProvider() {
-		return m_headerProvider;
+    /**
+	 * @return the blueprintContainer
+	 */
+	public BlueprintContainer getBlueprintContainer() {
+		return blueprintContainer;
 	}
 
-	public void setHeaderProvider(OnmsHeaderProvider headerProvider) {
-		this.m_headerProvider = headerProvider;
+	/**
+	 * @param blueprintContainer the blueprintContainer to set
+	 */
+	public void setBlueprintContainer(BlueprintContainer blueprintContainer) {
+		this.blueprintContainer = blueprintContainer;
 	}
 
+	
     /* (non-Javadoc)
      * @see org.opennms.vaadin.extender.AbstractApplicationFactory#getUI()
      */
     @Override
     public UI createUI() {
-        SimpleIframeApplication simpleIframeApplication = new SimpleIframeApplication();
-        simpleIframeApplication.setHeaderProvider(m_headerProvider);
-        simpleIframeApplication.setIframePageUrl(iframePageUrl);
-        simpleIframeApplication.setHeaderLinks(headerLinks);;
-        return simpleIframeApplication;
+        PluginManagerAdminApplication pluginManagerAdminApplication = new PluginManagerAdminApplication();
+        pluginManagerAdminApplication.setHeaderLinks(headerLinks);
+        
+        //local plugin model persists data for session instance
+        SessionPluginManager sessionPluginManager=new SessionPluginManager();
+        sessionPluginManager.setPluginManager(pluginManager);
+        sessionPluginManager.setBlueprintContainer(blueprintContainer);
+        pluginManagerAdminApplication.setSessionPluginManager(sessionPluginManager);
+        return pluginManagerAdminApplication;
     }
 
     /* (non-Javadoc)
@@ -95,7 +112,7 @@ public class SimpleIframeApplicationFactory extends AbstractApplicationFactory {
      */
     @Override
     public Class<? extends UI> getUIClass() {
-        return SimpleIframeApplication.class;
+        return PluginManagerAdminApplication.class;
     }
 
 }

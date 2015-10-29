@@ -26,33 +26,25 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.pluginmgr.vaadin.config;
+package org.opennms.features.pluginmgr.vaadin.config.karaf;
 
 //import org.opennms.features.vaadin.datacollection.SnmpCollectionPanel;
 //import org.opennms.netmgt.config.api.DataCollectionConfigDao;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+
 import java.util.Map;
 
 import org.opennms.features.pluginmgr.SessionPluginManager;
 import org.opennms.features.pluginmgr.vaadin.pluginmanager.PluginManagerUIMainPanel;
-import org.opennms.features.pluginmgr.vaadin.pluginmanager.internal.HttpServletRequestVaadinImpl;
-import org.opennms.web.api.OnmsHeaderProvider;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.ExternalResource;
-import com.vaadin.server.Page;
-import com.vaadin.server.Resource;
+
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.CustomLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Link;
@@ -65,21 +57,22 @@ import org.slf4j.LoggerFactory;
 /**
  * Plugin Manager Administration Application.
  */
-@Theme("opennms")
+//@Theme("opennms")
+@Theme("valo")
 @Title("Plugin Manager Administration")
 @SuppressWarnings("serial")
 public class PluginManagerAdminApplication extends UI {
-	private static final Logger LOG = LoggerFactory.getLogger(PluginManagerAdminApplication.class);
 
-	/*- VaadinEditorProperties={"grid":"RegularGrid,20","showGrid":true,"snapToGrid":true,"snapToObject":true,"movingGuides":false,"snappingDistance":10} */
+	private static final Logger LOG = LoggerFactory.getLogger(PluginManagerAdminApplication.class);
 
 	//headerLinks map of key= name and value=url for links to be placed in header of page
     private Map<String,String> headerLinks;
     
-	private OnmsHeaderProvider m_headerProvider;
-	private String m_headerHtml;
 	private VaadinRequest m_request;
+	
 	private VerticalLayout m_rootLayout;
+	
+	private Component headerComponent=null;
 
 	private SessionPluginManager sessionPluginManager;
 	
@@ -105,55 +98,20 @@ public class PluginManagerAdminApplication extends UI {
 	public void setHeaderLinks(Map<String,String> headerLinks) {
 		this.headerLinks = headerLinks;
 	}
-
-	// imported ideas from org.opennms.features.vaadin.nodemaps.internal.NodeMapsApplication
-	public OnmsHeaderProvider getHeaderProvider() {
-		return m_headerProvider;
+	
+	/**
+	 * @return the headerComponent
+	 */
+	public Component getHeaderComponent() {
+		return headerComponent;
 	}
 
-	public void setHeaderProvider(OnmsHeaderProvider headerProvider) {
-		this.m_headerProvider = headerProvider;
+	/**
+	 * @param headerComponent the headerComponent to set
+	 */
+	public void setHeaderComponent(Component headerComponent) {
+		this.headerComponent = headerComponent;
 	}
-
-	public void setHeaderHtml(final String headerHtml) {
-		m_headerHtml = headerHtml;
-	}
-
-	private void addHeader() {
-		if (m_headerProvider != null) {
-			try {
-				URL pageUrl = Page.getCurrent().getLocation().toURL();
-				setHeaderHtml(m_headerProvider.getHeaderHtml(new HttpServletRequestVaadinImpl(m_request, pageUrl)));
-			} catch (final Exception e) {
-				LOG.error("failed to get header HTML for request " + m_request.getPathInfo(), e.getCause());
-			}
-		}
-		if (m_headerHtml != null) {
-			InputStream is = null;
-			try {
-				is = new ByteArrayInputStream(m_headerHtml.getBytes());
-				final CustomLayout headerLayout = new CustomLayout(is);
-				headerLayout.setWidth("100%");
-				headerLayout.addStyleName("onmsheader");
-				m_rootLayout.addComponent(headerLayout);
-			} catch (final IOException e) {
-				closeQuietly(is);
-				LOG.debug("failed to get header layout data", e);
-			}
-		}
-	}
-
-	private void closeQuietly(InputStream is) {
-		if (is != null) {
-			try {
-				is.close();
-			} catch (final IOException closeE) {
-				LOG.debug("failed to close HTML input stream", closeE);
-			}
-		}
-	}
-
-
 
 	/* (non-Javadoc)
 	 * @see com.vaadin.ui.UI#init(com.vaadin.server.VaadinRequest)
@@ -167,9 +125,11 @@ public class PluginManagerAdminApplication extends UI {
 		m_rootLayout.setSizeFull();
 		m_rootLayout.addStyleName("root-layout");
 		setContent(m_rootLayout);
-		addHeader();
 		
-		//add diagnostic page links
+		// add header if provided
+		if(headerComponent!=null) m_rootLayout.addComponent(headerComponent);
+		
+		//add additional header page links if provided
 		if(headerLinks!=null) {
 			// defining 2 horizontal layouts to force links to stay together
 			HorizontalLayout horizontalLayout1= new HorizontalLayout();

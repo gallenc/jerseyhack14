@@ -10,18 +10,19 @@
   </parent>
 
   <groupId>org.opennms.plugins</groupId>
-  <artifactId>org.opennms.plugin.opennms-pluginmanager</artifactId>
+  <artifactId>org.opennms.plugin.pluginmanager.opennms-pluginmanager</artifactId>
   <packaging>bundle</packaging>
   <name>org.opennms.plugin.opennms-pluginmanager</name>
   <description>
     OpenNMS Vaadin Administration UI for installing Plugin modules.
   </description>
   <properties>
-    <bundle.symbolicName>org.opennms.plugin.vaadin-pluginmanager</bundle.symbolicName>
+    <bundle.symbolicName>org.opennms.plugin.opennms-pluginmanager</bundle.symbolicName>
     <bundle.namespace>org.opennms.features.pluginmgr</bundle.namespace>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <licencemgr-version>1.0-SNAPSHOT</licencemgr-version>
     <jerseyVersion>1.19</jerseyVersion>
+    <pluginmanagerVersion>1.0-SNAPSHOT</pluginmanagerVersion>
   </properties>
 
   <build>
@@ -39,7 +40,7 @@
         <artifactId>features-maven-plugin</artifactId>
         <configuration>
           <bundles>
-            <bundle>mvn:org.opennms.plugins/org.opennms.plugin.vaadin-pluginmanager/${project.version}</bundle>
+            <bundle>mvn:org.opennms.plugins/org.opennms.plugin.opennms-pluginmanager/${project.version}</bundle>
           </bundles>
 
           <!-- repos for licence manager and feature manager -->
@@ -270,7 +271,14 @@
       <groupId>javax.ws.rs</groupId>
       <artifactId>jsr311-api</artifactId>
       <version>1.1.1</version>
-    </dependency>
+    </dependency> 
+
+    <!-- plugin-manager core dependencies -->
+<!--     <dependency> -->
+<!--       <groupId>org.opennms.plugins</groupId> -->
+<!--       <artifactId>org.opennms.plugin.pluginmanager-core</artifactId> -->
+<!--       <version>${pluginmanagerVersion}</version> -->
+<!--     </dependency> -->
 
   </dependencies>
 

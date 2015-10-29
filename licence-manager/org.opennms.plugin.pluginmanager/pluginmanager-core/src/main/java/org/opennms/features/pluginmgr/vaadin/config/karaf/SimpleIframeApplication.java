@@ -26,33 +26,19 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.pluginmgr.vaadin.config;
+package org.opennms.features.pluginmgr.vaadin.config.karaf;
 
-//import org.opennms.features.vaadin.datacollection.SnmpCollectionPanel;
-//import org.opennms.netmgt.config.api.DataCollectionConfigDao;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
 import java.util.Map;
-
-import org.opennms.features.pluginmgr.SessionPluginManager;
-import org.opennms.features.pluginmgr.vaadin.pluginmanager.PluginManagerUIMainPanel;
-import org.opennms.features.pluginmgr.vaadin.pluginmanager.internal.HttpServletRequestVaadinImpl;
-import org.opennms.web.api.OnmsHeaderProvider;
 
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.Title;
 import com.vaadin.server.ExternalResource;
-import com.vaadin.server.Page;
-import com.vaadin.server.Resource;
 import com.vaadin.server.VaadinRequest;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.BrowserFrame;
 import com.vaadin.ui.Component;
-import com.vaadin.ui.CustomComponent;
-import com.vaadin.ui.CustomLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Link;
@@ -68,29 +54,36 @@ import org.slf4j.LoggerFactory;
 @Theme("opennms")
 @Title("Plugin Manager Administration")
 @SuppressWarnings("serial")
-public class PluginManagerAdminApplication extends UI {
-	private static final Logger LOG = LoggerFactory.getLogger(PluginManagerAdminApplication.class);
+public class SimpleIframeApplication extends UI {
+	private static final Logger LOG = LoggerFactory.getLogger(SimpleIframeApplication.class);
 
 	/*- VaadinEditorProperties={"grid":"RegularGrid,20","showGrid":true,"snapToGrid":true,"snapToObject":true,"movingGuides":false,"snappingDistance":10} */
 
-	//headerLinks map of key= name and value=url for links to be placed in header of page
-    private Map<String,String> headerLinks;
-    
-	private OnmsHeaderProvider m_headerProvider;
-	private String m_headerHtml;
+	private Component headerComponent=null;
+	
 	private VaadinRequest m_request;
 	private VerticalLayout m_rootLayout;
 
-	private SessionPluginManager sessionPluginManager;
+	private String iframePageUrl;
+
+	private Map<String, String> headerLinks;
+
+	/**
+	 * @return the headerComponent
+	 */
+	public Component getHeaderComponent() {
+		return headerComponent;
+	}
+
+	/**
+	 * @param headerComponent the headerComponent to set
+	 */
+	public void setHeaderComponent(Component headerComponent) {
+		this.headerComponent = headerComponent;
+	}
 	
-	public SessionPluginManager getSessionPluginManager() {
-		return sessionPluginManager;
-	}
-
-	public void setSessionPluginManager(SessionPluginManager sessionPluginManager) {
-		this.sessionPluginManager = sessionPluginManager;
-	}
-
+	
+	
 	/**
 	 * headerLinks map of key= name and value=url for links to be placed in header of page
 	 * @return
@@ -106,53 +99,13 @@ public class PluginManagerAdminApplication extends UI {
 		this.headerLinks = headerLinks;
 	}
 
-	// imported ideas from org.opennms.features.vaadin.nodemaps.internal.NodeMapsApplication
-	public OnmsHeaderProvider getHeaderProvider() {
-		return m_headerProvider;
+	public String getIframePageUrl() {
+		return iframePageUrl;
 	}
 
-	public void setHeaderProvider(OnmsHeaderProvider headerProvider) {
-		this.m_headerProvider = headerProvider;
+	public void setIframePageUrl(String iframePageUrl) {
+		this.iframePageUrl = iframePageUrl;
 	}
-
-	public void setHeaderHtml(final String headerHtml) {
-		m_headerHtml = headerHtml;
-	}
-
-	private void addHeader() {
-		if (m_headerProvider != null) {
-			try {
-				URL pageUrl = Page.getCurrent().getLocation().toURL();
-				setHeaderHtml(m_headerProvider.getHeaderHtml(new HttpServletRequestVaadinImpl(m_request, pageUrl)));
-			} catch (final Exception e) {
-				LOG.error("failed to get header HTML for request " + m_request.getPathInfo(), e.getCause());
-			}
-		}
-		if (m_headerHtml != null) {
-			InputStream is = null;
-			try {
-				is = new ByteArrayInputStream(m_headerHtml.getBytes());
-				final CustomLayout headerLayout = new CustomLayout(is);
-				headerLayout.setWidth("100%");
-				headerLayout.addStyleName("onmsheader");
-				m_rootLayout.addComponent(headerLayout);
-			} catch (final IOException e) {
-				closeQuietly(is);
-				LOG.debug("failed to get header layout data", e);
-			}
-		}
-	}
-
-	private void closeQuietly(InputStream is) {
-		if (is != null) {
-			try {
-				is.close();
-			} catch (final IOException closeE) {
-				LOG.debug("failed to close HTML input stream", closeE);
-			}
-		}
-	}
-
 
 
 	/* (non-Javadoc)
@@ -160,16 +113,21 @@ public class PluginManagerAdminApplication extends UI {
 	 */
 	@Override
 	public void init(VaadinRequest request) {
+		if (iframePageUrl==null) throw new RuntimeException("iframePageUrl must not be null");
 
 		m_request = request;
+
+		m_rootLayout= new VerticalLayout();
 
 		m_rootLayout = new VerticalLayout();
 		m_rootLayout.setSizeFull();
 		m_rootLayout.addStyleName("root-layout");
 		setContent(m_rootLayout);
-		addHeader();
-		
-		//add diagnostic page links
+
+		// add header if provided
+		if(headerComponent!=null) m_rootLayout.addComponent(headerComponent);
+
+		//add additional header page links if provided
 		if(headerLinks!=null) {
 			// defining 2 horizontal layouts to force links to stay together
 			HorizontalLayout horizontalLayout1= new HorizontalLayout();
@@ -189,12 +147,15 @@ public class PluginManagerAdminApplication extends UI {
 			m_rootLayout.addComponent(horizontalLayout1);
 		}
 
-		PluginManagerUIMainPanel pluginManagerUIMainPanel = new PluginManagerUIMainPanel(sessionPluginManager);
-		
-		m_rootLayout.addComponent(pluginManagerUIMainPanel);
+		ExternalResource iframPageResource = new ExternalResource(iframePageUrl);
+
+		BrowserFrame browser = new BrowserFrame("", iframPageResource);
+		browser.setWidth("100%");
+		browser.setHeight("100%");
+		m_rootLayout.addComponent(browser);
 
 		// this forces the UI panel to use up all the available space below the header
-		m_rootLayout.setExpandRatio(pluginManagerUIMainPanel, 1.0f);
+		m_rootLayout.setExpandRatio(browser, 1.0f);
 
 	}
 }

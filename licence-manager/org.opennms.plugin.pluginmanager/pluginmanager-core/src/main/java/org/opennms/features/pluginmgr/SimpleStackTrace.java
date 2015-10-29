@@ -1,4 +1,4 @@
-package org.opennms.features.pluginmgr.vaadin.config;
+package org.opennms.features.pluginmgr;
 
 import java.io.PrintWriter;
 import java.io.StringWriter;
