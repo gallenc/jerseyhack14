@@ -47,6 +47,7 @@
           <repositories>
             <repository>mvn:org.opennms.plugins/org.opennms.plugin.licencemanager.feature/${licencemgr-version}/xml/features</repository>
             <repository>mvn:org.opennms.plugins/org.opennms.plugin.featuremanager.feature/${licencemgr-version}/xml/features</repository>
+            <repository>mvn:org.opennms.plugins/org.opennms.plugin.pluginmanager-core/${project.version}/xml/features</repository>
           </repositories>
 
           <features>
@@ -54,6 +55,7 @@
             <feature>vaadin</feature>
             <feature>org.opennms.plugin.licencemanager.feature</feature>
             <feature>org.opennms.plugin.featuremanager.feature</feature>
+            <feature>org.opennms.plugin.pluginmanager-core</feature>
           </features>
 
         </configuration>
@@ -274,11 +276,11 @@
     </dependency> 
 
     <!-- plugin-manager core dependencies -->
-<!--     <dependency> -->
-<!--       <groupId>org.opennms.plugins</groupId> -->
-<!--       <artifactId>org.opennms.plugin.pluginmanager-core</artifactId> -->
-<!--       <version>${pluginmanagerVersion}</version> -->
-<!--     </dependency> -->
+    <dependency>
+      <groupId>org.opennms.plugins</groupId>
+      <artifactId>org.opennms.plugin.pluginmanager-core</artifactId>
+      <version>${pluginmanagerVersion}</version>
+    </dependency>
 
   </dependencies>
 
