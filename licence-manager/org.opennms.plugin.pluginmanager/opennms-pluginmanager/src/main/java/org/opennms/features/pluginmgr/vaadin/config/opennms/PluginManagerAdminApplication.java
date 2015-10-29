@@ -38,8 +38,8 @@ import java.net.URL;
 import java.util.Map;
 
 import org.opennms.features.pluginmgr.SessionPluginManager;
+import org.opennms.features.pluginmgr.vaadin.config.internal.HttpServletRequestVaadinImpl;
 import org.opennms.features.pluginmgr.vaadin.pluginmanager.PluginManagerUIMainPanel;
-import org.opennms.features.pluginmgr.vaadin.pluginmanager.internal.HttpServletRequestVaadinImpl;
 import org.opennms.web.api.OnmsHeaderProvider;
 
 import com.vaadin.annotations.Theme;
