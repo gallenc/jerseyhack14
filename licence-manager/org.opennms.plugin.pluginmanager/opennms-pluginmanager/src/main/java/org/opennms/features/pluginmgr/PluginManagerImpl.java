@@ -16,7 +16,6 @@ import javax.xml.bind.Unmarshaller;
 import org.opennms.features.pluginmgr.model.KarafEntryJaxb;
 import org.opennms.features.pluginmgr.model.KarafManifestEntryJaxb;
 import org.opennms.features.pluginmgr.model.PluginModelJaxb;
-import org.opennms.features.pluginmgr.vaadin.config.SimpleStackTrace;
 import org.opennms.karaf.featuremgr.rest.client.jerseyimpl.FeaturesServiceClientRestJerseyImpl;
 import org.opennms.karaf.licencemgr.StringCrc32Checksum;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceEntry;

@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Set;
 
 import org.opennms.features.pluginmgr.SessionPluginManager;
-import org.opennms.features.pluginmgr.vaadin.config.SimpleStackTrace;
+import org.opennms.features.pluginmgr.SimpleStackTrace;
 import org.opennms.karaf.licencemgr.metadata.jaxb.LicenceList;
 import org.opennms.karaf.licencemgr.metadata.jaxb.ProductSpecList;
 

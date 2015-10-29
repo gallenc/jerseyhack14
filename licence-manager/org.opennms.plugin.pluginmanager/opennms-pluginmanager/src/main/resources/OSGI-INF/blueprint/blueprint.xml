@@ -11,7 +11,7 @@
   <!-- <reference id="eventConfDao" interface="org.opennms.netmgt.config.api.EventConfDao" availability="mandatory" /> -->
   <!-- <reference id="dataCollectionConfigDao" interface="org.opennms.netmgt.config.api.DataCollectionConfigDao" availability="mandatory" /> -->
 
-  <!-- <bean id="eventAdminApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.EventAdminApplicationFactory"> -->
+  <!-- <bean id="eventAdminApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.opennms.EventAdminApplicationFactory"> -->
   <!-- <property name="eventProxy" ref="eventProxy" /> -->
   <!-- <property name="eventConfDao" ref="eventConfDao" /> -->
   <!-- </bean> -->
@@ -48,7 +48,7 @@
   <!-- configures the main ui for plugin application -->
   
   <!-- Main Plugin UI -->
-  <bean id="pluginManagerAdminApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.PluginManagerAdminApplicationFactory">
+  <bean id="pluginManagerAdminApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.opennms.PluginManagerAdminApplicationFactory">
     <property name="blueprintContainer" ref="blueprintContainer"/> <!-- predefined -->
     <property name="pluginManager" ref="pluginManagerImpl" />
     <property name="headerProvider" ref="onmsHeaderProvider" />
@@ -85,7 +85,7 @@
   </service>
 
   <!-- feature Diagnostics page -->
-  <bean id="featureDiagnosticsApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.SimpleIframeApplicationFactory">
+  <bean id="featureDiagnosticsApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.opennms.SimpleIframeApplicationFactory">
     <property name="headerProvider" ref="onmsHeaderProvider" />
     <property name="iframePageUrl" value="/opennms/featuremgr/diagnostics/feature-mgr-rest-diagnostics.html" />
     <property name="headerLinks">
@@ -102,7 +102,7 @@
   </service>
 
   <!-- Licence Diagnostics page -->
-  <bean id="licenceDiagnosticsApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.SimpleIframeApplicationFactory">
+  <bean id="licenceDiagnosticsApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.opennms.SimpleIframeApplicationFactory">
     <property name="headerProvider" ref="onmsHeaderProvider" />
     <property name="iframePageUrl" value="/opennms/licencemgr/diagnostics/licence-mgr-rest-diagnostics.html" />
     <property name="headerLinks">
@@ -119,7 +119,7 @@
   </service>
   
   <!-- Plugin Diagnostics page -->
-  <bean id="pluginDiagnosticsApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.SimpleIframeApplicationFactory">
+  <bean id="pluginDiagnosticsApplicationFactory" class="org.opennms.features.pluginmgr.vaadin.config.opennms.SimpleIframeApplicationFactory">
     <property name="headerProvider" ref="onmsHeaderProvider" />
     <property name="iframePageUrl" value="/opennms/pluginmgr/diagnostics/plugin-mgr-rest-diagnostics.html" />
     <property name="headerLinks">
