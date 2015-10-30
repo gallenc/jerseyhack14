@@ -66,25 +66,17 @@
   </build>
 
   <dependencies>
+  
+    <!-- karaf / osgi dependencies -->
+    <!-- Note these dependencies match org.apache.karaf.shell.console 2.2.11 -->
+    <!-- Version may need altered for OpenNMS -->
     <dependency>
       <groupId>org.apache.karaf.shell</groupId>
       <artifactId>org.apache.karaf.shell.console</artifactId>
       <scope>provided</scope>
       <version>2.2.11</version>
     </dependency>
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <scope>provided</scope>
-      <version>2.5</version>
-    </dependency>
-    <!-- Note these dependencies match org.apache.karaf.shell.console 2.2.11 -->
-    <!-- Version may need altered for OpenNMS -->
+ 
     <dependency>
       <groupId>org.osgi</groupId>
       <artifactId>org.osgi.core</artifactId>
@@ -98,7 +90,7 @@
       <scope>provided</scope>
     </dependency>
 
-    <!-- opennms Jersey implementation in Lib directory -->
+    <!-- Jersey Dependencies -->
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-server</artifactId>
@@ -127,20 +119,19 @@
       <artifactId>jsr311-api</artifactId>
       <scope>compile</scope>
     </dependency>
+    
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+      <version>2.5</version>
+    </dependency>
 
-
+   <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
 
   </dependencies>
-
-  <distributionManagement>
-    <repository>
-      <id>osgi-licenced-products</id>
-      <url>http://devel2.entimoss.org:8081/nexus/content/repositories/osgi-licenced-products</url>
-    </repository>
-    <snapshotRepository>
-      <id>osgi-licenced-products-snapshots</id>
-      <url>http://devel2.entimoss.org:8081/nexus/content/repositories/osgi-licenced-products-snapshots</url>
-    </snapshotRepository>
-  </distributionManagement>
-
 </project>

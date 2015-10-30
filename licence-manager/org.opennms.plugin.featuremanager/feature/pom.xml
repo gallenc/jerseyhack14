@@ -11,7 +11,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>org.opennms.plugin.featuremanager.feature</artifactId>
   <name>org.opennms.plugin.featuremanager.feature</name>
-  <description>Feature definition for org.opennms.featuremanager</description>
+  <description>Feature definition for org.opennms.plugin.featuremanager</description>
   <packaging>pom</packaging>
 
   <build>

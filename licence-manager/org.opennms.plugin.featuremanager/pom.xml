@@ -23,6 +23,15 @@
   </modules>
 
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven.surefire.plugin.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 
   <dependencyManagement>
@@ -58,7 +67,6 @@
         <artifactId>jersey-client</artifactId>
         <version>${jerseyVersion}</version>
       </dependency>
-      
       <dependency>
         <groupId>javax.ws.rs</groupId>
         <artifactId>jsr311-api</artifactId>
@@ -70,9 +78,9 @@
         <artifactId>junit</artifactId>
         <version>4.10</version>
       </dependency>
-      
+
     </dependencies>
-    
+
   </dependencyManagement>
 
   <!-- Change this to match your repo for the licenced product modules (i.e. containing the authenticator) -->
