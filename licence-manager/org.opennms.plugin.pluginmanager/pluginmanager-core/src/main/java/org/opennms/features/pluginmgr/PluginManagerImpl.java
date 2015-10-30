@@ -373,7 +373,7 @@ public class PluginManagerImpl implements PluginManager {
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
-			throw new RuntimeException("no karaf entry entry exists for karafInstance="+karafInstance);
+			throw new RuntimeException("no karaf entry entry exists for Karaf Instance="+karafInstance);
 		} 
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
 		karafEntry.getInstalledLicenceList().getLicenceList().clear();
@@ -393,7 +393,7 @@ public class PluginManagerImpl implements PluginManager {
 		if (! karafInstances.containsKey(karafInstance)) throw new RuntimeException("system does not know karafInstance="+karafInstance);
 
 		if (! pluginModelJaxb.getKarafDataMap().containsKey(karafInstance)){
-			throw new RuntimeException("no karaf entry entry exists for karafInstance="+karafInstance);
+			throw new RuntimeException("no karaf entry entry exists for Karaf Instance="+karafInstance);
 		} 
 		KarafEntryJaxb karafEntry = pluginModelJaxb.getKarafDataMap().get(karafInstance);
 		karafEntry.getInstalledPlugins().getProductSpecList().clear();
@@ -621,7 +621,7 @@ public class PluginManagerImpl implements PluginManager {
 			refreshKarafEntry(karafInstance);
 		} catch (Exception e) {
 			throw new RuntimeException("problem installing product "+selectedProductId
-					+ " for karafInstance="+karafInstance
+					+ " for Karaf Instance="+karafInstance
 					+ " karafInstanceUrl="+karafInstanceUrl
 					+ ": ", e);
 		}
@@ -665,7 +665,7 @@ public class PluginManagerImpl implements PluginManager {
 			refreshKarafEntry(karafInstance);
 		} catch (Exception e) {
 			throw new RuntimeException("problem un-installing product "+selectedProductId
-					+ " for karafInstance="+karafInstance
+					+ " for Karaf Instance="+karafInstance
 					+ " karafInstanceUrl="+karafInstanceUrl
 					+ ": ", e);
 		}

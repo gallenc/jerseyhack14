@@ -363,18 +363,18 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 				try{
 					String newManifestSystemId = manifestSystemIdTextField.getValue();
 					sessionPluginManager.setManifestSystemId(newManifestSystemId);
-					message = "manifestSystemId for karafInstance "+sessionPluginManager.getKarafInstance()
+					message = "manifestSystemId for Karaf Instance "+sessionPluginManager.getKarafInstance()
 							+" updated to "+newManifestSystemId;
 
 					sessionPluginManager.setSystemId(newManifestSystemId);
-					message = message+"\nsystemId for karafInstance "+sessionPluginManager.getKarafInstance()
+					message = message+"\nsystemId for Karaf Instance "+sessionPluginManager.getKarafInstance()
 							+" updated to "+newManifestSystemId;
 
 					systemMessages.setValue(message);
 					sessionPluginManager.refreshKarafEntry(); // update the values if we can
 					updateDisplayValues();
 				} catch (Exception e){
-					systemMessages.setValue(message +"\nproblem updating systemId for karafInstance "
+					systemMessages.setValue(message +"\nproblem updating systemId for Karaf Instance "
 							+sessionPluginManager.getKarafInstance()+" :\n"+SimpleStackTrace.errorToString(e));
 				}
 			}
@@ -411,7 +411,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 				availablePluginsControlsPanel.setRemoteUpdateControlsEnabled(remoteIsAccessible);
 				installedPluginsControlsPanel.setRemoteUpdateControlsEnabled(remoteIsAccessible);
 
-				systemMessages.setValue("remote is accessable set to "+remoteIsAccessible+ " for karafInstance "
+				systemMessages.setValue("remote is accessable set to "+remoteIsAccessible+ " for Karaf Instance "
 						+sessionPluginManager.getKarafInstance());
 			}
 		});
@@ -422,7 +422,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 			public void valueChange(ValueChangeEvent event) {
 				boolean allowUpdateMessages = (Boolean) event.getProperty().getValue();
 				sessionPluginManager.setAllowUpdateMessages(allowUpdateMessages);
-				systemMessages.setValue("allow update messages set to "+allowUpdateMessages+ " for karafInstance "
+				systemMessages.setValue("allow update messages set to "+allowUpdateMessages+ " for Karaf Instance "
 						+sessionPluginManager.getKarafInstance());
 			}
 		});

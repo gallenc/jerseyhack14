@@ -15,7 +15,7 @@
     Feature for running the OSGi plugin manager in a standalone karaf instance.
   </description>
   <properties>
-    <bundle.symbolicName>org.opennms.plugin.pluginmanager-core</bundle.symbolicName>
+    <bundle.symbolicName>org.opennms.plugin.pluginmanager.karaf-pluginmanager</bundle.symbolicName>
     <bundle.namespace>org.opennms.features.pluginmgr</bundle.namespace>
   </properties>
 
@@ -43,20 +43,20 @@
         <artifactId>features-maven-plugin</artifactId>
         <configuration>
           <bundles>
-            <bundle>mvn:org.opennms.plugins/org.opennms.plugin.karaf-pluginmanager/${project.version}</bundle>
+            <bundle>mvn:org.opennms.plugins/org.opennms.plugin.pluginmanager.karaf-pluginmanager/${project.version}</bundle>
           </bundles>
 
           <!-- repos for licence manager and feature manager -->
           <repositories>
             <repository>mvn:org.opennms.plugins/org.opennms.plugin.licencemanager.feature/${licencemanagerVersion}/xml/features</repository>
             <repository>mvn:org.opennms.plugins/org.opennms.plugin.featuremanager.feature/${featuremanagerVersion}/xml/features</repository>
-            <repository>mvn:org.opennms.plugins/org.opennms.plugin.pluginmanager-core/${project.version}/xml/features</repository>
+            <repository>mvn:org.opennms.plugins/org.opennms.plugin.pluginmanager.pluginmanager-core/${project.version}/xml/features</repository>
           </repositories>
 
           <features>
             <feature>org.opennms.plugin.licencemanager.feature</feature>
             <feature>org.opennms.plugin.featuremanager.feature</feature>
-            <feature>org.opennms.plugin.pluginmanager-core</feature>
+            <feature>org.opennms.plugin.pluginmanager.pluginmanager-core</feature>
           </features>
 
         </configuration>
@@ -214,7 +214,7 @@
     </dependency>
     <dependency>
       <groupId>org.opennms.plugins</groupId>
-      <artifactId>org.opennms.plugin.pluginmanager-core</artifactId>
+      <artifactId>org.opennms.plugin.pluginmanager.pluginmanager-core</artifactId>
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>

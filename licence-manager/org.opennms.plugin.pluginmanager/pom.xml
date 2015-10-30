@@ -26,7 +26,7 @@
 
   <modules>
     <module>pluginmanager-core</module>
-    <!-- <module>karaf-pluginmanager</module> -->
+    <module>karaf-pluginmanager</module>
   </modules>
 
   <build>
