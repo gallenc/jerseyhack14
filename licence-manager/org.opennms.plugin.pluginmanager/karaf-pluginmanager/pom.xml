@@ -39,13 +39,13 @@
 
           <!-- repos for licence manager and feature manager -->
           <repositories>
-            <repository>mvn:org.opennms.plugins/org.opennms.plugin.licencemanager.feature/${licencemanagerVersion}/xml/features</repository>
-            <repository>mvn:org.opennms.plugins/org.opennms.plugin.featuremanager.feature/${featuremanagerVersion}/xml/features</repository>
+            <repository>mvn:org.opennms.plugins/org.opennms.plugin.licencemanager/${licencemanagerVersion}/xml/features</repository>
+            <repository>mvn:org.opennms.plugins/org.opennms.plugin.featuremanager/${featuremanagerVersion}/xml/features</repository>
           </repositories>
 
           <features>
-            <feature>org.opennms.plugin.licencemanager.feature</feature>
-            <feature>org.opennms.plugin.featuremanager.feature</feature>
+            <feature>org.opennms.plugin.licencemanager</feature>
+            <feature>org.opennms.plugin.featuremanager</feature>
           </features>
 
         </configuration>
