@@ -411,7 +411,7 @@ public class PluginManagerUIMainPanel extends CustomComponent {
 				availablePluginsControlsPanel.setRemoteUpdateControlsEnabled(remoteIsAccessible);
 				installedPluginsControlsPanel.setRemoteUpdateControlsEnabled(remoteIsAccessible);
 
-				systemMessages.setValue("remote is accessable set to "+remoteIsAccessible+ " for Karaf Instance "
+				systemMessages.setValue("remote is accessible set to "+remoteIsAccessible+ " for Karaf Instance "
 						+sessionPluginManager.getKarafInstance());
 			}
 		});
