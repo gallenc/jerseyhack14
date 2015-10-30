@@ -12,17 +12,18 @@
   <groupId>org.opennms.plugins</groupId>
   <artifactId>org.opennms.plugin.pluginmanager.opennms-pluginmanager</artifactId>
   <packaging>bundle</packaging>
-  <name>org.opennms.plugin.opennms-pluginmanager</name>
+  <name>org.opennms.plugin.pluginmanager.opennms-pluginmanager</name>
   <description>
     OpenNMS Vaadin Administration UI for installing Plugin modules.
   </description>
   <properties>
-    <bundle.symbolicName>org.opennms.plugin.opennms-pluginmanager</bundle.symbolicName>
+    <bundle.symbolicName>org.opennms.plugin.pluginmanager.opennms-pluginmanager</bundle.symbolicName>
     <bundle.namespace>org.opennms.features.pluginmgr</bundle.namespace>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <licencemgr-version>1.0-SNAPSHOT</licencemgr-version>
     <jerseyVersion>1.19</jerseyVersion>
     <pluginmanagerVersion>1.0-SNAPSHOT</pluginmanagerVersion>
+    <licencemanagerVersion>1.0-SNAPSHOT</licencemanagerVersion>
+    <featuremanagerVersion>1.0-SNAPSHOT</featuremanagerVersion>
   </properties>
 
   <build>
@@ -40,14 +41,13 @@
         <artifactId>features-maven-plugin</artifactId>
         <configuration>
           <bundles>
-            <bundle>mvn:org.opennms.plugins/org.opennms.plugin.opennms-pluginmanager/${project.version}</bundle>
+            <bundle>mvn:org.opennms.plugins/org.opennms.plugin.pluginmanager.opennms-pluginmanager/${project.version}</bundle>
           </bundles>
 
           <!-- repos for licence manager and feature manager -->
           <repositories>
-            <repository>mvn:org.opennms.plugins/org.opennms.plugin.licencemanager.feature/${licencemgr-version}/xml/features</repository>
-            <repository>mvn:org.opennms.plugins/org.opennms.plugin.featuremanager.feature/${licencemgr-version}/xml/features</repository>
-<!--             <repository>mvn:org.opennms.plugins/org.opennms.plugin.pluginmanager.pluginmanager-core/${project.version}/xml/features</repository> -->
+            <repository>mvn:org.opennms.plugins/org.opennms.plugin.licencemanager.feature/${licencemanagerVersion}/xml/features</repository>
+            <repository>mvn:org.opennms.plugins/org.opennms.plugin.featuremanager.feature/${featuremanagerVersion}/xml/features</repository>
           </repositories>
 
           <features>
@@ -55,7 +55,6 @@
             <feature>vaadin</feature>
             <feature>org.opennms.plugin.licencemanager.feature</feature>
             <feature>org.opennms.plugin.featuremanager.feature</feature>
-<!--             <feature>org.opennms.plugin.pluginmanager.pluginmanager-core</feature> -->
           </features>
 
         </configuration>
@@ -63,6 +62,163 @@
 
     </plugins>
   </build>
+
+  <dependencies>
+
+    <!-- Jersey Dependencies -->
+    <!-- Override opennms Jersey implementation in Lib directory -->
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-server</artifactId>
+      <version>${jerseyVersion}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-servlet</artifactId>
+      <version>${jerseyVersion}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-core</artifactId>
+      <version>${jerseyVersion}</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>${jerseyVersion}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <dependency>
+      <!-- NOTE this is replaced in OpenNMS Lib with javax.ws.rs/javax.ws.rs-api -->
+      <!-- however jersey 1.19 bundles will not accept javax.ws.rs-api as jersey v2 api -->
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
+      <version>1.1.1</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <!-- OpenNMS Vaadin Dependencies -->
+    <dependency>
+      <groupId>org.opennms.osgi.features.topology</groupId>
+      <artifactId>vaadin</artifactId>
+      <type>pom</type>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opennms.features.themes</groupId>
+      <artifactId>onms-default-theme</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opennms.vaadin-extender</groupId>
+      <artifactId>service</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <!-- Required by pax/vaadin -->
+      <groupId>org.opennms.dependencies</groupId>
+      <artifactId>servlet-dependencies</artifactId>
+      <type>pom</type>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- OpenNMS core Dependencies -->
+    <dependency>
+      <groupId>org.opennms.dependencies</groupId>
+      <artifactId>spring-dependencies</artifactId>
+      <scope>provided</scope>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>org.opennms.core</groupId>
+      <artifactId>org.opennms.core.lib</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opennms</groupId>
+      <artifactId>opennms-config</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opennms</groupId>
+      <artifactId>opennms-dao</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opennms</groupId>
+      <artifactId>opennms-web-api</artifactId>
+      <scope>provided</scope>
+      <exclusions>
+        <exclusion>
+          <groupId>javax.ws.rs</groupId>
+          <artifactId>javax.ws.rs-api</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.opennms.features</groupId>
+      <artifactId>org.opennms.features.name-cutter</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>commons-lang</groupId>
+      <artifactId>commons-lang</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- logging dependency -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- OSGi Dependencies -->
+
+    <!-- BlueprintContainer from Apache Aries -->
+    <dependency>
+      <groupId>org.apache.aries.blueprint</groupId>
+      <artifactId>org.apache.aries.blueprint.core</artifactId>
+      <version>1.4.1</version> <!-- from Karaf -->
+      <scope>provided</scope>
+    </dependency>
+
+
+    <!-- licence / feature manager dependencies -->
+    <dependency>
+      <groupId>org.opennms.plugins</groupId>
+      <artifactId>org.opennms.plugin.licencemanager</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.opennms.plugins</groupId>
+      <artifactId>org.opennms.plugin.featuremanager</artifactId>
+      <version>1.0-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- plugin-manager core dependencies -->
+    <dependency>
+      <groupId>org.opennms.plugins</groupId>
+      <artifactId>org.opennms.plugin.pluginmanager.pluginmanager-core</artifactId>
+      <version>${pluginmanagerVersion}</version>
+      <scope>compile</scope>
+    </dependency>
+
+    <!--test dependencies -->
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
+
+  </dependencies>
 
   <repositories>
     <repository>
@@ -125,164 +281,5 @@
       <url>http://maven.opennms.org/content/groups/vaadin-snapshot/</url>
     </pluginRepository>
   </pluginRepositories>
-
-  <dependencies>
-
-    <!-- OSGi Dependencies -->
-    <dependency>
-      <groupId>org.opennms.vaadin-extender</groupId>
-      <artifactId>service</artifactId>
-    </dependency>
-    <dependency>
-      <!-- Required by pax/vaadin -->
-      <groupId>org.opennms.dependencies</groupId>
-      <artifactId>servlet-dependencies</artifactId>
-      <type>pom</type>
-      <scope>provided</scope>
-    </dependency>
-
-
-    <!-- Vaadin Dependencies -->
-
-    <dependency>
-      <groupId>org.opennms.osgi.features.topology</groupId>
-      <artifactId>vaadin</artifactId>
-      <type>pom</type>
-    </dependency>
-    <dependency>
-      <groupId>org.opennms.features.themes</groupId>
-      <artifactId>onms-default-theme</artifactId>
-      <version>${project.version}</version>
-    </dependency>
-
-    <!-- OpenNMS core Dependencies -->
-    <dependency>
-      <groupId>org.opennms.dependencies</groupId>
-      <artifactId>spring-dependencies</artifactId>
-      <scope>provided</scope>
-      <type>pom</type>
-    </dependency>
-    <dependency>
-      <groupId>org.opennms.core</groupId>
-      <artifactId>org.opennms.core.lib</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opennms</groupId>
-      <artifactId>opennms-config</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opennms</groupId>
-      <artifactId>opennms-dao</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opennms</groupId>
-      <artifactId>opennms-web-api</artifactId>
-      <scope>provided</scope>
-      <exclusions>
-        <exclusion>
-          <groupId>javax.ws.rs</groupId>
-          <artifactId>javax.ws.rs-api</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <dependency>
-      <groupId>org.opennms.features</groupId>
-      <artifactId>org.opennms.features.name-cutter</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>commons-lang</groupId>
-      <artifactId>commons-lang</artifactId>
-    </dependency>
-
-    <!-- BlueprintContainer from Apache Aries -->
-    <dependency>
-      <groupId>org.apache.aries.blueprint</groupId>
-      <artifactId>org.apache.aries.blueprint.core</artifactId>
-      <version>1.4.1</version> <!-- from Karaf -->
-      <scope>provided</scope>
-    </dependency>
-
-
-    <!-- licence / feature manager dependencies -->
-    <dependency>
-      <groupId>org.opennms.plugins</groupId>
-      <artifactId>org.opennms.plugin.licencemanager</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.opennms.plugins</groupId>
-      <artifactId>org.opennms.plugin.featuremanager</artifactId>
-      <version>1.0-SNAPSHOT</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <!-- Tests Dependencies -->
-
-    <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <!-- <dependency> -->
-    <!-- <groupId>org.opennms.core.test-api</groupId> -->
-    <!-- <artifactId>org.opennms.core.test-api.lib</artifactId> -->
-    <!-- <scope>test</scope> -->
-    <!-- </dependency> -->
-
-    <!-- to allow us to import opennms header -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.opennms.features.topology</groupId> -->
-    <!-- <artifactId>app</artifactId> -->
-    <!-- <version>16.0.0</version> -->
-    <!-- <scope>provided</scope> -->
-    <!-- </dependency> -->
-
-    <!-- jersey dependenceis - override -->
-    <!-- opennms Jersey implementation in Lib directory -->
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-server</artifactId>
-      <version>${jerseyVersion}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-servlet</artifactId>
-      <!-- <version>1.18.1</version> NOTE the version in OpenNMS 16.0.0.0 is 1.18 -->
-      <version>${jerseyVersion}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-core</artifactId>
-      <version>${jerseyVersion}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-client</artifactId>
-      <version>${jerseyVersion}</version>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>jsr311-api</artifactId>
-      <version>1.1.1</version>
-    </dependency> 
-
-    <!-- plugin-manager core dependencies -->
-    <dependency>
-      <groupId>org.opennms.plugins</groupId>
-      <artifactId>org.opennms.plugin.pluginmanager.pluginmanager-core</artifactId>
-      <version>${pluginmanagerVersion}</version>
-      <scope>compile</scope>
-    </dependency>
-
-  </dependencies>
 
 </project>

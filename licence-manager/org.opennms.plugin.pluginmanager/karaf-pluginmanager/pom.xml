@@ -30,97 +30,54 @@
     </resources>
     <plugins>
       <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <configuration>
-          <target>1.8</target>
-          <source>1.8</source>
-        </configuration>
-      </plugin>
-
-      <plugin>
         <groupId>org.opennms.maven.plugins</groupId>
         <artifactId>features-maven-plugin</artifactId>
         <configuration>
           <bundles>
             <bundle>mvn:org.opennms.plugins/org.opennms.plugin.pluginmanager.karaf-pluginmanager/${project.version}</bundle>
-<!--             <bundle>mvn:org.opennms.plugins/org.opennms.plugin.pluginmanager.pluginmanager-core/${project.version}</bundle> -->
           </bundles>
 
           <!-- repos for licence manager and feature manager -->
           <repositories>
             <repository>mvn:org.opennms.plugins/org.opennms.plugin.licencemanager.feature/${licencemanagerVersion}/xml/features</repository>
             <repository>mvn:org.opennms.plugins/org.opennms.plugin.featuremanager.feature/${featuremanagerVersion}/xml/features</repository>
-<!--             <repository>mvn:org.opennms.plugins/org.opennms.plugin.pluginmanager.pluginmanager-core/${project.version}/xml/features</repository> -->
           </repositories>
 
           <features>
             <feature>org.opennms.plugin.licencemanager.feature</feature>
             <feature>org.opennms.plugin.featuremanager.feature</feature>
-<!--             <feature>org.opennms.plugin.pluginmanager.pluginmanager-core</feature> -->
           </features>
 
         </configuration>
       </plugin>
-
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-
-        <configuration>
-          <excludes>
-            <!-- prevent tests running in this package. These are one off development tests -->
-            <exclude>**/org/opennms/karaf/licencemgr/rest/client/test/manual/*.java</exclude>
-          </excludes>
-          <!-- allows tests to run in order with static variable passed between tests -->
-          <reuseForks>false</reuseForks>
-          <forkCount>0</forkCount>
-        </configuration>
-      </plugin>
+      
     </plugins>
   </build>
 
   <dependencies>
-    <dependency>
-      <groupId>org.apache.karaf.shell</groupId>
-      <artifactId>org.apache.karaf.shell.console</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.core</artifactId>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>org.osgi</groupId>
-      <artifactId>org.osgi.compendium</artifactId>
-      <scope>provided</scope>
-    </dependency>
-
-    <!-- opennms Jersey implementation in Lib directory -->
+  
+    <!-- Jersey Dependencies -->
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-server</artifactId>
       <scope>compile</scope>
     </dependency>
-
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-servlet</artifactId>
       <scope>compile</scope>
     </dependency>
-
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-core</artifactId>
       <scope>compile</scope>
     </dependency>
-
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-client</artifactId>
       <scope>compile</scope>
     </dependency>
+    
     <dependency>
       <groupId>javax.ws.rs</groupId>
       <artifactId>jsr311-api</artifactId>
@@ -201,6 +158,22 @@
       <scope>compile</scope>
     </dependency>
 
+    <!-- OSGi / Karaf dependencies -->
+    <dependency>
+      <groupId>org.apache.karaf.shell</groupId>
+      <artifactId>org.apache.karaf.shell.console</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.osgi</groupId>
+      <artifactId>org.osgi.compendium</artifactId>
+      <scope>provided</scope>
+    </dependency>
 
     <!-- licence / feature / plugin manager dependencies -->
     <dependency>
@@ -213,6 +186,8 @@
       <artifactId>org.opennms.plugin.featuremanager</artifactId>
       <scope>provided</scope>
     </dependency>
+    
+    <!-- plugin-manager core dependencies -->
     <dependency>
       <groupId>org.opennms.plugins</groupId>
       <artifactId>org.opennms.plugin.pluginmanager.pluginmanager-core</artifactId>
@@ -226,6 +201,7 @@
       <artifactId>junit</artifactId>
       <scope>test</scope>
     </dependency>
+    
   </dependencies>
 
 </project>
