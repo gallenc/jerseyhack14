@@ -28,6 +28,7 @@
 	<modules>
         <module>licencemanager</module>
         <module>featuremanager</module>
+        <module>karaf-pluginmanager-archetype</module>
 		<module>pluginmanager-core</module>
 		<module>karaf-pluginmanager</module>
 	</modules>
