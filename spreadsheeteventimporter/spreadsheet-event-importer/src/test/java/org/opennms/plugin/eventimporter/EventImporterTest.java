@@ -17,6 +17,7 @@ package org.opennms.plugin.eventimporter;
 
 import static org.junit.Assert.*;
 
+import java.io.File;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -30,7 +31,8 @@ import org.junit.Test;
  */
 public class EventImporterTest {
 	
-	private static String TEST_PROPERTIES_FILE="/eventImporter.properties";
+	private static String TEST_PROPERTIES_FILE="eventImporter.properties";
+	private String worksheetFileName = "testSpreadSheet1.xlsx";
 	
 
 	
@@ -44,23 +46,24 @@ public class EventImporterTest {
         InputStream is = null;
         try {
             prop = new Properties();
-            is = this.getClass().getResourceAsStream(TEST_PROPERTIES_FILE);
+            is = this.getClass().getClassLoader().getResourceAsStream(TEST_PROPERTIES_FILE);
             prop.load(is);
- 
         } catch (Exception e) {
+        	e.printStackTrace();
         	System.out.println("     Using default values. Problem loading TEST_PROPERTIES_FILE:"+TEST_PROPERTIES_FILE+" Exception:"+e);
         }
 		
 	}
 
-
-	
 	
 	@Test
 	public void eventImporterTest(){
 		System.out.println("@Test - eventImporterTest.START");
 		
+		System.out.println("@Test - eventImporterTest. importing events from "+worksheetFileName);
 		EventImporter eventImporter = new EventImporter();
+		
+		eventImporter.setWorksheetFileName(worksheetFileName);
 		eventImporter.importEvents();
 			
 		
