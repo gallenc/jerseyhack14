@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<events xmlns="http://xmlns.opennms.org/xsd/eventconf">
+  <!-- example one -->
+  <!-- Start of 3Com Traps -->
+  <!-- Start of 3Com MIB: A3COM-SWITCHING-SYSTEMS-FDDI-MIB -->
+  <event>
+    <mask>
+      <maskelement>
+        <mename>id</mename>
+        <mevalue>.1.3.6.1.4.1.9.9.70.2</mevalue>
+      </maskelement>
+      <maskelement>
+        <mename>generic</mename>
+        <mevalue>6</mevalue>
+      </maskelement>
+      <maskelement>
+        <mename>specific</mename>
+        <mevalue>17</mevalue>
+      </maskelement>
+      <varbind>
+        <vbnumber>3</vbnumber>
+        <vbvalue>3</vbvalue>
+      </varbind>
+      <varbind> <!-- example with multiple values -->
+        <vbnumber>4</vbnumber>
+        <vbvalue>2</vbvalue>
+        <vbvalue>3</vbvalue>
+      </varbind>
+      <varbind> <!-- example with regex after ~ -->
+        <vbnumber>1</vbnumber>
+        <vbvalue>~[Dd]own</vbvalue>
+      </varbind>
+    </mask>
+    <uei>http://uei.opennms.org/vendor/Cisco/traps/ciscoC3800SysAggregateStatusChange</uei>
+    <event-label></event-label>
+    <descr></descr>
+    <logmsg dest='logndisplay'><p>Cisco Event: HSRP State Change to %parm[#1]%.</p></logmsg>
+    <severity>Indeterminate</severity>
+    <varbindsdecode> <!-- decoding varbinds to text for message -->
+      <parmid>parm[#1]</parmid> 
+      <decode varbindvalue="1" varbinddecodedstring="initial" />
+      <decode varbindvalue="2" varbinddecodedstring="learn" />
+    </varbindsdecode>
+    <alarm-data reduction-key="%uei%:%nodeid%" alarm-type="1" auto-clean="false" />
+  </event>
+  <!-- example 2 with alarm data-->
+  <event>
+  <mask>
+    <maskelement>
+      <mename>id</mename>
+      <mevalue>.1.3.6.1.4.1.664.2.154</mevalue>
+    </maskelement>
+    <maskelement>
+      <mename>generic</mename>
+      <mevalue>6</mevalue>
+    </maskelement>
+    <maskelement>
+      <mename>specific</mename>
+      <mevalue>15401101</mevalue>
+    </maskelement>
+  </mask>
+  <uei>uei.opennms.org/vendor/adtran/traps/adATLASHSSIV35IfceReact</uei>
+  <event-label>ADTRAN-ATLAS-HSSI-V35-MIB defined trap event: adATLASHSSIV35IfceReact</event-label>
+  <descr>
+&lt;p&gt;This trap indicates a HSSI/V.35 interface has been reactivated
+because either the number of active DS1 links has risen above
+the user-defined threshold value or because the user has
+manually reactivated it.&lt;/p&gt;&lt;table&gt;
+  &lt;tr&gt;&lt;td&gt;&lt;b&gt;
+
+  ifIndex&lt;/b&gt;&lt;/td&gt;&lt;td&gt;
+  %parm[#1]%&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;&lt;b&gt;
+
+  adATLASUnitSlotAddress&lt;/b&gt;&lt;/td&gt;&lt;td&gt;
+  %parm[#2]%&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;&lt;b&gt;
+
+  adATLASUnitPortAddress&lt;/b&gt;&lt;/td&gt;&lt;td&gt;
+  %parm[#3]%&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;&lt;b&gt;
+
+  adATLASModuleInfoFPStatus&lt;/b&gt;&lt;/td&gt;&lt;td&gt;
+  %parm[#4]%&lt;/td&gt;&lt;/tr&gt;
+  &lt;tr&gt;&lt;td&gt;&lt;b&gt;
+
+  adATLASUnitFPStatus&lt;/b&gt;&lt;/td&gt;&lt;td&gt;
+  %parm[#5]%&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+  </descr>
+    <logmsg dest='logndisplay'>&lt;p&gt;
+      adATLASHSSIV35IfceReact trap received 
+      ifIndex=%parm[#1]% 
+      adATLASUnitSlotAddress=%parm[#2]% 
+      adATLASUnitPortAddress=%parm[#3]% 
+      adATLASModuleInfoFPStatus=%parm[#4]% 
+      adATLASUnitFPStatus=%parm[#5]%&lt;/p&gt;
+    </logmsg>
+  <severity>Cleared</severity>
+  <alarm-data reduction-key="%uei%:%dpname%:%nodeid%:%interface%:%parm[#1]%:%parm[#2]%:%parm[#3]%" 
+                alarm-type="2" 
+                auto-clean="true" 
+                clear-key="uei.opennms.org/vendor/adtran/traps/adATLASHSSIV35IfceDeact:%dpname%:%nodeid%:%interface%:%parm[#1]%:%parm[#2]%:%parm[#3]%" />
+</event>
+</events>

@@ -28,7 +28,7 @@
         <directory>src/test/resources</directory>
       </testResource>
     </testResources>
-    
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -39,23 +39,39 @@
           <source>1.8</source>
         </configuration>
       </plugin>
+
+      <!-- generate the jaxb for xsd -->
+      <plugin>
+        <groupId>org.jvnet.jaxb2.maven2</groupId>
+        <artifactId>maven-jaxb2-plugin</artifactId>
+        <version>0.12.3</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>generate</goal>
+            </goals>
+            <configuration>
+              <schemaDirectory>src/main/xsds</schemaDirectory>
+              <generateDirectory>${project.build.directory}/generated-sources</generateDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
-
-
   </build>
 
   <dependencies>
-  <!-- apache poi (spreadsheet) dependencies -->
-  <dependency>
-    <groupId>org.apache.poi</groupId>
-    <artifactId>poi</artifactId>
-    <version>${poiVersion}</version>
-</dependency>
-<dependency>
-    <groupId>org.apache.poi</groupId>
-    <artifactId>poi-ooxml</artifactId>
-    <version>${poiVersion}</version>
-</dependency>
+    <!-- apache poi (spreadsheet) dependencies -->
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi</artifactId>
+      <version>${poiVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.poi</groupId>
+      <artifactId>poi-ooxml</artifactId>
+      <version>${poiVersion}</version>
+    </dependency>
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
