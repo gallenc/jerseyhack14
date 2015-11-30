@@ -162,9 +162,11 @@ public class MarshallerTest {
 								// decode.getVarbinddecodedstring();
 								// decode.getVarbindvalue();
 							} else if (varbinddecodeobj instanceof JAXBElement){
-								JAXBElement jaxbelement = (JAXBElement) eventContentObj;
+								JAXBElement jaxbelement = (JAXBElement) varbinddecodeobj;
 								System.out.println ("     varbinddecodeobj: jaxbelement.getName():"+jaxbelement.getName()+ " jaxbelement.getValue():"+jaxbelement.getValue());
-							} else System.out.println("unknown object type varbinddecodeobj= "+varbinddecodeobj.getClass().getName());
+							} else {
+								System.out.println("unknown object type varbinddecodeobj= "+varbinddecodeobj.getClass().getName() +"  varbinddecodeobj.toString()"+varbinddecodeobj.toString());
+							}
 						}
 					}
 					else if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.Snmp){
@@ -186,6 +188,10 @@ public class MarshallerTest {
 						for(Maskelement maskelement:maskelementlist){
 							System.out.println ("         maskelement.getMename()="+maskelement.getMename());
 							System.out.println ("         maskelement.getMevalue()="+maskelement.getMevalue());
+							List<String> mevalues = maskelement.getMevalue();
+							for (String mevalue: mevalues){
+								System.out.println ("             maskelement.getMevalue() mevalue="+mevalue);
+							}
 							//							maskelement.getMename();
 							//							maskelement.getMevalue();
 						}
@@ -193,9 +199,15 @@ public class MarshallerTest {
 						List<Varbind> varbindlist = mask.getVarbind();
 						for (Varbind varbind:varbindlist){
 							System.out.println ("         varbind.getTextualConvention()="+varbind.getTextualConvention());
-							List<Serializable> content = varbind.getContent();
-							for(Serializable serializable:content ){
-								System.out.println ("          varbind.getContent() serializable.toString="+serializable.toString());
+							List content = varbind.getContent();
+							for(Object serializableObj:content ){
+								if (serializableObj instanceof JAXBElement){
+									System.out.println ("serializableObj is JAXBElement");
+									JAXBElement jaxbelement = (JAXBElement) serializableObj;
+									System.out.println ("      varbind.getContent() jaxbelement.getName():"+jaxbelement.getName()+ " jaxbelement.getValue():"+jaxbelement.getValue());
+								} else {
+									System.out.println ("          varbind.getContent() serializableObj.toString="+serializableObj.toString());
+								}
 							}
 							//							varbind.getTextualConvention();
 							//							varbind.getContent();
