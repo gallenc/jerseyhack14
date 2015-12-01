@@ -55,7 +55,7 @@ import org.opennms.xmlns.xsd.eventconf.Varbind;
 import org.opennms.xmlns.xsd.eventconf.Varbindsdecode;
 
 
-public class MarshallerTest {
+public class MarshallerTest2 {
 
 	private String eventFileName = "testeventfile.xml";
 
