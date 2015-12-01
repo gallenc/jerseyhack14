@@ -54,7 +54,11 @@ import org.opennms.xmlns.xsd.eventconf.UpdateField;
 import org.opennms.xmlns.xsd.eventconf.Varbind;
 import org.opennms.xmlns.xsd.eventconf.Varbindsdecode;
 
-
+/**
+ * Stand alone marshalling and unmarshalling of data
+ * @author admin
+ *
+ */
 public class MarshallerTest {
 
 	private String eventFileName = "testeventfile.xml";
