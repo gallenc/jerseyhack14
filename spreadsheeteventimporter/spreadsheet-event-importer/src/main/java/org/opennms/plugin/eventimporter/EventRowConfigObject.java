@@ -94,6 +94,7 @@ public class EventRowConfigObject {
 	private String eventLoggroup=null; //<loggroup></loggroup>
 
 	// event / alarm description
+	// (logndisplay|displayonly|logonly|suppress|donotpersist|discardtraps)
 	private String 	eventLogmsgDest=null; // <logmsg dest='logndisplay'><p>Cisco Event: HSRP State Change to %parm[#1]%.</p></logmsg>
 	private String  eventLogmsgValue=null;
 	private Boolean eventLogmsgNotify=null;

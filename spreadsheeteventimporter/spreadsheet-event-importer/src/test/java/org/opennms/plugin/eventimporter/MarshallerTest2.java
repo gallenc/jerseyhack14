@@ -83,7 +83,8 @@ public class MarshallerTest2 {
 			marshalledEvents=fileContents.toString();
 			LOG.debug("Config file contents marshalledEvents: "+marshalledEvents);
 
-			initialEventsConfig = eventsFromXml(marshalledEvents);
+			EventsMarshaller eventsMarshaller = new EventsMarshaller();
+			initialEventsConfig = eventsMarshaller.eventsFromXml(marshalledEvents);
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
@@ -98,7 +99,8 @@ public class MarshallerTest2 {
 	public void unmarshallerTest(){
 		LOG.debug("@Test - unmarshallerTest().START");
 
-		String unmarshalledEvents = eventsToXml(initialEventsConfig);
+		EventsMarshaller eventsMarshaller = new EventsMarshaller();
+		String unmarshalledEvents = eventsMarshaller.eventsToXml(initialEventsConfig);
 
 		LOG.debug("umarshalledEvents: "+unmarshalledEvents);
 
@@ -136,44 +138,14 @@ public class MarshallerTest2 {
 			finalEventsConfig.getContent().add(event);
 		}
 		
-		String finalEvents = eventsToXml(finalEventsConfig);
+		EventsMarshaller eventsMarshaller = new EventsMarshaller();
+		
+		String finalEvents = eventsMarshaller.eventsToXml(finalEventsConfig);
 		LOG.debug("@Test - rowsObjectToEventsConfigTest() finalEvents="+finalEvents);
 		
 		LOG.debug("@Test - rowsObjectToEventsConfigTest().End");
 	}
 
-	/**
-	 * @return XML encoded version of ProductMetadata
-	 */
-	public String eventsToXml(Events eventsConfig){
 
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(org.opennms.xmlns.xsd.eventconf.ObjectFactory.class);
-			Marshaller jaxbMarshaller = jaxbContext.createMarshaller();
-			jaxbMarshaller.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
-			StringWriter stringWriter = new StringWriter();
-			jaxbMarshaller.marshal(eventsConfig,stringWriter);
-			return stringWriter.toString();
-		} catch (JAXBException e) {
-			throw new RuntimeException("Problem marshalling event config data:",e);
-		}
-	}
-
-	/**
-	 * load this object with data from xml string
-	 * @parm XML encoded version of LicenceMetadata
-	 */
-	public Events eventsFromXml(String xmlStr){
-
-		try {
-			JAXBContext jaxbContext = JAXBContext.newInstance(org.opennms.xmlns.xsd.eventconf.ObjectFactory.class);
-			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			StringReader reader = new StringReader(xmlStr);
-			Events eventsConfig= (Events) jaxbUnmarshaller.unmarshal(reader);
-			return eventsConfig;
-		} catch (JAXBException e) {
-			throw new RuntimeException("Problem unmarshalling ProductMetadata:",e);
-		}
-	}
 
 }
