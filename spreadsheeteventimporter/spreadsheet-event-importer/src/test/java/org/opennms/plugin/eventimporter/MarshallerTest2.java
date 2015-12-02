@@ -20,6 +20,7 @@ import java.io.FileNotFoundException;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.net.URL;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
@@ -36,7 +37,6 @@ import java.util.Scanner;
 
 import org.opennms.xmlns.xsd.eventconf.Event;
 import org.opennms.xmlns.xsd.eventconf.Events;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -48,9 +48,9 @@ public class MarshallerTest2 {
 	private String marshalledEvents=null;
 
 	private Events initialEventsConfig=null;
-	
+
 	private Events finalEventsConfig=null;
-	
+
 	private List<EventRowConfigObject> eventRowConfigObjectList = new ArrayList<EventRowConfigObject>();
 
 	@Test 
@@ -60,6 +60,9 @@ public class MarshallerTest2 {
 		unmarshallerTest();
 		eventsConfigToRowsObjectTest();
 		rowsObjectToEventsConfigTest();
+
+		eventsConfigToWorkbookTest();
+		workbookToEventsConfigTest();
 		LOG.debug("@Test - allTestsInOrder().END");
 	}
 
@@ -69,6 +72,7 @@ public class MarshallerTest2 {
 
 		ClassLoader classLoader = getClass().getClassLoader();
 		File eventsFile = new File(classLoader.getResource(eventFileName).getFile());
+		LOG.debug("@Test - marshallerTest() eventsFile.getPath()"+eventsFile.getPath());
 
 		StringBuilder fileContents = new StringBuilder((int)eventsFile .length());
 
@@ -110,7 +114,7 @@ public class MarshallerTest2 {
 
 	public void eventsConfigToRowsObjectTest(){
 		LOG.debug("@Test - eventsConfigToRowsObjectTest().START");
-		
+
 		eventRowConfigObjectList.clear();
 
 		List<Object> eventsContent = initialEventsConfig.getContent();
@@ -127,25 +131,57 @@ public class MarshallerTest2 {
 
 		LOG.debug("@Test - eventsConfigToRowsObjectTest().End");
 	}
-	
+
 	public void rowsObjectToEventsConfigTest(){
 		LOG.debug("@Test - rowsObjectToEventsConfigTest().START");
 
 		finalEventsConfig = new Events();
-		
+
 		for (EventRowConfigObject eventRowConfigObject: eventRowConfigObjectList){
 			Event event = ConfigRowTranslator.jaxbEventFromRow(eventRowConfigObject);
 			finalEventsConfig.getContent().add(event);
 		}
-		
+
 		EventsMarshaller eventsMarshaller = new EventsMarshaller();
-		
+
 		String finalEvents = eventsMarshaller.eventsToXml(finalEventsConfig);
-		LOG.debug("@Test - rowsObjectToEventsConfigTest() finalEvents="+finalEvents);
-		
+		LOG.debug("@Test - rowsObjectToEventsConfigTest() finalEvents=\n"+finalEvents);
+
 		LOG.debug("@Test - rowsObjectToEventsConfigTest().End");
 	}
 
+	public void eventsConfigToWorkbookTest(){
+		try{
+			WorkbookTranslatorFactory workbookTxFactory= new WorkbookTranslatorFactory();
+			String workbookTranslatorPropertiesFilePath=null;
+			String workbookFilePath = "eventsTestWorkBook1.xlsx";
+
+			//loading and translating file
+			WorkbookTranslator workbookTranslator = workbookTxFactory.createWorkbookTranslator(workbookFilePath, workbookTranslatorPropertiesFilePath);
+			LOG.debug("eventsConfigToWorkbookTest(): workbook sheet names before:");
+			for(String sheetname: workbookTranslator.getSheetNames()){
+				LOG.debug("       sheetname: "+sheetname);
+			}
+			
+			workbookTranslator.createSheet("testSheet1");
+			
+			LOG.debug("eventsConfigToWorkbookTest(): workbook sheet names after:");
+			for(String sheetname: workbookTranslator.getSheetNames()){
+				LOG.debug("       sheetname: "+sheetname);
+			}
+			workbookTranslator.createEventRows(eventRowConfigObjectList, "testSheet1");
+			
+			
+			workbookTranslator.close();
+		} catch (Exception e){
+			LOG.debug("eventsConfigToWorkbookTest(): Exception", e);
+		}
+	}
+
+
+	public void workbookToEventsConfigTest(){
+
+	}
 
 
 }
