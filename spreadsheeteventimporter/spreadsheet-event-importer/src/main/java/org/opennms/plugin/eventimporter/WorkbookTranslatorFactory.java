@@ -47,54 +47,7 @@ public class WorkbookTranslatorFactory {
 	 */
 	public WorkbookTranslator createWorkbookTranslator(String workbookFilePath , String workbookTranslatorPropertiesFilePath   ){
 
-		if (workbookFilePath ==null) throw new IllegalArgumentException("workbookFilePath cannot be null");
-		LOG.debug(" workbookFilePath="+ workbookFilePath);
-
-		File workbookFile=null;
-		Workbook importedWorkbook=null;
-		Properties workbookTranslatorProperties = null;
-
-		try {
-			
-			// checking if we can see file on class path
-			ClassLoader classLoader = getClass().getClassLoader();
-			URL resource = classLoader.getResource(workbookFilePath);
-			if (resource==null){
-				LOG.debug("createWorkbookTranslator resource is not on class path. Checking raw location");
-				workbookFile = new File(workbookFilePath);
-			} else {
-				workbookFile = new File(classLoader.getResource(workbookFilePath).getFile());
-			}
-			LOG.debug("@Test - createWorkbookTranslator workbookFile.getPath()"+workbookFile.getAbsolutePath());
-
-			if (workbookFile.exists()){
-				LOG.debug("createWorkbookTranslator Workbook File Exists. Loading Workbook from path "+workbookFile.getPath());
-			} else {
-				LOG.debug("createWorkbookTranslator Workbook File Does not exist. Creating New empty Workbook at path "+ workbookFile.getAbsolutePath());
-			    Workbook wb = new XSSFWorkbook();
-			    FileOutputStream fileOut = new FileOutputStream(workbookFile);
-			    wb.write(fileOut);
-			    fileOut.close();
-			}
-			// importing new workbook
-			importedWorkbook = WorkbookFactory.create(workbookFile);
-			
-		} catch (Exception e) {
-			throw new IllegalArgumentException("cannot import workbook from workbook File Path="+workbookFilePath , e);
-		} 
-
-		if (workbookTranslatorPropertiesFilePath!=null){
-			try {
-				workbookTranslatorProperties = new Properties();
-				InputStream    is = this.getClass().getClassLoader().getResourceAsStream(workbookTranslatorPropertiesFilePath);
-				workbookTranslatorProperties.load(is);
-			} catch (Exception e) {
-				throw new IllegalArgumentException("cannot import workbookTranslatorPropertiesFilePath="+workbookTranslatorPropertiesFilePath , e);
-			} 
-
-		}
-
-		WorkbookTranslator workbookTranslator= new WorkbookTranslatorBasicImpl(importedWorkbook, workbookTranslatorProperties );
+		WorkbookTranslator workbookTranslator= new WorkbookTranslatorBasicImpl(workbookFilePath , workbookTranslatorPropertiesFilePath  );
 
 		return workbookTranslator;
 	}

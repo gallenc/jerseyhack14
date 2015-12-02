@@ -158,20 +158,28 @@ public class MarshallerTest2 {
 
 			//loading and translating file
 			WorkbookTranslator workbookTranslator = workbookTxFactory.createWorkbookTranslator(workbookFilePath, workbookTranslatorPropertiesFilePath);
-			LOG.debug("eventsConfigToWorkbookTest(): workbook sheet names before:");
+			String snames="";
 			for(String sheetname: workbookTranslator.getSheetNames()){
-				LOG.debug("       sheetname: "+sheetname);
+				snames=snames+sheetname+" ";
 			}
-			
-			workbookTranslator.createSheet("testSheet1");
-			
-			LOG.debug("eventsConfigToWorkbookTest(): workbook sheet names after:");
+			LOG.debug("eventsConfigToWorkbookTest(): workbook sheet names before:"+snames);
+
+			// will fail if sheet already exists
+			try{
+				workbookTranslator.createSheet("testSheet1");
+			} catch (Exception e){
+				LOG.debug("eventsConfigToWorkbookTest(): could not create sheet:"+e.getMessage());
+			}
+
+			snames="";
 			for(String sheetname: workbookTranslator.getSheetNames()){
-				LOG.debug("       sheetname: "+sheetname);
+				snames=snames+sheetname+" ";
 			}
+			LOG.debug("eventsConfigToWorkbookTest(): workbook sheet names after:"+snames);
+
 			workbookTranslator.createEventRows(eventRowConfigObjectList, "testSheet1");
-			
-			
+
+
 			workbookTranslator.close();
 		} catch (Exception e){
 			LOG.debug("eventsConfigToWorkbookTest(): Exception", e);
