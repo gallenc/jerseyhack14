@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Properties;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -89,8 +90,90 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 	public List<EventRowConfigObject> retreiveEventRows(String sheetName) { 
 		if(importedWorkbook==null) throw new IllegalStateException("WorkbookTranslatorBasicImpl importedWorkbook must not be null");
 		if(sheetName==null|| "".equals(sheetName)) throw new IllegalArgumentException("sheetName must not be null or empty string '' ");
-		// TODO Auto-generated method stub
-		return null;
+
+		Sheet wbSheet = importedWorkbook.getSheet(sheetName);
+		if(wbSheet==null) throw new IllegalArgumentException("sheetName '"+sheetName +"' does not exist in this workbook.");
+
+		List<EventRowConfigObject> eventRowConfigObjectList = new ArrayList<EventRowConfigObject>();
+
+		// get header row headings
+		wbSheet.getFirstRowNum();
+		Row headerRow = wbSheet.getRow(0);
+
+		StringBuffer sb=new StringBuffer();
+
+		short headerRowMinColIx = headerRow.getFirstCellNum();
+		short headerRowMaxColIx = headerRow.getLastCellNum();
+		for(short colIx=headerRowMinColIx; colIx<headerRowMaxColIx; colIx++) {
+			Cell cell = headerRow.getCell(colIx);
+			if(cell == null) {
+				continue;
+			}
+			sb.append(" ("+cell.getColumnIndex()+") "+cellValue(cell));
+		}
+		LOG.debug("column headers: "+sb.toString());
+
+		// populate the event row config list
+		for (int rowNo=1; rowNo<= wbSheet.getLastRowNum();rowNo++){
+			Row row = wbSheet.getRow(rowNo);
+			EventRowConfigObject eventRowConfig= new EventRowConfigObject();
+
+			// converting row to config values
+			try{
+				Cell cell=null;
+				cell = row.getCell(0);
+				eventRowConfig.setMaskOid(cellValue(cell));
+				cell = row.getCell(1);
+				eventRowConfig.setMaskGeneric(cellValue(cell)); 
+				cell = row.getCell(2);
+				eventRowConfig.setMaskSpecific(cellValue(cell));
+				cell = row.getCell(3);
+				eventRowConfig.setMaskVarbind_1_number(cellValue(cell)); 
+				cell = row.getCell(4);
+				eventRowConfig.setMaskVarbind_1_value(cellValue(cell)); 
+				cell = row.getCell(5);
+				eventRowConfig.setMaskVarbind_2_number(cellValue(cell)); 
+				cell = row.getCell(6);
+				eventRowConfig.setMaskVarbind_2_value(cellValue(cell)); 
+				cell = row.getCell(7);
+				eventRowConfig.setEventUei(cellValue(cell));
+				cell = row.getCell(8);
+				eventRowConfig.setAlarmReductionKey(cellValue(cell)); 
+				cell = row.getCell(9);
+				Double cellDouble = Double.parseDouble((cellValue(cell)));
+				eventRowConfig.setAlarmType(cellDouble.intValue()); 
+				cell = row.getCell(10);
+				eventRowConfig.setAlarmClearKey(cellValue(cell)); 
+				cell = row.getCell(11);
+				eventRowConfig.setAlarmAutoClean(Boolean.valueOf(cellValue(cell))); 
+				cell = row.getCell(12);
+				eventRowConfig.setEventLabel(cellValue(cell));
+				cell = row.createCell(13);
+				eventRowConfig.setEventDescr(cellValue(cell));
+				cell = row.getCell(14);
+				eventRowConfig.setEventMouseOverText(cellValue(cell)); 
+				cell = row.getCell(15);
+				eventRowConfig.setEventOperInstruct(cellValue(cell)); 
+				cell = row.getCell(16);
+				eventRowConfig.setEventSeverity(cellValue(cell)); 
+				cell = row.getCell(17);
+				eventRowConfig.setEventLoggroup(cellValue(cell)); 
+				cell = row.getCell(18);
+				eventRowConfig.setEventLogmsgDest(cellValue(cell)); 
+				cell = row.getCell(19);
+				eventRowConfig.setEventLogmsgValue(cellValue(cell)); 
+				cell = row.getCell(20);
+				eventRowConfig.setEventLogmsgNotify(Boolean.valueOf(cellValue(cell))); 
+				
+				eventRowConfigObjectList.add(eventRowConfig);
+				
+			} catch (Exception e){
+				LOG.error("problem parsing data in row:"+ rowNo	+ "Exception:",e);
+			}
+
+		}
+
+		return eventRowConfigObjectList ;
 	}
 
 	@Override
@@ -99,7 +182,6 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 		if(sheetName==null|| "".equals(sheetName)) throw new IllegalArgumentException("sheetName must not be null or empty string '' ");
 		if(eventRowConfigObjectList==null) throw new IllegalArgumentException("eventRowConfigObjectList must not be null");
 
-		// TODO Auto-generated method stub
 		Sheet wbSheet = importedWorkbook.getSheet(sheetName);
 		if(wbSheet==null) throw new IllegalArgumentException("sheetName '"+sheetName +"' does not exist in this workbook.");
 
@@ -231,6 +313,45 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 			throw new IllegalStateException("WorkbookTranslatorBasicImpl cannot close worksheet.",e);
 		}
 
+	}
+
+	/** 
+	 * helper method to evaluate and return a cell value as a string
+	 * @param cell
+	 * @return
+	 */
+	private String cellValue(Cell cell){
+		if(importedWorkbook==null) throw new IllegalStateException("WorkbookTranslatorBasicImpl importedWorkbook must not be null");
+
+		FormulaEvaluator evaluator = importedWorkbook.getCreationHelper().createFormulaEvaluator();
+
+		String cellValue=null;
+		//cellValue = cell.getStringCellValue();
+
+		if (cell!=null) {
+			//switch (evaluator.evaluateFormulaCell(cell)) { TODO EVALUATE CELL??
+			switch (cell.getCellType()) {
+			case Cell.CELL_TYPE_BOOLEAN:
+				cellValue = Boolean.toString(cell.getBooleanCellValue());
+				break;
+			case Cell.CELL_TYPE_NUMERIC:
+				cellValue = Double.toString(cell.getNumericCellValue());
+				break;
+			case Cell.CELL_TYPE_STRING:
+				cellValue = cell.getStringCellValue();
+				break;
+			case Cell.CELL_TYPE_BLANK:
+				break;
+			case Cell.CELL_TYPE_ERROR:
+				cellValue = "Cell Error Code:"+Byte.toString(cell.getErrorCellValue());
+				break;
+				// CELL_TYPE_FORMULA will never occur
+			case Cell.CELL_TYPE_FORMULA: 
+				break;
+			}
+
+		}
+		return cellValue;
 	}
 
 }
