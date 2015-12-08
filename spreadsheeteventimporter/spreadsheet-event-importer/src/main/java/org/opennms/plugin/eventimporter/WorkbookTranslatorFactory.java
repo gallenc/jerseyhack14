@@ -19,6 +19,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.Properties;
 
@@ -38,6 +40,8 @@ import org.slf4j.LoggerFactory;
 public class WorkbookTranslatorFactory {
 	private static final Logger LOG = LoggerFactory.getLogger(WorkbookTranslatorFactory.class);
 
+	private static final String WORKBOOK_TRANSLATOR_KEY="org.opennms.plugin.eventimporter.workbooktranslator";
+
 
 	/**
 	 * creates a new workbook translator
@@ -46,10 +50,54 @@ public class WorkbookTranslatorFactory {
 	 * @return WorkbookTranslator with associated spreadsheet
 	 */
 	public WorkbookTranslator createWorkbookTranslator(String workbookFilePath , String workbookTranslatorPropertiesFilePath   ){
+		if (workbookFilePath ==null) throw new IllegalArgumentException("workbookFilePath cannot be null");
 
-		WorkbookTranslator workbookTranslator= new WorkbookTranslatorBasicImpl(workbookFilePath , workbookTranslatorPropertiesFilePath  );
+		LOG.info("Workbook Translator using workbook file path="+workbookFilePath );
 
-		return workbookTranslator;
+		WorkbookTranslator workbookTranslator=null;
+		Properties workbookTranslatorProperties=null; 
+
+		if (workbookTranslatorPropertiesFilePath==null){
+			LOG.debug("WorkbookTranslatorFactory workbookTranslatorPropertiesFilePath set to null. Using default values.");
+		} else {
+			try {
+				LOG.info("Workbook Translator importing properties from workbookTranslatorPropertiesFilePath="+workbookTranslatorPropertiesFilePath ); 
+				workbookTranslatorProperties = new Properties();
+				InputStream    is = this.getClass().getClassLoader().getResourceAsStream(workbookTranslatorPropertiesFilePath);
+				workbookTranslatorProperties.load(is);
+			} catch (Exception e) {
+				throw new IllegalArgumentException("WorkbookTranslatorFactory cannot import workbookTranslatorPropertiesFilePath="+workbookTranslatorPropertiesFilePath , e);
+			} 
+
+		}
+
+		if (workbookTranslatorProperties ==null ){
+			LOG.info("workbookTranslatorProperties file not set. using default class. Using default class WorkbookTranslatorBasicImpl");
+			workbookTranslator= new WorkbookTranslatorBasicImpl(workbookFilePath , workbookTranslatorProperties  );
+			return workbookTranslator;
+		} else {
+			if (!workbookTranslatorProperties.containsKey(WORKBOOK_TRANSLATOR_KEY)){
+				throw new IllegalArgumentException(""+WORKBOOK_TRANSLATOR_KEY+" not defined in the properties file");
+			}
+
+			String translatorClass = (String)workbookTranslatorProperties.get(WORKBOOK_TRANSLATOR_KEY);
+			LOG.info("Using workbooktranslator class defined by "+WORKBOOK_TRANSLATOR_KEY+"="+
+					translatorClass + " defined in the properties file.");
+			try {
+				Constructor<?> translatorConstructor=null;
+				translatorConstructor = Class.forName(translatorClass).getConstructor(String.class, Properties.class);
+				workbookTranslator = (WorkbookTranslator) translatorConstructor.newInstance(workbookFilePath, workbookTranslatorProperties);
+			} catch (NoSuchMethodException | SecurityException
+					| ClassNotFoundException | InstantiationException 
+					| IllegalAccessException | IllegalArgumentException 
+					| InvocationTargetException e) {
+
+				throw new IllegalStateException("Cannot instantiate workbooktranslator class for "+WORKBOOK_TRANSLATOR_KEY+"="+
+						translatorClass + " defined in the properties file. Exception:", e);
+			}
+			return workbookTranslator;
+		}
+
 	}
 
 

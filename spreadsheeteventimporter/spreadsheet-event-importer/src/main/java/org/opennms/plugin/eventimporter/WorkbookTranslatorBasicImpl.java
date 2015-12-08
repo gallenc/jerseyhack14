@@ -31,9 +31,10 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 	private File workbookOutFile=null;
 	private String filename=null;
 
-	public WorkbookTranslatorBasicImpl(String workbookFilePath , String workbookTranslatorPropertiesFilePath ){
+	public WorkbookTranslatorBasicImpl(String workbookFilePath , Properties workbookTranslatorProperties  ){
 		super();
 		if (workbookFilePath ==null) throw new IllegalArgumentException("workbookFilePath cannot be null");
+		this.workbookTranslatorProperties=workbookTranslatorProperties;
 
 		LOG.debug("workbookTranslatorBasicImpl workbookFilePath="+ workbookFilePath);
 
@@ -73,16 +74,6 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 			throw new IllegalArgumentException("workbookTranslatorBasicImpl cannot import workbook from workbook File Path="+workbookFilePath , e);
 		} 
 
-		if (workbookTranslatorPropertiesFilePath!=null){
-			try {
-				workbookTranslatorProperties = new Properties();
-				InputStream    is = this.getClass().getClassLoader().getResourceAsStream(workbookTranslatorPropertiesFilePath);
-				workbookTranslatorProperties.load(is);
-			} catch (Exception e) {
-				throw new IllegalArgumentException("workbookTranslatorBasicImpl cannot import workbookTranslatorPropertiesFilePath="+workbookTranslatorPropertiesFilePath , e);
-			} 
-
-		}
 
 	}
 

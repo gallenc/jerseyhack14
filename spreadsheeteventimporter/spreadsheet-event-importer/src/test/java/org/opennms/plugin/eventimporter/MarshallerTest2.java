@@ -198,7 +198,7 @@ public class MarshallerTest2 {
 		WorkbookTranslator workbookTranslator=null;
 		try{
 			WorkbookTranslatorFactory workbookTxFactory= new WorkbookTranslatorFactory();
-			String workbookTranslatorPropertiesFilePath=null;
+			String workbookTranslatorPropertiesFilePath="eventImporter.properties";
 			String workbookFilePath = "eventsTestWorkBook1.xlsx";
 
 			//loading and translating file
