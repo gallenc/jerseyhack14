@@ -61,7 +61,7 @@ import org.opennms.xmlns.xsd.eventconf.Varbindsdecode;
  */
 public class MarshallerTest {
 
-	private String eventFileName = "testeventfile.xml";
+	private String eventFileName = "testeventfileIN.xml";
 
 	private String marshalledEvents=null;
 

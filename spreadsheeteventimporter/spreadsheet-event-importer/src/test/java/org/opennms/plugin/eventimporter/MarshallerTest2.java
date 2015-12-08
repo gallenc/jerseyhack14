@@ -43,7 +43,7 @@ import org.slf4j.LoggerFactory;
 public class MarshallerTest2 {
 	private static final Logger LOG = LoggerFactory.getLogger(MarshallerTest2.class);
 
-	private String eventFileName = "testeventfile.xml";
+	private String eventFileName = "testeventfileIN.xml";
 
 	private String marshalledEvents=null;
 

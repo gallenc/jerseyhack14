@@ -83,7 +83,7 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 		if(sheetName==null|| "".equals(sheetName)) throw new IllegalArgumentException("sheetName must not be null or empty string '' ");
 
 		Sheet wbSheet = importedWorkbook.getSheet(sheetName);
-		if(wbSheet==null) throw new IllegalArgumentException("sheetName '"+sheetName +"' does not exist in this workbook.");
+		if(wbSheet==null) throw new IllegalArgumentException("sheetName '"+sheetName +"' does not exist in this workbook. workbookFile="+ workbookFile.getPath());
 
 		List<EventRowConfigObject> eventRowConfigObjectList = new ArrayList<EventRowConfigObject>();
 

@@ -35,33 +35,59 @@ public class SpreadsheetEventConfTest {
 	private static final Logger LOG = LoggerFactory.getLogger(SpreadsheetEventConfTest.class);
 
 	private static String TEST_PROPERTIES_FILE="eventImporter.properties";
-	private static String TEST_WORKBOOK_FILE= "eventsTestWorkBook1.xlsx";
-	private static String TEST_EVENTCONF_FILE= "testeventfile.xml";
+	private static String TEST_WORKBOOK_IN_FILE= "eventsTestWorkBookIN.xlsx";
+	private static String TEST_WORKBOOK_OUT_FILE= "./target/eventsTestWorkBookOUT.xlsx";
+	private static String TEST_EVENTCONF_IN_FILE= "testeventfileIN.xml";
+	private static String TEST_EVENTCONF_OUT_FILE= "./target/testeventfileOUT.xml";
 	private static String TEST_SPREADSHEET_NAME="testSpreadheet1";
 
 
 
 	@Test
-	public void eventImporterTest(){
-		LOG.info("@Test - eventImporterTest.START");
+	public void eventsToSpreadsheetTest(){
+		LOG.info("@Test - eventsToSpreadsheetTest.START");
 
-		LOG.info("@Test - eventImporterTest. Configuration:"
+		LOG.info("@Test - eventsToSpreadsheetTest. Configuration:"
 				+ "\n    TEST_PROPERTIES_FILE="+TEST_PROPERTIES_FILE
-				+ "\n    TEST_EVENTCONF_FILE="+TEST_EVENTCONF_FILE
-				+ "\n    TEST_WORKBOOK_FILE="+TEST_WORKBOOK_FILE
+				+ "\n    TEST_EVENTCONF_IN_FILE="+TEST_EVENTCONF_IN_FILE
+				+ "\n    TEST_WORKBOOK_OUT_FILE="+TEST_WORKBOOK_OUT_FILE
 				+ "\n    TEST_SPREADSHEET_NAME="+TEST_SPREADSHEET_NAME);
 
 
 		SpreadsheetEventConfMain spreadsheetEvtConfMain = new SpreadsheetEventConfMain();
 
-		spreadsheetEvtConfMain.setWorkbookFilePath(TEST_WORKBOOK_FILE);
+		spreadsheetEvtConfMain.setWorkbookFilePath(TEST_WORKBOOK_OUT_FILE);
 		spreadsheetEvtConfMain.setPropertiesFilePath(TEST_PROPERTIES_FILE);
 		spreadsheetEvtConfMain.setSpreadsheetName(TEST_SPREADSHEET_NAME);
-		spreadsheetEvtConfMain.setEventsFilePath(TEST_EVENTCONF_FILE);
+		spreadsheetEvtConfMain.setEventsFilePath(TEST_EVENTCONF_IN_FILE);
 
 		spreadsheetEvtConfMain.eventsToSpreadsheet();
 
-		LOG.info("@Test - eventImporterTest.FINISH");
+		LOG.info("@Test - eventsToSpreadsheetTest.FINISH");
+	}
+
+	
+	@Test
+	public void spreadsheetToEventsTest(){
+		LOG.info("@Test - spreadsheetToEventsTest.START");
+
+		LOG.info("@Test - spreadsheetToEventsTest. Configuration:"
+				+ "\n    TEST_PROPERTIES_FILE="+TEST_PROPERTIES_FILE
+				+ "\n    TEST_EVENTCONF_OUT_FILE="+TEST_EVENTCONF_OUT_FILE
+				+ "\n    TEST_WORKBOOK_IN_FILE="+TEST_WORKBOOK_IN_FILE
+				+ "\n    TEST_SPREADSHEET_NAME="+TEST_SPREADSHEET_NAME);
+
+
+		SpreadsheetEventConfMain spreadsheetEvtConfMain = new SpreadsheetEventConfMain();
+
+		spreadsheetEvtConfMain.setWorkbookFilePath(TEST_WORKBOOK_IN_FILE);
+		spreadsheetEvtConfMain.setPropertiesFilePath(TEST_PROPERTIES_FILE);
+		spreadsheetEvtConfMain.setSpreadsheetName(TEST_SPREADSHEET_NAME);
+		spreadsheetEvtConfMain.setEventsFilePath(TEST_EVENTCONF_OUT_FILE);
+
+		spreadsheetEvtConfMain.spreadsheetToEvents();
+
+		LOG.info("@Test - spreadsheetToEventsTest.FINISH");
 	}
 
 
