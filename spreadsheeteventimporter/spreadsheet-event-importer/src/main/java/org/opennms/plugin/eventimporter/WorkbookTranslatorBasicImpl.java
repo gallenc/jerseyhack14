@@ -113,51 +113,53 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 			try{
 				Cell cell=null;
 				cell = row.getCell(0);
-				eventRowConfig.setMaskOid(cellValue(cell));
+				if (cell!=null) eventRowConfig.setMaskOid(cellValue(cell));
 				cell = row.getCell(1);
-				eventRowConfig.setMaskGeneric(cellValue(cell)); 
+				if (cell!=null) eventRowConfig.setMaskGeneric(cellValue(cell)); 
 				cell = row.getCell(2);
-				eventRowConfig.setMaskSpecific(cellValue(cell));
+				if (cell!=null) eventRowConfig.setMaskSpecific(cellValue(cell));
 				cell = row.getCell(3);
-				eventRowConfig.setMaskVarbind_1_number(cellValue(cell)); 
+				if (cell!=null) eventRowConfig.setMaskVarbind_1_number(cellValue(cell)); 
 				cell = row.getCell(4);
-				eventRowConfig.setMaskVarbind_1_value(cellValue(cell)); 
+				if (cell!=null) eventRowConfig.setMaskVarbind_1_value(cellValue(cell)); 
 				cell = row.getCell(5);
-				eventRowConfig.setMaskVarbind_2_number(cellValue(cell)); 
+				if (cell!=null) eventRowConfig.setMaskVarbind_2_number(cellValue(cell)); 
 				cell = row.getCell(6);
-				eventRowConfig.setMaskVarbind_2_value(cellValue(cell)); 
+				if (cell!=null) eventRowConfig.setMaskVarbind_2_value(cellValue(cell)); 
 				cell = row.getCell(7);
-				eventRowConfig.setEventUei(cellValue(cell));
+				if (cell!=null) eventRowConfig.setEventUei(cellValue(cell));
 				cell = row.getCell(8);
-				eventRowConfig.setAlarmReductionKey(cellValue(cell)); 
+				if (cell!=null) eventRowConfig.setAlarmReductionKey(cellValue(cell)); 
 				cell = row.getCell(9);
-				Double cellDouble = Double.parseDouble((cellValue(cell)));
-				eventRowConfig.setAlarmType(cellDouble.intValue()); 
+				if (cell!=null){ 
+					Double cellDouble = Double.parseDouble((cellValue(cell)));
+					eventRowConfig.setAlarmType(cellDouble.intValue()); 
+				}
 				cell = row.getCell(10);
-				eventRowConfig.setAlarmClearKey(cellValue(cell)); 
+				if (cell!=null) eventRowConfig.setAlarmClearKey(cellValue(cell)); 
 				cell = row.getCell(11);
-				eventRowConfig.setAlarmAutoClean(Boolean.valueOf(cellValue(cell))); 
+				if (cell!=null) eventRowConfig.setAlarmAutoClean(Boolean.valueOf(cellValue(cell))); 
 				cell = row.getCell(12);
-				eventRowConfig.setEventLabel(cellValue(cell));
+				if (cell!=null) eventRowConfig.setEventLabel(cellValue(cell));
 				cell = row.createCell(13);
-				eventRowConfig.setEventDescr(cellValue(cell));
+				if (cell!=null) eventRowConfig.setEventDescr(cellValue(cell));
 				cell = row.getCell(14);
-				eventRowConfig.setEventMouseOverText(cellValue(cell)); 
+				if (cell!=null) eventRowConfig.setEventMouseOverText(cellValue(cell)); 
 				cell = row.getCell(15);
-				eventRowConfig.setEventOperInstruct(cellValue(cell)); 
+				if (cell!=null) eventRowConfig.setEventOperInstruct(cellValue(cell)); 
 				cell = row.getCell(16);
-				eventRowConfig.setEventSeverity(cellValue(cell)); 
+				if (cell!=null) eventRowConfig.setEventSeverity(cellValue(cell)); 
 				cell = row.getCell(17);
-				eventRowConfig.setEventLoggroup(cellValue(cell)); 
+				if (cell!=null) eventRowConfig.setEventLoggroup(cellValue(cell)); 
 				cell = row.getCell(18);
-				eventRowConfig.setEventLogmsgDest(cellValue(cell)); 
+				if (cell!=null) eventRowConfig.setEventLogmsgDest(cellValue(cell)); 
 				cell = row.getCell(19);
-				eventRowConfig.setEventLogmsgValue(cellValue(cell)); 
+				if (cell!=null) eventRowConfig.setEventLogmsgValue(cellValue(cell)); 
 				cell = row.getCell(20);
-				eventRowConfig.setEventLogmsgNotify(Boolean.valueOf(cellValue(cell))); 
-				
+				if (cell!=null) eventRowConfig.setEventLogmsgNotify(Boolean.valueOf(cellValue(cell))); 
+
 				eventRowConfigObjectList.add(eventRowConfig);
-				
+
 			} catch (Exception e){
 				LOG.error("problem parsing data in row:"+ rowNo	+ "Exception:",e);
 			}
@@ -216,47 +218,47 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 			Cell cell=null;
 
 			cell = row.createCell(0);
-			cell.setCellValue(eventRowConfig.getMaskOid());
+			if( eventRowConfig.getMaskOid() !=null ) cell.setCellValue(eventRowConfig.getMaskOid());
 			cell = row.createCell(1);
-			cell.setCellValue(eventRowConfig.getMaskGeneric()); 
+			if( eventRowConfig.getMaskGeneric() !=null ) cell.setCellValue(eventRowConfig.getMaskGeneric()); 
 			cell = row.createCell(2);
-			cell.setCellValue(eventRowConfig.getMaskSpecific());
+			if( eventRowConfig.getMaskSpecific() !=null ) cell.setCellValue(eventRowConfig.getMaskSpecific());
 			cell = row.createCell(3);
-			cell.setCellValue(eventRowConfig.getMaskVarbind_1_number()); 
+			if( eventRowConfig.getMaskVarbind_1_number() !=null ) cell.setCellValue(eventRowConfig.getMaskVarbind_1_number()); 
 			cell = row.createCell(4);
-			cell.setCellValue(eventRowConfig.getMaskVarbind_1_value()); 
+			if( eventRowConfig.getMaskVarbind_1_value() !=null ) cell.setCellValue(eventRowConfig.getMaskVarbind_1_value()); 
 			cell = row.createCell(5);
-			cell.setCellValue(eventRowConfig.getMaskVarbind_2_number()); 
+			if( eventRowConfig.getMaskVarbind_2_number() !=null ) cell.setCellValue(eventRowConfig.getMaskVarbind_2_number()); 
 			cell = row.createCell(6);
-			cell.setCellValue(eventRowConfig.getMaskVarbind_2_value()); 
+			if( eventRowConfig.getMaskVarbind_2_value() !=null ) cell.setCellValue(eventRowConfig.getMaskVarbind_2_value()); 
 			cell = row.createCell(7);
-			cell.setCellValue(eventRowConfig.getEventUei());
+			if( eventRowConfig.getEventUei() !=null ) cell.setCellValue(eventRowConfig.getEventUei());
 			cell = row.createCell(8);
-			cell.setCellValue(eventRowConfig.getAlarmReductionKey()); 
+			if( eventRowConfig.getAlarmReductionKey() !=null ) cell.setCellValue(eventRowConfig.getAlarmReductionKey()); 
 			cell = row.createCell(9);
-			cell.setCellValue(eventRowConfig.getAlarmType()); 
+			if( eventRowConfig.getAlarmType() !=null ) cell.setCellValue(eventRowConfig.getAlarmType()); 
 			cell = row.createCell(10);
-			cell.setCellValue(eventRowConfig.getAlarmClearKey()); 
+			if( eventRowConfig.getAlarmClearKey() !=null ) cell.setCellValue(eventRowConfig.getAlarmClearKey()); 
 			cell = row.createCell(11);
-			cell.setCellValue(eventRowConfig.getAlarmAutoClean()); 
+			if( eventRowConfig.getAlarmAutoClean() !=null ) cell.setCellValue(eventRowConfig.getAlarmAutoClean()); 
 			cell = row.createCell(12);
-			cell.setCellValue(eventRowConfig.getEventLabel()); 
+			if( eventRowConfig.getEventLabel() !=null ) cell.setCellValue(eventRowConfig.getEventLabel()); 
 			cell = row.createCell(13);
-			cell.setCellValue(eventRowConfig.getEventDescr()); 
+			if( eventRowConfig.getEventDescr() !=null ) cell.setCellValue(eventRowConfig.getEventDescr()); 
 			cell = row.createCell(14);
-			cell.setCellValue(eventRowConfig.getEventMouseOverText()); 
+			if( eventRowConfig.getEventMouseOverText() !=null ) cell.setCellValue(eventRowConfig.getEventMouseOverText()); 
 			cell = row.createCell(15);
-			cell.setCellValue(eventRowConfig.getEventOperInstruct()); 
+			if( eventRowConfig.getEventOperInstruct() !=null ) cell.setCellValue(eventRowConfig.getEventOperInstruct()); 
 			cell = row.createCell(16);
-			cell.setCellValue(eventRowConfig.getEventSeverity()); 
+			if( eventRowConfig.getEventSeverity() !=null ) cell.setCellValue(eventRowConfig.getEventSeverity()); 
 			cell = row.createCell(17);
-			cell.setCellValue(eventRowConfig.getEventLoggroup()); 
+			if( eventRowConfig.getEventLoggroup()!=null ) cell.setCellValue(eventRowConfig.getEventLoggroup()); 
 			cell = row.createCell(18);
-			cell.setCellValue(eventRowConfig.getEventLogmsgDest()); 
+			if( eventRowConfig.getEventLogmsgDest() !=null ) cell.setCellValue(eventRowConfig.getEventLogmsgDest()); 
 			cell = row.createCell(19);
-			cell.setCellValue(eventRowConfig.getEventLogmsgValue()); 
+			if( eventRowConfig.getEventLogmsgValue() !=null ) cell.setCellValue(eventRowConfig.getEventLogmsgValue()); 
 			cell = row.createCell(20);
-			cell.setCellValue(eventRowConfig.getEventLogmsgNotify()); 
+			if( eventRowConfig.getEventLogmsgNotify() !=null ) cell.setCellValue(eventRowConfig.getEventLogmsgNotify()); 
 		}
 
 

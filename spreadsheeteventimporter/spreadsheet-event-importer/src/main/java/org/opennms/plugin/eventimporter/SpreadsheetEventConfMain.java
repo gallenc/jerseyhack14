@@ -17,7 +17,6 @@ package org.opennms.plugin.eventimporter;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
@@ -29,11 +28,8 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
-import org.apache.commons.cli.Option;
-import org.apache.commons.cli.OptionBuilder;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
-import org.apache.commons.cli.UnrecognizedOptionException;
 import org.opennms.xmlns.xsd.eventconf.Event;
 import org.opennms.xmlns.xsd.eventconf.Events;
 import org.slf4j.Logger;
@@ -90,19 +86,25 @@ public class SpreadsheetEventConfMain {
 	 * converts an events config file to a spreadsheet
 	 */
 	public void eventsToSpreadsheet(){
+		if (eventsFilePath==null || "".equals(eventsFilePath) ) throw new IllegalStateException("eventsToSpreadsheet() eventsFilePath canot be null or empty string.");
+		
 		LOG.info("eventsToSpreadsheet() converting events file to spreadsheet ");
-
+		
 		String marshalledEvents=null;
 		Events initialEventsConfig=null;
 		WorkbookTranslator workbookTranslator=null;
 
 		try{
 			// marshal events file
+			File eventsFile=null;
 			ClassLoader classLoader = getClass().getClassLoader();
 			URL resource = classLoader.getResource(eventsFilePath);
-			if(resource==null) throw new IllegalStateException("eventsToSpreadsheet() cannot find events file: "+eventsFilePath);
-
-			File eventsFile = new File(classLoader.getResource(eventsFilePath).getFile());
+			if (resource==null){
+				LOG.debug("eventsToSpreadsheet() eventsFilePath resource is not on class path. Checking raw location");
+				eventsFile = new File(eventsFilePath);
+			} else {
+				eventsFile= new File(resource.getFile());
+			}
 			LOG.debug("eventsToSpreadsheet() using events file eventsFile.getPath()"+eventsFile.getAbsolutePath());
 
 			StringBuilder fileContents = new StringBuilder((int)eventsFile .length());
@@ -282,12 +284,12 @@ public class SpreadsheetEventConfMain {
 				}
 				if( cmd.hasOption( "workbookfile" ) ) {
 					System.out.println("option value workbook="+ cmd.getOptionValue( "workbook" ) );
-					workbookFilePath=cmd.getOptionValue( "workbook" );
+					workbookFilePath=cmd.getOptionValue( "workbookfile" );
 					if (workbookFilePath==null || "".equals(workbookFilePath))throw new ParseException("workbookfile cannot be null or empty string");
 				}
 				if( cmd.hasOption( "sheetname" ) ) {
 					System.out.println("option value sheet="+ cmd.getOptionValue( "sheet" ) );
-					spreadsheetName=cmd.getOptionValue( "sheet" );
+					spreadsheetName=cmd.getOptionValue( "sheetname" );
 					if (spreadsheetName==null || "".equals(spreadsheetName))throw new ParseException("sheetname cannot be null or empty string");
 				}
 				if( cmd.hasOption( "eventfile" ) ) {
@@ -305,7 +307,7 @@ public class SpreadsheetEventConfMain {
 					xmltospreadsheet=true; // CONVERTING TO SPREADSHEET
 
 				} else if(! cmd.hasOption( "toxmlevents" ) ) {
-					throw new ParseException("You must specifiy one of toxmlevents or toworksheet"); 
+					throw new ParseException("You must specifiy a conversion operation (-x / --toxmlevents or -w / --toworksheet)"); 
 				} else {
 					System.out.println("option value toxmlevents="+ cmd.getOptionValue( "toworksheet" ) );
 					xmltospreadsheet=false; // CONVERTING TO XMLEVENTS
