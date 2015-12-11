@@ -30,10 +30,22 @@ import org.apache.commons.cli.DefaultParser;
 import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
 import org.opennms.xmlns.xsd.eventconf.Event;
 import org.opennms.xmlns.xsd.eventconf.Events;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.core.Appender;
+import org.apache.logging.log4j.core.LoggerContext;
+import org.apache.logging.log4j.core.appender.ConsoleAppender;
+import org.apache.logging.log4j.core.config.AppenderRef;
+import org.apache.logging.log4j.core.config.Configuration;
+import org.apache.logging.log4j.core.config.LoggerConfig;
+import org.apache.logging.log4j.core.layout.PatternLayout;
 
 
 /**
@@ -82,14 +94,15 @@ public class SpreadsheetEventConfMain {
 		this.spreadsheetName = spreadsheetName;
 	}
 
+
 	/**
 	 * converts an events config file to a spreadsheet
 	 */
 	public void eventsToSpreadsheet(){
 		if (eventsFilePath==null || "".equals(eventsFilePath) ) throw new IllegalStateException("eventsToSpreadsheet() eventsFilePath canot be null or empty string.");
-		
+
 		LOG.info("eventsToSpreadsheet() converting events file to spreadsheet ");
-		
+
 		String marshalledEvents=null;
 		Events initialEventsConfig=null;
 		WorkbookTranslator workbookTranslator=null;
@@ -230,7 +243,16 @@ public class SpreadsheetEventConfMain {
 	}
 
 
-
+	/**
+	 * sets underlying log4j2 to debug mode
+	 */
+	public static void debug(){
+		LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
+		Configuration config = ctx.getConfiguration();
+		LoggerConfig loggerConfig = config.getLoggerConfig(LogManager.ROOT_LOGGER_NAME); 
+		loggerConfig.setLevel(Level.DEBUG);
+		ctx.updateLoggers();  // This causes all Loggers to refetch information from their LoggerConfig.
+	}
 
 	public static void main(String[] args) {
 		LOG.info("OpenNMS Spreadsheet / Event Config converter");
@@ -248,75 +270,76 @@ public class SpreadsheetEventConfMain {
 		// use apache cli to parse options from command line
 		Options options = new Options();
 
-		options.addOption("h", "help", false, "Display Help Message");
+		options.addOption("h", "help", false, "Display this Help Message");
 		options.addOption("d", "debug", false, "Run with debug messages");
 		options.addOption("s", "sheetname", true, "Set the name of worksheet in workbook");
-		options.addOption("b", "workbookfile", true, "Set the path to excel workbook file");
+		options.addOption("b", "workbookfile", true, "Set the path to excel workbook.xlsx file");
 		options.addOption("e", "eventfile", true, "Set the path to event.xml file");
 		options.addOption("x", "toxmlevents", false, "Use option to parse worksheet into events. Cannot be used with toworksheet ");
 		options.addOption("w", "toworksheet", false, "Use option to parse events into worksheet. Cannot be used with toxmlevents.");
 		options.addOption("p", "propertiesfile", false, "Set the path to properties file");
 
 		String header = "Utility to convert between EXCEL workbooks and OpenNMS Event definitions  \n\n";
-		String footer = "\nOpenNMS Utility Spreadsheet to events utility";
+		String footer = "\nOpenNMS Spreadsheet to event config utility";
 
 		HelpFormatter formatter = new HelpFormatter();
-		formatter.printHelp("java -jar <this program's jar file>", header, options, footer, true);
-
 		CommandLineParser parser = new DefaultParser();
 
-		try {
-			CommandLine cmd = parser.parse( options, args);
+		if (args.length==0) {
+			formatter.printHelp("java -jar <this program's jar file>", header, options, footer, true);
+		} else {
+			try {
+				CommandLine cmd = parser.parse( options, args);
 
-			if( cmd.hasOption( "debug" ) ) {
-				System.out.println("option value debug="+ cmd.getOptionValue( "debug" ) );
-				//TODO SET DEBUG
-			}
-
-			if( cmd.hasOption( "help" ) ) {
-				formatter.printHelp("java -jar <this program's jar file>", header, options, footer, true);
-			} else {
-				if( cmd.hasOption( "propertiesfile" ) ) {
-					System.out.println("option value propertiesfile = "+ cmd.getOptionValue( "propertiesfile" ) );
-					propertiesFilePath=cmd.getOptionValue( "propertiesfile");
-					if ( "".equals(propertiesFilePath))throw new ParseException("propertiesfile cannot be an empty string");
-
-				}
-				if( cmd.hasOption( "workbookfile" ) ) {
-					System.out.println("option value workbook="+ cmd.getOptionValue( "workbook" ) );
-					workbookFilePath=cmd.getOptionValue( "workbookfile" );
-					if (workbookFilePath==null || "".equals(workbookFilePath))throw new ParseException("workbookfile cannot be null or empty string");
-				}
-				if( cmd.hasOption( "sheetname" ) ) {
-					System.out.println("option value sheet="+ cmd.getOptionValue( "sheet" ) );
-					spreadsheetName=cmd.getOptionValue( "sheetname" );
-					if (spreadsheetName==null || "".equals(spreadsheetName))throw new ParseException("sheetname cannot be null or empty string");
-				}
-				if( cmd.hasOption( "eventfile" ) ) {
-					System.out.println("option value eventfile ="+ cmd.getOptionValue( "eventfile" ) );
-					eventsFilePath=cmd.getOptionValue( "eventfile" );
-					if (eventsFilePath==null || "".equals(eventsFilePath))throw new ParseException("eventsfile cannot be null or empty string");
+				if( cmd.hasOption( "debug" ) ) {
+					debug();
+					LOG.debug("Debugging log enabled = option value debug="+ cmd.getOptionValue( "debug" ) );
 				}
 
-				if( cmd.hasOption( "toxmlevents" ) && cmd.hasOption( "toworksheet" ) ) {
-					throw new ParseException("You cannot use both toxmlevents and toworksheet options together ");
-				}
-
-				if( cmd.hasOption( "toworksheet" ) ) {
-					System.out.println("option value toworksheet="+ cmd.getOptionValue( "toworksheet" ) );
-					xmltospreadsheet=true; // CONVERTING TO SPREADSHEET
-
-				} else if(! cmd.hasOption( "toxmlevents" ) ) {
-					throw new ParseException("You must specifiy a conversion operation (-x / --toxmlevents or -w / --toworksheet)"); 
+				if( cmd.hasOption( "help" ) ) {
+					formatter.printHelp("java -jar <this program's jar file>", header, options, footer, true);
 				} else {
-					System.out.println("option value toxmlevents="+ cmd.getOptionValue( "toworksheet" ) );
-					xmltospreadsheet=false; // CONVERTING TO XMLEVENTS
-				}
+					if( cmd.hasOption( "propertiesfile" ) ) {
+						propertiesFilePath=cmd.getOptionValue( "propertiesfile");
+						LOG.debug("option value propertiesfile = "+ propertiesFilePath );
+						if ( "".equals(propertiesFilePath))throw new ParseException("propertiesfile cannot be an empty string");
+					}
+					if( cmd.hasOption( "workbookfile" ) ) {
+						workbookFilePath=cmd.getOptionValue( "workbookfile" );
+						LOG.debug("option value workbook="+ workbookFilePath );
+						if (workbookFilePath==null || "".equals(workbookFilePath))throw new ParseException("workbookfile cannot be null or empty string");
+					}
+					if( cmd.hasOption( "sheetname" ) ) {
+						spreadsheetName=cmd.getOptionValue( "sheetname" );
+						LOG.debug("option value sheet="+ spreadsheetName );
+						if (spreadsheetName==null || "".equals(spreadsheetName))throw new ParseException("sheetname cannot be null or empty string");
+					}
+					if( cmd.hasOption( "eventfile" ) ) {
+						eventsFilePath=cmd.getOptionValue( "eventfile" );
+						LOG.debug("option value eventfile ="+ eventsFilePath );
+						if (eventsFilePath==null || "".equals(eventsFilePath))throw new ParseException("eventsfile cannot be null or empty string");
+					}
 
+					if( cmd.hasOption( "toxmlevents" ) && cmd.hasOption( "toworksheet" ) ) {
+						throw new ParseException("You cannot use both toxmlevents and toworksheet options together ");
+					}
+
+					if( cmd.hasOption( "toworksheet" ) ) {
+						LOG.debug("option value toworksheet="+ cmd.getOptionValue( "toworksheet" ) );
+						xmltospreadsheet=true; // CONVERTING TO SPREADSHEET
+
+					} else if(! cmd.hasOption( "toxmlevents" ) ) {
+						throw new ParseException("You must specifiy a conversion operation (-x / --toxmlevents or -w / --toworksheet)"); 
+					} else {
+						LOG.debug("option value toxmlevents="+ cmd.getOptionValue( "toworksheet" ) );
+						xmltospreadsheet=false; // CONVERTING TO XMLEVENTS
+					}
+
+				}
+			} catch (ParseException e) {
+				LOG.error("Problem parsing command line. "+ e.getMessage());
+				formatter.printHelp("USAGE : java -jar <this program's jar file>", header, options, footer, true);
 			}
-		} catch (ParseException e) {
-			LOG.error("Problem parsing command line. "+ e.getMessage());
-			formatter.printHelp("USAGE : java -jar <this program's jar file>", header, options, footer, true);
 		}
 
 		if(xmltospreadsheet==null){
@@ -324,7 +347,7 @@ public class SpreadsheetEventConfMain {
 		} else try {
 			SpreadsheetEventConfMain spreadsheetEvtConfMain = new SpreadsheetEventConfMain();
 
-			System.out.println("Conversion parameters:"
+			LOG.info("Conversion parameters:"
 					+ "\n    workbook=" +workbookFilePath 
 					+ "\n    propertiesfile=" +propertiesFilePath
 					+ "\n    eventfile=" +eventsFilePath
@@ -336,15 +359,15 @@ public class SpreadsheetEventConfMain {
 			spreadsheetEvtConfMain.setEventsFilePath(eventsFilePath);
 
 			if(xmltospreadsheet){
-				System.out.println("CONVERTING TO SPREADSHEET");
+				LOG.info("CONVERTING TO SPREADSHEET");
 				spreadsheetEvtConfMain.eventsToSpreadsheet();
-				
+
 			} else {
-				System.out.println("CONVERTING TO XMLEVENTS");
+				LOG.info("CONVERTING TO XMLEVENTS");
 				spreadsheetEvtConfMain.spreadsheetToEvents();
 			}
 		} catch (Exception e){
-			System.out.println("Problem performing conversion: EXception: ");
+			LOG.error("Problem performing conversion: EXception: ", e);
 			e.printStackTrace();
 		}
 

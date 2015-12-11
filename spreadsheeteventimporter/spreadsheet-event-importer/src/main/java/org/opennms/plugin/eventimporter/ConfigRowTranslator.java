@@ -59,11 +59,14 @@ public class ConfigRowTranslator {
 		for (Object eventContentObj: eventContent){
 			if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.Forward){
 				//  @XmlElementRef(name = "forward", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = Forward.class, required = false),
-				LOG.debug ("eventContentObj is Forward.class");
 				Forward forward= (Forward) eventContentObj;
-				LOG.debug ("     forward.getMechanism()="+forward.getMechanism());
-				LOG.debug ("     forward.getState()="+forward.getState());
-				LOG.debug ("     forward.getValue()="+forward.getValue());
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("eventContentObj is Forward.class");
+
+					LOG.debug ("     forward.getMechanism()="+forward.getMechanism());
+					LOG.debug ("     forward.getState()="+forward.getState());
+					LOG.debug ("     forward.getValue()="+forward.getValue());
+				}
 				// BEGIN TRANSLATION
 				//TODO WHAT IS FORWARD
 				LOG.error("     org.opennms.xmlns.xsd.eventconf.Forward detected but not translated");
@@ -73,11 +76,13 @@ public class ConfigRowTranslator {
 				//forward.getValue();
 			} else if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.Logmsg){
 				//  @XmlElementRef(name = "logmsg", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = Logmsg.class, required = false),
-				LOG.debug ("eventContentObj is Logmsg");
 				Logmsg logmsg= (Logmsg) eventContentObj;
-				LOG.debug ("     logmsg.getDest()="+logmsg.getDest());
-				LOG.debug ("     logmsg.getValue()="+logmsg.getValue());
-				LOG.debug ("     logmsg.isNotify()="+logmsg.isNotify());
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("eventContentObj is Logmsg");
+					LOG.debug ("     logmsg.getDest()="+logmsg.getDest());
+					LOG.debug ("     logmsg.getValue()="+logmsg.getValue());
+					LOG.debug ("     logmsg.isNotify()="+logmsg.isNotify());
+				}
 
 				// BEGIN TRANSLATION
 				eventRowConfigObject.setEventLogmsgDest(logmsg.getDest());
@@ -90,14 +95,16 @@ public class ConfigRowTranslator {
 			} else if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.Correlation){
 
 				//  @XmlElementRef(name = "correlation", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = Correlation.class, required = false),
-				LOG.debug ("eventContentObj is Correlation");
 				Correlation correlation= (Correlation) eventContentObj;
-				LOG.debug ("     correlation.getPath()="+correlation.getPath());
-				LOG.debug ("     correlation.getState()="+correlation.getState());
-				LOG.debug ("     correlation.getContent()="+correlation.getContent());
-				List<Serializable> content = correlation.getContent();
-				for(Serializable serializableObj:content ){
-					LOG.debug ("          correlation.getContent() serializableObj.toString()="+serializableObj.toString()+" serializableObj.getClass().getName():"+serializableObj.getClass().getName() );
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("eventContentObj is Correlation");
+					LOG.debug ("     correlation.getPath()="+correlation.getPath());
+					LOG.debug ("     correlation.getState()="+correlation.getState());
+					LOG.debug ("     correlation.getContent()="+correlation.getContent());
+					List<Serializable> content = correlation.getContent();
+					for(Serializable serializableObj:content ){
+						LOG.debug ("          correlation.getContent() serializableObj.toString()="+serializableObj.toString()+" serializableObj.getClass().getName():"+serializableObj.getClass().getName() );
+					}
 				}
 				// BEGIN TRANSLATION
 				//TODO WHAT IS CORRELATION
@@ -109,25 +116,28 @@ public class ConfigRowTranslator {
 			}
 			else if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.Varbindsdecode){
 				//  @XmlElementRef(name = "varbindsdecode", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = Varbindsdecode.class, required = false),
-				LOG.debug ("eventContentObj is Varbindsdecode");
+
 				Varbindsdecode varbindsdecodelist= (Varbindsdecode) eventContentObj;
 				List<Object> varbinddecode = varbindsdecodelist.getContent();
 				//@XmlElementRef(name = "parmid", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = JAXBElement.class, required = false),
 				//@XmlElementRef(name = "decode", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = Decode.class, required = false)
-				for (Object varbinddecodeobj:varbinddecode){
-					if (varbinddecodeobj instanceof org.opennms.xmlns.xsd.eventconf.Decode){
-						Decode decode = (Decode)varbinddecodeobj;
-						LOG.debug ("     varbindsdecode.Decode:");
-						LOG.debug ("                  decode.getVarbinddecodedstring()="+decode.getVarbinddecodedstring());
-						LOG.debug ("                  decode.getVarbindvalue()="+decode.getVarbindvalue());
-						// fyi - methods available
-						// decode.getVarbinddecodedstring();
-						// decode.getVarbindvalue();
-					} else if (varbinddecodeobj instanceof JAXBElement){
-						JAXBElement jaxbelement = (JAXBElement) varbinddecodeobj;
-						LOG.debug ("     varbinddecodeobj: jaxbelement.getName():"+jaxbelement.getName()+ " jaxbelement.getValue():"+jaxbelement.getValue());
-					} else {
-						LOG.debug("unknown object type varbinddecodeobj= "+varbinddecodeobj.getClass().getName() +"  varbinddecodeobj.toString()"+varbinddecodeobj.toString());
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("eventContentObj is Varbindsdecode");
+					for (Object varbinddecodeobj:varbinddecode){
+						if (varbinddecodeobj instanceof org.opennms.xmlns.xsd.eventconf.Decode){
+							Decode decode = (Decode)varbinddecodeobj;
+							LOG.debug ("     varbindsdecode.Decode:");
+							LOG.debug ("                  decode.getVarbinddecodedstring()="+decode.getVarbinddecodedstring());
+							LOG.debug ("                  decode.getVarbindvalue()="+decode.getVarbindvalue());
+							// fyi - methods available
+							// decode.getVarbinddecodedstring();
+							// decode.getVarbindvalue();
+						} else if (varbinddecodeobj instanceof JAXBElement){
+							JAXBElement jaxbelement = (JAXBElement) varbinddecodeobj;
+							LOG.debug ("     varbinddecodeobj: jaxbelement.getName():"+jaxbelement.getName()+ " jaxbelement.getValue():"+jaxbelement.getValue());
+						} else {
+							LOG.debug("unknown object type varbinddecodeobj= "+varbinddecodeobj.getClass().getName() +"  varbinddecodeobj.toString()"+varbinddecodeobj.toString());
+						}
 					}
 				}
 				// BEGIN TRANSLATION
@@ -137,11 +147,14 @@ public class ConfigRowTranslator {
 			}
 			else if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.Snmp){
 				//  @XmlElementRef(name = "snmp", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = Snmp.class, required = false),
-				LOG.debug ("eventContentObj is Snmp");
+
 				Snmp snmp= (Snmp) eventContentObj;
 				List<Serializable> content = snmp.getContent();
-				for(Serializable serializableObj:content ){
-					LOG.debug ("          snmp.getContent() serializableObj.toString()="+serializableObj.toString()+" serializableObj.getClass().getName():"+serializableObj.getClass().getName() );
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("eventContentObj is Snmp");
+					for(Serializable serializableObj:content ){
+						LOG.debug ("          snmp.getContent() serializableObj.toString()="+serializableObj.toString()+" serializableObj.getClass().getName():"+serializableObj.getClass().getName() );
+					}
 				}
 				// BEGIN TRANSLATION
 				//TODO org.opennms.xmlns.xsd.eventconf.Snmp translateor
@@ -152,16 +165,21 @@ public class ConfigRowTranslator {
 			}
 			else if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.Mask){
 				//  @XmlElementRef(name = "mask", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = Mask.class, required = false),
-				LOG.debug ("eventContentObj is Mask");
+
 				Mask mask= (Mask) eventContentObj;
-				LOG.debug ("     mask.getMaskelement()="+mask.getMaskelement());
+				if (LOG.isDebugEnabled()){
+					LOG.debug ("eventContentObj is Mask");
+					LOG.debug ("     mask.getMaskelement()="+mask.getMaskelement());
+				}
 				List<Maskelement> maskelementlist = mask.getMaskelement();
 				for(Maskelement maskelement:maskelementlist){
-					LOG.debug ("         maskelement.getMename()="+maskelement.getMename());
-					LOG.debug ("         maskelement.getMevalue()="+maskelement.getMevalue());
-					List<String> mevalues = maskelement.getMevalue();
-					for (String mevalue: mevalues){
-						LOG.debug ("             maskelement.getMevalue() mevalue="+mevalue);
+					if (LOG.isDebugEnabled()) {
+						LOG.debug ("         maskelement.getMename()="+maskelement.getMename());
+						LOG.debug ("         maskelement.getMevalue()="+maskelement.getMevalue());
+						List<String> mevalues = maskelement.getMevalue();
+						for (String mevalue: mevalues){
+							LOG.debug ("             maskelement.getMevalue() mevalue="+mevalue);
+						}
 					}
 					// BEGIN TRANSLATION
 					try{ 
@@ -169,7 +187,6 @@ public class ConfigRowTranslator {
 							LOG.error("      cannot translate eventContentObj maskelement.getMevalue().size()>1 for maskelement.getMename(): "+maskelement.getMename()+ " maskelement.getMevalue().size():"+maskelement.getMevalue().size());
 						} else {
 							switch (maskelement.getMename().toString()) {
-
 							case "id":
 								eventRowConfigObject.setMaskOid(maskelement.getMevalue().get(0)); // only first value used
 								break;
@@ -191,93 +208,95 @@ public class ConfigRowTranslator {
 					// maskelement.getMename();
 					// maskelement.getMevalue();
 				}
-				LOG.debug ("     mask.getVarbind()="+mask.getVarbind());
+				// NOTE because mixed=true in xsd - space text strings appear to be being stored as strings
+
 				List<Varbind> varbindlist = mask.getVarbind();
-				for (Varbind varbind:varbindlist){
-					LOG.debug ("         varbind.getTextualConvention()="+varbind.getTextualConvention());
-					List content = varbind.getContent();
-					for(Object serializableObj:content ){
-						if (serializableObj instanceof JAXBElement){
-							LOG.debug ("         serializableObj is JAXBElement");
-							JAXBElement jaxbelement = (JAXBElement) serializableObj;
-							LOG.debug ("               varbind.getContent() jaxbelement.getName():"+jaxbelement.getName()+ " jaxbelement.getValue():"+jaxbelement.getValue());
-						} else {
-							LOG.debug ("               varbind.getContent() serializableObj.toString()="+serializableObj.toString()+" serializableObj.getClass().getName():"+serializableObj.getClass().getName() );
+
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("     mask.getVarbind().size()="+mask.getVarbind().size());
+					for (int index=0 ; index < varbindlist.size(); index++){
+						Varbind varbind=varbindlist.get(index);
+						LOG.debug ("         varbindlist(index) index="+index);
+						LOG.debug ("         varbind.getTextualConvention()="+varbind.getTextualConvention());
+						LOG.debug ("         varbind.getContent().size()"+varbind.getContent().size());
+						List content = varbind.getContent();
+						for(int i=0; i<content.size(); i++ ){
+							Object serializableObj=content.get(i);
+							if (serializableObj instanceof JAXBElement){
+								JAXBElement jaxbelement = (JAXBElement) serializableObj;
+								LOG.debug ("                  varbind.getContent().get("+ i+ ") serializableObj is JAXBElement jaxbelement.getName():"+jaxbelement.getName()+ " jaxbelement.getValue():"+jaxbelement.getValue());
+							} else {
+								LOG.debug ("                  varbind.getContent().get("+ i+ ") serializableObj is unknown type serializableObj.toString()="+serializableObj.toString()+" serializableObj.getClass().getName():"+serializableObj.getClass().getName() );
+							}
 						}
+						// fyi - methods available
+						// varbind.getTextualConvention();
+						// varbind.getContent();
 					}
-					// fyi - methods available
-					// varbind.getTextualConvention();
-					// varbind.getContent();
+
+					LOG.debug ("   BEGINNING varbind translation");
 				}
 				// BEGIN TRANSLATION
 				try{
-					// only 2 varbinds considered
-					if (varbindlist.size()>2){
-						LOG.error("   eventContentObj more than 2 varbinds defined in list: varbindlist.size()="+varbindlist.size());
-					}
-					Varbind varbind1=null;
-					if (varbindlist.size()>=1) varbind1 = varbindlist.get(0);
-					if(varbind1!=null){
-						List varbind1content = varbind1.getContent() ;
-						if (varbind1content.get(0)!=null){
-							if(varbind1content.get(0) instanceof JAXBElement ){
-								JAXBElement jaxbelement = (JAXBElement) varbind1content.get(0);
+					// extract varbind definitions from XSD classes
+					RowVarbindConfig rowVbConfig= new RowVarbindConfig();
+					for (int index=0 ; index < varbindlist.size(); index++){
+						Varbind varbind=varbindlist.get(index);
+						List content = varbind.getContent();
+						RowVarbindEntry rowvbentry= new RowVarbindEntry();
+						for(int i=0; i<content.size(); i++ ){
+							Object serializableObj=content.get(i);
+							if (serializableObj instanceof JAXBElement){
+								JAXBElement jaxbelement = (JAXBElement) serializableObj;
 								switch (jaxbelement.getName().toString()) {
 								case "{http://xmlns.opennms.org/xsd/eventconf}vbnumber":
-									eventRowConfigObject.setMaskVarbind_1_number(jaxbelement.getValue().toString()); 
+									// note only one vb number per entry
+									if(rowvbentry.getNumber()!=null) LOG.error("more than one varbind number defined in a varbind config");
+									rowvbentry.setNumber(jaxbelement.getValue().toString());
 									break;
 								case "{http://xmlns.opennms.org/xsd/eventconf}vbvalue":
 									eventRowConfigObject.setMaskVarbind_1_value(jaxbelement.getValue().toString()); 
+									rowvbentry.getValues().add(jaxbelement.getValue().toString());
 									break;
 								default: 
-									LOG.error("   unknown varbind1 jaxbelement.getName().toString()"+ jaxbelement.getName().toString()+ " jaxbelement.getValue().toString():"+jaxbelement.getValue().toString());
+									// String values included because of mixed=true in xsd 
 									break;
 								}
-							} else {
-								LOG.error("   unknown type varbind1content.get(0).toString():"+ varbind1content.get(0).toString()+ "  varbind1content.get(0).getClass().getName():"+varbind1content.get(0).getClass().getName());
-							}
-
+							} 
 						}
-					}
-					Varbind varbind2=null;
-					if (varbindlist.size()>=2) varbind2 = varbindlist.get(0);
-					if(varbind2!=null){
-						List varbind2content = varbind2.getContent() ;
-						if (varbind2content.get(0)!=null){
-							if(varbind2content.get(0) instanceof JAXBElement ){
-								JAXBElement jaxbelement = (JAXBElement) varbind2content.get(0);
-								switch (jaxbelement.getName().toString()) {
-								case "{http://xmlns.opennms.org/xsd/eventconf}vbnumber":
-									eventRowConfigObject.setMaskVarbind_2_number(jaxbelement.getValue().toString()); 
-									break;
-								case "{http://xmlns.opennms.org/xsd/eventconf}vbvalue":
-									eventRowConfigObject.setMaskVarbind_2_value(jaxbelement.getValue().toString()); 
-									break;
-								default: 
-									LOG.error("   unknown varbind2 jaxbelement.getName().toString()"+ jaxbelement.getName().toString()+ " jaxbelement.getValue().toString():"+jaxbelement.getValue().toString());
-									break;
-								}
-							} else {
-								LOG.error("   unknown type varbind2content.get(0).toString():"+ varbind2content.get(0).toString()+ "  varbind2content.get(0).getClass().getName():"+varbind2content.get(0).getClass().getName());
-							}
+						rowVbConfig.getVarbindEntries().add(rowvbentry);
 
-						}
 					}
+
+					// only 2 varbinds considered for spreadsheet
+					if (rowVbConfig.getVarbindEntries().size()>2){
+						LOG.error("   eventContentObj more than 2 varbinds defined in list: rowVbConfig.getVarbindEntries().size())="+rowVbConfig.getVarbindEntries().size());
+					}
+
+					// fixed number of values in spreadsheet
+					if(rowVbConfig.getVarbindEntries().size()>=1){
+						eventRowConfigObject.setMaskVarbind_1_number(rowVbConfig.getVarbindEntries().get(0).getNumber());
+						eventRowConfigObject.setMaskVarbind_1_value(rowVbConfig.getVarbindEntries().get(0).getValues().get(0));
+					}
+					if(rowVbConfig.getVarbindEntries().size()>=2){
+						eventRowConfigObject.setMaskVarbind_2_number(rowVbConfig.getVarbindEntries().get(1).getNumber());
+						eventRowConfigObject.setMaskVarbind_2_value(rowVbConfig.getVarbindEntries().get(1).getValues().get(0));
+					}
+
 				} catch (Exception e){
 					LOG.error("problem translating org.opennms.xmlns.xsd.eventconf.Mask: Exception ",e);
 				}
-				// fyi - methods available
-				// mask.getMaskelement();
-				// mask.getVarbind();
 			}
 			else if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.Operaction){
 				//  @XmlElementRef(name = "operaction", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = Operaction.class, required = false),
-				LOG.debug ("eventContentObj is Operaction");
 				Operaction operaction= (Operaction) eventContentObj;
-				LOG.debug ("              operaction.getMenutext()="+operaction.getMenutext());
-				LOG.debug ("              operaction.getState()="+operaction.getState());
-				LOG.debug ("              operaction.getValue()="+operaction.getValue());
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("eventContentObj is Operaction");
 
+					LOG.debug ("              operaction.getMenutext()="+operaction.getMenutext());
+					LOG.debug ("              operaction.getState()="+operaction.getState());
+					LOG.debug ("              operaction.getValue()="+operaction.getValue());
+				}
 				// BEGIN TRANSLATION
 				//TODO WHAT IS OPERACTION
 				LOG.error("     org.opennms.xmlns.xsd.eventconf.Operaction detected but not translated");
@@ -289,11 +308,12 @@ public class ConfigRowTranslator {
 			} else if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.Script){
 
 				//  @XmlElementRef(name = "script", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = Script.class, required = false),
-				LOG.debug ("eventContentObj is Script");
 				Script script= (Script) eventContentObj;
-				LOG.debug ("     script.getLanguage()="+script.getLanguage());
-				LOG.debug ("     script.getValue()="+script.getValue());
-
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("eventContentObj is Script");
+					LOG.debug ("     script.getLanguage()="+script.getLanguage());
+					LOG.debug ("     script.getValue()="+script.getValue());
+				}
 				// BEGIN TRANSLATION
 				//TODO script not translated
 				LOG.error("     org.opennms.xmlns.xsd.eventconf.Script detected but not translated");
@@ -302,11 +322,14 @@ public class ConfigRowTranslator {
 				// script.getValue();
 			} else if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.Autoaction){
 				//  @XmlElementRef(name = "autoaction", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = Autoaction.class, required = false),
-				LOG.debug ("eventContentObj is Autoaction");
 				Autoaction autoaction= (Autoaction) eventContentObj;
-				LOG.debug ("     script.getState()="+autoaction.getState());
-				LOG.debug ("     script.getValue()="+autoaction.getValue());
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("eventContentObj is Autoaction");
 
+
+					LOG.debug ("     script.getState()="+autoaction.getState());
+					LOG.debug ("     script.getValue()="+autoaction.getValue());
+				}
 				// BEGIN TRANSLATION
 				//TODO WHAT IS AUTOACTION
 				LOG.error("     org.opennms.xmlns.xsd.eventconf.Autoaction detected but not translated");
@@ -316,20 +339,22 @@ public class ConfigRowTranslator {
 				// autoaction.getValue();
 			}else if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.AlarmData){
 				//  @XmlElementRef(name = "alarm-data", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = AlarmData.class, required = false),
-				LOG.debug ("eventContentObj is AlarmData");
 				AlarmData alarmData= (AlarmData) eventContentObj;
-				LOG.debug ("     alarmData.getAlarmType()="+alarmData.getAlarmType());
-				LOG.debug ("     alarmData.getClearKey()="+alarmData.getClearKey());
-				LOG.debug ("     alarmData.getReductionKey()="+alarmData.getReductionKey());
-				LOG.debug ("     alarmData.getX733AlarmType()="+alarmData.getX733AlarmType());
-				LOG.debug ("     alarmData.getX733ProbableCause()="+alarmData.getX733ProbableCause());
-				LOG.debug ("     alarmData.isAutoClean()="+alarmData.isAutoClean());
-
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("eventContentObj is AlarmData");
+					LOG.debug ("     alarmData.getAlarmType()="+alarmData.getAlarmType());
+					LOG.debug ("     alarmData.getClearKey()="+alarmData.getClearKey());
+					LOG.debug ("     alarmData.getReductionKey()="+alarmData.getReductionKey());
+					LOG.debug ("     alarmData.getX733AlarmType()="+alarmData.getX733AlarmType());
+					LOG.debug ("     alarmData.getX733ProbableCause()="+alarmData.getX733ProbableCause());
+					LOG.debug ("     alarmData.isAutoClean()="+alarmData.isAutoClean());
+				}
 				// BEGIN TRANSLATION
 				try {
 					eventRowConfigObject.setAlarmType(alarmData.getAlarmType());
 					eventRowConfigObject.setAlarmClearKey(alarmData.getClearKey());
 					eventRowConfigObject.setAlarmReductionKey(alarmData.getReductionKey());
+					//TODO alarmData.getUpdateField(); NOT TRANSLATED
 					//TODO alarmData.getX733AlarmType(); NOT TRANSLATED
 					//TODO alarmData.getX733ProbableCause(); NOT TRANSLATED
 					eventRowConfigObject.setAlarmAutoClean(alarmData.isAutoClean());
@@ -342,19 +367,20 @@ public class ConfigRowTranslator {
 					// alarmData.getX733AlarmType();
 					// alarmData.getX733ProbableCause();
 					// alarmData.isAutoClean();
-
-					LOG.debug ("     alarmData.getUpdateField()="+alarmData.getUpdateField());
-					//TODO alarmData.getUpdateField(); NOT TRANSLATED
-					if(alarmData.getUpdateField()!=null && alarmData.getUpdateField().size()!=0) {
-						LOG.error("     alarmData.getUpdateField() detected but not translated");
-					}
-					List<UpdateField> updatefieldList = alarmData.getUpdateField();
-					for (UpdateField updatefield:updatefieldList){
-						LOG.debug ("          updatefield.getFieldName()="+updatefield.getFieldName());
-						LOG.debug ("          updatefield.isUpdateOnReduction()="+updatefield.isUpdateOnReduction());
-						// fyi - methods available
-						// updatefield.getFieldName();
-						// updatefield.isUpdateOnReduction();
+					if (LOG.isDebugEnabled()) {
+						LOG.debug ("     alarmData.getUpdateField()="+alarmData.getUpdateField());
+						//TODO alarmData.getUpdateField(); NOT TRANSLATED
+						if(alarmData.getUpdateField()!=null && alarmData.getUpdateField().size()!=0) {
+							LOG.error("     alarmData.getUpdateField() detected but not translated");
+						}
+						List<UpdateField> updatefieldList = alarmData.getUpdateField();
+						for (UpdateField updatefield:updatefieldList){
+							LOG.debug ("          updatefield.getFieldName()="+updatefield.getFieldName());
+							LOG.debug ("          updatefield.isUpdateOnReduction()="+updatefield.isUpdateOnReduction());
+							// fyi - methods available
+							// updatefield.getFieldName();
+							// updatefield.isUpdateOnReduction();
+						}
 					}
 				} catch (Exception e){
 					LOG.error("problem translating org.opennms.xmlns.xsd.eventconf.AlarmData: Exception ",e);
@@ -362,10 +388,13 @@ public class ConfigRowTranslator {
 
 			}else if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.Tticket){
 				//  @XmlElementRef(name = "tticket", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = Tticket.class, required = false),
-				LOG.debug ("eventContentObj is Tticket");
 				Tticket tticket= (Tticket) eventContentObj;
-				LOG.debug ("     tticket.getState()="+tticket.getState());
-				LOG.debug ("     tticket.getValue()="+tticket.getValue());
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("eventContentObj is Tticket");
+
+					LOG.debug ("     tticket.getState()="+tticket.getState());
+					LOG.debug ("     tticket.getValue()="+tticket.getValue());
+				}
 				// BEGIN TRANSLATION
 				//TODO trouble ticket translation
 				LOG.error("     org.opennms.xmlns.xsd.eventconf.Tticket detected but not translated");
@@ -375,10 +404,12 @@ public class ConfigRowTranslator {
 				// tticket.getValue();
 			} else if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.Autoacknowledge){
 				//  @XmlElementRef(name = "autoacknowledge", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = Autoacknowledge.class, required = false),
-				LOG.debug ("eventContentObj is Autoacknowledge");
 				Autoacknowledge autoacknowledge= (Autoacknowledge) eventContentObj;
-				LOG.debug ("     autoacknowledge.getState()="+autoacknowledge.getState());
-				LOG.debug ("     autoacknowledge.getValue()="+autoacknowledge.getValue());
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("eventContentObj is Autoacknowledge");
+					LOG.debug ("     autoacknowledge.getState()="+autoacknowledge.getState());
+					LOG.debug ("     autoacknowledge.getValue()="+autoacknowledge.getValue());
+				}
 				// BEGIN TRANSLATION
 				//TODO org.opennms.xmlns.xsd.eventconf.Autoacknowledge translation
 				LOG.error("     org.opennms.xmlns.xsd.eventconf.Autoacknowledge detected but not translated");
@@ -387,17 +418,19 @@ public class ConfigRowTranslator {
 				// autoacknowledge.getValue();
 			}else if (eventContentObj instanceof org.opennms.xmlns.xsd.eventconf.Filters){
 				//  @XmlElementRef(name = "filters", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = Filters.class, required = false)
-				LOG.debug ("eventContentObj is Filters");
-				Filters filters= (Filters) eventContentObj;
-				List<Filter> filterlist = filters.getFilter();
-				for (Filter filter:filterlist){
-					LOG.debug ("        filter.getEventparm()="+filter.getEventparm());
-					LOG.debug ("        filter.getPattern()="+filter.getPattern());
-					LOG.debug ("        filter.getReplacement()="+filter.getReplacement());
-					// fyi - methods available
-					// filter.getEventparm();
-					// filter.getPattern();
-					// filter.getReplacement();
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("eventContentObj is Filters");
+					Filters filters= (Filters) eventContentObj;
+					List<Filter> filterlist = filters.getFilter();
+					for (Filter filter:filterlist){
+						LOG.debug ("        filter.getEventparm()="+filter.getEventparm());
+						LOG.debug ("        filter.getPattern()="+filter.getPattern());
+						LOG.debug ("        filter.getReplacement()="+filter.getReplacement());
+						// fyi - methods available
+						// filter.getEventparm();
+						// filter.getPattern();
+						// filter.getReplacement();
+					}
 				}
 				// BEGIN TRANSLATION
 				//TODO WHAT IS FILTERS
@@ -411,10 +444,12 @@ public class ConfigRowTranslator {
 				//  @XmlElementRef(name = "operinstruct", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = JAXBElement.class, required = false),
 				//  @XmlElementRef(name = "severity", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = JAXBElement.class, required = false),
 				//  @XmlElementRef(name = "loggroup", namespace = "http://xmlns.opennms.org/xsd/eventconf", type = JAXBElement.class, required = false),
-				LOG.debug ("eventContentObj is JAXBElement");
 				JAXBElement jaxbelement = (JAXBElement) eventContentObj;
-				LOG.debug ("      jaxbelement.getName():"+jaxbelement.getName()+ " jaxbelement.getValue():"+jaxbelement.getValue());
 
+				if (LOG.isDebugEnabled()) {
+					LOG.debug ("eventContentObj is JAXBElement");
+					LOG.debug ("      jaxbelement.getName():"+jaxbelement.getName()+ " jaxbelement.getValue():"+jaxbelement.getValue());
+				}
 				// BEGIN TRANSLATION
 				try{
 					switch (jaxbelement.getName().toString()) {
@@ -456,25 +491,25 @@ public class ConfigRowTranslator {
 	public static Event jaxbEventFromRow(EventRowConfigObject rowObject){
 
 		ObjectFactory objectFactory= new ObjectFactory();
-		
+
 		Event event = objectFactory.createEvent();
-		
+
 
 		try {
 
 			List<Object> eventContent = event.getContent();
-			
+
 			//event mask - only created if an oid exists
 			if(rowObject.getMaskOid()!=null){
 				Mask mask = objectFactory.createMask();
 				eventContent.add(mask);
-				
+
 				// oid
 				Maskelement oidMaskElement = objectFactory.createMaskelement();
 				oidMaskElement.setMename("id");
 				oidMaskElement.getMevalue().add(rowObject.getMaskOid());
 				mask.getMaskelement().add(oidMaskElement);
-				
+
 				// generic
 				if(rowObject.getMaskGeneric()!=null){
 					Maskelement genericMaskElement = objectFactory.createMaskelement();
@@ -482,7 +517,7 @@ public class ConfigRowTranslator {
 					genericMaskElement.getMevalue().add(rowObject.getMaskGeneric());
 					mask.getMaskelement().add(genericMaskElement);
 				}
-				
+
 				// specific
 				if(rowObject.getMaskSpecific()!=null){
 					Maskelement specificMaskElement = objectFactory.createMaskelement();
@@ -493,32 +528,29 @@ public class ConfigRowTranslator {
 
 				// varbinds ( only 2 varbinds supported)
 				if(rowObject.getMaskVarbind_1_number()!=null){
-					
+
 					JAXBElement<Integer> vbnumber = objectFactory.createVarbindVbnumber(Integer.valueOf(rowObject.getMaskVarbind_1_number()));
 					JAXBElement<String> vbvalue = objectFactory.createVarbindVbvalue(rowObject.getMaskVarbind_1_value());
-					
+
 					Varbind varbind_1 = objectFactory.createVarbind();
 					varbind_1.getContent().add(vbnumber);
 					varbind_1.getContent().add(vbvalue);
 					mask.getVarbind().add(varbind_1);
 
 				}
-				
+
 				if(rowObject.getMaskVarbind_2_number()!=null){
-					
+
 					JAXBElement<Integer> vbnumber = objectFactory.createVarbindVbnumber(Integer.valueOf(rowObject.getMaskVarbind_2_number()));
 					JAXBElement<String> vbvalue = objectFactory.createVarbindVbvalue(rowObject.getMaskVarbind_2_value());
-					
+
 					Varbind varbind_2 = objectFactory.createVarbind();
 					varbind_2.getContent().add(vbnumber);
 					varbind_2.getContent().add(vbvalue);
 					mask.getVarbind().add(varbind_2);
 				}
 			}
-			
-			
-			
-			
+
 			// Event string variables
 			if(rowObject.getEventUei()!=null){
 				eventContent.add(objectFactory.createEventUei(rowObject.getEventUei()));
@@ -538,15 +570,10 @@ public class ConfigRowTranslator {
 			if(rowObject.getEventLabel()!=null){
 				eventContent.add(objectFactory.createEventEventLabel(rowObject.getEventLabel()));
 			}
-			
+
 			// logmessage
 
 			rowObject.getEventLogmsgValue();
-
-
-
-
-
 
 		}catch (Exception e){
 			LOG.error("jaxbEventFromRow cannot populate event: ",e);

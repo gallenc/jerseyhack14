@@ -131,8 +131,8 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 				cell = row.getCell(8);
 				if (cell!=null) eventRowConfig.setAlarmReductionKey(cellValue(cell)); 
 				cell = row.getCell(9);
-				if (cell!=null){ 
-					Double cellDouble = Double.parseDouble((cellValue(cell)));
+				if (cell!=null && cellValue(cell)!=null){ 
+					Double cellDouble = Double.parseDouble(cellValue(cell));
 					eventRowConfig.setAlarmType(cellDouble.intValue()); 
 				}
 				cell = row.getCell(10);
