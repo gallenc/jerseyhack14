@@ -19,6 +19,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -62,6 +63,8 @@ public class SpreadsheetEventConfMain {
 
 	private String spreadsheetName=null;
 
+	private String snmpTrapScriptFilePath=null;
+
 	public String getWorkbookFilePath() {
 		return workbookFilePath;
 	}
@@ -94,6 +97,13 @@ public class SpreadsheetEventConfMain {
 		this.spreadsheetName = spreadsheetName;
 	}
 
+	public String getSnmpTrapScriptFilePath() {
+		return snmpTrapScriptFilePath;
+	}
+
+	public void setSnmpTrapScriptFilePath(String snmpTrapScriptFilePath) {
+		this.snmpTrapScriptFilePath = snmpTrapScriptFilePath;
+	}
 
 	/**
 	 * converts an events config file to a spreadsheet
@@ -202,6 +212,14 @@ public class SpreadsheetEventConfMain {
 			workbookTranslator = workbookTxFactory.createWorkbookTranslator(workbookFilePath, propertiesFilePath);
 
 			List<EventRowConfigObject> eventRows = workbookTranslator.retreiveEventRows(spreadsheetName);
+			
+			if(LOG.isDebugEnabled()){
+				LOG.debug("Event Rows Retreived from Sheet:");
+				for (EventRowConfigObject eventRowConfigObject: eventRows){
+					LOG.debug(eventRowConfigObject.toString());
+				}
+				LOG.debug("End of Event Rows Retreived from Sheet:");
+			}
 
 			EventsMarshaller eventsMarshaller = new EventsMarshaller();
 
@@ -233,13 +251,146 @@ public class SpreadsheetEventConfMain {
 					+ " to events file="+eventsFilePath	);
 
 		} catch (Exception e){
-			LOG.debug("spreadsheetToEvents(): problem converting spreadsheet to events file. Exception:", e);
+			LOG.error("spreadsheetToEvents(): problem converting spreadsheet to events file. Exception:", e);
 		} finally{
 			if (workbookTranslator!=null){
 				workbookTranslator.close();
 			}
 		}
 
+	}
+
+
+	/** 
+	 * converts an opennms events file to snmp trap tests
+	 * 
+	 */
+	public void eventsToSnmpTrapScript() {
+		// TODO Auto-generated method stub
+		if (eventsFilePath==null || "".equals(eventsFilePath) ) throw new IllegalStateException("eventsToSpreadsheet() eventsFilePath cannot be null or empty string.");
+		if (snmpTrapScriptFilePath==null || "".equals(snmpTrapScriptFilePath) ) throw new IllegalStateException("eventsToSpreadsheet() snmpTrapScriptFilePath cannot be null or empty string.");
+		
+		LOG.info("eventsToSnmpTrapScript() converting events file to snmtrap test script ");
+
+		String marshalledEvents=null;
+		Events initialEventsConfig=null;
+		PrintWriter snmpTestOut=null;
+
+		try{
+			// marshal events file
+			File eventsFile=null;
+			ClassLoader classLoader = getClass().getClassLoader();
+			URL resource = classLoader.getResource(eventsFilePath);
+			if (resource==null){
+				LOG.debug("eventsToSnmpTrapScript() eventsFilePath resource is not on class path. Checking raw location");
+				eventsFile = new File(eventsFilePath);
+			} else {
+				eventsFile= new File(resource.getFile());
+			}
+			LOG.debug("eventsToSnmpTrapScript() using events file eventsFile.getPath()"+eventsFile.getAbsolutePath());
+
+			StringBuilder fileContents = new StringBuilder((int)eventsFile .length());
+
+			Scanner scanner=null;
+			try {
+				scanner = new Scanner(eventsFile );
+				String lineSeparator = System.getProperty("line.separator");
+				while(scanner.hasNextLine()) {        
+					fileContents.append(scanner.nextLine() + lineSeparator);
+				}
+
+				marshalledEvents=fileContents.toString();
+				LOG.debug("eventsToSnmpTrapScript() Config file contents marshalledEvents: \n"+marshalledEvents);
+
+				EventsMarshaller eventsMarshaller = new EventsMarshaller();
+				initialEventsConfig = eventsMarshaller.eventsFromXml(marshalledEvents);
+
+			} catch (Exception e) {
+				throw new IllegalStateException("eventsToSnmpTrapScript() problem marshalling events configuration file "+eventsFilePath, e);
+			} finally {
+				if (scanner != null) scanner.close();
+			}
+			// convert events to rowConfigObjects
+
+			//loading and translating file
+			List<EventRowConfigObject> eventRowConfigObjectList = new ArrayList<EventRowConfigObject>();
+
+			LOG.debug("eventsToSnmpTrapScript()  converting Events to eventRowConfigObjects");
+			List<Object> eventsContent = initialEventsConfig.getContent();
+			for( Object obj: eventsContent){
+				if (obj instanceof org.opennms.xmlns.xsd.eventconf.Event){
+					Event event = (Event) obj;
+					EventRowConfigObject eventRowConfigObject = ConfigRowTranslator.rowFromJxbEvent(event);
+					eventRowConfigObjectList.add(eventRowConfigObject);
+					LOG.debug("      eventRowConfigObject.toString()="+eventRowConfigObject.toString());
+				}
+			}
+
+			// create test script
+			snmpTestOut = new PrintWriter(snmpTrapScriptFilePath);
+			
+			StringBuilder sb = new StringBuilder();
+			
+			sb.append("#!/bin/bash");
+			sb.append("\n# TEST FILE "+snmpTrapScriptFilePath);
+			
+			for (EventRowConfigObject eventRowConfigObject :eventRowConfigObjectList){
+				sb.append("\n");
+				sb.append("\n# eventLabel "+eventRowConfigObject.getEventLabel());
+				sb.append("\n# event eui  "+eventRowConfigObject.getEventUei());
+				sb.append("\n# test script:  ");
+				// basic trap string
+				String trapOid=eventRowConfigObject.getMaskOid()+"."+eventRowConfigObject.getMaskSpecific();
+				sb.append("\nsnmptrap -v 2c -c public host \"\" "+trapOid);
+				
+				try{
+				// find positions of varbinds
+				String vb1numStr=eventRowConfigObject.getMaskVarbind_1_number();
+				String vb1valStr=eventRowConfigObject.getMaskVarbind_1_value();
+				Integer vb1num=null;
+				Integer maxvbnum= 0;
+				if (vb1numStr!=null && ! "".equals(vb1numStr)){
+					vb1num = Integer.parseInt(vb1numStr);
+					maxvbnum=vb1num;
+				}
+				String vb2numStr=eventRowConfigObject.getMaskVarbind_2_number();
+				String vb2valStr=eventRowConfigObject.getMaskVarbind_2_value();
+				Integer vb2num=null;
+				if (vb2numStr!=null && ! "".equals(vb2numStr)){
+					vb2num = Integer.parseInt(vb2numStr);
+					if (vb2num>maxvbnum) maxvbnum=vb2num;
+				}
+				String[] varbindstrings= new String[maxvbnum];
+				for(int x=0; x<maxvbnum; x++){
+					// fill with dummy varbinds
+					varbindstrings[x]= " "+trapOid+" i "+1+" ";
+				}
+				varbindstrings[vb1num-1] = " "+trapOid+" i "+vb1valStr+" ";
+				if(vb2numStr!=null){
+					varbindstrings[vb2num-1] = " "+trapOid+" i "+vb2valStr+" ";
+				};
+				for(int x=0; x<maxvbnum; x++){
+					sb.append(varbindstrings[x]);
+				}
+				sb.append("");
+				
+				} catch (Exception e){
+					LOG.error("eventsToSnmpTrapScript() Exception when convsrting a file", e);
+				}
+				
+			}
+			LOG.debug("Test File to be written:\n"+sb.toString());
+			
+			snmpTestOut.println(sb.toString());
+			
+			LOG.info("CONVERSION COMPLETE - converted events file="+eventsFilePath
+					+ " to snmp test file ="+snmpTrapScriptFilePath);
+
+		} catch (Exception e){
+			LOG.error("eventsToSnmpTrapScript() Exception", e);
+		} finally{
+			if (snmpTestOut!=null) snmpTestOut.close();
+		}
 	}
 
 
@@ -372,6 +523,13 @@ public class SpreadsheetEventConfMain {
 		}
 
 	}
+
+
+
+
+
+
+
 
 
 

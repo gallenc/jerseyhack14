@@ -40,6 +40,7 @@ public class SpreadsheetEventConfTest {
 	private static String TEST_EVENTCONF_IN_FILE= "testeventfileIN.xml";
 	private static String TEST_EVENTCONF_OUT_FILE= "./target/testeventfileOUT.xml";
 	private static String TEST_SPREADSHEET_NAME="testSpreadheet1";
+	private static String TEST_TRAPSCRIPT_OUT_FILE="./target/snmptraptest.sh";
 
 
 
@@ -88,6 +89,32 @@ public class SpreadsheetEventConfTest {
 		spreadsheetEvtConfMain.spreadsheetToEvents();
 
 		LOG.info("@Test - spreadsheetToEventsTest.FINISH");
+	}
+	
+	
+	//@Test DO NOT RUN
+	public void eventsToSnmpTrapScriptTest(){
+		LOG.info("@Test - eventsToSnmpTrapScriptTest.START");
+
+		LOG.info("@Test - eventsToSnmpTrapScriptTest. Configuration:"
+				+ "\n    TEST_PROPERTIES_FILE="+TEST_PROPERTIES_FILE
+				+ "\n    TEST_EVENTCONF_IN_FILE="+TEST_EVENTCONF_IN_FILE
+				+ "\n    TEST_WORKBOOK_OUT_FILE="+TEST_WORKBOOK_OUT_FILE
+				+ "\n    TEST_SPREADSHEET_NAME="+TEST_SPREADSHEET_NAME
+				+ "\n    TEST_TRAPSCRIPT_OUT_FILE="+TEST_TRAPSCRIPT_OUT_FILE);
+
+
+		SpreadsheetEventConfMain spreadsheetEvtConfMain = new SpreadsheetEventConfMain();
+
+		spreadsheetEvtConfMain.setWorkbookFilePath(TEST_WORKBOOK_OUT_FILE);
+		spreadsheetEvtConfMain.setPropertiesFilePath(TEST_PROPERTIES_FILE);
+		spreadsheetEvtConfMain.setSpreadsheetName(TEST_SPREADSHEET_NAME);
+		spreadsheetEvtConfMain.setEventsFilePath(TEST_EVENTCONF_IN_FILE);
+		spreadsheetEvtConfMain.setSnmpTrapScriptFilePath(TEST_TRAPSCRIPT_OUT_FILE);
+
+		spreadsheetEvtConfMain.eventsToSnmpTrapScript();
+
+		LOG.info("@Test - eventsToSnmpTrapScriptTest.FINISH");
 	}
 
 

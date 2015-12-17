@@ -572,8 +572,13 @@ public class ConfigRowTranslator {
 			}
 
 			// logmessage
-
-			rowObject.getEventLogmsgValue();
+			if(rowObject.getEventLogmsgValue()!=null){
+				Logmsg logmsg= objectFactory.createLogmsg();
+				logmsg.setValue(rowObject.getEventLogmsgValue());
+				if (rowObject.getEventLogmsgDest()!=null) logmsg.setDest(rowObject.getEventLogmsgDest());
+				if (rowObject.getEventLogmsgNotify()!=null) logmsg.setNotify(rowObject.getEventLogmsgNotify());
+				eventContent.add(logmsg);
+			}
 
 		}catch (Exception e){
 			LOG.error("jaxbEventFromRow cannot populate event: ",e);
