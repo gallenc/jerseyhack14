@@ -159,7 +159,7 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 				if (cell!=null) eventRowConfig.setAlarmAutoClean(Boolean.valueOf(cellValue(cell))); 
 				cell = row.getCell(12);
 				if (cell!=null) eventRowConfig.setEventLabel(cellValue(cell));
-				cell = row.createCell(13);
+				cell = row.getCell(13);
 				if (cell!=null) eventRowConfig.setEventDescr(cellValue(cell));
 				cell = row.getCell(14);
 				if (cell!=null) eventRowConfig.setEventMouseOverText(cellValue(cell)); 
