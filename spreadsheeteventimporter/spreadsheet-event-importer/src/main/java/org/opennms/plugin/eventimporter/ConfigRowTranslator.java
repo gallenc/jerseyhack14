@@ -579,6 +579,21 @@ public class ConfigRowTranslator {
 				if (rowObject.getEventLogmsgNotify()!=null) logmsg.setNotify(rowObject.getEventLogmsgNotify());
 				eventContent.add(logmsg);
 			}
+			
+			// alarm data
+			// only create an alarm data element if alarmType not null
+			if(rowObject.getAlarmType()!=null){
+				AlarmData alarmData = objectFactory.createAlarmData();
+				alarmData.setAlarmType(rowObject.getAlarmType());
+				if(rowObject.getAlarmClearKey()!=null) alarmData.setClearKey(rowObject.getAlarmClearKey());
+				if(rowObject.getAlarmReductionKey()!=null) alarmData.setReductionKey(rowObject.getAlarmReductionKey());
+				//TODO alarmData.getUpdateField(); NOT TRANSLATED
+				//TODO alarmData.getX733AlarmType(); NOT TRANSLATED
+				//TODO alarmData.getX733ProbableCause(); NOT TRANSLATED
+				if(rowObject.getAlarmAutoClean()!=null) alarmData.setAutoClean(rowObject.getAlarmAutoClean());
+				eventContent.add(alarmData);
+			}
+
 
 		}catch (Exception e){
 			LOG.error("jaxbEventFromRow cannot populate event: ",e);
