@@ -510,11 +510,11 @@ public class SpreadsheetEventConfMain {
 			spreadsheetEvtConfMain.setEventsFilePath(eventsFilePath);
 
 			if(xmltospreadsheet){
-				LOG.info("CONVERTING TO SPREADSHEET");
+				LOG.info("CONVERTING TO SPREADSHEET (please note - loading the converter classes may take some time)");
 				spreadsheetEvtConfMain.eventsToSpreadsheet();
 
 			} else {
-				LOG.info("CONVERTING TO XMLEVENTS");
+				LOG.info("CONVERTING TO XMLEVENTS (please note - loading the converter classes may take some time)");
 				spreadsheetEvtConfMain.spreadsheetToEvents();
 			}
 		} catch (Exception e){

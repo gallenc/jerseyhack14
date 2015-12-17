@@ -102,8 +102,11 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 		List<EventRowConfigObject> eventRowConfigObjectList = new ArrayList<EventRowConfigObject>();
 
 		// get header row headings
-		wbSheet.getFirstRowNum();
-		Row headerRow = wbSheet.getRow(0);
+		// note that first rownum may not be 0 in some sheets ?!
+		int firstrownum = wbSheet.getFirstRowNum();
+		int lastrownum = wbSheet.getLastRowNum();
+		LOG.debug("retreiveEventRows sheet sheetname=" + " firstrownum="+firstrownum + " lastrownum="+lastrownum);
+		Row headerRow = wbSheet.getRow(firstrownum);
 
 		StringBuffer sb=new StringBuffer();
 
@@ -119,7 +122,8 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 		LOG.debug("column headers: "+sb.toString());
 
 		// populate the event row config list
-		for (int rowNo=1; rowNo<= wbSheet.getLastRowNum();rowNo++){
+		// firstrownum+1 is row after header row
+		for (int rowNo=firstrownum+1; rowNo<= lastrownum;rowNo++){
 			Row row = wbSheet.getRow(rowNo);
 			EventRowConfigObject eventRowConfig= new EventRowConfigObject();
 
