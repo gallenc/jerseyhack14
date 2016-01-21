@@ -428,7 +428,7 @@ public class SpreadsheetEventConfMain {
 		options.addOption("e", "eventfile", true, "Set the path to event.xml file");
 		options.addOption("x", "toxmlevents", false, "Use option to parse worksheet into events. Cannot be used with toworksheet ");
 		options.addOption("w", "toworksheet", false, "Use option to parse events into worksheet. Cannot be used with toxmlevents.");
-		options.addOption("p", "propertiesfile", false, "Set the path to properties file");
+		options.addOption("p", "propertiesfile", false, "Set the path to properties file (optional - currently not used)");
 
 		String header = "Utility to convert between EXCEL workbooks and OpenNMS Event definitions  \n\n";
 		String footer = "\nOpenNMS Spreadsheet to event config utility";
