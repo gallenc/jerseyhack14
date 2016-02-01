@@ -7,15 +7,6 @@ package tmf.org.dsmapi.tt;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Set;
-import javax.persistence.CollectionTable;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
@@ -38,7 +29,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
  * originator" } ] }}
  *
  */
-@Entity
+
 @XmlRootElement
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class TroubleTicket implements Serializable {
@@ -46,12 +37,10 @@ public class TroubleTicket implements Serializable {
     //Add other static strings as required....
     private static final long serialVersionUID = 1L;
     // Used for incremental update
-    @Transient
+    
     @JsonIgnore
     private Set<TroubleTicketField> fieldsIN;
-    @Id
-    @Column(name="TT_ID")
-    @GeneratedValue(strategy = GenerationType.AUTO)
+
     private String id;
 
     public String getId() {
@@ -73,25 +62,11 @@ public class TroubleTicket implements Serializable {
     private String statusChangeDate;
     private String resolutionDate;
     
-    @ElementCollection
-    @CollectionTable(
-            name = "RELATED_OBJECT",
-            joinColumns =
-            @JoinColumn(name = "OWNER_ID"))
+
     private List<RelatedObject> relatedObjects;
     
-    @ElementCollection
-    @CollectionTable(
-            name = "NOTES",
-            joinColumns =
-            @JoinColumn(name = "OWNER_ID"))
     private List<Note> notes;
     
-    @ElementCollection
-    @CollectionTable(
-            name = "RELATED_PARTY",
-            joinColumns =
-            @JoinColumn(name = "OWNER_ID"))
     private List<RelatedParty> relatedParties;
 
     public String getCorrelationId() {

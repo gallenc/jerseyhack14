@@ -5,7 +5,6 @@
 package tmf.org.dsmapi.tt;
 
 import java.io.Serializable;
-import javax.persistence.Embeddable;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 
 /**
@@ -22,7 +21,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize;
         }
  */
 
-@Embeddable
+
 @JsonSerialize(include = JsonSerialize.Inclusion.NON_NULL)
 public class RelatedObject implements Serializable  {
     
