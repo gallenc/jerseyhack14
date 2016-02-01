@@ -24,12 +24,20 @@ import com.sun.jersey.api.client.WebResource;
 public class TroubleTicketClient {
     private WebResource webResource;
     private Client client;
-    private static final String BASE_URI = "http://localhost:8080/DSTroubleTicket/webresources";
+    private static final String BASE_URI = "http://localhost:8080/DSTroubleTicket/webresources/v2/";
 
-    public TroubleTicketClient() {
+    /**
+     * constructor
+     * @param baseUri base uri to connect. 
+     * If null defaults to BASE_URI = "http://localhost:8080/DSTroubleTicket/webresources/v2/
+     * // http://env-0693795.jelastic.servint.net/DSTroubleTicket/api/troubleTicketManagement/v2/troubleTicket/2
+     */
+    public TroubleTicketClient(String baseUri) {
+    	if (baseUri==null ) baseUri=BASE_URI;
         com.sun.jersey.api.client.config.ClientConfig config = new com.sun.jersey.api.client.config.DefaultClientConfig();
         client = Client.create(config);
-        webResource = client.resource(BASE_URI).path("tmf.org.dsmapi.tt.troubleticket");
+        //webResource = client.resource(baseUri).path("tmf.org.dsmapi.tt.troubleticket");
+        webResource = client.resource(baseUri);
     }
 
     public void remove(String id) throws UniformInterfaceException {
