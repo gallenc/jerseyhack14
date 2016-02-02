@@ -1,12 +1,15 @@
 package tmf.org.dsmapi.tt.client;
 
 import java.io.IOException;
+
 import javax.ws.rs.core.MediaType;
+
 import org.codehaus.jackson.map.AnnotationIntrospector;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.xc.JaxbAnnotationIntrospector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import tmf.org.dsmapi.tt.TroubleTicket;
 
 import com.sun.jersey.api.client.Client;
@@ -23,6 +26,10 @@ public class TroubleTicketClientV2 {
 
 
 	private String baseUri=null;
+	
+	private String password=null;
+	
+	private String username=null;
 
 	public String getBaseUri() {
 		return baseUri;
@@ -30,6 +37,17 @@ public class TroubleTicketClientV2 {
 
 	public void setBaseUri(String baseUri) {
 		this.baseUri = baseUri;
+	}
+	
+	//TODO BASIC AUTHENTICATION
+	public void setPassword(String password) {
+		this.password=password;
+		
+	}
+
+	//TODO BASIC AUTHENTICATION
+	public void setUsername(String username) {
+		this.username=username;
 	}
 
 	/**
@@ -139,6 +157,8 @@ public class TroubleTicketClientV2 {
 		throw new UnsupportedOperationException("this operation is not yet implemented");
 		//return null;
 	}
+
+
 
 
 

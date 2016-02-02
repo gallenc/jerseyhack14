@@ -32,217 +32,221 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
-import java.util.Calendar;
 import java.util.Properties;
-import java.util.concurrent.ExecutionException;
 
-import org.joda.time.DateTime;
 import org.opennms.api.integration.ticketing.Plugin;
 import org.opennms.api.integration.ticketing.PluginException;
 import org.opennms.api.integration.ticketing.Ticket;
+import org.opennms.api.integration.ticketing.Ticket.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import tmf.org.dsmapi.tt.Status;
+import tmf.org.dsmapi.tt.TroubleTicket;
+import tmf.org.dsmapi.tt.client.TroubleTicketClientV2;
 
 
 /**
- * OpenNMS Trouble Ticket Plugin API implementation for Atlassian JIRA.
- * This implementation relies on the JIRA REST interface and is compatible
- * with JIRA 5.0+.
+ * OpenNMS Trouble Ticket Plugin API implementation for TMForum interface.
+ * This implementation relies on the tmforumtt REST interface and is compatible
+ * with v2.
  *
- * @see http://www.atlassian.com/software/jira/overview
- * @see https://docs.atlassian.com/jira-rest-java-client-api/3.0.0/jira-rest-java-client-api/apidocs/
- *
- * @author <a href="mailto:joed@opennms.org">Johan Edstrom</a>
- * @author Seth
+ * @Author cgallen
  */
 public class TmforumTicketerPlugin implements Plugin {
-    private static final Logger LOG = LoggerFactory.getLogger(TmforumTicketerPlugin.class);
+	private static final Logger LOG = LoggerFactory.getLogger(TmforumTicketerPlugin.class);
 
-    protected final JiraRestClientFactory clientFactory = new AsynchronousJiraRestClientFactory();
 
-    protected JiraRestClient getConnection() {
-        try {
-            URI jiraUri = new URL(getProperties().getProperty("jira.host")).toURI();
-            String username = getProperties().getProperty("jira.username");
-            if (username == null || "".equals(username)) {
-                return clientFactory.create(jiraUri, new AnonymousAuthenticationHandler());
-            } else {
-                return clientFactory.createWithBasicHttpAuthentication(jiraUri, getProperties().getProperty("jira.username"), getProperties().getProperty("jira.password"));
-            }
-        } catch (MalformedURLException e) {
-            LOG.error("Failed to parse URL: {}", getProperties().getProperty("jira.host"));
-        } catch (URISyntaxException e) {
-            LOG.error("Failed to parse URI: {}", getProperties().getProperty("jira.host"));
-        }
-        return null;
-    }
+	protected TroubleTicketClientV2 getConnection() {
+		TroubleTicketClientV2 client=null;
 
-    /**
-     * Implementation of TicketerPlugin API call to retrieve a Jira trouble ticket.
-     *
-     * @return an OpenNMS
-     * @throws PluginException
-     */
-    @Override
-    public Ticket get(String ticketId) throws PluginException {
-        JiraRestClient jira = getConnection();
-        if (jira == null) {
-            return null;
-        }
+		String baseUri =  getProperties().getProperty("tmforumtt.baseuri");
+		String username = getProperties().getProperty("tmforumtt.username");
+		String password = getProperties().getProperty("tmforumtt.password");
 
-        // w00t
-        Issue issue;
-        try {
-            issue = jira.getIssueClient().getIssue(ticketId).get();
-        } catch (InterruptedException|ExecutionException e) {
-            throw new PluginException("Failed to get issue with id: " + ticketId, e);
-        }
+		client = new TroubleTicketClientV2();
+		client.setBaseUri(baseUri);
+		client.setUsername(username);
+		client.setPassword(password);
 
-        if (issue != null) {
-            Ticket ticket = new Ticket();
+		return client;
+	}
 
-            ticket.setId(issue.getKey());
-            ticket.setModificationTimestamp(String.valueOf(issue.getUpdateDate().toDate().getTime()));
-            ticket.setSummary(issue.getSummary());
-            ticket.setDetails(issue.getDescription());
-            ticket.setState(getStateFromId(issue.getStatus().getName()));
+	/**
+	 * Implementation of TicketerPlugin API call to retrieve a tmforumtt trouble ticket.
+	 *
+	 * @return an OpenNMS
+	 * @throws PluginException
+	 */
+	@Override
+	public Ticket get(String ticketId) throws PluginException {
+		TroubleTicketClientV2 ttclient = getConnection();
+		if (ttclient == null) return null;
 
-            return ticket;
-        } else {
-            return null;
-        }
-    }
+		TroubleTicket issue;
+		try {
+			issue = ttclient.getTroubleTicket(ticketId);
+		} catch (Exception e) {
+			throw new PluginException("Failed to connect and get issue with id: " + ticketId, e);
+		}
 
-    /**
-     * Convenience method for converting a string representation of
-     * the OpenNMS enumerated ticket states.
-     *
-     * @param stateIdString
-     * @return the converted <code>org.opennms.api.integration.ticketing.Ticket.State</code>
-     */
-    private static Ticket.State getStateFromId(String stateIdString) {
-        if (stateIdString == null) {
-            return Ticket.State.OPEN;
-        } else if ("Open".equals(stateIdString)) {
-            return Ticket.State.OPEN;
-        } else if ("In Progress".equals(stateIdString)) {
-            return Ticket.State.OPEN;
-        } else if ("Reopened".equals(stateIdString)) {
-            return Ticket.State.OPEN;
-        } else if ("Resolved".equals(stateIdString)) {
-            return Ticket.State.CLOSED;
-        } else if ("Closed".equals(stateIdString)) {
-            return Ticket.State.CLOSED;
-        } else {
-            return Ticket.State.OPEN;
-        }
-    }
+		if (issue != null) {
+			LOG.debug("received ticket id="+ticketId+ "ticket values:-\n"+issue.toString());
+			Ticket ticket = new Ticket();
+			ticket.setId(issue.getId());
+			ticket.setModificationTimestamp(issue.getStatusChangeDate());
+			ticket.setSummary(issue.getDescription());
+			ticket.setDetails(issue.getDescription());
+			ticket.setState(getStateFromId(issue.getStatus()));
+			return ticket;
+		} else {
+			LOG.debug("ticket id="+ticketId+ " no ticket found");
+			return null;
+		}
+	}
 
-    /**
-     * Retrieves the properties defined in the tmforumtt.properties file.
-     *
-     * @return a <code>java.util.Properties object containing tmforumtt plugin defined properties
-     */
-    private static Properties getProperties() {
-        File home = new File(System.getProperty("opennms.home"));
-        File etc = new File(home, "etc");
-        File config = new File(etc, "tmforumtt.properties");
+	/**
+	 * Convenience method for mapping tmforum Status values to OpenNMS status values
+	 * @param status
+	 * @return
+	 */
+	private State getStateFromId(Status status) {
+		if (status == null ) return Ticket.State.OPEN;
 
-        Properties props = new Properties();
+		if (Status.Submitted.equals(status)) return Ticket.State.OPEN ;
+		if (Status.Acknowledged.equals(status)) return Ticket.State.OPEN ;
+		if (Status.InProgress_Held.equals(status)) return Ticket.State.OPEN ;
+		if (Status.InProgress_Pending.equals(status)) return Ticket.State.OPEN ;
+		if (Status.Rejected.equals(status)) return Ticket.State.OPEN ;
+		if (Status.Resolved.equals(status)) return Ticket.State.CLOSED ;
+		if (Status.Cancelled.equals(status)) return Ticket.State.CANCELLED;
 
-        try (InputStream in = new FileInputStream(config)) {
-            props.load(in);
-        } catch (IOException e) {
-            LOG.error("Unable to load {} ignoring.", config, e);
-        }
+		return Ticket.State.CLOSED;
 
-        LOG.debug("Loaded user: {}", props.getProperty("tmforumtt.username"));
-        LOG.debug("Loaded type: {}", props.getProperty("tmforumtt.type"));
+	}
 
-        return props;
-    }
+	/**
+	 * Retrieves the properties defined in the tmforumtt.properties file.
+	 *
+	 * @return a <code>java.util.Properties object containing tmforumtt plugin defined properties
+	 */
+	private static Properties getProperties() {
+		File home = new File(System.getProperty("opennms.home"));
+		File etc = new File(home, "etc");
+		File config = new File(etc, "tmforumtt.properties");
 
-    /*
-    * (non-Javadoc)
-    * @see org.opennms.api.integration.ticketing.Plugin#saveOrUpdate(org.opennms.api.integration.ticketing.Ticket)
-    */
-    @Override
-    public void saveOrUpdate(Ticket ticket) throws PluginException {
+		Properties props = new Properties();
 
-        JiraRestClient jira = getConnection();
+		try (InputStream in = new FileInputStream(config)) {
+			props.load(in);
+		} catch (IOException e) {
+			LOG.error("Unable to load {} ignoring.", config, e);
+		}
 
-        if (ticket.getId() == null || ticket.getId().equals("")) {
-            // If we can't find a ticket with the specified ID then create one.
-            IssueInputBuilder builder = new IssueInputBuilder(getProperties().getProperty("jira.project"), Long.valueOf(getProperties().getProperty("jira.type").trim()));
-            builder.setReporterName(getProperties().getProperty("jira.username"));
-            builder.setSummary(ticket.getSummary());
-            builder.setDescription(ticket.getDetails());
-            builder.setDueDate(new DateTime(Calendar.getInstance()));
+		LOG.debug("Loaded user: {}", props.getProperty("tmforumtt.username"));
+		LOG.debug("Loaded type: {}", props.getProperty("tmforumtt.type"));
 
-            BasicIssue createdIssue;
-            try {
-                createdIssue = jira.getIssueClient().createIssue(builder.build()).get();
-            } catch (InterruptedException | ExecutionException e) {
-                throw new PluginException("Failed to create issue.", e);
-            }
-            LOG.info("created ticket " + createdIssue);
+		return props;
+	}
 
-            ticket.setId(createdIssue.getKey());
+	/*
+	 * (non-Javadoc)
+	 * @see org.opennms.api.integration.ticketing.Plugin#saveOrUpdate(org.opennms.api.integration.ticketing.Ticket)
+	 */
+	@Override
+	public void saveOrUpdate(Ticket ticket) throws PluginException {
 
-        } else {
-            // Otherwise update the existing ticket
-            LOG.info("Received ticket: {}", ticket.getId());
+		TroubleTicketClientV2 ttclient = getConnection();
+		if (ttclient == null) throw new PluginException("cannot create trouble ticket client: ");
 
-            Issue issue;
-            try {
-                issue = jira.getIssueClient().getIssue(ticket.getId()).get();
-            } catch (InterruptedException | ExecutionException e) {
-                throw new PluginException("Failed to get issue with id:" + ticket.getId(), e);
-            }
+		if (ticket.getId() == null || ticket.getId().equals("")) {
+			// If we can't find a ticket with the specified ID then create one.
 
-            Iterable<Transition> transitions;
-            try {
-                transitions = jira.getIssueClient().getTransitions(issue).get();
-            } catch (InterruptedException | ExecutionException e) {
-                throw new PluginException("Failed to get transitions for issue with id:" + issue.getId(), e);
-            }
+			TroubleTicket newIssue= new TroubleTicket();
+			//        	newIssue.setCorrelationId(correlationId);
+			//        	newIssue.setCreationDate(creationDate);
+			newIssue.setDescription(ticket.getDetails());
+			//        	newIssue.setFieldsIN(fields);
+			//        	newIssue.setId(id);
+			//        	newIssue.setNotes(notes);
+			//        	newIssue.setRelatedObjects(relatedObjects);
+			//        	newIssue.setRelatedParties(relatedParties);
+			//        	newIssue.setResolutionDate(resolutionDate);
+			//        	newIssue.setSeverity(severity);
+			//        	newIssue.setStatus(status);
+			//        	newIssue.setStatusChangeDate(statusChangeDate);
+			//        	newIssue.setStatusChangeReason(statusChangeReason);
+			//        	newIssue.setSubStatus(subStatus);
+			//        	newIssue.setTargetResolutionDate(targetResolutionDate);
+			//        	newIssue.setType(type);
 
-            if (Ticket.State.CLOSED.equals(ticket.getState())) {
-                Comment comment = Comment.valueOf("Issue resolved by OpenNMS.");
-                for (Transition transition : transitions) {
-                    if (getProperties().getProperty("jira.resolve").equals(transition.getName())) {
-                        LOG.info("Resolving ticket {}", ticket.getId());
-                        // Resolve the issue
-                        try {
-                            jira.getIssueClient().transition(issue, new TransitionInput(transition.getId(), comment)).get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            throw new PluginException("Failed to get resolve issue with id:" + issue.getId(), e);
-                        }
-                        return;
-                    }
-                }
-                LOG.warn("Could not resolve ticket {}, no '{}' operation available.", ticket.getId(), getProperties().getProperty("jira.resolve"));
-            } else if (Ticket.State.OPEN.equals(ticket.getState())) {
-                Comment comment = Comment.valueOf("Issue reopened by OpenNMS.");
-                for (Transition transition : transitions) {
-                    if (getProperties().getProperty("jira.reopen").equals(transition.getName())) {
-                        LOG.info("Reopening ticket {}", ticket.getId());
-                        // Resolve the issue
-                        try {
-                            jira.getIssueClient().transition(issue, new TransitionInput(transition.getId(), comment)).get();
-                        } catch (InterruptedException | ExecutionException e) {
-                            throw new PluginException("Failed to reopen issue with id:" + issue.getId(), e);
-                        }
-                        return;
-                    }
-                }
-                LOG.warn("Could not reopen ticket {}, no '{}' operation available.", ticket.getId(), getProperties().getProperty("jira.reopen"));
-            }
-        }
-    }
+			//        	ticket.getUser();
+			//        	ticket.getAlarmId();
+			//        	ticket.getAttributes();
+			//        	ticket.getDetails();
+			//        	ticket.getId();
+			//        	ticket.getIpAddress();
+			//        	ticket.getModificationTimestamp();
+			//        	ticket.getState();
+			//        	ticket.getSummary();
+			//        	ticket.getAttribute(key);
+			//        	ticket.getNodeId();
+
+			//            IssueInputBuilder builder = new IssueInputBuilder(getProperties().getProperty("tmforumtt.project"), Long.valueOf(getProperties().getProperty("tmforumtt.type").trim()));
+			//            builder.setReporterName(getProperties().getProperty("tmforumtt.username"));
+			//            builder.setSummary(ticket.getSummary());
+			//            builder.setDescription(ticket.getDetails());
+			//            builder.setDueDate(new DateTime(Calendar.getInstance()));
+
+			//            BasicIssue createdIssue;
+
+			TroubleTicket createdIssue;
+			try {
+				createdIssue = ttclient.createTroubleTicket(newIssue);
+			} catch (Exception e) {
+				throw new PluginException("Failed to connect and create issue: ", e);
+			}
+			LOG.info("created ticket :" + createdIssue);
+
+			ticket.setId(createdIssue.getId());
+
+		} else {
+			// Otherwise update the existing ticket
+			LOG.info("Received ticket: {}", ticket.getId());
+
+			TroubleTicket issue;
+			try {
+				issue = ttclient.getTroubleTicket(ticket.getId());
+				if (issue ==null) throw new RuntimeException("ticket not found with id="+ticket.getId());
+			} catch (Exception e) {
+				throw new PluginException("Failed to get issue with id:" + ticket.getId(), e);
+			}
+
+			if (Ticket.State.CLOSED.equals(ticket.getState())) {
+
+				issue.setStatus(Status.Closed);
+				issue.setStatusChangeReason("Issue resolved by OpenNMS.");
+				TroubleTicket newIssue=null;
+				try {
+					newIssue = ttclient.updateTroubleTicket(issue);
+					if (newIssue ==null) throw new RuntimeException("unable to update issue="+issue.getId());
+				} catch (Exception e) {
+					throw new PluginException("Failed to resolve issue with id:" + issue.getId(), e);
+				}
+
+			} else if (Ticket.State.OPEN.equals(ticket.getState())) {
+
+				issue.setStatus(Status.InProgress_Pending);
+				issue.setStatusChangeReason("Issue reopened by OpenNMS.");
+				TroubleTicket newIssue=null;
+				try {
+					newIssue = ttclient.updateTroubleTicket(issue);
+					if (newIssue ==null) throw new RuntimeException("unable to update issue="+issue.getId());
+				} catch (Exception e) {
+					throw new PluginException("Failed to resolve issue with id:" + issue.getId(), e);
+				}
+
+			}
+		}
+	}
 }

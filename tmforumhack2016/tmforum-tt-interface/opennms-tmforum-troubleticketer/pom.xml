@@ -27,8 +27,8 @@
         <artifactId>features-maven-plugin</artifactId>
         <configuration>
           <bundles>
-            <bundle>mvn:joda-time/joda-time/${jodaTimeVersion}</bundle>
-            <bundle>mvn:org.opennms.features/jira-client/${project.version}</bundle>
+<!--             <bundle>mvn:joda-time/joda-time/${jodaTimeVersion}</bundle> -->
+<!--             <bundle>mvn:org.opennms.features/jira-client/${project.version}</bundle> -->
             <bundle>mvn:org.opennms.features/tmforum-troubleticketer/${project.version}</bundle>
           </bundles>
         </configuration>
@@ -75,14 +75,20 @@
       <artifactId>org.opennms.core.lib</artifactId>
     </dependency>
     <dependency>
+      <groupId>org.tmforum.dsmapi</groupId>
+      <artifactId>org.tmforum.dsmapi.tt</artifactId>
+      <version>2.0-SNAPSHOT</version>
+    </dependency>
+
+    <dependency>
       <groupId>joda-time</groupId>
       <artifactId>joda-time</artifactId>
     </dependency>
-    <dependency>
-      <groupId>org.opennms.features</groupId>
-      <artifactId>jira-client</artifactId>
-      <version>${project.version}</version>
-    </dependency>
+    <!-- <dependency> -->
+    <!-- <groupId>org.opennms.features</groupId> -->
+    <!-- <artifactId>jira-client</artifactId> -->
+    <!-- <version>${project.version}</version> -->
+    <!-- </dependency> -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -90,16 +96,16 @@
     </dependency>
   </dependencies>
 
-  <repositories>
-    <repository>
-      <id>atlassian-public</id>
-      <name>Atlassian public repo</name>
-      <url>http://maven.atlassian.com/content/repositories/atlassian-public/</url>
-    </repository>
-    <repository>
-      <id>atlassian-public-mirror</id>
-      <name>Atlassian public repo</name>
-      <url>http://maven.opennms.org/content/repositories/atlassian-public/</url>
-    </repository>
-  </repositories>
+  <!-- <repositories> -->
+  <!-- <repository> -->
+  <!-- <id>atlassian-public</id> -->
+  <!-- <name>Atlassian public repo</name> -->
+  <!-- <url>http://maven.atlassian.com/content/repositories/atlassian-public/</url> -->
+  <!-- </repository> -->
+  <!-- <repository> -->
+  <!-- <id>atlassian-public-mirror</id> -->
+  <!-- <name>Atlassian public repo</name> -->
+  <!-- <url>http://maven.opennms.org/content/repositories/atlassian-public/</url> -->
+  <!-- </repository> -->
+  <!-- </repositories> -->
 </project>
