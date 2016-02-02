@@ -108,17 +108,24 @@
 <!--       <scope>test</scope> -->
 <!--     </dependency> -->
 
-    <dependency>
-      <groupId>com.sun.jersey</groupId>
-      <artifactId>jersey-client</artifactId>
-      <version>${jerseyVersion}</version>
-      <scope>test</scope>
-    </dependency>
-    <dependency>
-      <groupId>javax.ws.rs</groupId>
-      <artifactId>jsr311-api</artifactId>
-      <version>1.1.1</version>
-      <scope>provided</scope>
+<!--     <dependency> -->
+<!--       <groupId>com.sun.jersey</groupId> -->
+<!--       <artifactId>jersey-client</artifactId> -->
+<!--       <version>${jerseyVersion}</version> -->
+<!--       <scope>test</scope> -->
+<!--     </dependency> -->
+<!--     <dependency> -->
+<!--       <groupId>javax.ws.rs</groupId> -->
+<!--       <artifactId>jsr311-api</artifactId> -->
+<!--       <version>1.1.1</version> -->
+<!--       <scope>provided</scope> -->
+<!--     </dependency> -->
+
+   <dependency>
+      <groupId>org.opennms.dependencies</groupId>
+      <artifactId>jersey-client-dependencies</artifactId>
+      <version>${project.version}</version>
+      <type>pom</type>
     </dependency>
 
     <!-- logging dependency -->

@@ -143,8 +143,9 @@ public class TmforumTicketerPlugin implements Plugin {
 			LOG.error("Unable to load {} ignoring.", config, e);
 		}
 
-		LOG.debug("Loaded user: {}", props.getProperty("tmforumtt.username"));
-		LOG.debug("Loaded type: {}", props.getProperty("tmforumtt.type"));
+		LOG.debug("Loaded username:          {}", props.getProperty("tmforumtt.username"));
+		LOG.debug("Loaded password:          {}", props.getProperty("tmforumtt.password"));
+		LOG.debug("Loaded tmforumtt.baseuri: {}", props.getProperty("tmforumtt.baseuri"));
 
 		return props;
 	}
