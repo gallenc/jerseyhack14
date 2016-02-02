@@ -190,7 +190,7 @@ public class TmforumTicketerPlugin implements Plugin {
 			newIssue.setRelatedParties(relatedParties);
 			
 			//        	newIssue.setResolutionDate(resolutionDate);
-			newIssue.setSeverity(Severity.Critical);
+			newIssue.setSeverity(Severity.High); //TODO Severity.Critical fails !!!
 			newIssue.setStatus(Status.Submitted);
 			
 			//        	newIssue.setStatusChangeDate(statusChangeDate);
