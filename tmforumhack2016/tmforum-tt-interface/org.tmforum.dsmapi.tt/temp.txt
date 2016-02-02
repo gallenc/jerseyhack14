@@ -1,0 +1,7 @@
+23:08:33.978 [main] DEBUG tmf.org.dsmapi.tt.client.TroubleTicketClientV2 - calling jsonString={"description":"ticket client test description","severity":"High","type":"Bills, charges or payment","creationDate":"2016-02-02T23:08:33UTC","status":"Submitted"}
+23:08:34.173 [main] DEBUG tmf.org.dsmapi.tt.client.TroubleTicketClientV2 - calling createTroubleTicket uri=http://env-0693795.jelastic.servint.net/DSTroubleTicket/api/troubleTicketManagement/v2/troubleTicket
+
+23:10:29.859 [main] DEBUG tmf.org.dsmapi.tt.client.TroubleTicketClientV2 - calling jsonString={"description":"These are the details","severity":"Critical","type":"Bills, charges or payment","creationDate":"2016-02-02T23:10:29UTC","status":"Submitted"}
+23:10:30.440 [main] DEBUG tmf.org.dsmapi.tt.client.TroubleTicketClientV2 - calling createTroubleTicket uri=http://env-0693795.jelastic.servint.net/DSTroubleTicket/api/troubleTicketManagement/v2/troubleTicket
+23:10:32.209 [main] DEBUG tmf.org.dsmapi.tt.client.TroubleTicketClientV2 - createTroubleTicket response status= 400 status info=Bad Request
+2

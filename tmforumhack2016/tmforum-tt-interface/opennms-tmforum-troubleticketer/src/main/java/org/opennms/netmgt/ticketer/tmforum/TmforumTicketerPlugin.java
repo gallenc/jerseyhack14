@@ -32,6 +32,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 import org.opennms.api.integration.ticketing.Plugin;
@@ -41,8 +44,13 @@ import org.opennms.api.integration.ticketing.Ticket.State;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import tmf.org.dsmapi.tt.Note;
+import tmf.org.dsmapi.tt.RelatedObject;
+import tmf.org.dsmapi.tt.RelatedParty;
+import tmf.org.dsmapi.tt.Severity;
 import tmf.org.dsmapi.tt.Status;
 import tmf.org.dsmapi.tt.TroubleTicket;
+import tmf.org.dsmapi.tt.client.Format;
 import tmf.org.dsmapi.tt.client.TroubleTicketClientV2;
 
 
@@ -158,28 +166,38 @@ public class TmforumTicketerPlugin implements Plugin {
 	public void saveOrUpdate(Ticket ticket) throws PluginException {
 
 		TroubleTicketClientV2 ttclient = getConnection();
-		if (ttclient == null) throw new PluginException("cannot create trouble ticket client: ");
+		if (ttclient == null) throw new PluginException("cannot create trouble ticket client");
 
 		if (ticket.getId() == null || ticket.getId().equals("")) {
 			// If we can't find a ticket with the specified ID then create one.
 
 			TroubleTicket newIssue= new TroubleTicket();
 			//        	newIssue.setCorrelationId(correlationId);
-			//        	newIssue.setCreationDate(creationDate);
+			String creationDate= Format.toString(new Date());
+			newIssue.setCreationDate(creationDate);
+			
 			newIssue.setDescription(ticket.getDetails());
+			
 			//        	newIssue.setFieldsIN(fields);
 			//        	newIssue.setId(id);
-			//        	newIssue.setNotes(notes);
-			//        	newIssue.setRelatedObjects(relatedObjects);
-			//        	newIssue.setRelatedParties(relatedParties);
+			List<Note> notes=new ArrayList<Note>();
+			newIssue.setNotes(notes);
+			
+			List<RelatedObject> relatedObjects= new ArrayList<RelatedObject>();
+			newIssue.setRelatedObjects(relatedObjects);
+			
+			List<RelatedParty> relatedParties=new ArrayList<RelatedParty>();
+			newIssue.setRelatedParties(relatedParties);
+			
 			//        	newIssue.setResolutionDate(resolutionDate);
-			//        	newIssue.setSeverity(severity);
-			//        	newIssue.setStatus(status);
+			newIssue.setSeverity(Severity.Critical);
+			newIssue.setStatus(Status.Submitted);
+			
 			//        	newIssue.setStatusChangeDate(statusChangeDate);
 			//        	newIssue.setStatusChangeReason(statusChangeReason);
 			//        	newIssue.setSubStatus(subStatus);
 			//        	newIssue.setTargetResolutionDate(targetResolutionDate);
-			//        	newIssue.setType(type);
+			newIssue.setType("Bills, charges or payment");
 
 			//        	ticket.getUser();
 			//        	ticket.getAlarmId();
@@ -193,13 +211,6 @@ public class TmforumTicketerPlugin implements Plugin {
 			//        	ticket.getAttribute(key);
 			//        	ticket.getNodeId();
 
-			//            IssueInputBuilder builder = new IssueInputBuilder(getProperties().getProperty("tmforumtt.project"), Long.valueOf(getProperties().getProperty("tmforumtt.type").trim()));
-			//            builder.setReporterName(getProperties().getProperty("tmforumtt.username"));
-			//            builder.setSummary(ticket.getSummary());
-			//            builder.setDescription(ticket.getDetails());
-			//            builder.setDueDate(new DateTime(Calendar.getInstance()));
-
-			//            BasicIssue createdIssue;
 
 			TroubleTicket createdIssue;
 			try {
