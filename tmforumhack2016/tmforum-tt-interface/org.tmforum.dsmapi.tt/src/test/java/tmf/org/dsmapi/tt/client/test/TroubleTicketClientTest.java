@@ -16,6 +16,7 @@ import tmf.org.dsmapi.tt.RelatedParty;
 import tmf.org.dsmapi.tt.Severity;
 import tmf.org.dsmapi.tt.Status;
 import tmf.org.dsmapi.tt.TroubleTicket;
+import tmf.org.dsmapi.tt.client.Format;
 import tmf.org.dsmapi.tt.client.TroubleTicketClientV2;
 
 public class TroubleTicketClientTest {
@@ -86,6 +87,9 @@ public class TroubleTicketClientTest {
 			
 			createTicket.setDescription("ticket client test description");
 			
+			String creationDate= Format.toString(new Date());
+			createTicket.setCreationDate(creationDate);
+			
 			List<Note> notes=new ArrayList<Note>();
 			createTicket.setNotes(notes);
 			
@@ -101,10 +105,11 @@ public class TroubleTicketClientTest {
 			Status status= Status.Submitted;
 			createTicket.setStatus(status);
 			
-			String type="";
+			String type="Bills, charges or payment";
 			createTicket.setType(type);
 			
 			TroubleTicket tt= client.createTroubleTicket(createTicket);
+			
 			LOG.debug("test createTroubleTicketTest created troubleticket="+tt);
 		} catch (Exception e){
 			LOG.error("test createTroubleTicketTest error:",e);
