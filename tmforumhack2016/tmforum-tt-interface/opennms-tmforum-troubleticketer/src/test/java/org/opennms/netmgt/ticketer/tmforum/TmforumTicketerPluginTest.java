@@ -42,8 +42,13 @@ import org.junit.Test;
 import org.opennms.api.integration.ticketing.PluginException;
 import org.opennms.api.integration.ticketing.Ticket;
 import org.opennms.netmgt.ticketer.tmforum.TmforumTicketerPlugin;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import tmf.org.dsmapi.tt.client.TroubleTicketClientV2;
 
 public class TmforumTicketerPluginTest {
+	private static final Logger LOG = LoggerFactory.getLogger(TmforumTicketerPluginTest.class);
 
     TmforumTicketerPlugin m_ticketer;
 
@@ -53,11 +58,12 @@ public class TmforumTicketerPluginTest {
         assertTrue(opennmsHome + " must exist.", opennmsHome.exists());
         System.setProperty("opennms.home", opennmsHome.getAbsolutePath());
 
+        LOG.debug("set opennms.home System property to="+System.getProperty("opennms.home"));
         m_ticketer = new TmforumTicketerPlugin();
     }
 
     @Test
-    @Ignore("This rely on the JIRA system configured in src/test/resources/opennms-home/etc/jira.properties")
+    //@Ignore("This relies on the trouble ticket system configured in src/test/resources/opennms-home/etc/tmforumtt.properties")
     public void canSaveGetAndUpdate() throws Exception {
         String ticketId = save();
         get(ticketId);

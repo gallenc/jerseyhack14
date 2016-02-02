@@ -79,11 +79,72 @@
       <artifactId>org.tmforum.dsmapi.tt</artifactId>
       <version>2.0-SNAPSHOT</version>
     </dependency>
+    
+<!--     <dependency> -->
+<!--       <groupId>com.sun.jersey</groupId> -->
+<!--       <artifactId>jersey-server</artifactId> -->
+<!--       <version>${jerseyVersion}</version> -->
+<!--       <scope>test</scope> -->
+<!--     </dependency> -->
+
+<!--     <dependency> -->
+<!--       <groupId>com.sun.jersey</groupId> -->
+<!--       <artifactId>jersey-servlet</artifactId> -->
+<!--       <version>${jerseyVersion}</version> -->
+<!--       <scope>test</scope> -->
+<!--     </dependency> -->
+
+<!--     <dependency> -->
+<!--       <groupId>com.sun.jersey</groupId> -->
+<!--       <artifactId>jersey-core</artifactId> -->
+<!--       <version>${jerseyVersion}</version> -->
+<!--       <scope>test</scope> -->
+<!--     </dependency> -->
+
+<!--     <dependency> -->
+<!--       <groupId>com.sun.jersey</groupId> -->
+<!--       <artifactId>jersey-json</artifactId> -->
+<!--       <version>${jerseyVersion}</version> -->
+<!--       <scope>test</scope> -->
+<!--     </dependency> -->
 
     <dependency>
-      <groupId>joda-time</groupId>
-      <artifactId>joda-time</artifactId>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>${jerseyVersion}</version>
+      <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
+      <version>1.1.1</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- logging dependency -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <scope>provided</scope>
+      <version>${slf4jVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-slf4j-impl</artifactId>
+      <version>${log4j2Version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>${log4j2Version}</version>
+      <scope>test</scope>
+    </dependency>
+
+<!--     <dependency> -->
+<!--       <groupId>joda-time</groupId> -->
+<!--       <artifactId>joda-time</artifactId> -->
+<!--     </dependency> -->
     <!-- <dependency> -->
     <!-- <groupId>org.opennms.features</groupId> -->
     <!-- <artifactId>jira-client</artifactId> -->

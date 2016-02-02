@@ -60,7 +60,7 @@
     </testResources>
   </build>
   <dependencies>
-    <!-- opennms Jersey implementation in Lib directory -->
+    
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-server</artifactId>
