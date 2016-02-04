@@ -211,6 +211,7 @@ public class TmforumTicketerPlugin implements Plugin {
 			//        	ticket.getAttribute(key);
 			//        	ticket.getNodeId();
 
+			LOG.info("trying to create ticket :" + newIssue);
 
 			TroubleTicket createdIssue;
 			try {

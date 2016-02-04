@@ -63,7 +63,7 @@ public class TmforumTicketerPluginTest {
     }
 
     @Test
-    //@Ignore("This relies on the trouble ticket system configured in src/test/resources/opennms-home/etc/tmforumtt.properties")
+    @Ignore("This relies on the trouble ticket system configured in src/test/resources/opennms-home/etc/tmforumtt.properties")
     public void canSaveGetAndUpdate() throws Exception {
         String ticketId = save();
         get(ticketId);
@@ -73,8 +73,8 @@ public class TmforumTicketerPluginTest {
     private String save() throws PluginException {
         Ticket ticket = new Ticket();
         ticket.setState(Ticket.State.OPEN);
-        ticket.setSummary("This is the summary");
-        ticket.setDetails("These are the details");
+        ticket.setSummary("This is the details");
+        ticket.setDetails("This is the details");
 
         m_ticketer.saveOrUpdate(ticket);
 
@@ -94,7 +94,7 @@ public class TmforumTicketerPluginTest {
         assertNotNull(newTicket);
         assertEquals(ticketId, newTicket.getId());
         assertEquals(Ticket.State.OPEN, newTicket.getState());
-        assertTrue("Unexpected summary: " + newTicket.getSummary(), newTicket.getSummary().contains("This is the summary"));
+        assertTrue("Unexpected summary: " + newTicket.getSummary(), newTicket.getSummary().contains("This is the details"));
         assertTrue("Unexpected description: " + newTicket.getDetails(), newTicket.getDetails().contains("details"));
     }
 

@@ -1,0 +1,5 @@
+http://projects.tmforum.org/wiki/display/API/Open+Hack+Lisbon+Feb+1+-+3+2016
+
+features:addurl mvn:org.opennms.features/tmforum-troubleticketer/17.0.1-SNAPSHOT/xml/features
+
+features:install 

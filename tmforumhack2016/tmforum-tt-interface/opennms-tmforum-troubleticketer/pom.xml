@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-<!--   <parent> -->
-<!--     <groupId>org.opennms.features</groupId> -->
-<!--     <artifactId>org.opennms.features.ticketing</artifactId> -->
-<!--     <version>17.0.1-SNAPSHOT</version> -->
-<!--   </parent> -->
+  <!-- <parent> -->
+  <!-- <groupId>org.opennms.features</groupId> -->
+  <!-- <artifactId>org.opennms.features.ticketing</artifactId> -->
+  <!-- <version>17.0.1-SNAPSHOT</version> -->
+  <!-- </parent> -->
   <!-- <parent> -->
   <!-- <groupId>org.opennms.features.topology.build</groupId> -->
   <!-- <artifactId>compiled-bundle-settings</artifactId> -->
   <!-- <version>17.0.1-SNAPSHOT</version> -->
-
   <!-- <relativePath>../topology-map/poms/compiled/</relativePath> -->
   <!-- </parent> -->
-  
-  
+
   <groupId>org.opennms.features</groupId>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>tmforum-troubleticketer</artifactId>
@@ -21,16 +19,20 @@
   <version>17.0.1-SNAPSHOT</version>
   <name>OpenNMS :: Features :: Ticketing :: TMForum</name>
 
-<properties>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     <jerseyVersion>1.19</jerseyVersion>
     <log4j2Version>2.1</log4j2Version>
     <slf4jVersion>1.7.7</slf4jVersion>
+    <org.tmforum.dsmapi.tt.version>2.0-SNAPSHOT</org.tmforum.dsmapi.tt.version>
   </properties>
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
+        <version>2.3.7</version>
         <extensions>true</extensions>
         <configuration>
           <instructions>
@@ -38,18 +40,35 @@
           </instructions>
         </configuration>
       </plugin>
+
       <plugin>
         <groupId>org.opennms.maven.plugins</groupId>
         <artifactId>features-maven-plugin</artifactId>
         <version>1.2.0</version>
-        <configuration>
-          <bundles>
-            <!-- <bundle>mvn:joda-time/joda-time/${jodaTimeVersion}</bundle> -->
-            <!-- <bundle>mvn:org.opennms.features/jira-client/${project.version}</bundle> -->
-            <bundle>mvn:org.opennms.features/tmforum-troubleticketer/${project.version}</bundle>
-          </bundles>
-        </configuration>
+        <executions>
+          <execution>
+            <id>features.xml</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>generate-features-xml</goal>
+            </goals>
+            <configuration>
+              <bundles>
+                <bundle>mvn:org.opennms.features/tmforum-troubleticketer/${project.version}</bundle>
+              </bundles>
+              <repositories>
+                <repository>mvn:org.tmforum.dsmapi/org.tmforum.dsmapi.tt/${org.tmforum.dsmapi.tt.version}/xml/features</repository>
+              </repositories>
+              <features>
+                <feature>opennms-core</feature>
+                <feature>org.tmforum.dsmapi.tt</feature>
+              </features>
+
+            </configuration>
+          </execution>
+        </executions>
       </plugin>
+
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
         <version>3.1</version>
@@ -88,7 +107,21 @@
         </plugin>
       </plugins>
     </pluginManagement>
+
+    <resources>
+      <resource>
+        <directory>${project.basedir}/src/main/resources</directory>
+      </resource>
+    </resources>
+    <testResources>
+      <testResource>
+        <directory>${project.basedir}/src/test/resources</directory>
+      </testResource>
+    </testResources>
   </build>
+
+
+
 
   <dependencies>
     <dependency>
@@ -101,6 +134,7 @@
           <artifactId>jsr311-api</artifactId>
         </exclusion>
       </exclusions>
+      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>org.opennms.core</groupId>
@@ -112,6 +146,7 @@
           <artifactId>jsr311-api</artifactId>
         </exclusion>
       </exclusions>
+      <scope>provided</scope>
     </dependency>
 
 
@@ -133,7 +168,7 @@
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-core</artifactId>
       <version>${jerseyVersion}</version>
-      <scope>test</scope>
+      <scope>compile</scope>
       <exclusions>
         <exclusion>
           <groupId>javax.ws.rs</groupId>
@@ -146,7 +181,7 @@
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-json</artifactId>
       <version>${jerseyVersion}</version>
-      <scope>test</scope>
+      <scope>compile</scope>
       <exclusions>
         <exclusion>
           <groupId>javax.ws.rs</groupId>
@@ -159,7 +194,7 @@
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-client</artifactId>
       <version>${jerseyVersion}</version>
-      <scope>test</scope>
+      <scope>compile</scope>
       <exclusions>
         <exclusion>
           <groupId>javax.ws.rs</groupId>
@@ -184,6 +219,7 @@
           <artifactId>jsr311-api</artifactId>
         </exclusion>
       </exclusions>
+      <scope>compile</scope>
     </dependency>
 
     <!-- <dependency> -->
@@ -213,15 +249,6 @@
       <scope>test</scope>
     </dependency>
 
-    <!-- <dependency> -->
-    <!-- <groupId>joda-time</groupId> -->
-    <!-- <artifactId>joda-time</artifactId> -->
-    <!-- </dependency> -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.opennms.features</groupId> -->
-    <!-- <artifactId>jira-client</artifactId> -->
-    <!-- <version>${project.version}</version> -->
-    <!-- </dependency> -->
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
@@ -230,31 +257,59 @@
     </dependency>
   </dependencies>
 
-  <!-- <repositories> -->
-  <!-- <repository> -->
-  <!-- <id>atlassian-public</id> -->
-  <!-- <name>Atlassian public repo</name> -->
-  <!-- <url>http://maven.atlassian.com/content/repositories/atlassian-public/</url> -->
-  <!-- </repository> -->
-  <!-- <repository> -->
-  <!-- <id>atlassian-public-mirror</id> -->
-  <!-- <name>Atlassian public repo</name> -->
-  <!-- <url>http://maven.opennms.org/content/repositories/atlassian-public/</url> -->
-  <!-- </repository> -->
-  <!-- </repositories> -->
-  <pluginRepositories>
-  <pluginRepository>
+  <repositories>
+    <repository>
+      <id>vaadin-snapshots</id>
       <releases>
         <enabled>false</enabled>
       </releases>
       <snapshots>
         <enabled>true</enabled>
       </snapshots>
+      <url>http://maven.opennms.org/content/groups/vaadin-snapshot/</url>
+    </repository>
+    <repository>
+      <id>vaadin-addons</id>
+      <url>http://maven.opennms.org/content/groups/vaadin.com-addons/</url>
+    </repository>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <id>opennms-repo</id>
+      <name>OpenNMS Repository</name>
+      <url>http://maven.opennms.org/content/groups/opennms.org-release</url>
+    </repository>
+    <repository>
       <id>opennms-snapshots</id>
       <name>OpenNMS Snapshot Maven Repository</name>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
       <url>http://maven.opennms.org/content/groups/opennms.org-snapshot</url>
+    </repository>
+  </repositories>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <id>opennms-repo</id>
+      <name>OpenNMS Repository</name>
+      <url>http://maven.opennms.org/content/groups/opennms.org-release</url>
     </pluginRepository>
   </pluginRepositories>
-  
-  
+
+
+
 </project>
