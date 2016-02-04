@@ -26,9 +26,9 @@ public class TroubleTicketClientV2 {
 
 
 	private String baseUri=null;
-	
+
 	private String password=null;
-	
+
 	private String username=null;
 
 	public String getBaseUri() {
@@ -38,11 +38,11 @@ public class TroubleTicketClientV2 {
 	public void setBaseUri(String baseUri) {
 		this.baseUri = baseUri;
 	}
-	
+
 	//TODO BASIC AUTHENTICATION
 	public void setPassword(String password) {
 		this.password=password;
-		
+
 	}
 
 	//TODO BASIC AUTHENTICATION
@@ -67,66 +67,81 @@ public class TroubleTicketClientV2 {
 		WebResource webResourceGet = client.resource(baseUri).path("troubleTicket/"+id);
 		webResourceGet.type(MediaType.APPLICATION_JSON_TYPE);
 		webResourceGet.accept(MediaType.APPLICATION_JSON_TYPE);
-		
+
 		LOG.debug("calling getTroubleTicket uri="+webResourceGet.getURI().toString());
-		
+
 		ClientResponse response = webResourceGet.get(ClientResponse.class);
-		
+
 		if (response.getStatus() != 200) {
 			LOG.debug("getTroubleTicket response status= "+response.getStatus());
 			return null;
 		}
-		
+
 		TroubleTicket responseEntity = response.getEntity(TroubleTicket.class);
 
 		LOG.debug("getTroubleTicket response="+responseEntity.toString());
 		return responseEntity;
 	}
-	
-	
+
+
 	public TroubleTicket createTroubleTicket(TroubleTicket tt){
 		if(tt==null) throw new RuntimeException("trouble ticket cannot be null");
 		if(baseUri==null) throw new RuntimeException("baseUri cannot be null");
-		
+
 		LOG.debug("calling createTroubleTicket baseUri="+baseUri+"\n"
 				+ "trouble ticket="+tt.toString()+ "");
 
 		ClientConfig clientConfig = new DefaultClientConfig();
-		
+
 		// only create json string if debugging
 		if (LOG.isDebugEnabled()){
-			ObjectMapper mapper = new ObjectMapper();
-		    AnnotationIntrospector introspector = new JaxbAnnotationIntrospector();
-		    // make deserializer use JAXB annotations (only)
-		    mapper.getDeserializationConfig().withAnnotationIntrospector(introspector);
-		    String jsonString =null;
-				try {
-					jsonString = mapper.writeValueAsString( tt );
-				} catch (IOException e) {
-					LOG.debug("problem logging jsonString",e);
-				}
+			String jsonString = ttToJson(tt);
 			LOG.debug("calling jsonString="+jsonString);
 		}
 
 		Client client = Client.create(clientConfig);
-		
+
 		WebResource webResourcePost = client.resource(baseUri).path("troubleTicket");
 		LOG.debug("calling createTroubleTicket uri="+webResourcePost.getURI().toString());
-		
+
 		WebResource.Builder builder = webResourcePost.type(MediaType.APPLICATION_JSON_TYPE).accept(MediaType.APPLICATION_JSON_TYPE);
 		ClientResponse response = builder.post(ClientResponse.class, tt);
 
 		if (response.getStatus() != 201) {
-			LOG.debug("createTroubleTicket response status= "+response.getStatus()+" status info=" +response.getStatusInfo().toString());
+			LOG.warn("tried calling createTroubleTicket uri="+webResourcePost.getURI().toString()+ "\n for ticket json:"+ttToJson(tt));
+			LOG.warn("createTroubleTicket response status= "+response.getStatus()+" status info=" +response.getStatusInfo().toString());
 			return null;
 		}
-		
+
 		TroubleTicket responseEntity = response.getEntity(TroubleTicket.class);
 
 		LOG.debug("createTroubleTicket response="+responseEntity.toString());
 		return responseEntity;
 	}
 
+	/**
+	 * converts ticket to jsonString - only used for debugging
+	 * @param tt
+	 * @return
+	 */
+	private String ttToJson(TroubleTicket tt){
+		if (tt==null) {
+			LOG.error("ttToJson problem converting ticket to jsonString. TroubleTicket tt=null");
+			return null;
+		}
+
+		ObjectMapper mapper = new ObjectMapper();
+		AnnotationIntrospector introspector = new JaxbAnnotationIntrospector();
+		// make deserializer use JAXB annotations (only)
+		mapper.getDeserializationConfig().withAnnotationIntrospector(introspector);
+		String jsonString =null;
+		try {
+			jsonString = mapper.writeValueAsString( tt );
+		} catch (IOException e) {
+			LOG.error("ttToJson problem converting ticket to jsonString",e);
+		}
+		return jsonString;
+	}
 
 	/**
 	 * troubleTicketUpdate
@@ -137,7 +152,7 @@ public class TroubleTicketClientV2 {
 		throw new UnsupportedOperationException("this operation is not yet implemented");
 		//return null;
 	}
-	
+
 	/**
 	 * troubleTicketPatch
 	 * @param tt
@@ -147,12 +162,12 @@ public class TroubleTicketClientV2 {
 		throw new UnsupportedOperationException("this operation is not yet implemented");
 		//return null;
 	}
-	
-/**
- *  troubleTicketFind
- * @param tt
- * @return
- */
+
+	/**
+	 *  troubleTicketFind
+	 * @param tt
+	 * @return
+	 */
 	public TroubleTicket findTroubleTicket(TroubleTicket tt){
 		throw new UnsupportedOperationException("this operation is not yet implemented");
 		//return null;
