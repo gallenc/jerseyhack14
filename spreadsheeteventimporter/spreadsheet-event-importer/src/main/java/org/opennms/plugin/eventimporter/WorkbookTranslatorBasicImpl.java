@@ -133,30 +133,38 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 				cell = row.getCell(0);
 				if (cell!=null && cellValue(cell)!=null) eventRowConfig.setMaskOid(cellValue(cell));
 				cell = row.getCell(1);
-				if (cell!=null && cellValue(cell)!=null) {
+				if (cell!=null && cellValue(cell)!=null) try {
 					// ensures only integer value when spreadsheet casts number as double
 					Double cellDouble = Double.parseDouble(cellValue(cell));
 					eventRowConfig.setMaskGeneric(Integer.toString(cellDouble.intValue())); 
+				} catch (Exception e){
+					throw new RuntimeException("problem parsing cell 1 value="+cellValue(cell),e);
 				}
 				cell = row.getCell(2);
-				if (cell!=null && cellValue(cell)!=null) {
+				if (cell!=null && cellValue(cell)!=null) try {
 					// ensures only integer value when spreadsheet casts number as double
 					Double cellDouble = Double.parseDouble(cellValue(cell));
 					eventRowConfig.setMaskSpecific(Integer.toString(cellDouble.intValue()));
+				} catch (Exception e){
+					throw new RuntimeException("problem parsing cell 2 value="+cellValue(cell),e);
 				}
 				cell = row.getCell(3);
-				if (cell!=null && cellValue(cell)!=null) {
+				if (cell!=null && cellValue(cell)!=null) try {
 					// ensures only integer value when spreadsheet casts number as double
 					Double cellDouble = Double.parseDouble(cellValue(cell));
 					eventRowConfig.setMaskVarbind_1_number(Integer.toString(cellDouble.intValue())); 
+				} catch (Exception e){
+					throw new RuntimeException("problem parsing cell 3 value="+cellValue(cell),e);
 				}
 				cell = row.getCell(4);
 				if (cell!=null && cellValue(cell)!=null) eventRowConfig.setMaskVarbind_1_value(cellValue(cell)); 
 				cell = row.getCell(5);
-				if (cell!=null && cellValue(cell)!=null) {
+				if (cell!=null && cellValue(cell)!=null) try {
 					// ensures only integer value when spreadsheet casts number as double
 					Double cellDouble = Double.parseDouble(cellValue(cell));
 					eventRowConfig.setMaskVarbind_2_number(Integer.toString(cellDouble.intValue())); 
+				} catch (Exception e){
+					throw new RuntimeException("problem parsing cell 5 value="+cellValue(cell),e);
 				}
 				cell = row.getCell(6);
 				if (cell!=null && cellValue(cell)!=null) eventRowConfig.setMaskVarbind_2_value(cellValue(cell)); 
@@ -165,14 +173,20 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 				cell = row.getCell(8);
 				if (cell!=null && cellValue(cell)!=null) eventRowConfig.setAlarmReductionKey(cellValue(cell)); 
 				cell = row.getCell(9);
-				if (cell!=null && cellValue(cell)!=null){ 
+				if (cell!=null && cellValue(cell)!=null) try { 
 					Double cellDouble = Double.parseDouble(cellValue(cell));
 					eventRowConfig.setAlarmType(cellDouble.intValue()); 
+				} catch (Exception e){
+					throw new RuntimeException("problem parsing cell 9 value="+cellValue(cell),e);
 				}
 				cell = row.getCell(10);
 				if (cell!=null && cellValue(cell)!=null) eventRowConfig.setAlarmClearKey(cellValue(cell)); 
 				cell = row.getCell(11);
-				if (cell!=null && cellValue(cell)!=null) eventRowConfig.setAlarmAutoClean(Boolean.valueOf(cellValue(cell))); 
+				if (cell!=null && cellValue(cell)!=null) try{
+					eventRowConfig.setAlarmAutoClean(Boolean.valueOf(cellValue(cell))); 
+				} catch (Exception e){
+					throw new RuntimeException("problem parsing cell 11 value="+cellValue(cell),e);
+				}
 				cell = row.getCell(12);
 				if (cell!=null && cellValue(cell)!=null) eventRowConfig.setEventLabel(cellValue(cell));
 				cell = row.getCell(13);
@@ -190,12 +204,16 @@ public class WorkbookTranslatorBasicImpl implements WorkbookTranslator {
 				cell = row.getCell(19);
 				if (cell!=null && cellValue(cell)!=null) eventRowConfig.setEventLogmsgValue(cellValue(cell)); 
 				cell = row.getCell(20);
-				if (cell!=null && cellValue(cell)!=null) eventRowConfig.setEventLogmsgNotify(Boolean.valueOf(cellValue(cell))); 
+				if (cell!=null && cellValue(cell)!=null) try {
+					eventRowConfig.setEventLogmsgNotify(Boolean.valueOf(cellValue(cell))); 
+				} catch (Exception e){
+					throw new RuntimeException("problem parsing cell 20 value="+cellValue(cell),e);
+				}
 
 				eventRowConfigObjectList.add(eventRowConfig);
 
 			} catch (Exception e){
-				LOG.error("problem parsing data in row:"+ rowNo	+ "Exception:",e);
+				LOG.error("problem parsing data in row:"+ rowNo	+ " Exception:", e);
 			}
 
 		}
