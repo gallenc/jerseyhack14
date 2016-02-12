@@ -110,6 +110,12 @@ public class TroubleTicketClientV2 {
 		if (response.getStatus() != 201) {
 			LOG.warn("tried calling createTroubleTicket uri="+webResourcePost.getURI().toString()+ "\n for ticket json:"+ttToJson(tt));
 			LOG.warn("createTroubleTicket response status= "+response.getStatus()+" status info=" +response.getStatusInfo().toString());
+			try {
+				String errorText = response.getEntity(String.class);
+				LOG.warn("createTroubleTicket server response error message="+errorText  );
+			} catch (Exception e){
+				LOG.error("cannot decode server response",e);
+			}
 			return null;
 		}
 
