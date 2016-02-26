@@ -16,12 +16,10 @@
 package org.opennms.plugin.eventimporter;
 
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.io.File;
-import java.io.InputStream;
-import java.util.Properties;
-
-import org.junit.Test;
+import java.net.URL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +52,28 @@ public class SpreadsheetEventConfTest {
 				+ "\n    TEST_WORKBOOK_OUT_FILE="+TEST_WORKBOOK_OUT_FILE
 				+ "\n    TEST_SPREADSHEET_NAME="+TEST_SPREADSHEET_NAME);
 
+		// delete spreadsheet TEST_WORKBOOK_OUT_FILE if already exists in target directory for test
+		File workbookFile=null;
+		try {
+			
+			// checking if we can see file on class path
+			ClassLoader classLoader = getClass().getClassLoader();
+			URL resource = classLoader.getResource(TEST_WORKBOOK_OUT_FILE);
+			if (resource==null){
+				LOG.debug("workbookTranslatorBasicImpl resource is not on class path. Checking raw location");
+				workbookFile = new File(TEST_WORKBOOK_OUT_FILE);
+			} else {
+				workbookFile = new File(classLoader.getResource(TEST_WORKBOOK_OUT_FILE).getFile());
+			}
+			LOG.debug("TEST_WORKBOOK_OUT_FILE workbookFile.getPath()"+workbookFile.getAbsolutePath());
+
+			if (workbookFile.exists()){
+				LOG.debug("deleting TEST_WORKBOOK_OUT_FILE from path "+workbookFile.getPath());
+				workbookFile.delete();
+			} 
+		} catch (Exception e){
+			LOG.debug("problem testing in TEST_WORKBOOK_OUT_FILE exists and deleting before test", e);
+		} 
 
 		SpreadsheetEventConfMain spreadsheetEvtConfMain = new SpreadsheetEventConfMain();
 
@@ -67,7 +87,7 @@ public class SpreadsheetEventConfTest {
 		LOG.info("@Test - eventsToSpreadsheetTest.FINISH");
 	}
 
-	
+
 	@Test
 	public void spreadsheetToEventsTest(){
 		LOG.info("@Test - spreadsheetToEventsTest.START");
@@ -90,9 +110,9 @@ public class SpreadsheetEventConfTest {
 
 		LOG.info("@Test - spreadsheetToEventsTest.FINISH");
 	}
-	
-	
-	//@Test DO NOT RUN
+
+
+	@Test
 	public void eventsToSnmpTrapScriptTest(){
 		LOG.info("@Test - eventsToSnmpTrapScriptTest.START");
 

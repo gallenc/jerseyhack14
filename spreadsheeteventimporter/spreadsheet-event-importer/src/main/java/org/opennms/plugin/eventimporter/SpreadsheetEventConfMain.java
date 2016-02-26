@@ -212,7 +212,7 @@ public class SpreadsheetEventConfMain {
 			workbookTranslator = workbookTxFactory.createWorkbookTranslator(workbookFilePath, propertiesFilePath);
 
 			List<EventRowConfigObject> eventRows = workbookTranslator.retreiveEventRows(spreadsheetName);
-			
+
 			if(LOG.isDebugEnabled()){
 				LOG.debug("Event Rows Retreived from Sheet:");
 				for (EventRowConfigObject eventRowConfigObject: eventRows){
@@ -260,16 +260,35 @@ public class SpreadsheetEventConfMain {
 
 	}
 
+	/*
+	 * returns varbind type string or integer depending on whether varbindvalue can be parsed as intgeger
+	 * @param varbindvalue
+	 * @return
+	 */
+	private String varbindString(String varbindvalue){
+
+		boolean isInt=false;
+		try{
+			//test if string is a string representing an integer or just a string
+			Integer.parseInt(varbindvalue);
+			isInt=true;
+		} catch (Exception e){}
+		if (isInt){
+			return " i "+varbindvalue;
+		}
+		else return " s "+varbindvalue;
+
+	}
 
 	/** 
 	 * converts an opennms events file to snmp trap tests
 	 * 
 	 */
 	public void eventsToSnmpTrapScript() {
-		// TODO Auto-generated method stub
+
 		if (eventsFilePath==null || "".equals(eventsFilePath) ) throw new IllegalStateException("eventsToSpreadsheet() eventsFilePath cannot be null or empty string.");
 		if (snmpTrapScriptFilePath==null || "".equals(snmpTrapScriptFilePath) ) throw new IllegalStateException("eventsToSpreadsheet() snmpTrapScriptFilePath cannot be null or empty string.");
-		
+
 		LOG.info("eventsToSnmpTrapScript() converting events file to snmtrap test script ");
 
 		String marshalledEvents=null;
@@ -293,7 +312,7 @@ public class SpreadsheetEventConfMain {
 
 			Scanner scanner=null;
 			try {
-				scanner = new Scanner(eventsFile );
+				scanner = new Scanner(eventsFile);
 				String lineSeparator = System.getProperty("line.separator");
 				while(scanner.hasNextLine()) {        
 					fileContents.append(scanner.nextLine() + lineSeparator);
@@ -328,61 +347,74 @@ public class SpreadsheetEventConfMain {
 
 			// create test script
 			snmpTestOut = new PrintWriter(snmpTrapScriptFilePath);
-			
+
 			StringBuilder sb = new StringBuilder();
-			
+
 			sb.append("#!/bin/bash");
 			sb.append("\n# TEST FILE "+snmpTrapScriptFilePath);
-			
+			sb.append("\n\n# Note this file generates simple traps corresponding to the opennms events config file:");
+			sb.append("\n# "+eventsFile.getAbsolutePath());
+			sb.append("\n\n# since OpenNMS only cares about the varbind position and not the absolute OID attached to varbinds:");
+			sb.append("\n# this simulator cheats by re-using the trap OID in each varbind and adding extra varbinds as ");
+			sb.append("\n# padding for varbinds which are present in the trap but not used in the OpenNMS configuration.");
+
+
 			for (EventRowConfigObject eventRowConfigObject :eventRowConfigObjectList){
-				sb.append("\n");
-				sb.append("\n# eventLabel "+eventRowConfigObject.getEventLabel());
-				sb.append("\n# event eui  "+eventRowConfigObject.getEventUei());
-				sb.append("\n# test script:  ");
-				// basic trap string
-				String trapOid=eventRowConfigObject.getMaskOid()+"."+eventRowConfigObject.getMaskSpecific();
-				sb.append("\nsnmptrap -v 2c -c public host \"\" "+trapOid);
-				
 				try{
-				// find positions of varbinds
-				String vb1numStr=eventRowConfigObject.getMaskVarbind_1_number();
-				String vb1valStr=eventRowConfigObject.getMaskVarbind_1_value();
-				Integer vb1num=null;
-				Integer maxvbnum= 0;
-				if (vb1numStr!=null && ! "".equals(vb1numStr)){
-					vb1num = Integer.parseInt(vb1numStr);
-					maxvbnum=vb1num;
-				}
-				String vb2numStr=eventRowConfigObject.getMaskVarbind_2_number();
-				String vb2valStr=eventRowConfigObject.getMaskVarbind_2_value();
-				Integer vb2num=null;
-				if (vb2numStr!=null && ! "".equals(vb2numStr)){
-					vb2num = Integer.parseInt(vb2numStr);
-					if (vb2num>maxvbnum) maxvbnum=vb2num;
-				}
-				String[] varbindstrings= new String[maxvbnum];
-				for(int x=0; x<maxvbnum; x++){
-					// fill with dummy varbinds
-					varbindstrings[x]= " "+trapOid+" i "+1+" ";
-				}
-				varbindstrings[vb1num-1] = " "+trapOid+" i "+vb1valStr+" ";
-				if(vb2numStr!=null){
-					varbindstrings[vb2num-1] = " "+trapOid+" i "+vb2valStr+" ";
-				};
-				for(int x=0; x<maxvbnum; x++){
-					sb.append(varbindstrings[x]);
-				}
-				sb.append("");
-				
+
+					String vb1numStr=eventRowConfigObject.getMaskVarbind_1_number();
+					String vb1valStr=eventRowConfigObject.getMaskVarbind_1_value();
+					String vb2numStr=eventRowConfigObject.getMaskVarbind_2_number();
+					String vb2valStr=eventRowConfigObject.getMaskVarbind_2_value();
+
+					sb.append("\n");
+					sb.append("\n# eventLabel "+eventRowConfigObject.getEventLabel());
+					sb.append("\n# event eui  "+eventRowConfigObject.getEventUei());
+					sb.append("\n# first  checked varbind position number="+vb1numStr+ " value="+vb1valStr);
+					sb.append("\n# second checked varbind position number="+vb2numStr+ " value="+vb2valStr);
+					sb.append("\n# test script:  ");
+
+					// trap generation string prolog
+					String trapOid=eventRowConfigObject.getMaskOid()+"."+eventRowConfigObject.getMaskSpecific();
+					sb.append("\nsnmptrap -v 2c -c public localhost \"\" "+trapOid);
+
+					// find positions of varbinds
+					Integer vb1num=null;
+					Integer maxvbnum= 0;
+					if (vb1numStr!=null && ! "".equals(vb1numStr)){
+						vb1num = Integer.parseInt(vb1numStr);
+						maxvbnum=vb1num;
+					}
+					Integer vb2num=null;
+					if (vb2numStr!=null && ! "".equals(vb2numStr)){
+						vb2num = Integer.parseInt(vb2numStr);
+						if (vb2num>maxvbnum) maxvbnum=vb2num;
+					}
+					String[] varbindstrings= new String[maxvbnum];
+					for(int x=0; x<maxvbnum; x++){
+						// fill number of varbinds in trap with dummy varbinds
+						varbindstrings[x]= " "+trapOid+" i "+999+" ";
+					}
+					if(vb1num!=null){
+						varbindstrings[vb1num-1] = " "+trapOid+" "+varbindString(vb1valStr)+" ";
+					}
+					if(vb2num!=null){
+						varbindstrings[vb2num-1] = " "+trapOid+" "+varbindString(vb2valStr)+" ";
+					};
+					for(int x=0; x<maxvbnum; x++){
+						sb.append(varbindstrings[x]);
+					}
+					sb.append("\n");
+
 				} catch (Exception e){
-					LOG.error("eventsToSnmpTrapScript() Exception when convsrting a file", e);
+					LOG.error("eventsToSnmpTrapScript() Exception when converting a file", e);
 				}
-				
+
 			}
 			LOG.debug("Test File to be written:\n"+sb.toString());
-			
+
 			snmpTestOut.println(sb.toString());
-			
+
 			LOG.info("CONVERSION COMPLETE - converted events file="+eventsFilePath
 					+ " to snmp test file ="+snmpTrapScriptFilePath);
 
@@ -412,11 +444,16 @@ public class SpreadsheetEventConfMain {
 		String propertiesFilePath=null;
 		String eventsFilePath=null;
 		String spreadsheetName=null;
+		String snmpTrapScriptFilePath=null;
 
 		// if null do nothing
 		// if true convert xml to spreadsheet
 		// if false convert spreadsheet to xml
 		Boolean xmltospreadsheet= null;
+
+		// if null do nothing
+		// if true convert xml to totestfile
+		Boolean xmltotestfile=null;
 
 		// use apache cli to parse options from command line
 		Options options = new Options();
@@ -427,7 +464,9 @@ public class SpreadsheetEventConfMain {
 		options.addOption("b", "workbookfile", true, "Set the path to excel workbook.xlsx file");
 		options.addOption("e", "eventfile", true, "Set the path to event.xml file");
 		options.addOption("x", "toxmlevents", false, "Use option to parse worksheet into events. Cannot be used with toworksheet ");
-		options.addOption("w", "toworksheet", false, "Use option to parse events into worksheet. Cannot be used with toxmlevents.");
+		options.addOption("w", "toworksheet", false, "Use option to parse events xml file into worksheet. Cannot be used with toxmlevents.");
+		options.addOption("t", "totestfile", false, "Use option to parse events xml file into bash trap test file for netsnmp. Cannot be used with toxmlevents.");
+		options.addOption("f", "testfile", true, "Set the path to <filenmame.sh> trap test file for netsnmp.");
 		options.addOption("p", "propertiesfile", false, "Set the path to properties file (optional - currently not used)");
 
 		String header = "Utility to convert between EXCEL workbooks and OpenNMS Event definitions  \n\n";
@@ -470,17 +509,32 @@ public class SpreadsheetEventConfMain {
 						LOG.debug("option value eventfile ="+ eventsFilePath );
 						if (eventsFilePath==null || "".equals(eventsFilePath))throw new ParseException("eventsfile cannot be null or empty string");
 					}
+					if( cmd.hasOption( "testfile" ) ) {
+						snmpTrapScriptFilePath=cmd.getOptionValue( "testfile" );
+						LOG.debug("option value snmpTrapScriptFilePath ="+ snmpTrapScriptFilePath );
+						if (snmpTrapScriptFilePath==null || "".equals(snmpTrapScriptFilePath))throw new ParseException("testfile cannot be null or empty string");
+					}
 
 					if( cmd.hasOption( "toxmlevents" ) && cmd.hasOption( "toworksheet" ) ) {
 						throw new ParseException("You cannot use both toxmlevents and toworksheet options together ");
 					}
 
-					if( cmd.hasOption( "toworksheet" ) ) {
-						LOG.debug("option value toworksheet="+ cmd.getOptionValue( "toworksheet" ) );
-						xmltospreadsheet=true; // CONVERTING TO SPREADSHEET
+					if( cmd.hasOption( "toxmlevents" ) && cmd.hasOption( "totestfile" ) ) {
+						throw new ParseException("You cannot use both toxmlevents and totestfile options together ");
+					}
+
+					if( cmd.hasOption( "toworksheet" ) || cmd.hasOption( "totestfile" )) {
+						if( cmd.hasOption( "toworksheet" )){
+							LOG.debug("option value toworksheet="+ cmd.getOptionValue( "toworksheet" ) );
+							xmltospreadsheet=true; // CONVERTING TO SPREADSHEET
+						}
+						if( cmd.hasOption( "totestfile" )){
+							LOG.debug("option value toworksheet="+ cmd.getOptionValue( "toworksheet" ) );
+							xmltotestfile=true; // CONVERTING TO TEST FILE
+						}
 
 					} else if(! cmd.hasOption( "toxmlevents" ) ) {
-						throw new ParseException("You must specifiy a conversion operation (-x / --toxmlevents or -w / --toworksheet)"); 
+						throw new ParseException("You must specifiy a conversion operation (-x / --toxmlevents or -w / --toworksheet or -t / --totestfile)"); 
 					} else {
 						LOG.debug("option value toxmlevents="+ cmd.getOptionValue( "toworksheet" ) );
 						xmltospreadsheet=false; // CONVERTING TO XMLEVENTS
@@ -493,30 +547,41 @@ public class SpreadsheetEventConfMain {
 			}
 		}
 
-		if(xmltospreadsheet==null){
+		if(xmltospreadsheet==null && xmltotestfile==null){
 			System.out.println("No conversion specified. Do nothing");
 		} else try {
 			SpreadsheetEventConfMain spreadsheetEvtConfMain = new SpreadsheetEventConfMain();
-
-			LOG.info("Conversion parameters:"
-					+ "\n    workbook=" +workbookFilePath 
-					+ "\n    propertiesfile=" +propertiesFilePath
-					+ "\n    eventfile=" +eventsFilePath
-					+ "\n    sheet=" +spreadsheetName);
 
 			spreadsheetEvtConfMain.setWorkbookFilePath(workbookFilePath);
 			spreadsheetEvtConfMain.setPropertiesFilePath(propertiesFilePath);
 			spreadsheetEvtConfMain.setSpreadsheetName(spreadsheetName);
 			spreadsheetEvtConfMain.setEventsFilePath(eventsFilePath);
+			spreadsheetEvtConfMain.setSnmpTrapScriptFilePath(snmpTrapScriptFilePath);
 
-			if(xmltospreadsheet){
-				LOG.info("CONVERTING TO SPREADSHEET (please note - loading the converter classes may take some time)");
-				spreadsheetEvtConfMain.eventsToSpreadsheet();
-
-			} else {
-				LOG.info("CONVERTING TO XMLEVENTS (please note - loading the converter classes may take some time)");
-				spreadsheetEvtConfMain.spreadsheetToEvents();
+			if(xmltotestfile!=null && xmltotestfile==true){
+				LOG.info("CONVERTING XMLEVENTS TO TEST FILE");
+				LOG.info("Conversion parameters:"
+						+ "\n    eventfile=" +eventsFilePath
+						+ "\n    testfile=" +snmpTrapScriptFilePath);
+				spreadsheetEvtConfMain.eventsToSnmpTrapScript();;
 			}
+
+			if(xmltospreadsheet!=null) {
+				LOG.info("\nConversion parameters:"
+						+ "\n    workbook=" +workbookFilePath 
+						+ "\n    propertiesfile=" +propertiesFilePath
+						+ "\n    eventfile=" +eventsFilePath
+						+ "\n    sheet=" +spreadsheetName);
+				if (xmltospreadsheet==true){
+					LOG.info("CONVERTING XMLEVENTS TO SPREADSHEET (please note - loading the converter classes may take some time)");
+
+					spreadsheetEvtConfMain.eventsToSpreadsheet();
+				} else {
+					LOG.info("CONVERTING SPREADSHEET TO XMLEVENTS (please note - loading the converter classes may take some time)");
+					spreadsheetEvtConfMain.spreadsheetToEvents();
+				}
+			}
+
 		} catch (Exception e){
 			LOG.error("Problem performing conversion: EXception: ", e);
 			e.printStackTrace();
