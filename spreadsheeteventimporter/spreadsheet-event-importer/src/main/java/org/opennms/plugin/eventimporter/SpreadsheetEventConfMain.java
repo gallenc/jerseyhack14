@@ -369,6 +369,7 @@ public class SpreadsheetEventConfMain {
 
 					sb.append("\n");
 					sb.append("\n# eventLabel "+eventRowConfigObject.getEventLabel());
+					sb.append("\n# evenLogMsg "+eventRowConfigObject.getEventLogmsgValue());
 					sb.append("\n# event eui  "+eventRowConfigObject.getEventUei());
 					sb.append("\n# first  checked varbind position number="+vb1numStr+ " value="+vb1valStr);
 					sb.append("\n# second checked varbind position number="+vb2numStr+ " value="+vb2valStr);
