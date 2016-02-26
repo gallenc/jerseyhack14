@@ -376,7 +376,14 @@ public class SpreadsheetEventConfMain {
 					sb.append("\n# test script:  ");
 
 					// trap generation string prolog
-					String trapOid=eventRowConfigObject.getMaskOid()+"."+eventRowConfigObject.getMaskSpecific();
+					// note that enterprise oid's (generic mask=6) are handled differently
+					String trapOid=null;
+					if("6".equals(eventRowConfigObject.getMaskGeneric())){
+						trapOid=eventRowConfigObject.getMaskOid()+"."+eventRowConfigObject.getMaskSpecific();
+					} else {
+						trapOid=eventRowConfigObject.getMaskOid();
+					}
+					
 					sb.append("\nsnmptrap -v 2c -c public localhost \"\" "+trapOid);
 
 					// find positions of varbinds
