@@ -276,7 +276,7 @@ public class SpreadsheetEventConfMain {
 		if (isInt){
 			return " i "+varbindvalue;
 		}
-		else return " s "+varbindvalue;
+		else return " s \""+varbindvalue+"\" ";
 
 	}
 
