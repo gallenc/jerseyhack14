@@ -3,12 +3,12 @@
   <!-- <parent> -->
   <!-- <groupId>org.opennms.features</groupId> -->
   <!-- <artifactId>org.opennms.features.ticketing</artifactId> -->
-  <!-- <version>17.0.1-SNAPSHOT</version> -->
+  <!-- <version>17.1.1</version> -->
   <!-- </parent> -->
   <!-- <parent> -->
   <!-- <groupId>org.opennms.features.topology.build</groupId> -->
   <!-- <artifactId>compiled-bundle-settings</artifactId> -->
-  <!-- <version>17.0.1-SNAPSHOT</version> -->
+  <!-- <version>17.1.1</version> -->
   <!-- <relativePath>../topology-map/poms/compiled/</relativePath> -->
   <!-- </parent> -->
 
@@ -16,7 +16,7 @@
   <modelVersion>4.0.0</modelVersion>
   <artifactId>tmforum-troubleticketer</artifactId>
   <packaging>bundle</packaging>
-  <version>17.0.1-SNAPSHOT</version>
+  <version>17.1.1-SNAPSHOT</version>
   <name>OpenNMS :: Features :: Ticketing :: TMForum</name>
 
   <properties>
@@ -26,17 +26,20 @@
     <log4j2Version>2.1</log4j2Version>
     <slf4jVersion>1.7.7</slf4jVersion>
     <org.tmforum.dsmapi.tt.version>2.0-SNAPSHOT</org.tmforum.dsmapi.tt.version>
+    <!--  defines version of opennms against which this ticketer module is compiled - should work with later versions -->
+    <org.opennms.version>17.1.1</org.opennms.version>
   </properties>
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.felix</groupId>
         <artifactId>maven-bundle-plugin</artifactId>
-        <version>2.3.7</version>
+        <version>2.5.3</version>
         <extensions>true</extensions>
         <configuration>
           <instructions>
-            <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment>
+            <!-- <Bundle-RequiredExecutionEnvironment>JavaSE-1.8</Bundle-RequiredExecutionEnvironment> -->
+            <Import-Package>org.opennms.api.integration.ticketing;version=17,*</Import-Package>
           </instructions>
         </configuration>
       </plugin>
@@ -127,7 +130,7 @@
     <dependency>
       <groupId>org.opennms.features.ticketing</groupId>
       <artifactId>org.opennms.features.ticketing.api</artifactId>
-      <version>17.0.1-SNAPSHOT</version>
+      <version>${org.opennms.version}</version>
       <exclusions>
         <exclusion>
           <groupId>javax.ws.rs</groupId>
@@ -139,7 +142,7 @@
     <dependency>
       <groupId>org.opennms.core</groupId>
       <artifactId>org.opennms.core.lib</artifactId>
-      <version>17.0.1-SNAPSHOT</version>
+      <version>${org.opennms.version}</version>
       <exclusions>
         <exclusion>
           <groupId>javax.ws.rs</groupId>
@@ -212,7 +215,7 @@
     <dependency>
       <groupId>org.tmforum.dsmapi</groupId>
       <artifactId>org.tmforum.dsmapi.tt</artifactId>
-      <version>2.0-SNAPSHOT</version>
+      <version>${org.tmforum.dsmapi.tt.version}</version>
       <exclusions>
         <exclusion>
           <groupId>javax.ws.rs</groupId>
@@ -309,7 +312,5 @@
       <url>http://maven.opennms.org/content/groups/opennms.org-release</url>
     </pluginRepository>
   </pluginRepositories>
-
-
 
 </project>

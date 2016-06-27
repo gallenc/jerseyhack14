@@ -1,0 +1,10 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+  <!-- Generated Licence Authenticator Blueprint-->
+  <!-- for productId='alarm-change-notifier/1.0-SNAPSHOT' -->
+
+  <bean id="licenceAuthenticator" class="org.opennms.plugins.alarmnotifier.Temp" destroy-method="destroyMethod">
+<!--     <argument ref="licenceService" /> -->
+  </bean>
+
+</blueprint>

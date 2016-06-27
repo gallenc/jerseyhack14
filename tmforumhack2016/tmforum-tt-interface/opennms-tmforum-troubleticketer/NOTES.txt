@@ -1,5 +1,47 @@
 http://projects.tmforum.org/wiki/display/API/Open+Hack+Lisbon+Feb+1+-+3+2016
 
-features:addurl mvn:org.opennms.features/tmforum-troubleticketer/17.0.1-SNAPSHOT/xml/features
+features:addurl mvn:org.opennms.features/tmforum-troubleticketer/17.1.1-SNAPSHOT/xml/features
 
-features:install 
+features:install tmforum-troubleticketer/17.1.1-SNAPSHOT
+
+note to get working in opennms with a local repo where /home/admin/.m2/ should be 
+set to your local repo file.
+
+add line file:/home/admin/.m2/repository@snapshots@id=localrepo
+
+sudo vi org.ops4j.pax.url.mvn.cfg
+org.ops4j.pax.url.mvn.repositories= \
+    http://repo1.maven.org/maven2@id=central, \
+    http://svn.apache.org/repos/asf/servicemix/m2-repo@id=servicemix, \
+    http://repository.springsource.com/maven/bundles/release@id=springsource.release, \
+    http://repository.springsource.com/maven/bundles/external@id=springsource.external, \
+    https://oss.sonatype.org/content/repositories/releases/@id=sonatype, \
+    file:/home/admin/.m2/repository@snapshots@id=localrepo
+
+To Enable plugin
+
+Edit the $OPENNMS_HOME/etc/opennms.properties file and change this:
+
+opennms.ticketer.plugin=org.opennms.netmgt.ticketd.NullTicketerPlugin
+
+to this:
+
+opennms.ticketer.plugin=org.opennms.netmgt.ticketd.OSGiBasedTicketerPlugin
+
+    In the same file, change this:
+
+#opennms.alarmTroubleTicketEnabled = false
+#opennms.alarmTroubleTicketLinkTemplate = <a href="http://localhost:8080/centric/TroubleTickets.do?command=Details&id=${id}">${id}</a>
+
+to this:
+
+opennms.alarmTroubleTicketEnabled = true
+opennms.alarmTroubleTicketLinkTemplate = <a href="https://myjirahost/browse/${id}">${id}</a>
+
+Add the following properties to opennms.properties
+tmforumtt.baseuri=http://env-0693795.jelastic.servint.net/DSTroubleTicket/api/troubleTicketManagement/v2
+tmforumtt.username=
+tmforumtt.password=
+
+
+
