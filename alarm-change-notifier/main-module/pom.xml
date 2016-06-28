@@ -83,6 +83,59 @@
       <version>${slf4jVersion}</version>
       <scope>provided</scope>
     </dependency>
+
+    <dependency>
+      <!-- PostgreSQL Asychronous Notification JDBC driver -->
+      <groupId>com.impossibl.pgjdbc-ng</groupId>
+      <artifactId>pgjdbc-ng</artifactId>
+      <version>${pgjdbc-ng-version}</version>
+      <classifier>complete</classifier>
+      <exclusions>
+        <exclusion>
+          <groupId>io.netty</groupId>
+          <artifactId>netty-all</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+
+    <!-- OSGi netty dependencies for pgjdbc-ng -->
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-common</artifactId>
+      <version>${nettyVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-transport</artifactId>
+      <version>${nettyVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-buffer</artifactId>
+      <version>${nettyVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-handler</artifactId>
+      <version>${nettyVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+<!--     <dependency> -->
+<!--       <groupId>io.netty</groupId> -->
+<!--       <artifactId>netty-resolver</artifactId> -->
+<!--       <version>${nettyVersion}</version> -->
+<!--       <scope>provided</scope> -->
+<!--     </dependency> -->
+    <dependency>
+      <groupId>io.netty</groupId>
+      <artifactId>netty-codec</artifactId>
+      <version>${nettyVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+
   </dependencies>
 
 </project>

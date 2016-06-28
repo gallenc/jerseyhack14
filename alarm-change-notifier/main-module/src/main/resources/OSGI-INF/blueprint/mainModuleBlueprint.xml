@@ -6,5 +6,18 @@
   <bean id="licenceAuthenticator" class="org.opennms.plugins.alarmnotifier.Temp" destroy-method="destroyMethod">
 <!--     <argument ref="licenceService" /> -->
   </bean>
+  
+  <bean id="dataSource" class="com.impossibl.postgres.jdbc.PGDataSource" >
+        <property name="host" value="localhost"/>
+        <property name="database" value="opennms"/>
+        <property name="password" value="opennms"/>
+        <property name="port" value="5432"/>
+        <property name="user" value="opennms"/>
+  </bean>
+  
+  <bean id="alarmNotifier" class="org.opennms.plugins.alarmnotifier.AlarmNotifier" init-method="init" destroy-method="destroy">
+    <argument ref="dataSource" />
+  </bean>
+
 
 </blueprint>
