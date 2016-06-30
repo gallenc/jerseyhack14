@@ -15,16 +15,101 @@
     <property name="password" value="opennms" />
   </bean>
 
-  <bean id="alarmNotifier" class="org.opennms.plugins.alarmnotifier.AlarmNotifier" init-method="init" destroy-method="destroy">
-    <argument ref="pgDataSource" />
+  <!--  DatabaseChangeNotifier(DataSource dataSource, List<String> paramList) -->
+  <bean id="databaseChangeNotifier" class="org.opennms.plugins.alarmnotifier.DatabaseChangeNotifier" init-method="init" destroy-method="destroy">
+    <argument index="0" ref="pgDataSource" />
+    
+    <argument index="1">
+      <list>
+        <value>NOTIFY_ALARM_CHANGES</value>
+        <value>NOTIFY_EVENT_CHANGES</value>
+      </list>
+    </argument>
 
-    <property name="connectionStatement" ref="connectionStatement" />
-    <property name="disConnectionStatement" ref="disConnectionStatement" />
+    <property name="connectionStatementEvents" ref="connectionStatementEvents" />
+    <property name="disConnectionStatementEvents" ref="disConnectionStatementEvents" />
+    <property name="connectionStatementAlarms" ref="connectionStatementAlarms" />
+    <property name="disConnectionStatementAlarms" ref="disConnectionStatementAlarms" />
   </bean>
 
-  <!-- This sql statement initialises the triggers in the database -->
+
+  <!-- ********************************** -->
+  <!-- alarms notification sql statements -->
+  <!-- ********************************** -->
+
+  <!-- This sql statement initialises the triggers in the database for the alarms table -->
   <!-- Note you must use /* */ for comments as string is rendered as single line. -->
-  <bean id="connectionStatement" class="java.lang.String">
+  <bean id="connectionStatementAlarms" class="java.lang.String">
+    <argument
+      value="
+CREATE OR REPLACE FUNCTION notify_alarm() RETURNS TRIGGER AS $$
+
+    DECLARE 
+        data json;
+        notification json;
+    
+    BEGIN
+    
+/*
+        -- Convert the old or new row to JSON, based on the kind of action.
+        -- Action = DELETE?             -> OLD row
+        -- Action = INSERT or UPDATE?   -> NEW row
+*/
+        IF (TG_OP = 'DELETE') THEN
+            data = row_to_json(OLD);
+        ELSE
+            data = row_to_json(NEW);
+        END IF;
+
+/*        
+        -- Contruct the notification as a JSON string. ( only in 9.4 not 9.2)
+        --notification = json_build_object(
+        --                  'table',TG_TABLE_NAME,
+        --                  'action', TG_OP,
+        --                  'data', data);
+*/
+       notification = data;
+        
+/*                        
+        -- Execute pg_notify(channel, notification)
+*/
+        PERFORM pg_notify('opennms_alarm_changes',notification::text);
+        
+/*
+        -- Result is ignored since this is an AFTER trigger
+*/
+        RETURN NULL; 
+    END;
+    
+$$ LANGUAGE plpgsql;
+
+ DROP TRIGGER IF EXISTS alarms_change_notify ON alarms;
+
+ CREATE TRIGGER alarms_change_notify
+ AFTER INSERT OR UPDATE OR DELETE ON alarms
+    FOR EACH ROW EXECUTE PROCEDURE notify_alarm();
+    
+  " />
+  </bean>
+
+  <!-- This sql statement removes the triggers from the database for the alarms table -->
+  <!-- Note you must use /* */ for comments as string is rendered as single line. -->
+  <bean id="disConnectionStatementAlarms" class="java.lang.String">
+    <argument value="
+      DROP TRIGGER IF EXISTS alarms_change_notify ON alarms;
+      
+      DROP FUNCTION IF EXISTS notify_alarm();
+  " />
+  </bean>
+
+
+  <!-- ********************************** -->
+  <!-- events notification sql statements -->
+  <!-- ********************************** -->
+
+  <!-- This sql statement initialises the triggers in the database for the events table -->
+  <!-- Note you must use /* */ for comments as string is rendered as single line. -->
+  <bean id="connectionStatementEvents" class="java.lang.String">
     <argument
       value="
 CREATE OR REPLACE FUNCTION notify_event() RETURNS TRIGGER AS $$
@@ -58,7 +143,7 @@ CREATE OR REPLACE FUNCTION notify_event() RETURNS TRIGGER AS $$
 /*                        
         -- Execute pg_notify(channel, notification)
 */
-        PERFORM pg_notify('dml_events',notification::text);
+        PERFORM pg_notify('opennms_event_changes',notification::text);
         
 /*
         -- Result is ignored since this is an AFTER trigger
@@ -75,11 +160,12 @@ $$ LANGUAGE plpgsql;
     FOR EACH ROW EXECUTE PROCEDURE notify_event();
     
   " />
+
   </bean>
 
-  <!-- This sql statement removes the triggers from the database -->
+  <!-- This sql statement removes the triggers from the database for the events table -->
   <!-- Note you must use /* */ for comments as string is rendered as single line. -->
-  <bean id="disConnectionStatement" class="java.lang.String">
+  <bean id="disConnectionStatementEvents" class="java.lang.String">
     <argument value="
       DROP TRIGGER IF EXISTS events_change_notify ON events;
       

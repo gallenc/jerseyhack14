@@ -2,13 +2,16 @@ package org.opennms.plugins.alarmnotifier.test.manual;
 
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.Test;
 
 import com.impossibl.postgres.jdbc.PGDataSource;
 
 import javax.sql.DataSource;
 
-import org.opennms.plugins.alarmnotifier.AlarmNotifier;
+import org.opennms.plugins.alarmnotifier.DatabaseChangeNotifier;
 
 public class AlarmNotifierTest {
 
@@ -24,11 +27,17 @@ public class AlarmNotifierTest {
 		pgDataSource.setUser("opennms");
 		pgDataSource.setPassword("opennms");
 
-		AlarmNotifier alarmNotifier = null;
+		DatabaseChangeNotifier alarmNotifier = null;
 
 		try {
 			System.out.println("AlarmNotifierTest creating connection - this is quite slow");
-			alarmNotifier = new AlarmNotifier(pgDataSource);
+			
+			List<String> paramList = new ArrayList<String>();
+			
+			paramList.add(DatabaseChangeNotifier.NOTIFY_EVENT_CHANGES);
+			paramList.add(DatabaseChangeNotifier.NOTIFY_ALARM_CHANGES);
+			
+			alarmNotifier = new DatabaseChangeNotifier(pgDataSource,paramList);
 			
 			System.out.println("AlarmNotifierTest initialising connection");
 			alarmNotifier.init();
