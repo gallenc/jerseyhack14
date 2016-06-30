@@ -27,7 +27,7 @@
     <karafVersion>2.4.0</karafVersion>
     <log4j2Version>2.1</log4j2Version>
     <junitVersion>4.10</junitVersion>
-    
+
     <!-- <pgjdbc-ng-version>0.6</pgjdbc-ng-version> -->
     <!-- <pgjdbc-ng-version>0.3</pgjdbc-ng-version> -->
     <!-- <pgjdbc-ng-version>0.7.0-SNAPSHOT</pgjdbc-ng-version> -->
@@ -138,11 +138,11 @@
 
       </plugins>
     </pluginManagement>
-    
+
   </build>
 
-<dependencyManagement>
-<dependencies>
+  <dependencyManagement>
+    <dependencies>
       <!-- logging dependencies. Note slf4j is used in karaf. log4j is only used in tests -->
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
@@ -169,7 +169,7 @@
         <artifactId>slf4j-api</artifactId>
         <version>${slf4jVersion}</version>
       </dependency>
-      
+
       <dependency>
         <groupId>junit</groupId>
         <artifactId>junit</artifactId>
@@ -178,8 +178,33 @@
 
     </dependencies>
 
- 
-</dependencyManagement>
+
+  </dependencyManagement>
+
+  <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <id>opennms-repo</id>
+      <name>OpenNMS Repository</name>
+      <url>http://maven.opennms.org/content/groups/opennms.org-release</url>
+    </repository>
+    <repository>
+      <id>opennms-snapshots</id>
+      <name>OpenNMS Snapshot Maven Repository</name>
+      <snapshots>
+        <enabled>true</enabled>
+      </snapshots>
+      <releases>
+        <enabled>false</enabled>
+      </releases>
+      <url>http://maven.opennms.org/content/groups/opennms.org-snapshot</url>
+    </repository>
+  </repositories>
 
   <pluginRepositories>
     <pluginRepository>

@@ -15,10 +15,14 @@
     <property name="password" value="opennms" />
   </bean>
 
-  <!--  DatabaseChangeNotifier(DataSource dataSource, List<String> paramList) -->
+  <bean id="databaseChangeNotifierClient" class="org.opennms.plugins.alarmnotifier.DbNotificationClientDefaultTestImpl" init-method="init" destroy-method="destroy">
+    <property name="databaseChangeNotifier" ref="databaseChangeNotifier" />
+  </bean>
+
+  <!-- DatabaseChangeNotifier(DataSource dataSource, List<String> paramList) -->
   <bean id="databaseChangeNotifier" class="org.opennms.plugins.alarmnotifier.DatabaseChangeNotifier" init-method="init" destroy-method="destroy">
     <argument index="0" ref="pgDataSource" />
-    
+
     <argument index="1">
       <list>
         <value>NOTIFY_ALARM_CHANGES</value>
@@ -31,7 +35,6 @@
     <property name="connectionStatementAlarms" ref="connectionStatementAlarms" />
     <property name="disConnectionStatementAlarms" ref="disConnectionStatementAlarms" />
   </bean>
-
 
   <!-- ********************************** -->
   <!-- alarms notification sql statements -->
