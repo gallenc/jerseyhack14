@@ -28,9 +28,9 @@
               <goal>generate-features-xml</goal>
             </goals>
             <configuration>
-              <!-- <bundles> -->
-              <!-- <bundle>mvn:com.sun.jersey/jersey-server/${jerseyVersion}${pgjdbc-ng-version}0.3</bundle> -->
-              <!-- </bundles> -->
+              <bundles>
+<!--               <bundle>mvn:com.impossibl.pgjdbc-ng/pgjdbc-ng/${pgjdbc-ng-version}</bundle> -->
+              </bundles>
             </configuration>
           </execution>
         </executions>
@@ -45,7 +45,7 @@
       <groupId>com.impossibl.pgjdbc-ng</groupId>
       <artifactId>pgjdbc-ng</artifactId>
       <version>${pgjdbc-ng-version}</version>
-      <classifier>complete</classifier>
+<!--       <classifier>complete</classifier> -->
       <exclusions>
         <exclusion>
           <groupId>io.netty</groupId>
