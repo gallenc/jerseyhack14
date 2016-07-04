@@ -3,7 +3,9 @@ package org.opennms.plugins.alarmnotifier.test.manual;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.junit.Test;
 
@@ -11,7 +13,9 @@ import com.impossibl.postgres.jdbc.PGDataSource;
 
 import org.opennms.plugins.alarmnotifier.DatabaseChangeNotifier;
 import org.opennms.plugins.alarmnotifier.DbNotificationClient;
-import org.opennms.plugins.alarmnotifier.DbNotificationClientDefaultTestImpl;
+import org.opennms.plugins.alarmnotifier.DbNotificationClientQueueImpl;
+import org.opennms.plugins.alarmnotifier.NotificationClient;
+import org.opennms.plugins.alarmnotifier.VerySimpleNotificationClient;
 
 
 public class DbChangeNotifierTest {
@@ -40,9 +44,16 @@ public class DbChangeNotifierTest {
 			
 			dbChangeNotifier = new DatabaseChangeNotifier(pgDataSource,paramList);
 			
-			DbNotificationClient dbNotificationClient= new DbNotificationClientDefaultTestImpl();
-			dbNotificationClient.setDatabaseChangeNotifier(dbChangeNotifier);
-			dbNotificationClient.init();
+			DbNotificationClientQueueImpl dbNotificationQueueClient= new DbNotificationClientQueueImpl();
+			
+			Map<String, NotificationClient> channelHandlingClients= new HashMap<String, NotificationClient>();
+			channelHandlingClients.put("opennms_alarm_changes", new VerySimpleNotificationClient());
+			
+			dbNotificationQueueClient.setChannelHandlingClients(channelHandlingClients);
+			
+			
+			dbNotificationQueueClient.setDatabaseChangeNotifier(dbChangeNotifier);
+			dbNotificationQueueClient.init();
 			
 			System.out.println("DbChangeNotifierTest initialising connection");
 			dbChangeNotifier.init();
@@ -50,7 +61,7 @@ public class DbChangeNotifierTest {
 			System.out.println("DbChangeNotifierTest waiting for messages or until timeout");
 
 			try{ // wait for interrupt or time out
-				Thread.sleep(100000);
+				Thread.sleep(50000);
 			} catch (InterruptedException e){}
 			
 			System.out.println("DbChangeNotifierTest shutting down");

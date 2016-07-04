@@ -15,8 +15,18 @@
     <property name="password" value="opennms" />
   </bean>
 
-  <bean id="databaseChangeNotifierClient" class="org.opennms.plugins.alarmnotifier.DbNotificationClientDefaultTestImpl" init-method="init" destroy-method="destroy">
+  <bean id="databaseChangeNotifierClient" class="org.opennms.plugins.alarmnotifier.DbNotificationClientQueueImpl" init-method="init" destroy-method="destroy">
     <property name="databaseChangeNotifier" ref="databaseChangeNotifier" />
+
+    <property name="channelHandlingClients">
+      <map>
+        <entry key="opennms_alarm_changes" value-ref="verySimpleClient"/>
+<!--         <entry key="opennms_event_changes" value-ref="verySimpleClient"/> -->
+      </map>
+    </property>
+  </bean>
+  
+  <bean id="verySimpleClient" class="org.opennms.plugins.alarmnotifier.VerySimpleNotificationClient">
   </bean>
 
   <!-- DatabaseChangeNotifier(DataSource dataSource, List<String> paramList) -->

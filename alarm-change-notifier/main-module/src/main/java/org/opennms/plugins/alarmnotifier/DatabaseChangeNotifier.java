@@ -170,8 +170,14 @@ public class DatabaseChangeNotifier {
 			public void notification(int processId, String channelName, String payload) {
 
 				DbNotification dbn = new DbNotification(processId, channelName, payload);
+				
+				if(LOG.isDebugEnabled()) {
+					LOG.debug("notification received from database - sending to registered clients :\n processId:"+processId
+							+ "\n channelName:"+channelName
+							+ "\n payload:"+payload);
+				}
 
-				// send notifications to registered clients note each client must return quickly
+				// send notifications to registered clients - note each client must return quickly
 				synchronized(dbNotificationClientList) {
 					Iterator<DbNotificationClient> i = dbNotificationClientList.iterator(); // Must be in synchronized block
 					while (i.hasNext()){
@@ -179,15 +185,7 @@ public class DatabaseChangeNotifier {
 					}         
 				}
 
-				//TODO REMOVE
-				System.out.println("DbNotification:notification received:\n processId:"+processId
-						+ "\n channelName:"+channelName
-						+ "\n payload:"+payload);
-				if(LOG.isDebugEnabled()) {
-					LOG.debug("DbNotification:notification received:\n processId:"+processId
-							+ "\n channelName:"+channelName
-							+ "\n payload:"+payload);
-				}
+
 			}
 		};
 

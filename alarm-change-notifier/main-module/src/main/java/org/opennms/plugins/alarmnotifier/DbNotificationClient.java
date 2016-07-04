@@ -5,16 +5,11 @@ package org.opennms.plugins.alarmnotifier;
  * @author admin
  *
  */
-public interface DbNotificationClient {
+public interface DbNotificationClient extends NotificationClient{
 
-	public void sendDbNotification(DbNotification dbNotification);
-	
 	public void setDatabaseChangeNotifier(DatabaseChangeNotifier databaseChangeNotifier);
 	
 	public DatabaseChangeNotifier getDatabaseChangeNotifier();
 
-	public void init();
-	
-	public void destroy();
 	
 }
