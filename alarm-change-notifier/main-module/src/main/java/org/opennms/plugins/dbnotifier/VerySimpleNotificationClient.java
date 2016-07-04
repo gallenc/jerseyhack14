@@ -1,4 +1,4 @@
-package org.opennms.plugins.alarmnotifier;
+package org.opennms.plugins.dbnotifier;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

@@ -3,9 +3,14 @@
   <!-- Generated Licence Authenticator Blueprint -->
   <!-- for productId='alarm-change-notifier/1.0-SNAPSHOT' -->
 
-  <bean id="sayHello" class="org.opennms.plugins.alarmnotifier.Temp" destroy-method="destroyMethod">
+  <bean id="sayHello" class="org.opennms.plugins.dbnotifier.Temp" destroy-method="destroyMethod">
     <!-- <argument ref="licenceService" /> -->
   </bean>
+
+  <!-- opennms event proxy -->
+  <!-- note optional so that we can run tests outside of opennms -->
+  <reference id="eventProxy" interface="org.opennms.netmgt.events.api.EventProxy" availability="optional" timeout="100" />
+
 
   <bean id="pgDataSource" class="com.impossibl.postgres.jdbc.PGDataSource">
     <property name="host" value="localhost" />
@@ -15,28 +20,34 @@
     <property name="password" value="opennms" />
   </bean>
 
-  <bean id="databaseChangeNotifierClient" class="org.opennms.plugins.alarmnotifier.DbNotificationClientQueueImpl" init-method="init" destroy-method="destroy">
+  <bean id="databaseChangeNotifierClient" class="org.opennms.plugins.dbnotifier.DbNotificationClientQueueImpl" init-method="init" destroy-method="destroy">
     <property name="databaseChangeNotifier" ref="databaseChangeNotifier" />
 
     <property name="channelHandlingClients">
       <map>
-        <entry key="opennms_alarm_changes" value-ref="verySimpleClient"/>
-<!--         <entry key="opennms_event_changes" value-ref="verySimpleClient"/> -->
+        <!-- <entry key="opennms_alarm_changes" value-ref="verySimpleClient" /> -->
+        <entry key="opennms_alarm_changes" value-ref="alarmChangeNotificationClient" />
+        <!-- <entry key="opennms_event_changes" value-ref="verySimpleClient"/> -->
       </map>
     </property>
   </bean>
-  
-  <bean id="verySimpleClient" class="org.opennms.plugins.alarmnotifier.VerySimpleNotificationClient">
+
+  <bean id="verySimpleClient" class="org.opennms.plugins.dbnotifier.VerySimpleNotificationClient">
+  </bean>
+
+  <bean id="alarmChangeNotificationClient" class="org.opennms.plugins.dbnotifier.alarmnotifier.AlarmChangeNotificationClient" init-method="init"
+    destroy-method="destroy">
+    <property name="eventProxy" ref="eventProxy" />
   </bean>
 
   <!-- DatabaseChangeNotifier(DataSource dataSource, List<String> paramList) -->
-  <bean id="databaseChangeNotifier" class="org.opennms.plugins.alarmnotifier.DatabaseChangeNotifier" init-method="init" destroy-method="destroy">
+  <bean id="databaseChangeNotifier" class="org.opennms.plugins.dbnotifier.DatabaseChangeNotifier" init-method="init" destroy-method="destroy">
     <argument index="0" ref="pgDataSource" />
 
     <argument index="1">
       <list>
         <value>NOTIFY_ALARM_CHANGES</value>
-        <value>NOTIFY_EVENT_CHANGES</value>
+        <!-- <value>NOTIFY_EVENT_CHANGES</value> -->
       </list>
     </argument>
 

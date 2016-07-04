@@ -1,4 +1,4 @@
-package org.opennms.plugins.alarmnotifier;
+package org.opennms.plugins.dbnotifier;
 
 import com.impossibl.postgres.api.jdbc.PGConnection;
 import com.impossibl.postgres.api.jdbc.PGNotificationListener;

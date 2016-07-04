@@ -1,4 +1,4 @@
-package org.opennms.plugins.alarmnotifier;
+package org.opennms.plugins.dbnotifier;
 
 public class Temp {
 	public Temp(){

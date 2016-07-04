@@ -104,7 +104,7 @@
       <groupId>com.impossibl.pgjdbc-ng</groupId>
       <artifactId>pgjdbc-ng</artifactId>
       <version>${pgjdbc-ng-version}</version>
-<!--       <classifier>complete</classifier> -->
+      <!-- <classifier>complete</classifier> -->
       <exclusions>
         <exclusion>
           <groupId>io.netty</groupId>
@@ -152,13 +152,13 @@
     </dependency>
 
     <!-- Byte code generator - completely optional -->
-<!--     <dependency> -->
-<!--       <groupId>org.javassist</groupId> -->
-<!--       <artifactId>javassist</artifactId> -->
-<!--       <version>3.20.0-GA</version> -->
-<!--       <scope>provided</scope> -->
-<!--       <optional>true</optional> -->
-<!--     </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>org.javassist</groupId> -->
+    <!-- <artifactId>javassist</artifactId> -->
+    <!-- <version>3.20.0-GA</version> -->
+    <!-- <scope>provided</scope> -->
+    <!-- <optional>true</optional> -->
+    <!-- </dependency> -->
 
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
@@ -190,6 +190,28 @@
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
       <scope>test</scope>
+    </dependency>
+
+    <!-- opennms dependencies -->
+    <dependency>
+      <groupId>org.opennms.osgi</groupId>
+      <artifactId>opennms-osgi-core</artifactId>
+      <version>${opennmsVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opennms</groupId>
+      <artifactId>opennms-dao</artifactId>
+      <version>${opennmsVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.googlecode.json-simple</groupId>
+      <artifactId>json-simple</artifactId>
+      <version>${json-simpleVersion}</version>
+      <scope>provided</scope>
     </dependency>
 
   </dependencies>

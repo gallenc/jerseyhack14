@@ -1,4 +1,4 @@
-package org.opennms.plugins.alarmnotifier;
+package org.opennms.plugins.dbnotifier;
 
 /**
  * message class used to transport database notifications

@@ -1,4 +1,4 @@
-package org.opennms.plugins.alarmnotifier.test.manual;
+package org.opennms.plugins.dbnotifier.test.manual;
 
 import static org.junit.Assert.*;
 
@@ -11,11 +11,12 @@ import org.junit.Test;
 
 import com.impossibl.postgres.jdbc.PGDataSource;
 
-import org.opennms.plugins.alarmnotifier.DatabaseChangeNotifier;
-import org.opennms.plugins.alarmnotifier.DbNotificationClient;
-import org.opennms.plugins.alarmnotifier.DbNotificationClientQueueImpl;
-import org.opennms.plugins.alarmnotifier.NotificationClient;
-import org.opennms.plugins.alarmnotifier.VerySimpleNotificationClient;
+import org.opennms.plugins.dbnotifier.DatabaseChangeNotifier;
+import org.opennms.plugins.dbnotifier.DbNotificationClient;
+import org.opennms.plugins.dbnotifier.DbNotificationClientQueueImpl;
+import org.opennms.plugins.dbnotifier.NotificationClient;
+import org.opennms.plugins.dbnotifier.VerySimpleNotificationClient;
+import org.opennms.plugins.dbnotifier.alarmnotifier.AlarmChangeNotificationClient;
 
 
 public class DbChangeNotifierTest {
@@ -47,7 +48,10 @@ public class DbChangeNotifierTest {
 			DbNotificationClientQueueImpl dbNotificationQueueClient= new DbNotificationClientQueueImpl();
 			
 			Map<String, NotificationClient> channelHandlingClients= new HashMap<String, NotificationClient>();
-			channelHandlingClients.put("opennms_alarm_changes", new VerySimpleNotificationClient());
+//			channelHandlingClients.put("opennms_alarm_changes", new VerySimpleNotificationClient());
+			
+			AlarmChangeNotificationClient alarmChangeNotificationClient = new AlarmChangeNotificationClient();
+			channelHandlingClients.put("opennms_alarm_changes", alarmChangeNotificationClient);
 			
 			dbNotificationQueueClient.setChannelHandlingClients(channelHandlingClients);
 			

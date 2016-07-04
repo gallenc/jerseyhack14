@@ -1,4 +1,4 @@
-package org.opennms.plugins.alarmnotifier;
+package org.opennms.plugins.dbnotifier;
 
 /**
  * Client interface used to register with DatabaseChangeNotifier to receive DbNotifications
