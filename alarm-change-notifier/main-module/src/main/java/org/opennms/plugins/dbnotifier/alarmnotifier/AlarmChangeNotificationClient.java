@@ -65,7 +65,8 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 
 				String alarmId= (oldJsonObject.get("alarmid")==null) ? null : oldJsonObject.get("alarmid").toString();
 				eb.addParam("alarmid", alarmId );
-				eb.addParam("changedalarm", dbNotification.getPayload());
+				eb.addParam("oldalarmvalues",oldJsonObject.toString());
+				eb.addParam("newalarmvalues",newJsonObject.toString());
 				sendEvent(eb.getEvent());
 
 			} else if ( (! newJsonObject.isEmpty()) && oldJsonObject.isEmpty()){
@@ -75,7 +76,8 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 						"AlarmChangeNotifier");
 				String alarmId= (newJsonObject.get("alarmid")==null) ? null : newJsonObject.get("alarmid").toString();
 				eb.addParam("alarmid", alarmId );
-				eb.addParam("changedalarm", dbNotification.getPayload());
+				eb.addParam("oldalarmvalues",oldJsonObject.toString());
+				eb.addParam("newalarmvalues",newJsonObject.toString());
 				sendEvent(eb.getEvent());
 
 			} else {
@@ -87,7 +89,8 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 						"AlarmChangeNotifier");
 				String alarmId= (newJsonObject.get("alarmid")==null) ? null : newJsonObject.get("alarmid").toString();
 				eb.addParam("alarmid", alarmId );
-				eb.addParam("changedalarm", dbNotification.getPayload());
+				eb.addParam("oldalarmvalues",oldJsonObject.toString());
+				eb.addParam("newalarmvalues",newJsonObject.toString());
 				sendEvent(eb.getEvent());
 			}
 			
