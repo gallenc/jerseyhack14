@@ -6,6 +6,10 @@ project groupId: org.opennms.plugins
 project name:    alarm-change-notifier
 version:         1.0-SNAPSHOT
 
+Description
+-----------
+This project generates new OpenNMS events corresponding to changes in alarms
+
 NEXT STEPS
 ----------
 

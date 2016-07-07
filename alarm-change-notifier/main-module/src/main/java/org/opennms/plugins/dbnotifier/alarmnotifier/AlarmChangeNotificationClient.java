@@ -81,13 +81,21 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 				sendEvent(eb.getEvent());
 
 			} else {
+				String alarmId= (newJsonObject.get("alarmid")==null) ? null : newJsonObject.get("alarmid").toString();
+				
+				// check for alarm ack
+				
+				
+				
+				
+				
 				// received an alarm change notification
 				// to do check for ack notifications and other alarm types
 				// to do ignore simple alarm count changes - also in db trigger
 				eb= new EventBuilder(
 						"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmChanged",
 						"AlarmChangeNotifier");
-				String alarmId= (newJsonObject.get("alarmid")==null) ? null : newJsonObject.get("alarmid").toString();
+				
 				eb.addParam("alarmid", alarmId );
 				eb.addParam("oldalarmvalues",oldJsonObject.toString());
 				eb.addParam("newalarmvalues",newJsonObject.toString());
