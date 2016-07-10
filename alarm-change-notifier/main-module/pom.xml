@@ -95,7 +95,6 @@
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
-      <version>${slf4jVersion}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -203,6 +202,13 @@
     <dependency>
       <groupId>org.opennms</groupId>
       <artifactId>opennms-dao</artifactId>
+      <version>${opennmsVersion}</version>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opennms.core</groupId>
+      <artifactId>org.opennms.core.api</artifactId>
       <version>${opennmsVersion}</version>
       <scope>provided</scope>
     </dependency>

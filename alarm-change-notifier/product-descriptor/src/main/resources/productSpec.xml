@@ -23,11 +23,11 @@
   <packageingDescriptor>Not Defined</packageingDescriptor>
 	
   <organization>OpenNMS Project</organization>
-  <productDescription>TODO complete product description for alarm-change-notifier</productDescription>
+  <productDescription>the alarm-change-notifier generates OpenNMS events for changes in alarms in alarms table</productDescription>
   <productName>alarm-change-notifier</productName>
   <productUrl>http:\\opennms.co.uk</productUrl>
-  <licenceKeyRequired>true</licenceKeyRequired>
-  <licenceType>See Plugin Documentation for ELUA</licenceType>
+  <licenceKeyRequired>false</licenceKeyRequired>
+  <licenceType>AGPL</licenceType>
   
   <!-- a plugin marked as a system plugin will not be removable by the plugin manager -->
   <systemPlugin>false</systemPlugin>
