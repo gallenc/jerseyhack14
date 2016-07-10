@@ -59,97 +59,171 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 
 			if ( newJsonObject.isEmpty() && (! oldJsonObject.isEmpty()) ){
 				// received an alarm delete
-				if (LOG.isDebugEnabled()) LOG.debug("alarm deleted alarmid="+oldJsonObject.get("alarmid"));
-				EventBuilder eb= jsonAlarmToEventBuilder(oldJsonObject, 
-						new EventBuilder(
-								"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmDeleted",
-								"AlarmChangeNotifier"));
+				// ignore alarm type 2
+				if(! "2".equals(oldJsonObject.get("alarmtype").toString())) {
+					if (LOG.isDebugEnabled()) LOG.debug("alarm deleted alarmid="+oldJsonObject.get("alarmid"));
+					EventBuilder eb= jsonAlarmToEventBuilder(oldJsonObject, 
+							new EventBuilder(
+									"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmDeleted",
+									"AlarmChangeNotifier"));
 
-				//copy in all values as json in params
-				eb.addParam("oldalarmvalues",oldJsonObject.toString());
-				eb.addParam("newalarmvalues",newJsonObject.toString());
+					//copy in all values as json in params
+					eb.addParam("oldalarmvalues",oldJsonObject.toString());
+					eb.addParam("newalarmvalues",newJsonObject.toString());
 
-				sendEvent(eb.getEvent());
+					sendEvent(eb.getEvent());
+				}
 
 			} else if ( (! newJsonObject.isEmpty()) && oldJsonObject.isEmpty()){
 				// received an alarm create
-				if (LOG.isDebugEnabled()) LOG.debug("alarm created alarmid="+newJsonObject.get("alarmid"));
-				EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
-						new EventBuilder(
-								"uei.opennms.org/plugin/AlarmChangeNotificationEvent/NewAlarmCreated",
-								"AlarmChangeNotifier"));
+				
+				// ignore alarm type 2
+				if(! "2".equals(newJsonObject.get("alarmtype").toString())) {
+					if (LOG.isDebugEnabled()) LOG.debug("alarm created alarmid="+newJsonObject.get("alarmid"));
+					EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
+							new EventBuilder(
+									"uei.opennms.org/plugin/AlarmChangeNotificationEvent/NewAlarmCreated",
+									"AlarmChangeNotifier"));
 
-				//copy in all values as json in params
-				eb.addParam("oldalarmvalues",oldJsonObject.toString());
-				eb.addParam("newalarmvalues",newJsonObject.toString());
+					//copy in all values as json in params
+					eb.addParam("oldalarmvalues",oldJsonObject.toString());
+					eb.addParam("newalarmvalues",newJsonObject.toString());
 
-				sendEvent(eb.getEvent());
+					sendEvent(eb.getEvent());
+				}
 			} else {
 				// received an alarm change notification
 				// alarm has changed check for changes and send appropriate notifications
-				
-				//TODO possibly ignore alarm type 2 alarm changes - only alarm type 1 alarms are real alarms
 
-				// ignore event count changes if only change in alarm
-				// TODO need database trigger to also ignore these changes
-				JSONObject newobj = new JSONObject(newJsonObject);
-				JSONObject oldobj = new JSONObject(oldJsonObject);
-				newobj.remove("lasteventtime");
-				oldobj.remove("lasteventtime");
-				newobj.remove("lasteventid");
-				oldobj.remove("lasteventid");
-				newobj.remove("counter");
-				oldobj.remove("counter");
-				
-				if (! newobj.toString().equals(oldobj.toString())){
-					// changes other than event count
+				// ignore alarm type 2
+				if(! "2".equals(newJsonObject.get("alarmtype").toString())) {
 
-					// severity changed notification
-					String oldseverity= (oldJsonObject.get("severity")==null) ? null : oldJsonObject.get("severity").toString();
-					String newseverity= (newJsonObject.get("severity")==null) ? null : newJsonObject.get("severity").toString();
-					if (newseverity !=null && ! newseverity.equals(oldseverity)){
-						if (LOG.isDebugEnabled()) LOG.debug("alarm severity changed alarmid="+oldJsonObject.get("alarmid")
-								+" old severity="+oldseverity+" new severity="+newseverity);
-						EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
-								new EventBuilder(
-										"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmSeverityChanged",
-										"AlarmChangeNotifier"));
-						eb.addParam("oldseverity",oldseverity);
+					// ignore event count changes if only change in alarm
+					// TODO need database trigger to also ignore these changes
+					JSONObject newobj = new JSONObject(newJsonObject);
+					JSONObject oldobj = new JSONObject(oldJsonObject);
+					newobj.remove("lasteventtime");
+					oldobj.remove("lasteventtime");
+					newobj.remove("lasteventid");
+					oldobj.remove("lasteventid");
+					newobj.remove("counter");
+					oldobj.remove("counter");
 
-						//copy in all values as json in params
-						eb.addParam("oldalarmvalues",oldJsonObject.toString());
-						eb.addParam("newalarmvalues",newJsonObject.toString());
+					if (! newobj.toString().equals(oldobj.toString())){
+						// changes other than event count
 
-						sendEvent(eb.getEvent());
-					}
-
-					// alarm acknowledged / unacknowledged notifications  
-					String oldalarmacktime= (oldJsonObject.get("alarmacktime")==null) ? null : oldJsonObject.get("alarmacktime").toString();
-					String newalarmacktime= (newJsonObject.get("alarmacktime")==null) ? null : newJsonObject.get("alarmacktime").toString();
-					if(oldalarmacktime==null && newalarmacktime !=null) {
-						//alarm acknowledged notification
-						if (LOG.isDebugEnabled()) LOG.debug("alarm acknowleged alarmid="+newJsonObject.get("alarmid"));
-
-						EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
-								new EventBuilder(
-										"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmAcknowledged",
-										"AlarmChangeNotifier"));
-
-						//copy in all values as json in params
-						eb.addParam("oldalarmvalues",oldJsonObject.toString());
-						eb.addParam("newalarmvalues",newJsonObject.toString());
-
-						sendEvent(eb.getEvent());
-
-					} else {
-						if(oldalarmacktime!=null && newalarmacktime ==null) {
-
-							//alarm unacknowledged notification
-							if (LOG.isDebugEnabled()) LOG.debug("alarm unacknowleged alarmid="+newJsonObject.get("alarmid"));
-							//TODO issue unacknowledged doesn't have a user because only user and time in alarm field
+						// severity changed notification
+						String oldseverity= (oldJsonObject.get("severity")==null) ? null : oldJsonObject.get("severity").toString();
+						String newseverity= (newJsonObject.get("severity")==null) ? null : newJsonObject.get("severity").toString();
+						if (newseverity !=null && ! newseverity.equals(oldseverity)){
+							if (LOG.isDebugEnabled()) LOG.debug("alarm severity changed alarmid="+oldJsonObject.get("alarmid")
+									+" old severity="+oldseverity+" new severity="+newseverity);
 							EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
 									new EventBuilder(
-											"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmUnAcknowledged",
+											"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmSeverityChanged",
+											"AlarmChangeNotifier"));
+							eb.addParam("oldseverity",oldseverity);
+
+							//copy in all values as json in params
+							eb.addParam("oldalarmvalues",oldJsonObject.toString());
+							eb.addParam("newalarmvalues",newJsonObject.toString());
+
+							sendEvent(eb.getEvent());
+						}
+
+						// alarm acknowledged / unacknowledged notifications  
+						String oldalarmacktime= (oldJsonObject.get("alarmacktime")==null) ? null : oldJsonObject.get("alarmacktime").toString();
+						String newalarmacktime= (newJsonObject.get("alarmacktime")==null) ? null : newJsonObject.get("alarmacktime").toString();
+						if(oldalarmacktime==null && newalarmacktime !=null) {
+							//alarm acknowledged notification
+							if (LOG.isDebugEnabled()) LOG.debug("alarm acknowleged alarmid="+newJsonObject.get("alarmid"));
+
+							EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
+									new EventBuilder(
+											"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmAcknowledged",
+											"AlarmChangeNotifier"));
+
+							//copy in all values as json in params
+							eb.addParam("oldalarmvalues",oldJsonObject.toString());
+							eb.addParam("newalarmvalues",newJsonObject.toString());
+
+							sendEvent(eb.getEvent());
+
+						} else {
+							if(oldalarmacktime!=null && newalarmacktime ==null) {
+
+								//alarm unacknowledged notification
+								if (LOG.isDebugEnabled()) LOG.debug("alarm unacknowleged alarmid="+newJsonObject.get("alarmid"));
+								//TODO issue unacknowledged doesn't have a user because only user and time in alarm field
+								EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
+										new EventBuilder(
+												"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmUnAcknowledged",
+												"AlarmChangeNotifier"));
+
+								//copy in all values as json in params
+								eb.addParam("oldalarmvalues",oldJsonObject.toString());
+								eb.addParam("newalarmvalues",newJsonObject.toString());
+
+								sendEvent(eb.getEvent());
+							}
+						}
+
+						// alarm suppressed / unsuppressed notifications 
+						String newsuppresseduntil= (newJsonObject.get("suppresseduntil")==null) ? null : newJsonObject.get("suppresseduntil").toString();
+						String oldsuppresseduntil= (oldJsonObject.get("suppresseduntil")==null) ? null : oldJsonObject.get("suppresseduntil").toString();
+
+						if (newsuppresseduntil!=null && ! newsuppresseduntil.equals(oldsuppresseduntil)) {
+							//alarm suppressed notification
+							if (LOG.isDebugEnabled()) LOG.debug("alarm suppressed alarmid="+newJsonObject.get("alarmid"));
+
+							EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
+									new EventBuilder(
+											"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmSuppressed",
+											"AlarmChangeNotifier"));
+
+							//copy in all values as json in params
+							eb.addParam("oldalarmvalues",oldJsonObject.toString());
+							eb.addParam("newalarmvalues",newJsonObject.toString());
+
+							sendEvent(eb.getEvent());
+
+						} else {
+							if(oldsuppresseduntil!=null && newsuppresseduntil ==null) {
+
+								//alarm unsuppressed notification
+								if (LOG.isDebugEnabled()) LOG.debug("alarm unsuppressed alarmid="+newJsonObject.get("alarmid"));
+								//TODO issue unsuppress doesn't have a user because only user and time in alarm field
+								EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
+										new EventBuilder(
+												"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmUnSuppressed",
+												"AlarmChangeNotifier"));
+
+								//copy in all values as json in params
+								eb.addParam("oldalarmvalues",oldJsonObject.toString());
+								eb.addParam("newalarmvalues",newJsonObject.toString());
+
+								sendEvent(eb.getEvent());
+							}
+						}
+
+						// TODO alarm sticky note changed
+
+						// send alarm changed event for any other changes not captured above
+						newobj.remove("severity");
+						oldobj.remove("severity");
+						newobj.remove("alarmacktime");
+						oldobj.remove("alarmacktime");
+						newobj.remove("alarmackuser");
+						oldobj.remove("alarmackuser");
+						newobj.remove("suppresseduntil");
+						oldobj.remove("suppresseduntil");
+						newobj.remove("suppresseduser");
+						oldobj.remove("suppresseduser");
+						if (! newobj.toString().equals(oldobj.toString())) {
+
+							EventBuilder eb= jsonAlarmToEventBuilder(oldJsonObject, 
+									new EventBuilder(
+											"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmChanged",
 											"AlarmChangeNotifier"));
 
 							//copy in all values as json in params
@@ -158,75 +232,10 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 
 							sendEvent(eb.getEvent());
 						}
-					}
 
-					// alarm suppressed / unsuppressed notifications 
-					String newsuppresseduntil= (newJsonObject.get("suppresseduntil")==null) ? null : newJsonObject.get("suppresseduntil").toString();
-					String oldsuppresseduntil= (oldJsonObject.get("suppresseduntil")==null) ? null : oldJsonObject.get("suppresseduntil").toString();
-
-					if (newsuppresseduntil!=null && ! newsuppresseduntil.equals(oldsuppresseduntil)) {
-						//alarm suppressed notification
-						if (LOG.isDebugEnabled()) LOG.debug("alarm suppressed alarmid="+newJsonObject.get("alarmid"));
-
-						EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
-								new EventBuilder(
-										"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmSuppressed",
-										"AlarmChangeNotifier"));
-
-						//copy in all values as json in params
-						eb.addParam("oldalarmvalues",oldJsonObject.toString());
-						eb.addParam("newalarmvalues",newJsonObject.toString());
-
-						sendEvent(eb.getEvent());
-
-					} else {
-						if(oldsuppresseduntil!=null && newsuppresseduntil ==null) {
-
-							//alarm unsuppressed notification
-							if (LOG.isDebugEnabled()) LOG.debug("alarm unsuppressed alarmid="+newJsonObject.get("alarmid"));
-							//TODO issue unsuppress doesn't have a user because only user and time in alarm field
-							EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
-									new EventBuilder(
-											"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmUnSuppressed",
-											"AlarmChangeNotifier"));
-
-							//copy in all values as json in params
-							eb.addParam("oldalarmvalues",oldJsonObject.toString());
-							eb.addParam("newalarmvalues",newJsonObject.toString());
-
-							sendEvent(eb.getEvent());
-						}
-					}
-
-					// TODO alarm sticky note changed
-
-					// send alarm changed event for any other changes not captured above
-					newobj.remove("severity");
-					oldobj.remove("severity");
-					newobj.remove("alarmacktime");
-					oldobj.remove("alarmacktime");
-					newobj.remove("alarmackuser");
-					oldobj.remove("alarmackuser");
-					newobj.remove("suppresseduntil");
-					oldobj.remove("suppresseduntil");
-					newobj.remove("suppresseduser");
-					oldobj.remove("suppresseduser");
-					if (! newobj.toString().equals(oldobj.toString())) {
-
-						EventBuilder eb= jsonAlarmToEventBuilder(oldJsonObject, 
-								new EventBuilder(
-										"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmChanged",
-										"AlarmChangeNotifier"));
-
-						//copy in all values as json in params
-						eb.addParam("oldalarmvalues",oldJsonObject.toString());
-						eb.addParam("newalarmvalues",newJsonObject.toString());
-
-						sendEvent(eb.getEvent());
 					}
 
 				}
-
 			}
 
 		} catch (Exception e){
