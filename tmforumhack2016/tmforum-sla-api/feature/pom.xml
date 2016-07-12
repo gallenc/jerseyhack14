@@ -30,6 +30,10 @@
             <configuration>
               <bundles>
               </bundles>
+              <features>
+                <feature>http</feature>
+                <feature>http-whiteboard</feature>
+              </features>
             </configuration>
           </execution>
         </executions>
@@ -50,6 +54,39 @@
       <artifactId>${productName}.product-descriptor</artifactId>
       <version>${project.version}</version>
     </dependency>
+
+    <!-- Jersey Dependencies -->
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-server</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-servlet</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-core</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
+    </dependency>
+
+    <!-- <dependency> -->
+    <!-- <groupId>javax.servlet</groupId> -->
+    <!-- <artifactId>servlet-api</artifactId> -->
+    <!-- <version>2.5</version> -->
+    <!-- </dependency> -->
+
+
 
     <dependency>
       <groupId>com.googlecode.json-simple</groupId>

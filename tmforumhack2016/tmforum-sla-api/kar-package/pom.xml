@@ -30,7 +30,8 @@
             </goals>
             <configuration>
               <!-- this unknown karaf version prevents copying any karaf descriptors into kar - which we do not want -->
-              <karafVersion>99999</karafVersion>
+              <!-- TODO issues with to many karaf bundles in generated kar <karafVersion>99999</karafVersion> -->
+              <karafVersion>${karafVersion}</karafVersion>
               <descriptors>
                 <descriptor>mvn:org.opennms.plugins/tmforum-sla-api/${project.version}/xml/features</descriptor>
               </descriptors>
@@ -48,7 +49,7 @@
               <goal>create-kar</goal>
             </goals>
             <configuration>
-
+              <karafVersion>99999</karafVersion>
               <featuresFile>${project.basedir}/target/temp-features-repo/org/opennms/plugins/tmforum-sla-api/${project.version}/tmforum-sla-api-1.0-SNAPSHOT-features.xml</featuresFile>
 
             </configuration>

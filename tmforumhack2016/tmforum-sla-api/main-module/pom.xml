@@ -92,72 +92,53 @@
       <version>4.2.0</version>
       <scope>provided</scope>
     </dependency>
+    
+        <!-- Jersey Dependencies -->
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-server</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-servlet</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-core</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
+      <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <scope>provided</scope>
+      <version>2.5</version>
+    </dependency>
+    
+    
+    
+    
+    
     <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
       <scope>provided</scope>
     </dependency>
-
-    <dependency>
-      <!-- PostgreSQL Asychronous Notification JDBC driver -->
-      <groupId>com.impossibl.pgjdbc-ng</groupId>
-      <artifactId>pgjdbc-ng</artifactId>
-      <version>${pgjdbc-ng-version}</version>
-      <!-- <classifier>complete</classifier> -->
-      <exclusions>
-        <exclusion>
-          <groupId>io.netty</groupId>
-          <artifactId>netty-all</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-
-    <!-- OSGi netty dependencies for pgjdbc-ng -->
-    <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty-common</artifactId>
-      <version>${nettyVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty-transport</artifactId>
-      <version>${nettyVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty-buffer</artifactId>
-      <version>${nettyVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-    <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty-handler</artifactId>
-      <version>${nettyVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-    <!-- <dependency> -->
-    <!-- <groupId>io.netty</groupId> -->
-    <!-- <artifactId>netty-resolver</artifactId> -->
-    <!-- <version>${nettyVersion}</version> -->
-    <!-- <scope>provided</scope> -->
-    <!-- </dependency> -->
-    <dependency>
-      <groupId>io.netty</groupId>
-      <artifactId>netty-codec</artifactId>
-      <version>${nettyVersion}</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <!-- Byte code generator - completely optional -->
-    <!-- <dependency> -->
-    <!-- <groupId>org.javassist</groupId> -->
-    <!-- <artifactId>javassist</artifactId> -->
-    <!-- <version>3.20.0-GA</version> -->
-    <!-- <scope>provided</scope> -->
-    <!-- <optional>true</optional> -->
-    <!-- </dependency> -->
 
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>

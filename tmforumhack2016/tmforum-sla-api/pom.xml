@@ -29,6 +29,7 @@
     <junitVersion>4.10</junitVersion>
 
     <opennmsVersion>18.0.0</opennmsVersion>
+    <jerseyVersion>1.19</jerseyVersion>
     <json-simpleVersion>1.1.1</json-simpleVersion>
   </properties>
 
@@ -139,6 +140,37 @@
   <dependencyManagement>
     <dependencies>
       <!-- logging dependencies. Note slf4j is used in karaf. log4j is only used in tests -->
+
+      <!-- opennms Jersey implementation in Lib directory -->
+      <dependency>
+        <groupId>com.sun.jersey</groupId>
+        <artifactId>jersey-server</artifactId>
+        <version>${jerseyVersion}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.sun.jersey</groupId>
+        <artifactId>jersey-servlet</artifactId>
+        <version>${jerseyVersion}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.sun.jersey</groupId>
+        <artifactId>jersey-core</artifactId>
+        <version>${jerseyVersion}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.sun.jersey</groupId>
+        <artifactId>jersey-client</artifactId>
+        <version>${jerseyVersion}</version>
+      </dependency>
+      <dependency>
+        <groupId>javax.ws.rs</groupId>
+        <artifactId>jsr311-api</artifactId>
+        <version>1.1.1</version>
+      </dependency>
+
       <dependency>
         <groupId>org.apache.logging.log4j</groupId>
         <artifactId>log4j-api</artifactId>
