@@ -10,13 +10,40 @@
   <!-- opennms event proxy -->
   <!-- note optional so that we can run tests outside of opennms -->
   <reference id="eventProxy" interface="org.opennms.netmgt.events.api.EventProxy" availability="optional" timeout="100" />
-  
-   <!-- Maps in the test resource files for serving basic test pages -->
+
+  <!-- karaf features service interface -->
+  <!-- <reference id="featuresService" interface="org.apache.karaf.features.FeaturesService"/> -->
+
+
+  <!-- ReST Servelet configuration for jersey -->
+
+  <!-- http://localhost:8980/opennms/tmforumsla/api/slaManagement/v2 -->
+  <service interface="javax.servlet.http.HttpServlet">
+    <service-properties>
+      <entry key="alias" value="/tmforumsla/api/slaManagement/v2" />
+    </service-properties>
+    <bean class="com.sun.jersey.spi.container.servlet.ServletContainer">
+      <argument ref="featureManagerRestApplication" />
+    </bean>
+  </service>
+
+  <bean id="featureManagerRestApplication" class="org.opennms.plugins.tmforum.sla.rest.impl.SlaManagerServiceRestApplication" destroy-method="destroyMethod" />
+
+  <bean id="slaNotificationService" class="org.opennms.plugins.tmforum.sla.rest.impl.SlaNotificationServiceImpl" destroy-method="destroyMethod" />
+
+  <!-- ServiceLoader(EventProxy eventProxyService ) -->
+  <bean id="serviceLoader" class="org.opennms.plugins.tmforum.sla.rest.impl.ServiceLoader">
+    <argument ref="slaNotificationService" />
+  </bean>
+
+
+  <!-- Maps in the test resource files for serving basic test pages -->
+  <!-- swagger api -->
   <bean id="testResourceMapping" class="org.ops4j.pax.web.extender.whiteboard.runtime.DefaultResourceMapping">
     <property name="alias" value="/tmforumsla/diagnostics" />
     <property name="path" value="/diagnostics" />
   </bean>
 
   <service id="testResources" ref="testResourceMapping" interface="org.ops4j.pax.web.extender.whiteboard.ResourceMapping" />
-  
+
 </blueprint>

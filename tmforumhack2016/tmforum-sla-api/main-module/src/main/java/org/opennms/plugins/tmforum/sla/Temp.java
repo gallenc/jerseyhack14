@@ -3,7 +3,7 @@ package org.opennms.plugins.tmforum.sla;
 public class Temp {
 	public Temp(){
 		super();
-		System.out.println("Hello there!!! 7");
+		System.out.println("Hello there!!! 8");
 	}
 	
 	public void destroyMethod(){
