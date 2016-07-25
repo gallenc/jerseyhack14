@@ -72,7 +72,9 @@ CREATE OR REPLACE FUNCTION notify_alarm() RETURNS TRIGGER AS $$
         new_data json;
         old_data json;
         notification text= '[{},{}]';
-    
+        temp_new json;
+        temp_old json;
+
     BEGIN
 
 /*
@@ -82,9 +84,8 @@ CREATE OR REPLACE FUNCTION notify_alarm() RETURNS TRIGGER AS $$
         -- Action = INSERT              -> [NEW_row_json,empty_object]
         -- Action = UPDATE              -> [NEW_row_json,OLD_row_json]
 */
-	    
-	    
-	    IF (TG_OP = 'INSERT') THEN 
+
+        IF (TG_OP = 'INSERT') THEN 
 	        new_data=row_to_json(NEW);
 	        notification=CONCAT('[', new_data::text, ', {}]');
 	        PERFORM pg_notify('opennms_alarm_changes',notification);
@@ -95,18 +96,30 @@ CREATE OR REPLACE FUNCTION notify_alarm() RETURNS TRIGGER AS $$
 	        PERFORM pg_notify('opennms_alarm_changes',notification);
             
         ELSE
-        /* IGNORE rows where only event count updated*/
+            /* send change notification but IGNORE rows where only event count, last event or automation records updated */
             new_data=row_to_json(NEW);
             old_data=row_to_json(OLD);
-            notification=CONCAT('[', new_data::text,',', old_data::text, ']');
+
+            /* null records which we dont care about update */
+            NEW.counter=null;
+            OLD.counter=null;
+            NEW.lasteventtime=null;
+            OLD.lasteventtime=null;           
+            NEW.lastautomationtime=null;
+            OLD.lastautomationtime=null;                 
+            NEW.firstautomationtime=null;
+            OLD.firstautomationtime=null; 
+
+            temp_new = row_to_json(NEW);
+            temp_old = row_to_json(OLD);
+            IF (temp_new::text != temp_old::text) THEN
+               notification=CONCAT('[', new_data::text,',', old_data::text, ']');
+               PERFORM pg_notify('opennms_alarm_changes',notification);
+            END IF;
             
         END IF;
 
-        PERFORM pg_notify('opennms_alarm_changes',notification);
-        
-/*
-        -- Result is ignored since this is an AFTER trigger
-*/
+        /* Result is ignored since this is an AFTER trigger */
         RETURN NULL; 
     END;
     
