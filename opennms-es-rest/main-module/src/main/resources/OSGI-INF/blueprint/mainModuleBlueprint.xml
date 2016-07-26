@@ -1,0 +1,12 @@
+<blueprint xmlns="http://www.osgi.org/xmlns/blueprint/v1.0.0">
+
+  <!-- Generated Licence Authenticator Blueprint -->
+  <!-- for productId='opennms-es-rest/1.0-SNAPSHOT' -->
+
+  <bean id="sayHello" class="org.opennms.plugins.elasticsearch.jest.Temp" destroy-method="destroyMethod">
+    <!-- <argument ref="licenceService" /> -->
+  </bean>
+
+ 
+
+</blueprint>
