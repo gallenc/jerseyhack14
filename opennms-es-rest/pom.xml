@@ -28,9 +28,9 @@
     <log4j2Version>2.1</log4j2Version>
     <junitVersion>4.10</junitVersion>
 
-
     <opennmsVersion>18.0.0</opennmsVersion>
     <json-simpleVersion>1.1.1</json-simpleVersion>
+    <jestVersion>2.0.3</jestVersion>
   </properties>
 
   <modules>
@@ -172,12 +172,31 @@
         <version>${junitVersion}</version>
       </dependency>
 
+
+      <dependency>
+        <groupId>io.searchbox</groupId>
+        <artifactId>jest</artifactId>
+        <version>${jestVersion}</version>
+      </dependency>
+
+
     </dependencies>
 
 
   </dependencyManagement>
 
   <repositories>
+    <repository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <id>maven-repo</id>
+      <name>Maven Central</name>
+      <url>http://maven.opennms.org/content/repositories/central/</url>
+    </repository>
     <repository>
       <snapshots>
         <enabled>false</enabled>
@@ -203,6 +222,17 @@
   </repositories>
 
   <pluginRepositories>
+    <pluginRepository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <id>maven-repo</id>
+      <name>Maven Central</name>
+      <url>http://maven.opennms.org/content/repositories/central/</url>
+    </pluginRepository>
     <pluginRepository>
       <snapshots>
         <enabled>false</enabled>

@@ -25,6 +25,19 @@ import org.slf4j.LoggerFactory;
 public class AlarmChangeNotificationClient implements NotificationClient {
 	private static final Logger LOG = LoggerFactory
 			.getLogger(AlarmChangeNotificationClient.class);
+	
+	public static final String EVENT_SOURCE_NAME = "AlarmChangeNotifier";
+	
+	// uei definitions of alarm change events
+	public static final String ALARM_DELETED_EVENT = "uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmDeleted";
+	public static final String ALARM_CREATED_EVENT = "uei.opennms.org/plugin/AlarmChangeNotificationEvent/NewAlarmCreated";
+	public static final String ALARM_SEVERITY_CHANGED_EVENT = "uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmSeverityChanged";
+	public static final String ALARM_ACKNOWLEDGED_EVENT = "uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmAcknowledged";
+	public static final String ALARM_UNACKNOWLEDGED_EVENT = "uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmUnAcknowledged";
+	public static final String ALARM_SUPPRESSED_EVENT = "uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmSuppressed";
+	public static final String ALARM_UNSUPPRESSED_EVENT = "uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmUnSuppressed";
+	public static final String ALARM_TROUBLETICKET_STATE_CHANGE_EVENT = "uei.opennms.org/plugin/AlarmChangeNotificationEvent/TroubleTicketStateChange";
+	public static final String ALARM_CHANGED_EVENT = "uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmChanged";
 
 	EventProxy eventProxy = null;
 
@@ -63,9 +76,7 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 				if(! "2".equals(oldJsonObject.get("alarmtype").toString())) {
 					if (LOG.isDebugEnabled()) LOG.debug("alarm deleted alarmid="+oldJsonObject.get("alarmid"));
 					EventBuilder eb= jsonAlarmToEventBuilder(oldJsonObject, 
-							new EventBuilder(
-									"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmDeleted",
-									"AlarmChangeNotifier"));
+							new EventBuilder( ALARM_DELETED_EVENT, EVENT_SOURCE_NAME));
 
 					//copy in all values as json in params
 					eb.addParam("oldalarmvalues",oldJsonObject.toString());
@@ -81,9 +92,7 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 				if(! "2".equals(newJsonObject.get("alarmtype").toString())) {
 					if (LOG.isDebugEnabled()) LOG.debug("alarm created alarmid="+newJsonObject.get("alarmid"));
 					EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
-							new EventBuilder(
-									"uei.opennms.org/plugin/AlarmChangeNotificationEvent/NewAlarmCreated",
-									"AlarmChangeNotifier"));
+							new EventBuilder( ALARM_CREATED_EVENT, EVENT_SOURCE_NAME));
 
 					//copy in all values as json in params
 					eb.addParam("oldalarmvalues",oldJsonObject.toString());
@@ -119,9 +128,7 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 							if (LOG.isDebugEnabled()) LOG.debug("alarm severity changed alarmid="+oldJsonObject.get("alarmid")
 									+" old severity="+oldseverity+" new severity="+newseverity);
 							EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
-									new EventBuilder(
-											"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmSeverityChanged",
-											"AlarmChangeNotifier"));
+									new EventBuilder( ALARM_SEVERITY_CHANGED_EVENT, EVENT_SOURCE_NAME));
 							eb.addParam("oldseverity",oldseverity);
 
 							//copy in all values as json in params
@@ -139,9 +146,7 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 							if (LOG.isDebugEnabled()) LOG.debug("alarm acknowleged alarmid="+newJsonObject.get("alarmid"));
 
 							EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
-									new EventBuilder(
-											"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmAcknowledged",
-											"AlarmChangeNotifier"));
+									new EventBuilder( ALARM_ACKNOWLEDGED_EVENT, EVENT_SOURCE_NAME));
 
 							//copy in all values as json in params
 							eb.addParam("oldalarmvalues",oldJsonObject.toString());
@@ -156,9 +161,7 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 								if (LOG.isDebugEnabled()) LOG.debug("alarm unacknowleged alarmid="+newJsonObject.get("alarmid"));
 								//TODO issue unacknowledged doesn't have a user because only user and time in alarm field
 								EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
-										new EventBuilder(
-												"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmUnAcknowledged",
-												"AlarmChangeNotifier"));
+										new EventBuilder( ALARM_UNACKNOWLEDGED_EVENT, EVENT_SOURCE_NAME));
 
 								//copy in all values as json in params
 								eb.addParam("oldalarmvalues",oldJsonObject.toString());
@@ -177,9 +180,7 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 							if (LOG.isDebugEnabled()) LOG.debug("alarm suppressed alarmid="+newJsonObject.get("alarmid"));
 
 							EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
-									new EventBuilder(
-											"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmSuppressed",
-											"AlarmChangeNotifier"));
+									new EventBuilder( ALARM_SUPPRESSED_EVENT, EVENT_SOURCE_NAME));
 
 							//copy in all values as json in params
 							eb.addParam("oldalarmvalues",oldJsonObject.toString());
@@ -195,8 +196,8 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 								//TODO issue unsuppress doesn't have a user because only user and time in alarm field
 								EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
 										new EventBuilder(
-												"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmUnSuppressed",
-												"AlarmChangeNotifier"));
+												ALARM_UNSUPPRESSED_EVENT,
+												EVENT_SOURCE_NAME));
 
 								//copy in all values as json in params
 								eb.addParam("oldalarmvalues",oldJsonObject.toString());
@@ -222,9 +223,7 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 									+" oldtticketstate="+oldtticketstate
 									+" newtticketstate="+newtticketstate);
 							EventBuilder eb= jsonAlarmToEventBuilder(newJsonObject, 
-									new EventBuilder(
-											"uei.opennms.org/plugin/AlarmChangeNotificationEvent/TroubleTicketStateChange",
-											"AlarmChangeNotifier"));
+									new EventBuilder( ALARM_TROUBLETICKET_STATE_CHANGE_EVENT, EVENT_SOURCE_NAME));
 							eb.addParam("oldtticketid",oldtticketid);
 							eb.addParam("tticketid",newtticketid);
 							eb.addParam("oldtticketstate",oldtticketstate);
@@ -257,9 +256,7 @@ public class AlarmChangeNotificationClient implements NotificationClient {
 						if (! newobj.toString().equals(oldobj.toString())) {
 
 							EventBuilder eb= jsonAlarmToEventBuilder(oldJsonObject, 
-									new EventBuilder(
-											"uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmChanged",
-											"AlarmChangeNotifier"));
+									new EventBuilder( ALARM_CHANGED_EVENT, EVENT_SOURCE_NAME));
 
 							//copy in all values as json in params
 							eb.addParam("oldalarmvalues",oldJsonObject.toString());

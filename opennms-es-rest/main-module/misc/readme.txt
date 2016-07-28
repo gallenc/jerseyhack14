@@ -1,0 +1,1 @@
+https://chanchal.wordpress.com/2015/12/29/calling-elasticsearch-apis-using-jax-rs-client-jersey-client-jackson/

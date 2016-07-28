@@ -23,7 +23,7 @@
   <packageingDescriptor>Not Defined</packageingDescriptor>
 	
   <organization>OpenNMS Project</organization>
-  <productDescription>the opennms-es-rest uses the Jest REST library to send data to ElasticSearch</productDescription>
+  <productDescription>the opennms-es-rest uses a REST library to send data to ElasticSearch</productDescription>
   <productName>opennms-es-rest</productName>
   <productUrl>http:\\opennms.co.uk</productUrl>
   <licenceKeyRequired>false</licenceKeyRequired>
