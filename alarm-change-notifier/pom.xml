@@ -43,6 +43,7 @@
     <module>main-module</module>
     <module>product-descriptor</module>
     <module>feature</module>
+    <module>kar-descriptor</module>
     <module>kar-package</module>
   </modules>
 

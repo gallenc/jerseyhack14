@@ -48,7 +48,7 @@
               <goal>create-kar</goal>
             </goals>
             <configuration>
-
+            
               <featuresFile>${project.basedir}/target/temp-features-repo/org/opennms/plugins/alarm-change-notifier/${project.version}/alarm-change-notifier-1.0-SNAPSHOT-features.xml</featuresFile>
 
             </configuration>
