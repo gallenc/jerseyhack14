@@ -21,6 +21,12 @@ import com.google.gson.Gson;
 
 public class EventToIndexTest {
 	private static final Logger LOG = LoggerFactory.getLogger(EventToIndexTest.class);
+	
+	public static final String ALARM_INDEX_NAME = "opennms-alarms";
+	public static final String ALARM_EVENT_INDEX_NAME = "opennms-alarm-events";
+	public static final String EVENT_INDEX_NAME = "opennms-events";
+	public static final String ALARM_INDEX_TYPE = "alarmdata";
+	public static final String EVENT_INDEX_TYPE = "eventdata";
 
 	// uei definitions of alarm change events
 	public static final String ALARM_DELETED_EVENT = "uei.opennms.org/plugin/AlarmChangeNotificationEvent/AlarmDeleted";
@@ -35,14 +41,13 @@ public class EventToIndexTest {
 
 	public static final String EVENT_SOURCE_NAME = "AlarmChangeNotifier";
 
-
+	//raw json="{"alarmid":806,"eventuei":"uei.opennms.org/nodes/nodeLostService","nodeid":36,"ipaddr":"142.34.5.19","serviceid":2,"reductionkey":"uei.opennms.org/nodes/nodeLostService::36:142.34.5.19:HTTP","alarmtype":1,"counter":1,"severity":5,"lasteventid":7003,"firsteventtime":"2016-07-27 22:20:52.282+01","lasteventtime":"2016-07-27 22:20:52.282+01","firstautomationtime":null,"lastautomationtime":null,"description":"<p>A HTTP outage was identified on interface\n      142.34.5.19.</p> <p>A new Outage record has been\n      created and service level availability calculations will be\n      impacted until this outage is resolved.</p>","logmsg":"HTTP outage identified on interface 142.34.5.19 with reason code: Unknown.","operinstruct":null,"tticketid":null,"tticketstate":null,"mouseovertext":null,"suppresseduntil":"2016-07-27 22:20:52.282+01","suppresseduser":null,"suppressedtime":"2016-07-27 22:20:52.282+01","alarmackuser":null,"alarmacktime":null,"managedobjectinstance":null,"managedobjecttype":null,"applicationdn":null,"ossprimarykey":null,"x733alarmtype":null,"x733probablecause":0,"qosalarmstate":null,"clearkey":null,"ifindex":null,"eventparms":"eventReason=Unknown(string,text)","stickymemo":null,"systemid":"00000000-0000-0000-0000-000000000000"}";
 	public static final String TEST_ALARM_JSON_1="{\"alarmid\":807,\"eventuei\":\"uei.opennms.org/nodes/nodeLostService\",\"nodeid\":36,\"ipaddr\":\"142.34.5.19\",\"serviceid\":2,\"reductionkey\":\"uei.opennms.org/nodes/nodeLostService::36:142.34.5.19:HTTP\",\"alarmtype\":1,\"counter\":1,\"severity\":5,\"lasteventid\":7003,\"firsteventtime\":\"2016-07-27 22:20:52.282+01\",\"lasteventtime\":\"2016-07-27 22:20:52.282+01\",\"firstautomationtime\":null,\"lastautomationtime\":null,\"description\":\"<p>A HTTP outage was identified on interface\n      142.34.5.19.</p> <p>A new Outage record has been\n      created and service level availability calculations will be\n      impacted until this outage is resolved.</p>\",\"logmsg\":\"HTTP outage identified on interface 142.34.5.19 with reason code: Unknown.\",\"operinstruct\":null,\"tticketid\":null,\"tticketstate\":null,\"mouseovertext\":null,\"suppresseduntil\":\"2016-07-27 22:20:52.282+01\",\"suppresseduser\":null,\"suppressedtime\":\"2016-07-27 22:20:52.282+01\",\"alarmackuser\":null,\"alarmacktime\":null,\"managedobjectinstance\":null,\"managedobjecttype\":null,\"applicationdn\":null,\"ossprimarykey\":null,\"x733alarmtype\":null,\"x733probablecause\":0,\"qosalarmstate\":null,\"clearkey\":null,\"ifindex\":null,\"eventparms\":\"eventReason=Unknown(string,text)\",\"stickymemo\":null,\"systemid\":\"00000000-0000-0000-0000-000000000000\"}";
 
 
-
 	@Test
-	public void jestClientTest(){
-		LOG.debug("start of test jestClientTest");
+	public void jestClientAlarmToESTest(){
+		LOG.debug("***************** start of test jestClientAlarmToESTest");
 
 		try {
 			// Get Jest client
@@ -53,9 +58,11 @@ public class EventToIndexTest {
 			JestClient jestClient = factory.getObject();
 
 			try {
+				// create alarm event send to index
 				Index index = alarmEventToIndex();
 				DocumentResult dresult = jestClient.execute(index);
 
+				// search for resulting alarm
 				LOG.debug("received dresult: "+dresult.getJsonString()+ "\n   response code:" +dresult.getResponseCode() +"\n   error message: "+dresult.getErrorMessage());
 
 				String query = "{\n" 
@@ -68,16 +75,14 @@ public class EventToIndexTest {
 
 				Search search = new Search.Builder(query)
 				// multiple index or types can be added.
-				.addIndex("alarm-index")
+				.addIndex(ALARM_INDEX_NAME)
 				.build();
 
 				SearchResult sresult = jestClient.execute(search);
 
-				LOG.debug("received search sresult: "+sresult.getJsonString()+ "\n   response code:" +sresult.getResponseCode() +"\n   error message: "+sresult.getErrorMessage());
-
-
-
-
+				LOG.debug("received search sresult: "+sresult.getJsonString()
+						+ "\n   response code:" +sresult.getResponseCode() 
+						+ "\n   error message: "+sresult.getErrorMessage());
 
 			} finally {
 				// shutdown client
@@ -87,23 +92,13 @@ public class EventToIndexTest {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-		LOG.debug("end of jestClientTest");
+		LOG.debug("***************** end of test jestClientAlarmToESTest");
 	}
-
-
+	
 	public Index alarmEventToIndex() {
 
 		EventToIndex eti = new EventToIndex();
-		LOG.debug("alarmEventToIndex 1");
-
 		EventBuilder eb = new EventBuilder( ALARM_ACKNOWLEDGED_EVENT, EVENT_SOURCE_NAME);
-
-		//String json="{"alarmid":806,"eventuei":"uei.opennms.org/nodes/nodeLostService","nodeid":36,"ipaddr":"142.34.5.19","serviceid":2,"reductionkey":"uei.opennms.org/nodes/nodeLostService::36:142.34.5.19:HTTP","alarmtype":1,"counter":1,"severity":5,"lasteventid":7003,"firsteventtime":"2016-07-27 22:20:52.282+01","lasteventtime":"2016-07-27 22:20:52.282+01","firstautomationtime":null,"lastautomationtime":null,"description":"<p>A HTTP outage was identified on interface\n      142.34.5.19.</p> <p>A new Outage record has been\n      created and service level availability calculations will be\n      impacted until this outage is resolved.</p>","logmsg":"HTTP outage identified on interface 142.34.5.19 with reason code: Unknown.","operinstruct":null,"tticketid":null,"tticketstate":null,"mouseovertext":null,"suppresseduntil":"2016-07-27 22:20:52.282+01","suppresseduser":null,"suppressedtime":"2016-07-27 22:20:52.282+01","alarmackuser":null,"alarmacktime":null,"managedobjectinstance":null,"managedobjecttype":null,"applicationdn":null,"ossprimarykey":null,"x733alarmtype":null,"x733probablecause":0,"qosalarmstate":null,"clearkey":null,"ifindex":null,"eventparms":"eventReason=Unknown(string,text)","stickymemo":null,"systemid":"00000000-0000-0000-0000-000000000000"}";
-
-
-
-
-		LOG.debug("alarmEventToIndex 2");
 
 		//copy in all values as json in params
 		eb.addParam("oldalarmvalues",TEST_ALARM_JSON_1);
@@ -111,11 +106,85 @@ public class EventToIndexTest {
 		Event event = eb.getEvent();
 		event.setDbid(100);
 
-		LOG.debug("alarmEventToIndex 2 created event:"+event.toString());
+		LOG.debug("alarmEventToIndex created event:"+event.toString());
 
-		String indexName="alarm-index";
-		String indexType="data";
+		String indexName=ALARM_INDEX_NAME;
+		String indexType=ALARM_INDEX_TYPE;
 		Index index = eti.populateAlarmIndexBodyFromAlarmChangeEvent(event, indexName, indexType);
+		LOG.debug("created event index:"+index.toString());
+
+		return index;
+	}
+
+	@Test
+	public void jestClientEventToESTest(){
+		LOG.debug("***************** start of test jestClientEventToESTest");
+
+		try {
+			// Get Jest client
+			HttpClientConfig clientConfig = new HttpClientConfig.Builder(
+					"http://localhost:9200").multiThreaded(true).build();
+			JestClientFactory factory = new JestClientFactory();
+			factory.setHttpClientConfig(clientConfig);
+			JestClient jestClient = factory.getObject();
+
+			try {
+				Index index = eventToIndex();
+				DocumentResult dresult = jestClient.execute(index);
+
+				LOG.debug("jestClientEventToESTest received dresult: "+dresult.getJsonString()
+						+ "\n   response code:" +dresult.getResponseCode() 
+						+ "\n   error message: "+dresult.getErrorMessage());
+
+				String query = "{\n" 
+				        +"\n       \"query\": {"
+						+ "\n         \"match\": {"
+					    + "\n         \"id\": \"101\""
+					    + "\n          }"
+					    + "\n        }"
+					    + "\n     }";
+
+				Search search = new Search.Builder(query)
+				// multiple index or types can be added.
+				.addIndex(EVENT_INDEX_NAME)
+				.build();
+
+				SearchResult sresult = jestClient.execute(search);
+
+				LOG.debug("jestClientEventToESTest received search sresult: "+sresult.getJsonString()
+						+ "\n   response code:" +sresult.getResponseCode() 
+						+ "\n   error message: "+sresult.getErrorMessage());
+
+			} finally {
+				// shutdown client
+				jestClient.shutdownClient();
+			}
+
+		} catch (Exception ex) {
+			ex.printStackTrace();
+		}
+		LOG.debug("***************\n end of jestClientEventToESTest");
+	}
+
+
+	
+	public Index eventToIndex() {
+
+		EventToIndex eti = new EventToIndex();
+		EventBuilder eb = new EventBuilder( ALARM_ACKNOWLEDGED_EVENT, EVENT_SOURCE_NAME);
+
+
+		//copy in all values as json in params
+		eb.addParam("oldalarmvalues",TEST_ALARM_JSON_1);
+		eb.addParam("newalarmvalues",TEST_ALARM_JSON_1);
+		Event event = eb.getEvent();
+		event.setDbid(101);
+
+		LOG.debug("eventToIndex 2 created event:"+event.toString());
+
+		String indexName=EVENT_INDEX_NAME;
+		String indexType=EVENT_INDEX_TYPE;
+		Index index = eti.populateEventIndexBodyFromEvent(event, indexName, indexType);
 		LOG.debug("created alarm index:"+index.toString());
 
 

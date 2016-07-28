@@ -4,7 +4,10 @@ import io.searchbox.core.Index;
 
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import org.opennms.netmgt.events.api.EventParameterUtils;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -21,6 +24,12 @@ import org.slf4j.LoggerFactory;
 
 public class EventToIndex {
 	private static final Logger LOG = LoggerFactory.getLogger(EventToIndex.class);
+
+	public static final String ALARM_INDEX_NAME = "opennms-alarms";
+	public static final String ALARM_EVENT_INDEX_NAME = "opennms-alarm-events";
+	public static final String EVENT_INDEX_NAME = "opennms-events";
+	public static final String ALARM_INDEX_TYPE = "alarmdata";
+	public static final String EVENT_INDEX_TYPE = "eventdata";
 
 	// stem of all alarm change notification uei's
 	public static final String ALARM_NOTIFICATION_UEI_STEM = "uei.opennms.org/plugin/AlarmChangeNotificationEvent";
@@ -182,6 +191,7 @@ public class EventToIndex {
 	 * Alarms table row for this alarm id. Both "oldalarmvalues" and "newalarmvalues" params may be populated
 	 * The alarm index body will be populated with the "newalarmvalues" but if "newalarmvalues" is null then the
 	 * "oldalarmvalues" json string will be used
+	 * If cannot parse event into alarm then null index is returned
 	 * @param body
 	 * @param event
 	 */
@@ -215,7 +225,8 @@ public class EventToIndex {
 				LOG.debug("payload alarmvalues.toString():" + alarmValues.toString());
 
 			} catch (ParseException e1) {
-				throw new RuntimeException("cannot parse notification payload to json object. payload="+ payload, e1);
+				LOG.error("cannot parse event payload to json object. payload="+ payload, e1);
+				return null;
 			}
 
 		}
@@ -223,13 +234,28 @@ public class EventToIndex {
 		for (Object x: alarmValues.keySet()){
 			String key=(String) x;
 			String value = (alarmValues.get(key)==null) ? null : alarmValues.get(key).toString();
-			body.put(key, value);
+			if ("eventparms".equals(key) && value!=null){
+				//decode event parms into alarm record
+				List<Parm> params = EventParameterUtils.decode(value);
+				for(Parm parm : params) {
+					body.put("p_" + parm.getParmName(), parm.getValue().getContent());
+				}
+			} else{
+				body.put(key, value);
+			}
+			
 		}
 
-		String id = (alarmValues.get("alarmid")==null) ? "" : alarmValues.get("alarmid").toString();
+		Index index=null;
 
-		Index index = new Index.Builder(body).index(indexName)
-				.type(indexType).id(id).build();
+		if (alarmValues.get("alarmid")==null){
+			LOG.error("No alarmid param - cannot create alarm logstash record from event content:"+ event.toString());
+		} else{
+			String id = alarmValues.get("alarmid").toString();
+
+			index = new Index.Builder(body).index(indexName)
+					.type(indexType).id(id).build();
+		}
 
 		return index;
 	}
