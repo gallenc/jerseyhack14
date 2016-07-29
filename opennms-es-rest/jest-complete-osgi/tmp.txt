@@ -1,0 +1,166 @@
+opennms> osgi:headers 215
+
+wrap_mvn_io.searchbox_jest_2.0.3 (215)
+--------------------------------------
+Archiver-Version = Plexus Archiver
+Originally-Created-By = Apache Maven 3.2.5
+Created-By = 1.8.0_91 (Oracle Corporation)
+Manifest-Version = 1.0
+Bnd-LastModified = 1469806177709
+Generated-By-Ops4j-Pax-From = wrap:mvn:io.searchbox/jest/2.0.3
+Build-Jdk = 1.7.0_76
+Built-By = travis
+Tool = Bnd-2.1.0.20130426-122213
+
+Bundle-ManifestVersion = 2
+Bundle-SymbolicName = wrap_mvn_io.searchbox_jest_2.0.3
+Bundle-Version = 0
+Bundle-Name = wrap_mvn_io.searchbox_jest_2.0.3
+
+Export-Package = 
+        io.searchbox.client;
+                uses:="io.searchbox.client.config,
+                        io.searchbox.client.config.discovery,
+                        io.searchbox.client.http,
+                        org.apache.http,
+                        org.apache.http.client.config,
+                        org.apache.http.client.protocol,
+                        org.apache.http.conn,
+                        org.apache.http.conn.routing,
+                        org.apache.http.impl.client,
+                        org.apache.http.impl.nio.client,
+                        org.apache.http.nio.conn",
+        io.searchbox.client.config;
+                uses:="org.apache.http,
+                        org.apache.http.client,
+                        org.apache.http.conn.routing,
+                        org.apache.http.conn.socket,
+                        org.apache.http.nio.conn",
+        io.searchbox.client.config.idle;uses:="org.apache.http.conn,org.apache.http.nio.conn",
+        io.searchbox.client.http;
+                uses:="com.google.gson,
+                        io.searchbox.action,
+                        io.searchbox.client,
+                        org.apache.http,
+                        org.apache.http.client.methods,
+                        org.apache.http.client.protocol,
+                        org.apache.http.concurrent,
+                        org.apache.http.entity,
+                        org.apache.http.impl.client,
+                        org.apache.http.impl.nio.client",
+        io.searchbox.client.http.apache;uses:=org.apache.http.client.methods,
+        io,
+        io.searchbox
+Import-Package = 
+        com.google.common.util.concurrent;resolution:=optional,
+        com.google.gson;resolution:=optional,
+        io.searchbox.action;resolution:=optional,
+        io.searchbox.client.config.discovery;resolution:=optional,
+        io.searchbox.client.config.exception;resolution:=optional,
+        org.apache.commons.lang3;resolution:=optional,
+        org.apache.http;resolution:=optional,
+        org.apache.http.auth;resolution:=optional,
+        org.apache.http.client;resolution:=optional,
+        org.apache.http.client.config;resolution:=optional,
+        org.apache.http.client.entity;resolution:=optional,
+        org.apache.http.client.methods;resolution:=optional,
+        org.apache.http.client.protocol;resolution:=optional,
+        org.apache.http.concurrent;resolution:=optional,
+        org.apache.http.config;resolution:=optional,
+        org.apache.http.conn;resolution:=optional,
+        org.apache.http.conn.routing;resolution:=optional,
+        org.apache.http.conn.socket;resolution:=optional,
+        org.apache.http.conn.ssl;resolution:=optional,
+        org.apache.http.entity;resolution:=optional,
+        org.apache.http.impl.auth;resolution:=optional,
+        org.apache.http.impl.client;resolution:=optional,
+        org.apache.http.impl.conn;resolution:=optional,
+        org.apache.http.impl.nio.client;resolution:=optional,
+        org.apache.http.impl.nio.conn;resolution:=optional,
+        org.apache.http.impl.nio.reactor;resolution:=optional,
+        org.apache.http.nio.conn;resolution:=optional,
+        org.apache.http.nio.conn.ssl;resolution:=optional,
+        org.apache.http.nio.reactor;resolution:=optional,
+        org.apache.http.protocol;resolution:=optional,
+        org.apache.http.util;resolution:=optional,
+        org.slf4j;resolution:=optional
+        
+        
+        opennms> osgi:install wrap:mvn:io.searchbox/jest-common/2.0.3
+Bundle ID: 216
+opennms> osgi:headers 216
+
+wrap_mvn_io.searchbox_jest-common_2.0.3 (216)
+---------------------------------------------
+Archiver-Version = Plexus Archiver
+Originally-Created-By = Apache Maven 3.2.5
+Created-By = 1.8.0_91 (Oracle Corporation)
+Manifest-Version = 1.0
+Bnd-LastModified = 1469806336953
+Generated-By-Ops4j-Pax-From = wrap:mvn:io.searchbox/jest-common/2.0.3
+Build-Jdk = 1.7.0_76
+Built-By = travis
+Tool = Bnd-2.1.0.20130426-122213
+
+Bundle-ManifestVersion = 2
+Bundle-SymbolicName = wrap_mvn_io.searchbox_jest-common_2.0.3
+Bundle-Version = 0
+Bundle-Name = wrap_mvn_io.searchbox_jest-common_2.0.3
+
+Export-Package = 
+        io.searchbox.action;
+                uses:="com.google.common.collect,
+                        com.google.gson,
+                        io.searchbox.client,
+                        io.searchbox.core,
+                        org.slf4j",
+        io.searchbox.annotations,
+        io.searchbox.client;
+                uses:="com.google.common.collect,
+                        com.google.gson,
+                        io.searchbox.action,
+                        io.searchbox.client.config.discovery,
+                        io.searchbox.client.config.idle",
+        io.searchbox.client.config;uses:=com.google.gson,
+        io.searchbox.client.config.discovery;
+                uses:="com.google.common.util.concurrent,
+                        io.searchbox.client,
+                        io.searchbox.client.config",
+        io.searchbox.client.config.exception,
+        io.searchbox.client.config.idle;uses:="com.google.common.util.concurrent,io.searchbox.client.config",
+        io.searchbox.cloning;uses:=com.google.gson,
+        io.searchbox.cluster;uses:="com.google.gson,io.searchbox.action",
+        io.searchbox.core;
+                uses:="com.google.gson,
+                        io.searchbox.action,
+                        io.searchbox.client,
+                        io.searchbox.core.search.aggregation,
+                        io.searchbox.core.search.sort,
+                        io.searchbox.params",
+        io.searchbox.core.search.aggregation;uses:="com.google.gson,io.searchbox.core",
+        io.searchbox.core.search.sort,
+        io.searchbox.indices;uses:=io.searchbox.action,
+        io.searchbox.indices.aliases;uses:=io.searchbox.action,
+        io.searchbox.indices.mapping;uses:=io.searchbox.action,
+        io.searchbox.indices.script;uses:=io.searchbox.action,
+        io.searchbox.indices.settings;uses:=io.searchbox.action,
+        io.searchbox.indices.template;uses:=io.searchbox.action,
+        io.searchbox.indices.type;uses:=io.searchbox.action,
+        io.searchbox.params,
+        io.searchbox.snapshot;uses:=io.searchbox.action,
+        io,
+        io.searchbox,
+        io.searchbox.core.search
+Import-Package = 
+        com.google.common.base;resolution:=optional,
+        com.google.common.collect;resolution:=optional,
+        com.google.common.io;resolution:=optional,
+        com.google.common.reflect;resolution:=optional,
+        com.google.common.util.concurrent;resolution:=optional,
+        com.google.gson;resolution:=optional,
+        org.apache.commons.lang3;resolution:=optional,
+        org.apache.commons.lang3.builder;resolution:=optional,
+        org.slf4j;resolution:=optional
+
+        
+

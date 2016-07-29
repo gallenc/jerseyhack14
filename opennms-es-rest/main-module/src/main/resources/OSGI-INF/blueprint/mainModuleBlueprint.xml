@@ -14,8 +14,7 @@
   <!-- Generated Licence Authenticator Blueprint -->
   <!-- for productId='opennms-es-rest/1.0-SNAPSHOT' -->
 
-  <bean id="sayHello" class="org.opennms.plugins.elasticsearch.rest.Temp" destroy-method="destroyMethod">
-    <!-- <argument ref="licenceService" /> -->
+  <bean id="sayHello" class="org.opennms.plugins.elasticsearch.rest.SayHello" destroy-method="destroyMethod">
   </bean>
 
   <!-- Configuration properties -->
@@ -23,8 +22,7 @@
     update-strategy="reload">
     <cm:default-properties>
       <cm:property name="elasticsearchCluster" value="opennms" />
-      <cm:property name="elasticsearchIp" value="127.0.0.1" />
-      <cm:property name="elasticsearchPort" value="5200" />
+      <cm:property name="elasticsearchUrl" value="http://localhost:9200" />
       <cm:property name="logEventDescription" value="false" />
       <cm:property name="cache_max_ttl" value="0" /> <!-- set to zero to disable TTL -->
       <cm:property name="cache_max_size" value="10000" /> <!-- set to zero to disable max size -->
@@ -41,13 +39,27 @@
     <property name="eventForwarder" ref="eventForwarder" />
   </bean>
 
-  <bean id="eventForwarder" class=" org.opennms.plugins.elasticsearch.rest.EventForwarderImpl" />
+  <bean id="eventForwarder" class=" org.opennms.plugins.elasticsearch.rest.EventForwarderImpl">
+    <property name="eventToIndex" ref="eventToIndex" />
+  </bean>
 
-  <bean id="nodeDataCache" class="org.opennms.plugins.elasticsearch.rest.NodeCache" init-method="init">
+  <bean id="nodeDataCache" class="org.opennms.plugins.elasticsearch.rest.NodeCacheImpl" init-method="init">
     <property name="nodeDao" ref="nodeDao" />
     <property name="transactionOperations" ref="transactionOperations" />
     <property name="MAX_TTL" value="${cache_max_ttl}" />
     <property name="MAX_SIZE" value="${cache_max_size}" />
+  </bean>
+
+  <bean id="restClientFactory" class="org.opennms.plugins.elasticsearch.rest.RestClientFactory">
+    <argument value="${elasticsearchUrl}" />
+  </bean>
+
+
+  <bean id="eventToIndex" class="org.opennms.plugins.elasticsearch.rest.EventToIndex" destroy-method="destroy">
+    <property name="restClientFactory" ref="restClientFactory" />
+    <property name="nodeCache" ref="nodeDataCache" />
+    <property name="elasticsearchCluster" value="${elasticsearchCluster}" />
+    <property name="logEventDescription" value="${logEventDescription}" />
   </bean>
 
 

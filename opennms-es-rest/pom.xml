@@ -34,6 +34,7 @@
   </properties>
 
   <modules>
+    <module>jest-complete-osgi</module>
     <module>main-module</module>
     <module>product-descriptor</module>
     <module>feature</module>

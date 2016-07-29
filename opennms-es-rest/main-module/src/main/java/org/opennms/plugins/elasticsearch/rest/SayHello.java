@@ -1,7 +1,7 @@
 package org.opennms.plugins.elasticsearch.rest;
 
-public class Temp {
-	public Temp(){
+public class SayHello {
+	public SayHello(){
 		super();
 		System.out.println("Jest Hello there 2!!!");
 	}

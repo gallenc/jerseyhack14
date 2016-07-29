@@ -29,6 +29,13 @@
             </goals>
             <configuration>
               <bundles>
+                <!-- <bundle>wrap:mvn:io.searchbox/jest-common/${jestVersion}</bundle> -->
+                <!-- <bundle>wrap:mvn:io.searchbox/jest/${jestVersion}</bundle> -->
+<!--                 <bundle>wrap:mvn:io.searchbox/jest-complete-osgi/${jestVersion}</bundle> -->
+                
+                <bundle>wrap:mvn:org.apache.httpcomponents/httpcore-nio/4.4.4</bundle>
+                <bundle>wrap:mvn:org.apache.httpcomponents/httpasyncclient/4.1.1</bundle>
+                -->
               </bundles>
             </configuration>
           </execution>
@@ -51,11 +58,98 @@
       <version>${project.version}</version>
     </dependency>
 
+    <!-- <dependency> -->
+    <!-- <groupId>com.googlecode.json-simple</groupId> -->
+    <!-- <artifactId>json-simple</artifactId> -->
+    <!-- <version>${json-simpleVersion}</version> -->
+    <!-- </dependency> -->
+
+    <!-- <dependency> -->
+    <!-- <groupId>io.searchbox</groupId> -->
+    <!-- <artifactId>jest</artifactId> -->
+    <!-- </dependency> -->
     <dependency>
-      <groupId>com.googlecode.json-simple</groupId>
-      <artifactId>json-simple</artifactId>
-      <version>${json-simpleVersion}</version>
+      <groupId>io.searchbox</groupId>
+      <artifactId>jest-complete-osgi</artifactId>
+      <version>2.0.3</version>
     </dependency>
+
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+      <version>2.6.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>19.0</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.4</version>
+    </dependency>
+
+    <!-- <dependency> -->
+    <!-- <groupId>org.apache.httpcomponents</groupId> -->
+    <!-- <artifactId>httpcore-nio</artifactId> -->
+    <!-- <version>4.4.4</version> -->
+    <!-- </dependency> -->
+
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpcore-osgi</artifactId>
+      <version>4.4.4</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.apache.httpcomponents</groupId>
+      <artifactId>httpclient-osgi</artifactId>
+      <version>4.5.2</version>
+    </dependency>
+
+    <!-- <dependency> -->
+    <!-- <groupId>org.apache.httpcomponents</groupId> -->
+    <!-- <artifactId>httpasyncclient</artifactId> -->
+    <!-- <version>4.1.1</version> -->
+    <!-- </dependency> -->
+
+
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.2</version>
+    </dependency>
+
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.9</version>
+    </dependency>
+
+
+
+    <!-- [INFO] \- io.searchbox:jest:jar:2.0.3:provided -->
+    <!-- [INFO] +- io.searchbox:jest-common:jar:2.0.3:provided -->
+    <!-- [INFO] | +- com.google.code.gson:gson:jar:2.6.2:provided -->
+    <!-- [INFO] | \- org.apache.commons:commons-lang3:jar:3.4:provided -->
+    <!-- [INFO] +- org.apache.httpcomponents:httpcore-nio:jar:4.4.4:provided -->
+    <!-- [INFO] | \- org.apache.httpcomponents:httpcore:jar:4.4.4:provided -->
+    <!-- [INFO] +- org.apache.httpcomponents:httpclient:jar:4.5.2:provided -->
+    <!-- [INFO] | +- commons-logging:commons-logging:jar:1.2:provided -->
+    <!-- [INFO] | \- commons-codec:commons-codec:jar:1.9:provided -->
+    <!-- [INFO] \- org.apache.httpcomponents:httpasyncclient:jar:4.1.1:provided -->
+
+
+
+
+
+
+
+
+
 
   </dependencies>
   <pluginRepositories>

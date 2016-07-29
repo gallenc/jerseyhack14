@@ -8,12 +8,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class EventForwarderImpl implements EventForwarder {
+
+
 	private static final Logger LOG = LoggerFactory.getLogger(EventForwarderImpl.class);
 
-	@Override
-	public void sendNow(Event event) {
-		LOG.debug("Event to send received: " + event.toString());
+	private EventToIndex eventToIndex=null;
+	
+	public EventToIndex getEventToIndex() {
+		return eventToIndex;
+	}
 
+	public void setEventToIndex(EventToIndex eventToIndex) {
+		this.eventToIndex = eventToIndex;
+	}
+	
+	@Override
+	public void sendNow(Event event) {		
+		LOG.debug("Event to send received: " + event.toString());
+		if (eventToIndex!=null) eventToIndex.forwardEvent(event);
 	}
 
 	@Override
