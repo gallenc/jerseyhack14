@@ -27,16 +27,29 @@ karaf@root> features:install opennms-es-rest
 (or features:install opennms-es-rest/1.0-SNAPSHOT for a specific version of the feature)
 
 
-To install on OpenNMS
----------------------
-You need to add the repo where the feature is installed to the opennms karaf configuration.
+To install on OpenNMS (Tested on OpenNMS 18.0.0)
+------------------------------------------------
+
+1. You must add the jar httpasyncclient-osgi-4.0.2.jar to <opennmshome>/lib
+
+(from http://repo1.maven.org/maven2/org/apache/httpcomponents/httpasyncclient-osgi/4.0.2/)
+
+and modify <opennmshome>/etc/custom.properties to add the following lines to org.osgi.framework.system.packages.extra
+
+        org.apache.http.nio.conn;version=4.0.2,\
+        org.apache.http.nio.conn.ssl;version=4.0.2,\
+        org.apache.http.nio.conn.scheme;version=4.0.2,\
+        org.apache.http.impl.nio.client;version=4.3.3,\
+        org.apache.http.impl.nio.conn;version=4.0.2,\
+
+2. You need to add the repo where the feature is installed to the opennms karaf configuration.
 Obviously this could point at a remote repository
 However if you have built on your local machine, add the local repo as follows;
 
 sudo vi /opt/opennms/org.ops4j.pax.url.mvn.cfg
 
 change the following property to add file:/home/admin/.m2/repository@snapshots@id=localrepo 
-where /home/admin/.m2/repository is the location of local maven repository
+where /home/admin/.m2/repository is the location of your local (user account) maven repository
 
 org.ops4j.pax.url.mvn.repositories= \
     http://repo1.maven.org/maven2@id=central, \

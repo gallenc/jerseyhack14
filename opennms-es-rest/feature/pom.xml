@@ -17,6 +17,7 @@
     <!-- opennms versions -->
     <httpcoreVersion>4.3.3</httpcoreVersion>
     <httpclientVersion>4.3.6</httpclientVersion>
+    <httpasyncclientVersion>4.0.2</httpasyncclientVersion>
   </properties>
   <build>
 
@@ -38,7 +39,7 @@
                 <!-- <bundle>wrap:mvn:io.searchbox/jest/${jestVersion}</bundle> -->
                 <!-- <bundle>wrap:mvn:io.searchbox/jest-complete-osgi/${jestVersion}</bundle> -->
 
-                <!-- <bundle>wrap:mvn:org.apache.httpcomponents/httpcore-nio/4.4.4</bundle> -->
+<!--                 <bundle>wrap:mvn:org.apache.httpcomponents/httpcore-nio/${httpcoreVersion}</bundle> -->
                 <!-- <bundle>wrap:mvn:org.apache.httpcomponents/httpasyncclient/4.1.1</bundle> -->
                 <!-- <bundle>wrap:mvn:org.apache.httpcomponents/httpasyncclient/${httpclientVersion}</bundle> -->
 
@@ -131,7 +132,8 @@
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpasyncclient-osgi</artifactId>
       <!-- <version>4.1.1</version> -->
-      <version>4.0.2</version> 
+      <version>${httpasyncclientVersion}</version> 
+       <scope>provided</scope>
     </dependency>
 
     <!-- <dependency> -->
@@ -165,15 +167,6 @@
     <!-- [INFO] | +- commons-logging:commons-logging:jar:1.2:provided -->
     <!-- [INFO] | \- commons-codec:commons-codec:jar:1.9:provided -->
     <!-- [INFO] \- org.apache.httpcomponents:httpasyncclient:jar:4.1.1:provided -->
-
-
-
-
-
-
-
-
-
 
   </dependencies>
   <pluginRepositories>

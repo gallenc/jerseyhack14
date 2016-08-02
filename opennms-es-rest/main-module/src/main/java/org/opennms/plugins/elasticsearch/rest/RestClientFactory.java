@@ -8,6 +8,8 @@ public class RestClientFactory {
 	
 	private JestClientFactory factory=null;
 	
+	JestClient jestClient=null;
+	
 	/**
 	 * create a Jest Client Factory using url in form http://localhost:9200
 	 * @param elasticSearchURL
@@ -21,10 +23,12 @@ public class RestClientFactory {
 		
 		factory.setHttpClientConfig(clientConfig);
 		
+		jestClient=factory.getObject();
+		
 	}
 	
 	public JestClient getJestClient(){
-		return factory.getObject();
+		return jestClient;
 	}
 
 }

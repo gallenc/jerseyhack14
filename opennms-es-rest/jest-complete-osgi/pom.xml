@@ -14,6 +14,12 @@
   <name>jest-complete-osgi</name>
   <description>shaded osgi bundle containing complete jest implementation</description>
   <packaging>bundle</packaging>
+  
+  <properties>
+    <httpcoreVersion>4.3.3</httpcoreVersion>
+    <httpclientVersion>4.3.6</httpclientVersion>
+    <httpasyncclientVersion>4.0.2</httpasyncclientVersion>
+  </properties>
 
   <build>
 
@@ -170,11 +176,18 @@
       <version>2.6.2</version>
       <scope>provided</scope>
     </dependency>
+    
+    <dependency>
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>19.0</version>
+      <scope>provided</scope>
+    </dependency>
 
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.4</version>
+      <version>3.4</version> <!-- opennms 3.3.2 -->
       <scope>provided</scope>
     </dependency>
 
@@ -188,38 +201,49 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore-osgi</artifactId>
-      <version>4.4.4</version>
+      <!-- <version>4.4.4</version> --><!-- jest version -->
+      <version>${httpcoreVersion}</version>
       <scope>provided</scope>
     </dependency>
 
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient-osgi</artifactId>
-      <version>4.5.2</version>
+      <!-- <version>4.5.2</version> --><!-- jest version -->
+      <version>${httpclientVersion}</version> <!-- best match -->
       <scope>provided</scope>
     </dependency>
-
+    
+    
+    <!-- best match derived from httpasyncclient 4.0.2 compiled against httpclient 4.3.5 httpcore 4.3.2  -->
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpasyncclient</artifactId>
-      <version>4.1.1</version>
-      <scope>provided</scope>
+      <artifactId>httpasyncclient-osgi</artifactId>
+      <!-- <version>4.1.1</version> -->
+      <version>${httpasyncclientVersion}</version> 
     </dependency>
 
+<!--     <dependency> -->
+<!--       <groupId>org.apache.httpcomponents</groupId> -->
+<!--       <artifactId>httpasyncclient</artifactId> -->
+<!--       <version>4.1.1</version> -->
+<!--       <scope>provided</scope> -->
+<!--     </dependency> -->
 
-    <dependency>
-      <groupId>commons-logging</groupId>
-      <artifactId>commons-logging</artifactId>
-      <version>1.2</version>
-      <scope>provided</scope>
-    </dependency>
 
-    <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-      <version>1.9</version>
-      <scope>provided</scope>
-    </dependency>
+<!--     <dependency> -->
+<!--       <groupId>commons-logging</groupId> -->
+<!--       <artifactId>commons-logging</artifactId> -->
+<!--       <version>1.2</version> -->
+<!--       <scope>provided</scope> -->
+<!--     </dependency> -->
+
+<!--     <dependency> -->
+<!--       <groupId>commons-codec</groupId> -->
+<!--       <artifactId>commons-codec</artifactId> -->
+<!--       <version>1.9</version> -->
+<!--       <scope>provided</scope> -->
+<!--     </dependency> -->
 
 
   </dependencies>

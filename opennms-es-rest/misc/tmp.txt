@@ -1,0 +1,21 @@
+Caused by: java.lang.LinkageError: loader constraint violation: 
+when resolving method "org.apache.http.impl.auth.HttpAuthenticator.<init>(Lorg/apache/commons/logging/Log;)V"
+ the class loader (instance of org/apache/felix/framework/BundleWiringImpl$BundleClassLoaderJava5) 
+ of the current class, org/apache/http/impl/nio/client/MainClientExec, 
+ and the class loader (instance of java/net/FactoryURLClassLoader) for the method's defining class, 
+ org/apache/http/impl/auth/HttpAuthenticator, have different Class objects for the type 
+ org/apache/commons/logging/Log used in the signature
+ 
+	at org.apache.http.impl.nio.client.MainClientExec.<init>(MainClientExec.java:125)
+	at org.apache.http.impl.nio.client.HttpAsyncClientBuilder.build(HttpAsyncClientBuilder.java:782)
+	at io.searchbox.client.JestClientFactory.createAsyncHttpClient(JestClientFactory.java:125)
+	at io.searchbox.client.JestClientFactory.getObject(JestClientFactory.java:63)
+	at org.opennms.plugins.elasticsearch.rest.RestClientFactory.<init>(RestClientFactory.java:26)
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)[:1.8.0_91]
+	at sun.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)[:1.8.0_91]
+	at sun.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)[:1.8.0_91]
+	at java.lang.reflect.Constructor.newInstance(Constructor.java:423)[:1.8.0_91]
+	at org.apache.aries.blueprint.utils.ReflectionUtils.newInstance(ReflectionUtils.java:329)
+	at org.apache.aries.blueprint.container.BeanRecipe.newInstance(BeanRecipe.java:962)
+	at org.apache.aries.blueprint.container.BeanRecipe.getInstance(BeanRecipe.java:331)
+	... 61 more
