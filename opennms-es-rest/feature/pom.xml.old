@@ -13,11 +13,6 @@
   <description>Feature definition for opennms-es-rest</description>
   <packaging>pom</packaging>
 
-  <properties>
-    <!-- opennms versions -->
-    <httpcoreVersion>4.3.3</httpcoreVersion>
-    <httpclientVersion>4.3.6</httpclientVersion>
-  </properties>
   <build>
 
     <plugins>
@@ -36,11 +31,10 @@
               <bundles>
                 <!-- <bundle>wrap:mvn:io.searchbox/jest-common/${jestVersion}</bundle> -->
                 <!-- <bundle>wrap:mvn:io.searchbox/jest/${jestVersion}</bundle> -->
-                <!-- <bundle>wrap:mvn:io.searchbox/jest-complete-osgi/${jestVersion}</bundle> -->
-
-                <!-- <bundle>wrap:mvn:org.apache.httpcomponents/httpcore-nio/4.4.4</bundle> -->
-                <!-- <bundle>wrap:mvn:org.apache.httpcomponents/httpasyncclient/4.1.1</bundle> -->
-                <!-- <bundle>wrap:mvn:org.apache.httpcomponents/httpasyncclient/${httpclientVersion}</bundle> -->
+<!--                 <bundle>wrap:mvn:io.searchbox/jest-complete-osgi/${jestVersion}</bundle> -->
+                
+                <bundle>wrap:mvn:org.apache.httpcomponents/httpcore-nio/4.4.4</bundle>
+                <bundle>wrap:mvn:org.apache.httpcomponents/httpasyncclient/4.1.1</bundle>
 
               </bundles>
             </configuration>
@@ -95,7 +89,7 @@
     <dependency>
       <groupId>org.apache.commons</groupId>
       <artifactId>commons-lang3</artifactId>
-      <version>3.4</version> <!-- opennms 3.3.2 -->
+      <version>3.4</version>
     </dependency>
 
     <!-- <dependency> -->
@@ -107,31 +101,13 @@
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore-osgi</artifactId>
-      <!-- <version>4.4.4</version> --><!-- jest version -->
-      <version>${httpcoreVersion}</version>
-      <scope>provided</scope>
+      <version>4.4.4</version>
     </dependency>
 
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpclient-osgi</artifactId>
-      <!-- <version>4.5.2</version> --><!-- jest version -->
-      <version>${httpclientVersion}</version> <!-- best match -->
-      <scope>provided</scope>
-    </dependency>
-
-    <!-- <dependency> -->
-    <!-- <groupId>org.apache.httpcomponents</groupId> -->
-    <!-- <artifactId>httpasyncclient-osgi</artifactId> -->
-    <!-- <version>${httpclientVersion}</version> -->
-    <!-- </dependency> -->
-
-    <!-- best match derived from httpasyncclient 4.0.2 compiled against httpclient 4.3.5 httpcore 4.3.2  -->
-    <dependency>
-      <groupId>org.apache.httpcomponents</groupId>
-      <artifactId>httpasyncclient-osgi</artifactId>
-      <!-- <version>4.1.1</version> -->
-      <version>4.0.2</version> 
+      <version>4.5.2</version>
     </dependency>
 
     <!-- <dependency> -->
@@ -141,17 +117,17 @@
     <!-- </dependency> -->
 
 
-<!--     <dependency> -->
-<!--       <groupId>commons-logging</groupId> -->
-<!--       <artifactId>commons-logging</artifactId> -->
-<!--       <version>1.2</version> -->
-<!--     </dependency> -->
+    <dependency>
+      <groupId>commons-logging</groupId>
+      <artifactId>commons-logging</artifactId>
+      <version>1.2</version>
+    </dependency>
 
-<!--     <dependency> -->
-<!--       <groupId>commons-codec</groupId> -->
-<!--       <artifactId>commons-codec</artifactId> -->
-<!--       <version>1.9</version> -->
-<!--     </dependency> -->
+    <dependency>
+      <groupId>commons-codec</groupId>
+      <artifactId>commons-codec</artifactId>
+      <version>1.9</version>
+    </dependency>
 
 
 

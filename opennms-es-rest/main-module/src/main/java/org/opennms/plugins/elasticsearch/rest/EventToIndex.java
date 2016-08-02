@@ -6,6 +6,7 @@ import io.searchbox.core.DocumentResult;
 import io.searchbox.core.Index;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -54,10 +55,11 @@ public class EventToIndex {
 
 	private boolean logEventDescription=false;
 	private NodeCache nodeCache=null;
+	private String elasticsearchCluster="opennms";
 
 	private JestClient jestClient = null;
 
-	private JestClientFactory jestClientFactory = null;
+	private RestClientFactory restClientFactory = null;
 
 	public boolean isLogEventDescription() {
 		return logEventDescription;
@@ -75,12 +77,26 @@ public class EventToIndex {
 		this.nodeCache = cache;
 	}
 
-	public JestClientFactory getJestClientFactory() {
-		return jestClientFactory;
+	public RestClientFactory getRestClientFactory() {
+		return restClientFactory;
 	}
 
-	public void setJestClientFactory(JestClientFactory jestClientFactory) {
-		this.jestClientFactory = jestClientFactory;
+	public void setRestClientFactory(RestClientFactory restClientFactory) {
+		this.restClientFactory = restClientFactory;
+	}
+	
+	/**
+	 * @return the elasticsearchCluster
+	 */
+	public String getElasticsearchCluster() {
+		return elasticsearchCluster;
+	}
+
+	/**
+	 * @param elasticsearchCluster the elasticsearchCluster to set
+	 */
+	public void setElasticsearchCluster(String elasticsearchCluster) {
+		this.elasticsearchCluster = elasticsearchCluster;
 	}
 
 	/**
@@ -91,8 +107,8 @@ public class EventToIndex {
 		if (jestClient==null) {
 			synchronized(this){
 				if (jestClient==null){
-					if (jestClientFactory==null) throw new RuntimeException("JestClientFactory must be set");
-					jestClient= jestClientFactory.getObject();
+					if (restClientFactory==null) throw new RuntimeException("JestClientFactory must be set");
+					jestClient= restClientFactory.getJestClient();
 				}
 			}
 		}
@@ -118,10 +134,12 @@ public class EventToIndex {
 
 			// handling uei definitions of alarm change events
 
-			String uei=null;
-			Index index=null;
-			DocumentResult dresult=null;
-
+			String uei=event.getUei();
+			Index alarmIndex=null;
+			Index eventIndex=null;
+			DocumentResult alarmIndexresult=null;
+			DocumentResult eventIndexresult=null;
+			
 			// if alarm change notification then handle change
 			// change alarm index and add event to alarm change event index
 			if(uei.startsWith(ALARM_NOTIFICATION_UEI_STEM)) {			
@@ -155,27 +173,61 @@ public class EventToIndex {
 
 				}
 
-				index = populateAlarmIndexBodyFromAlarmChangeEvent(event, ALARM_INDEX_NAME, ALARM_INDEX_TYPE);
-				dresult = getJestClient().execute(index);
+				alarmIndex = populateAlarmIndexBodyFromAlarmChangeEvent(event, ALARM_INDEX_NAME, ALARM_INDEX_TYPE);
+				alarmIndexresult = getJestClient().execute(alarmIndex);
+				
+				if(LOG.isDebugEnabled()) {
+					if (alarmIndexresult==null) {
+						LOG.debug("returned dresult==null");
+					} else{
+						LOG.debug("Alarm sent to es index:"+ALARM_INDEX_NAME+" type:"+ ALARM_INDEX_TYPE+" received search dresult: "+alarmIndexresult.getJsonString()
+						+ "\n   response code:" +alarmIndexresult.getResponseCode() 
+						+ "\n   error message: "+alarmIndexresult.getErrorMessage());
+					}
+				}
 
-				index = populateEventIndexBodyFromEvent(event, ALARM_EVENT_INDEX_NAME, EVENT_INDEX_TYPE);
-				dresult = getJestClient().execute(index);
+				eventIndex = populateEventIndexBodyFromEvent(event, ALARM_EVENT_INDEX_NAME, EVENT_INDEX_TYPE);
+				eventIndexresult = getJestClient().execute(eventIndex);
+				
+				if(LOG.isDebugEnabled()) {
+					if (alarmIndexresult==null) {
+						LOG.debug("returned dresult==null");
+					} else{
+					LOG.debug("event sent to es index:"+ALARM_EVENT_INDEX_NAME+" type:"+ EVENT_INDEX_TYPE+" received search dresult: "+eventIndexresult.getJsonString()
+						+ "\n   response code:" +eventIndexresult.getResponseCode() 
+						+ "\n   error message: "+eventIndexresult.getErrorMessage());
+					}
+				}
 
 				// else handle all other event types
 			} else {
 
 				// only send events to ES which are persisted to database
+				
 				if(event.getDbid()!=null && event.getDbid()!=0) {
+					if (LOG.isDebugEnabled()) LOG.debug("Sending Event to ES:"+event.toString());
 					// Send the event to the event forwarder
-					index = populateEventIndexBodyFromEvent(event, EVENT_INDEX_NAME, EVENT_INDEX_TYPE);
-					dresult = getJestClient().execute(index);
+					eventIndex = populateEventIndexBodyFromEvent(event, EVENT_INDEX_NAME, EVENT_INDEX_TYPE);
+					eventIndexresult = getJestClient().execute(eventIndex);
+					
+					if(LOG.isDebugEnabled()) {
+						if (eventIndexresult==null) {
+							LOG.debug("returned dresult==null");
+						} else{
+							LOG.debug("event sent to es index:"+EVENT_INDEX_NAME+" type:"+ EVENT_INDEX_TYPE+" received search dresult: "+eventIndexresult.getJsonString()
+							+ "\n   response code:" +eventIndexresult.getResponseCode() 
+							+ "\n   error message: "+eventIndexresult.getErrorMessage());
+						}
+					}
+					
+					
+				} else {
+					if (LOG.isDebugEnabled()) LOG.debug("Not Sending Event to ES: event.getDbid()="+event.getDbid()+ " Event="+event.toString());
 				}
 
 			}
 			
-			if(LOG.isDebugEnabled()) LOG.debug("event sent to es received search dresult: "+dresult.getJsonString()
-					+ "\n   response code:" +dresult.getResponseCode() 
-					+ "\n   error message: "+dresult.getErrorMessage());
+
 		} catch (Exception ex){
 			LOG.error("problem sending event to Elastic Search",ex);
 		}
@@ -198,7 +250,11 @@ public class EventToIndex {
 		body.put("eventuei",event.getUei());
 
 		Calendar cal=Calendar.getInstance();
-		cal.setTime(event.getCreationTime()); // javax.xml.bind.DatatypeConverter.parseDateTime("2010-01-01T12:00:00Z");
+		if (event.getCreationTime()==null) {
+			if(LOG.isDebugEnabled()) LOG.debug("no event creation time for event.toString: "+ event.toString());
+			cal.setTime(new Date());
+
+		} else 	cal.setTime(event.getCreationTime()); // javax.xml.bind.DatatypeConverter.parseDateTime("2010-01-01T12:00:00Z");
 
 		body.put("@timestamp", DatatypeConverter.printDateTime(cal));
 
@@ -341,6 +397,8 @@ public class EventToIndex {
 			}
 		}
 	}
+
+
 
 
 }
