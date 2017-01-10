@@ -1,7 +1,8 @@
-package org.opennms.features.graphml.model;
+package org.opennms.features.graphml.model.manual;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.opennms.features.graphml.model.GraphMLNode;
 
 public class GraphMLNodeTest {
 

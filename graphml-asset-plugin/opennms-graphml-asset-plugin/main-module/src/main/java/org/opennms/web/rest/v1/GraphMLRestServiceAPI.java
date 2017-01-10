@@ -26,29 +26,36 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.features.graphml.model.manual;
+package org.opennms.web.rest.v1;
 
-import org.junit.Assert;
-import org.junit.Test;
-import org.opennms.features.graphml.model.GraphML;
-import org.opennms.features.graphml.model.GraphMLGraph;
-import org.opennms.features.graphml.model.GraphMLReader;
-import org.opennms.features.graphml.model.InvalidGraphException;
+import java.io.IOException;
+import java.util.NoSuchElementException;
 
-public class GraphMLReaderTest {
+import javax.ws.rs.DELETE;
+import javax.ws.rs.GET;
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.core.Response;
 
-    @Test
-    public void verifyRead() throws InvalidGraphException {
-        GraphML graphML = GraphMLReader.read(getClass().getResourceAsStream("/test-graph.xml"));
-        Assert.assertEquals(2, graphML.getGraphs().size());
+import org.graphdrawing.graphml.GraphmlType;
+import org.springframework.stereotype.Component;
 
-        GraphMLGraph graph = graphML.getGraphs().get(0);
-        Assert.assertEquals("regions", graph.getId());
-        Assert.assertEquals(4, graph.getNodes().size());
+@Component
+@Path("graphml")
+public interface GraphMLRestServiceAPI {
 
-        graph = graphML.getGraphs().get(1);
-        Assert.assertEquals("markets", graph.getId());
-        Assert.assertEquals(16, graph.getNodes().size());
+  
+    @POST
+    @Path("{graph-name}")
+    public Response createGraph(@PathParam("graph-name") String graphname,
+                                GraphmlType graphmlType) throws IOException;
+    @DELETE
+    @Path("{graph-name}")
+    public Response deleteGraph(@PathParam("graph-name") String graphname) throws IOException ;
 
-    }
+    @GET
+    @Path("{graph-name}")
+    public Response getGraph(@PathParam("graph-name") String graphname) throws IOException ;
+
 }

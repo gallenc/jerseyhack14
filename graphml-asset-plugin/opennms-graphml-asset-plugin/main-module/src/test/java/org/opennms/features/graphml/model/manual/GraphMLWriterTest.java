@@ -1,4 +1,4 @@
-package org.opennms.features.graphml.model;
+package org.opennms.features.graphml.model.manual;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -6,6 +6,13 @@ import java.io.FileNotFoundException;
 
 import org.junit.Assert;
 import org.junit.Test;
+import org.opennms.features.graphml.model.GraphML;
+import org.opennms.features.graphml.model.GraphMLEdge;
+import org.opennms.features.graphml.model.GraphMLGraph;
+import org.opennms.features.graphml.model.GraphMLNode;
+import org.opennms.features.graphml.model.GraphMLReader;
+import org.opennms.features.graphml.model.GraphMLWriter;
+import org.opennms.features.graphml.model.InvalidGraphException;
 
 public class GraphMLWriterTest {
 

@@ -1,4 +1,4 @@
-package org.opennms.plugins.graphml.asset;
+package org.opennms.plugins.graphml.asset.test.manual;
 
 import java.io.File;
 import java.io.StringWriter;
