@@ -25,9 +25,34 @@
             <!-- org.apache.felix.service.command, -->
             <!-- * -->
             <!-- </Import-Package> -->
+            <Export-Package>org.opennms.plugins.graphml</Export-Package>
           </instructions>
         </configuration>
       </plugin>
+
+<!--       <plugin> -->
+<!--         <groupId>org.codehaus.mojo</groupId> -->
+<!--         <artifactId>jaxb2-maven-plugin</artifactId> -->
+<!--         <version>1.6</version> -->
+<!--         <executions> -->
+<!--           <execution> -->
+<!--             <id>xjc</id> -->
+<!--             <goals> -->
+<!--               <goal>xjc</goal> -->
+<!--             </goals> -->
+<!--           </execution> -->
+<!--         </executions> -->
+<!--         <configuration> -->
+<!--           <outputDirectory>${project.build.directory}/generated-sources/jaxb</outputDirectory> -->
+<!--           Set the package of the generated code -->
+<!--           <packageName>org.opennms.plugin.graphdrawing.graphml</packageName> -->
+<!--           <sourceType>xsd</sourceType> -->
+<!--           <sources> -->
+<!--             <source>src/main/xsd</source> -->
+<!--           </sources> -->
+<!--           <catalog>src/main/catalog.xml</catalog> -->
+<!--         </configuration> -->
+<!--       </plugin> -->
 
 
       <plugin>

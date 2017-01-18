@@ -23,7 +23,7 @@
   <packageingDescriptor>This optional plugin is packaged with OpenNMS</packageingDescriptor>
 	
   <organization>OpenNMS Project</organization>
-  <productDescription>The opennms-graphml-asset-plugin plugin uses the Jest ReST library to send data to ElasticSearch</productDescription>
+  <productDescription>The opennms-graphml-asset-plugin plugin generates graphml topologies from node asset table</productDescription>
   <productName>opennms-graphml-asset-plugin</productName>
   <productUrl>http:\\opennms.co.uk</productUrl>
   <licenceKeyRequired>false</licenceKeyRequired>

@@ -15,33 +15,15 @@ import javax.xml.bind.Unmarshaller;
 import org.graphdrawing.graphml.xmlns.GraphmlType;
 import org.graphdrawing.graphml.xmlns.ObjectFactory;
 import org.junit.Test;
-import org.opennms.plugins.graphml.client.GraphMLRestJerseyClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GraphMLRestJerseyClientTest {
-	private static final Logger LOG = LoggerFactory.getLogger(GraphMLRestJerseyClientTest.class);
+public class NewGraphMLRestJerseyClientTest {
+	private static final Logger LOG = LoggerFactory.getLogger(NewGraphMLRestJerseyClientTest.class);
 
 
-	private String baseUrl = "http://localhost:8980";
-	private String basePath = "/opennms/rest";
-	private String userName = "admin"; // If userName is null no basic authentication is generated
-	private String password = "admin";
-
-	private String graphname="testgraph1";
-
-	GraphMLRestJerseyClient client = null;
-
-	private GraphMLRestJerseyClient getClient(){
-		GraphMLRestJerseyClient client = new GraphMLRestJerseyClient();
-		client.setBasePath(basePath);
-		client.setBaseUrl(baseUrl);
-		client.setPassword(password);
-		client.setUserName(userName);
-		return client;
-	}
 	
-	//@Test
+	@Test
 	public void testMarshaller(){
 		readTestGraph();
 	}
@@ -70,69 +52,12 @@ public class GraphMLRestJerseyClientTest {
 					+ ""+x.toString()+" name " +x.getClass().getName());
 		}
 		
+
 		LOG.debug("unmarshaled test graph marshalled from file :"+graphmlTypeToString(graph));
 		return graph;
 	}
 	
-	@Test
-	public void testsInOrder(){
-		LOG.debug("testsInOrder() START");
-				
-		//testCreateGraph();
-		testGetGraph(); 
-		//testDeleteGraph();
-		LOG.debug("testsInOrder() FINISH");
-	}
 
-	//@Test
-	public void testCreateGraph() {
-		LOG.debug("testCreateGraph() START");
-		GraphmlType graphmlType = readTestGraph();
-
-		try {
-			GraphMLRestJerseyClient client = getClient();
-			client.createGraph(graphname, graphmlType) ;
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		LOG.debug("testCreateGraph() FINISH");
-
-	}
-
-	//@Test 
-	public void testDeleteGraph() {
-		LOG.debug("testdDeleteGraph() START");
-		try {
-			GraphMLRestJerseyClient client = getClient();
-            client.deleteGraph(graphname);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		LOG.debug("testdDeleteGraph() FINISH");
-	}
-
-	//@Test
-	public void testGetGraph() {
-		LOG.debug("testGetGraph() START");
-		try {
-			GraphMLRestJerseyClient client = getClient();
-			GraphmlType graphmlType = client.getGraph(graphname);
-
-			String gmlstr=null;
-			if (graphmlType !=null){
-				gmlstr=graphmlTypeToString(graphmlType);
-			}
-
-			LOG.debug("returned graphml "+ gmlstr);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		LOG.debug("testGetGraph() FINISH");
-	}
 
 	public String graphmlTypeToString(GraphmlType graphmlType){
 		try {

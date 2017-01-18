@@ -12,15 +12,14 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
-import org.graphdrawing.graphml.xmlns.GraphmlType;
-import org.graphdrawing.graphml.xmlns.ObjectFactory;
+import org.graphdrawing.graphml.GraphmlType;
 import org.junit.Test;
-import org.opennms.plugins.graphml.client.GraphMLRestJerseyClient;
+import org.opennms.plugins.graphml.client.GraphMLRestJerseyClientOLD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class GraphMLRestJerseyClientTest {
-	private static final Logger LOG = LoggerFactory.getLogger(GraphMLRestJerseyClientTest.class);
+public class GraphMLRestJerseyClientOLDTest {
+	private static final Logger LOG = LoggerFactory.getLogger(GraphMLRestJerseyClientOLDTest.class);
 
 
 	private String baseUrl = "http://localhost:8980";
@@ -30,10 +29,10 @@ public class GraphMLRestJerseyClientTest {
 
 	private String graphname="testgraph1";
 
-	GraphMLRestJerseyClient client = null;
+	GraphMLRestJerseyClientOLD client = null;
 
-	private GraphMLRestJerseyClient getClient(){
-		GraphMLRestJerseyClient client = new GraphMLRestJerseyClient();
+	private GraphMLRestJerseyClientOLD getClient(){
+		GraphMLRestJerseyClientOLD client = new GraphMLRestJerseyClientOLD();
 		client.setBasePath(basePath);
 		client.setBaseUrl(baseUrl);
 		client.setPassword(password);
@@ -41,22 +40,25 @@ public class GraphMLRestJerseyClientTest {
 		return client;
 	}
 	
-	//@Test
+	@Test
 	public void testMarshaller(){
 		readTestGraph();
 	}
 
 	private GraphmlType readTestGraph(){
-		File graphmlfile = new File("./src/test/resources/test-graph.xml");
+		File graphmlfile = new File("./src/test/resources/minimalistic1.xml");
 		LOG.debug("reading graph file from"+graphmlfile.getAbsolutePath());
 
 		//GraphmlType graph = JAXB.unmarshal(graphmlfile, GraphmlType.class);
+		
 
-		JAXBContext ctx;
+		
+		
+		JAXBContext jaxbContext;
 		JAXBElement<GraphmlType> jaxbgraph=null;
 		try {
-			ctx = JAXBContext.newInstance("org.graphdrawing.graphml.xmlns");
-			Unmarshaller jaxbUnmarshaller = ctx.createUnmarshaller();
+			jaxbContext = JAXBContext.newInstance("org.graphdrawing.graphml");
+			Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
 			jaxbgraph =  (JAXBElement<GraphmlType>) jaxbUnmarshaller.unmarshal(graphmlfile);
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
@@ -70,6 +72,7 @@ public class GraphMLRestJerseyClientTest {
 					+ ""+x.toString()+" name " +x.getClass().getName());
 		}
 		
+
 		LOG.debug("unmarshaled test graph marshalled from file :"+graphmlTypeToString(graph));
 		return graph;
 	}
@@ -90,7 +93,7 @@ public class GraphMLRestJerseyClientTest {
 		GraphmlType graphmlType = readTestGraph();
 
 		try {
-			GraphMLRestJerseyClient client = getClient();
+			GraphMLRestJerseyClientOLD client = getClient();
 			client.createGraph(graphname, graphmlType) ;
 
 		} catch (Exception e) {
@@ -105,7 +108,7 @@ public class GraphMLRestJerseyClientTest {
 	public void testDeleteGraph() {
 		LOG.debug("testdDeleteGraph() START");
 		try {
-			GraphMLRestJerseyClient client = getClient();
+			GraphMLRestJerseyClientOLD client = getClient();
             client.deleteGraph(graphname);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -118,7 +121,7 @@ public class GraphMLRestJerseyClientTest {
 	public void testGetGraph() {
 		LOG.debug("testGetGraph() START");
 		try {
-			GraphMLRestJerseyClient client = getClient();
+			GraphMLRestJerseyClientOLD client = getClient();
 			GraphmlType graphmlType = client.getGraph(graphname);
 
 			String gmlstr=null;
@@ -136,18 +139,13 @@ public class GraphMLRestJerseyClientTest {
 
 	public String graphmlTypeToString(GraphmlType graphmlType){
 		try {
-			
-		      // Marshal graphmlType
-	        ObjectFactory objectFactory = new ObjectFactory();
-	        JAXBElement<GraphmlType> je =  objectFactory.createGraphml(graphmlType);
-	        
 			StringWriter sw = new StringWriter();
-			JAXBContext ctx = JAXBContext.newInstance("org.graphdrawing.graphml.xmlns");
-
+			JAXBContext ctx = JAXBContext
+					.newInstance("org.graphdrawing.graphml");
 			Marshaller marshaller = ctx.createMarshaller();
 
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.marshal(je, sw);
+			marshaller.marshal(graphmlType, sw);
 
 			return sw.toString();
 		} catch (Exception e) {
