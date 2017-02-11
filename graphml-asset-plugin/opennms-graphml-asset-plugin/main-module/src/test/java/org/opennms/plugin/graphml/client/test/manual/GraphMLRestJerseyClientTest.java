@@ -77,9 +77,9 @@ public class GraphMLRestJerseyClientTest {
 	@Test
 	public void testsInOrder(){
 		LOG.debug("testsInOrder() START");
-				
+		readTestGraph();	
 		//testCreateGraph();
-		testGetGraph(); 
+		//testGetGraph(); 
 		//testDeleteGraph();
 		LOG.debug("testsInOrder() FINISH");
 	}

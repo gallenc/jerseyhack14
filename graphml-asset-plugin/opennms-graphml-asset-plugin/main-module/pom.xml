@@ -25,7 +25,8 @@
             <!-- org.apache.felix.service.command, -->
             <!-- * -->
             <!-- </Import-Package> -->
-            <Export-Package>org.opennms.plugins.graphml</Export-Package>
+            <Export-Package>org.opennms.plugins.graphml.*</Export-Package>
+            <Private-Package>org.graphdrawing.graphml.xmlns.*</Private-Package>
           </instructions>
         </configuration>
       </plugin>

@@ -1,9 +1,9 @@
-## OpenNMS Elasticsearch 2 ReST Plugin
+## OpenNMS GraphML Asset Plugin
 
 ### Maven Project
 ~~~~
 project groupId: org.opennms.plugins
-project name:    opennms-es-rest
+project name:    opennms-graphml-asset-plugin
 version:         19.0.0-SNAPSHOT
 ~~~~
 

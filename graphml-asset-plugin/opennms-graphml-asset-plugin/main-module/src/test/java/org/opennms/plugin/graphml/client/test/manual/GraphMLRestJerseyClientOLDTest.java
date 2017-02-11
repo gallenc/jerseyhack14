@@ -14,7 +14,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.graphdrawing.graphml.GraphmlType;
 import org.junit.Test;
-import org.opennms.plugins.graphml.client.GraphMLRestJerseyClientOLD;
+import org.opennms.graphml.client.GraphMLRestJerseyClientOLD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

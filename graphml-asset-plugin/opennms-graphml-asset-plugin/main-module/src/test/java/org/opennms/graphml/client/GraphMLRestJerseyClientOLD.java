@@ -26,11 +26,12 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.plugins.graphml.client;
+package org.opennms.graphml.client;
 
 import javax.ws.rs.core.MediaType;
 
 import org.graphdrawing.graphml.GraphmlType;
+import org.opennms.plugins.graphml.client.GraphmlClientException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
