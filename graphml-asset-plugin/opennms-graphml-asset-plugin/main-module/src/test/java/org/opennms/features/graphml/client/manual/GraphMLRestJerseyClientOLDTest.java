@@ -1,4 +1,4 @@
-package org.opennms.plugin.graphml.client.test.manual;
+package org.opennms.features.graphml.client.manual;
 
 import static org.junit.Assert.*;
 
@@ -14,7 +14,7 @@ import javax.xml.bind.Unmarshaller;
 
 import org.graphdrawing.graphml.GraphmlType;
 import org.junit.Test;
-import org.opennms.graphml.client.GraphMLRestJerseyClientOLD;
+import org.opennms.features.graphml.client.GraphMLRestJerseyClientOLD;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

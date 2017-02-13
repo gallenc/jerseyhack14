@@ -28,7 +28,7 @@ public class NodeInfoRepository {
 	 * Map of Maps of node parameters which is populated by populateBodyWithNodeInfo
 	 * nodeKey is a unique identifier for the node from nodeid and/or node foreignsource or foreignid
 	 * node_parameterKey is the parameter name e.g. foreignsource or foreignid
-	 * node_parameterValue is the paramter value for the given key
+	 * node_parameterValue is the parameter value for the given key
 	 * Map<nodeKey,Map<node_parameterKey,node_parameterValue>> nodeInfo
 	 */
 	private Map<String,Map<String,String>> nodeInfo = Collections.synchronizedMap(new LinkedHashMap<String, Map<String, String>>());
@@ -147,13 +147,13 @@ public class NodeInfoRepository {
 	 * @param node the node object
 	 */
 	private void populateNodeParametersWithNodeInfo(Map<String,String> nodeParameters, OnmsNode node) {
-		nodeParameters.put("node-nodelabel", node.getLabel());
-		nodeParameters.put("node-nodeid", node.getNodeId());
-		nodeParameters.put("node-foreignsource", node.getForeignSource());
-		nodeParameters.put("node-foreignid", node.getForeignId());
-		nodeParameters.put("node-nodesysname", node.getSysName());
-		nodeParameters.put("node-nodesyslocation", node.getSysLocation());
-		nodeParameters.put("node-operatingsystem", node.getOperatingSystem());
+		nodeParameters.put(NodeParamLabels.NODE_NODELABEL, node.getLabel());
+		nodeParameters.put(NodeParamLabels.NODE_NODEID, node.getNodeId());
+		nodeParameters.put(NodeParamLabels.NODE_FOREIGNSOURCE, node.getForeignSource());
+		nodeParameters.put(NodeParamLabels.NODE_FOREIGNID, node.getForeignId());
+		nodeParameters.put(NodeParamLabels.NODE_NODESYSNAME, node.getSysName());
+		nodeParameters.put(NodeParamLabels.NODE_NODESYSLOCATION, node.getSysLocation());
+		nodeParameters.put(NodeParamLabels.NODE_OPERATINGSYSTEM, node.getOperatingSystem());
 
 		StringBuilder categories=new StringBuilder();
 		for (Iterator<OnmsCategory> i=node.getCategories().iterator();i.hasNext();) {
@@ -162,15 +162,15 @@ public class NodeInfoRepository {
 				categories.append(",");
 			}
 		}
-		nodeParameters.put("node-categories", categories.toString());
+		nodeParameters.put(NodeParamLabels.NODE_CATEGORIES, categories.toString());
 
 		// parent information
 		OnmsNode parent = node.getParent();
 		if (parent!=null){
-			nodeParameters.put("parent-nodelabel", parent.getLabel());
-			nodeParameters.put("parent-nodeid", parent.getNodeId());
-			nodeParameters.put("parent-foreignsource", parent.getForeignSource());
-			nodeParameters.put("parent-foreignid", parent.getForeignId());
+			nodeParameters.put(NodeParamLabels.PARENT_NODELABEL, parent.getLabel());
+			nodeParameters.put(NodeParamLabels.PARENT_NODEID, parent.getNodeId());
+			nodeParameters.put(NodeParamLabels.PARENT_FOREIGNSOURCE, parent.getForeignSource());
+			nodeParameters.put(NodeParamLabels.PARENT_FOREIGNID, parent.getForeignId());
 		}
 
 		//assetRecord.
@@ -180,41 +180,41 @@ public class NodeInfoRepository {
 			//geolocation
 			OnmsGeolocation gl = assetRecord.getGeolocation();
 			if (gl !=null){
-				nodeParameters.put("asset-country", gl.getCountry());
-				nodeParameters.put("asset-address1", gl.getAddress1());
-				nodeParameters.put("asset-address2", gl.getAddress2());
-				nodeParameters.put("asset-city", gl.getCity());
-				nodeParameters.put("asset-zip", gl.getZip());
-				nodeParameters.put("asset-state", gl.getState());
-				nodeParameters.put("asset-latitude", (gl.getLatitude()!=null ? gl.getLatitude().toString() : null));
-				nodeParameters.put("asset-longitude", (gl.getLongitude()!=null ? gl.getLongitude().toString() : null));
+				nodeParameters.put(NodeParamLabels.ASSET_COUNTRY, gl.getCountry());
+				nodeParameters.put(NodeParamLabels.ASSET_ADDRESS1, gl.getAddress1());
+				nodeParameters.put(NodeParamLabels.ASSET_ADDRESS2, gl.getAddress2());
+				nodeParameters.put(NodeParamLabels.ASSET_CITY, gl.getCity());
+				nodeParameters.put(NodeParamLabels.ASSET_ZIP, gl.getZip());
+				nodeParameters.put(NodeParamLabels.ASSET_STATE, gl.getState());
+				nodeParameters.put(NodeParamLabels.ASSET_LATITUDE, (gl.getLatitude()!=null ? gl.getLatitude().toString() : null));
+				nodeParameters.put(NodeParamLabels.ASSET_LONGITUDE, (gl.getLongitude()!=null ? gl.getLongitude().toString() : null));
 			}
 
 			//assetRecord
-			nodeParameters.put("asset-region", assetRecord.getRegion());
-			nodeParameters.put("asset-division", assetRecord.getDivision());
-			nodeParameters.put("asset-department", assetRecord.getDepartment());
-			nodeParameters.put("asset-building", assetRecord.getBuilding());
-			nodeParameters.put("asset-floor", assetRecord.getFloor());
-			nodeParameters.put("asset-room",  assetRecord.getRoom());
-			nodeParameters.put("asset-rack", assetRecord.getRack());
-			nodeParameters.put("asset-slot", assetRecord.getSlot());
-			nodeParameters.put("asset-port", assetRecord.getPort());
-			nodeParameters.put("asset-circuitid", assetRecord.getCircuitId());
+			nodeParameters.put(NodeParamLabels.ASSET_REGION, assetRecord.getRegion());
+			nodeParameters.put(NodeParamLabels.ASSET_DIVISION, assetRecord.getDivision());
+			nodeParameters.put(NodeParamLabels.ASSET_DEPARTMENT, assetRecord.getDepartment());
+			nodeParameters.put(NodeParamLabels.ASSET_BUILDING, assetRecord.getBuilding());
+			nodeParameters.put(NodeParamLabels.ASSET_FLOOR, assetRecord.getFloor());
+			nodeParameters.put(NodeParamLabels.ASSET_ROOM,  assetRecord.getRoom());
+			nodeParameters.put(NodeParamLabels.ASSET_RACK, assetRecord.getRack());
+			nodeParameters.put(NodeParamLabels.ASSET_SLOT, assetRecord.getSlot());
+			nodeParameters.put(NodeParamLabels.ASSET_PORT, assetRecord.getPort());
+			nodeParameters.put(NodeParamLabels.ASSET_CIRCUITID, assetRecord.getCircuitId());
 
-			nodeParameters.put("asset-category", assetRecord.getCategory());
-			nodeParameters.put("asset-displaycategory", assetRecord.getDisplayCategory());
-			nodeParameters.put("asset-notifycategory", assetRecord.getNotifyCategory());
-			nodeParameters.put("asset-pollercategory", assetRecord.getPollerCategory());
-			nodeParameters.put("asset-thresholdcategory", assetRecord.getThresholdCategory());
-			nodeParameters.put("asset-managedobjecttype", assetRecord.getManagedObjectType());
-			nodeParameters.put("asset-managedobjectinstance", assetRecord.getManagedObjectInstance());
+			nodeParameters.put(NodeParamLabels.ASSET_CATEGORY, assetRecord.getCategory());
+			nodeParameters.put(NodeParamLabels.ASSET_DISPLAYCATEGORY, assetRecord.getDisplayCategory());
+			nodeParameters.put(NodeParamLabels.ASSET_NOTIFYCATEGORY, assetRecord.getNotifyCategory());
+			nodeParameters.put(NodeParamLabels.ASSET_POLLERCATEGORY, assetRecord.getPollerCategory());
+			nodeParameters.put(NodeParamLabels.ASSET_THRESHOLDCATEGORY, assetRecord.getThresholdCategory());
+			nodeParameters.put(NodeParamLabels.ASSET_MANAGEDOBJECTTYPE, assetRecord.getManagedObjectType());
+			nodeParameters.put(NodeParamLabels.ASSET_MANAGEDOBJECTINSTANCE, assetRecord.getManagedObjectInstance());
 
-			nodeParameters.put("asset-manufacturer", assetRecord.getManufacturer());
-			nodeParameters.put("asset-vendor", assetRecord.getVendor());
-			nodeParameters.put("asset-modelnumber", assetRecord.getModelNumber());
-			nodeParameters.put("asset-description", assetRecord.getDescription());
-			nodeParameters.put("asset-operatingsystem", assetRecord.getOperatingSystem()); 
+			nodeParameters.put(NodeParamLabels.ASSET_MANUFACTURER, assetRecord.getManufacturer());
+			nodeParameters.put(NodeParamLabels.ASSET_VENDOR, assetRecord.getVendor());
+			nodeParameters.put(NodeParamLabels.ASSET_MODELNUMBER, assetRecord.getModelNumber());
+			nodeParameters.put(NodeParamLabels.ASSET_DESCRIPTION, assetRecord.getDescription());
+			nodeParameters.put(NodeParamLabels.ASSET_OPERATINGSYSTEM, assetRecord.getOperatingSystem()); 
 
 
 			/*not used or depreciated*/

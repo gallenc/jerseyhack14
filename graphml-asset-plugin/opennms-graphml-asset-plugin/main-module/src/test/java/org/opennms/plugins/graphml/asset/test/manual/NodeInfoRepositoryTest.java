@@ -25,28 +25,38 @@ public class NodeInfoRepositoryTest {
 
 	@Test
 	public void test() {
-		
+
+		NodeInfoRepository nir = getMockNodeInfoRepository();
+
+		LOG.debug(nir.nodeInfoToString());
+
+	}
+
+	/**
+	 * utility to create mock node info repository
+	 * @param id
+	 * @return
+	 */
+	public static NodeInfoRepository getMockNodeInfoRepository(){
 		List<OnmsNode> nodeList= new ArrayList<OnmsNode>();
-		
+
 		for( int id = 0;id<10;id++){
 			OnmsNode n =createNode(id);
 			nodeList.add(n);
 		}
-		
+
 		NodeInfoRepository nir= new NodeInfoRepository();
 		nir.initialiseNodeInfoFromNodeList(nodeList);
-		
-		LOG.debug(nir.nodeInfoToString());
-		
+		return nir;
 	}
-	
+
 	/**
 	 * utility to create unique node with id
 	 * @param id
 	 * @return
 	 */
-	public OnmsNode createNode(int id){
-	
+	public static OnmsNode createNode(int id){
+
 		OnmsNode node = new OnmsNode();
 
 		node.setLabel("node-nodelabel_"+id);

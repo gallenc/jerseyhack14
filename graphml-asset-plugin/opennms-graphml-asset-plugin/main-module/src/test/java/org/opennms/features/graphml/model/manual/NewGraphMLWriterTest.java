@@ -1,4 +1,4 @@
-package org.opennms.plugins.graphml.asset.test.manual;
+package org.opennms.features.graphml.model.manual;
 
 import java.io.File;
 import java.io.FileInputStream;

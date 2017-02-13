@@ -26,7 +26,7 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.graphml.client;
+package org.opennms.features.graphml.client;
 
 import javax.ws.rs.core.MediaType;
 
