@@ -31,6 +31,16 @@ public class GraphMLRestJerseyClientTest {
 	private String graphname="testgraph1";
 
 	GraphMLRestJerseyClient client = null;
+	
+	@Test
+	public void testsInOrder(){
+		LOG.debug("testsInOrder() START");
+		readTestGraph();	
+		//testCreateGraph();
+		//testGetGraph(); 
+		//testDeleteGraph();
+		LOG.debug("testsInOrder() FINISH");
+	}
 
 	private GraphMLRestJerseyClient getClient(){
 		GraphMLRestJerseyClient client = new GraphMLRestJerseyClient();
@@ -41,10 +51,7 @@ public class GraphMLRestJerseyClientTest {
 		return client;
 	}
 	
-	//@Test
-	public void testMarshaller(){
-		readTestGraph();
-	}
+
 
 	private GraphmlType readTestGraph(){
 		File graphmlfile = new File("./src/test/resources/test-graph.xml");
@@ -74,15 +81,7 @@ public class GraphMLRestJerseyClientTest {
 		return graph;
 	}
 	
-	@Test
-	public void testsInOrder(){
-		LOG.debug("testsInOrder() START");
-		readTestGraph();	
-		//testCreateGraph();
-		//testGetGraph(); 
-		//testDeleteGraph();
-		LOG.debug("testsInOrder() FINISH");
-	}
+
 
 	//@Test
 	public void testCreateGraph() {

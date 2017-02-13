@@ -17,6 +17,7 @@ import org.opennms.netmgt.events.api.EventIpcManager;
 import org.opennms.netmgt.events.api.EventListener;
 import org.opennms.netmgt.xml.event.Event;
 import org.opennms.netmgt.xml.event.Parm;
+import org.opennms.plugins.graphml.client.GraphMLRestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -24,8 +25,8 @@ import org.springframework.util.Assert;
 public class AssetPluginController  implements EventListener{
 
 	public static final String ASSET_TOPOLOGY_FOLDER = "etc/assettopology/";
-	public static final String ASSET_TOPOLOGY_FILE = "AssetTopologyFile.xml"; //TODO WILL BE XML
-	public static final String ASSET_TOPOLOGY_FILE_TMP = "AssetTopologyFile.txt"; //TODO WILL BE XML
+	public static final String ASSET_TOPOLOGY_FILE = "AssetTopologyFile.xml"; 
+	public static final String ASSET_LIST_FILE = "AssetListFile.txt"; //for debugging
 	public static final String ASSET_TOPOLOGY_NAME="assetTopology";
 
 	public static final String CREATE_ASSET_TOPOLOGY = "uei.opennms.plugins/assettopology/create"; 
@@ -35,6 +36,10 @@ public class AssetPluginController  implements EventListener{
 	private static final Logger LOG = LoggerFactory.getLogger(AssetPluginController.class);
 
 	private NodeInfoRepository nodeInfoRepository=null;
+	
+	private AssetTopologyMapper assetTopologyMapper=null;
+	
+	private GraphMLRestClient graphMLRestClient=null;
 
 	private EventIpcManager eventIpcManager=null;
 
@@ -45,6 +50,14 @@ public class AssetPluginController  implements EventListener{
 	public void setNodeInfoRepository(NodeInfoRepository nodeInfoRepository) {
 		this.nodeInfoRepository = nodeInfoRepository;
 	}
+	
+	public GraphMLRestClient getGraphMLRestClient() {
+		return graphMLRestClient;
+	}
+
+	public void setGraphMLRestClient(GraphMLRestClient graphMLRestClient) {
+		this.graphMLRestClient = graphMLRestClient;
+	}
 
 	public EventIpcManager getEventIpcManager() {
 		return eventIpcManager;
@@ -52,6 +65,16 @@ public class AssetPluginController  implements EventListener{
 
 	public void setEventIpcManager(EventIpcManager eventIpcManager) {
 		this.eventIpcManager = eventIpcManager;
+	}
+	
+
+	public AssetTopologyMapper getAssetTopologyMapper() {
+		return assetTopologyMapper;
+	}
+
+
+	public void setAssetTopologyMapper(AssetTopologyMapper assetTopologyMapper) {
+		this.assetTopologyMapper = assetTopologyMapper;
 	}
 
 	public void init() {
@@ -82,7 +105,7 @@ public class AssetPluginController  implements EventListener{
 		}
 	}
 
-	private String readTopologyFileFromDisk(String topologyFilename){
+	private GraphmlType readTopologyFileFromDisk(String topologyFilename){
 		File topologyFolder = new File(ASSET_TOPOLOGY_FOLDER);
 		File graphmlfile = new File(topologyFolder, topologyFilename);
 		LOG.info("reading from file:"+graphmlfile.getAbsolutePath());
@@ -96,7 +119,8 @@ public class AssetPluginController  implements EventListener{
 			Unmarshaller jaxbUnmarshaller = ctx.createUnmarshaller();
 			jaxbgraph =  (JAXBElement<GraphmlType>) jaxbUnmarshaller.unmarshal(graphmlfile);
 			graph = jaxbgraph.getValue();
-			return graphmlTypeToString(graph);
+			//return graphmlTypeToString(graph);
+			return graph;
 		} catch (JAXBException e) {
 			// TODO Auto-generated catch block
 			LOG.error("problem reading file:"+graphmlfile.getAbsolutePath(),e);
@@ -130,18 +154,27 @@ public class AssetPluginController  implements EventListener{
 	@Override
 	public void onEvent(final Event event) {
 		if(event==null) throw new RuntimeException("onEvent(event) event must not be null");
+		if(graphMLRestClient==null) throw new RuntimeException("graphMLRestClient must not be null");
+		
 		if(CREATE_ASSET_TOPOLOGY.equals(event.getUei())){
 			LOG.info("CREATE_ASSET_TOPOLOGY event received. Creating topology file from Node Database");
 
 			nodeInfoRepository.initialiseNodeInfo();
 			LOG.info("Asset Topology Plugin loaded node info ");
-			writeTopologyFileToDisk(nodeInfoRepository.nodeInfoToString(), ASSET_TOPOLOGY_FILE_TMP);
+			writeTopologyFileToDisk(nodeInfoRepository.nodeInfoToString(), ASSET_LIST_FILE);
+			
+			GraphmlType graph = assetTopologyMapper.nodeInfoToTopology(nodeInfoRepository);
+			
+			String assetTopologyStr = graphmlTypeToString(graph);
+			
+			writeTopologyFileToDisk(assetTopologyStr, ASSET_TOPOLOGY_FILE);
+
 
 		}else if(INSTALL_ASSET_TOPOLOGY.equals(event.getUei())){
-			Parm topFileNameParm=event.getParm("topologyFilename");
+			Parm topologyFileNameParm=event.getParm("topologyFilename");
 			String topologyFilename=ASSET_TOPOLOGY_FILE;
-			if(topFileNameParm!=null){
-				topologyFilename = topFileNameParm.getValue().getContent();
+			if(topologyFileNameParm!=null){
+				topologyFilename = topologyFileNameParm.getValue().getContent();
 			}
 			Parm topologyNameParm=event.getParm("topologyName");
 			String topologyName=ASSET_TOPOLOGY_NAME;
@@ -150,9 +183,12 @@ public class AssetPluginController  implements EventListener{
 			}
 			LOG.info("INSTALL_ASSET_TOPOLOGY event received. Installing topology topologyFilename="+topologyFilename+" topologyName="+topologyName);
 			try{
-				String readFile = readTopologyFileFromDisk(topologyFilename);
-				LOG.info("topology:"+readFile);
-				//TODO push file to opennms
+				GraphmlType graph = readTopologyFileFromDisk(topologyFilename);
+				LOG.debug("topology to install topology:"+graphmlTypeToString(graph));
+
+				//post file to opennms
+				graphMLRestClient.createGraph(topologyName, graph);
+
 			} catch (Exception e){
 				LOG.error("INSTALL_ASSET_TOPOLOGY event received. unable to install topologyFilename="+topologyFilename+" topologyName="+topologyName, e);
 			}
@@ -164,9 +200,11 @@ public class AssetPluginController  implements EventListener{
 				topologyName = topologyNameParm.getValue().getContent();
 			}
 			LOG.info("UNINSTALL_ASSET_TOPOLOGY event received. Uninstalling topologyName="+topologyName);
-
-			//TODO read file from opennms
-
+			try{
+			graphMLRestClient.deleteGraph(topologyName);
+			} catch (Exception e){
+				LOG.error("UNINSTALL_ASSET_TOPOLOGY event received. unable to uninstall  topologyName="+topologyName, e);
+			}
 		}
 
 	}
@@ -200,6 +238,8 @@ public class AssetPluginController  implements EventListener{
 		}
 		return null;
 	}
+
+
 
 
 }

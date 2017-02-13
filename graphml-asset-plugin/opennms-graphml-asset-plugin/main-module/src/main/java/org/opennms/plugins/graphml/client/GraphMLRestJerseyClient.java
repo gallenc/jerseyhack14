@@ -50,17 +50,18 @@ import com.sun.jersey.api.client.filter.HTTPBasicAuthFilter;
  * @author admin
  *
  */
-public class GraphMLRestJerseyClient {
+public class GraphMLRestJerseyClient implements GraphMLRestClient {
 	private static final Logger LOG = LoggerFactory.getLogger(GraphMLRestJerseyClient.class);
 
 	private String baseUrl = "http://localhost:8980";
 	private String basePath = "/opennms/rest";
-	private String userName = null; // If userName is null no basic authentication is generated
+	private String userName = null; // If userName is null or empty no basic authentication is generated
 	private String password = "";
 
 	/**
 	 * @return the userName
 	 */
+	@Override
 	public String getUserName() {
 		return userName;
 	}
@@ -70,6 +71,7 @@ public class GraphMLRestJerseyClient {
 	 * If userName is null then no basic authentication is generated
 	 * @param userName the userName to set
 	 */
+	@Override
 	public void setUserName(String userName) {
 		this.userName = userName;
 	}
@@ -77,6 +79,7 @@ public class GraphMLRestJerseyClient {
 	/**
 	 * @return the password
 	 */
+	@Override
 	public String getPassword() {
 		return password;
 	}
@@ -86,6 +89,7 @@ public class GraphMLRestJerseyClient {
 	 * password must not be set to null but if not set, password will default to empty string "".
 	 * @param password the password to set
 	 */
+	@Override
 	public void setPassword(String password) {
 		if (password==null) throw new RuntimeException("password must not be set to null");
 		this.password = password;
@@ -95,6 +99,7 @@ public class GraphMLRestJerseyClient {
 	 * base URL of service as http://HOSTNAME:PORT e.g http://localhost:8181
 	 * @return baseUrl
 	 */
+	@Override
 	public String getBaseUrl() {
 		return baseUrl;
 	}
@@ -103,15 +108,17 @@ public class GraphMLRestJerseyClient {
 	 * base URL of service as http://HOSTNAME:PORT/ e.g http://localhost:8181
 	 * @param baseUrl
 	 */
+	@Override
 	public void setBaseUrl(String baseUrl) {
 		this.baseUrl = baseUrl;
 	}
 
 	/**
 	 * base path of service starting with '/' such that service is accessed using baseUrl/basePath... 
-	 * e.g http://localhost:8181/featuremgr
+	 * e.g http://localhost:8181/opennms/rest
 	 * @return basePath
 	 */
+	@Override
 	public String getBasePath() {
 		return basePath;
 	}
@@ -121,13 +128,14 @@ public class GraphMLRestJerseyClient {
 	 * e.g http://localhost:8181/featuremgr
 	 * @return basePath
 	 */
+	@Override
 	public void setBasePath(String basePath) {
 		this.basePath = basePath;
 	}
 
 	private Client newClient(){
 		Client client = Client.create();
-		if (userName!=null) client.addFilter(new HTTPBasicAuthFilter(userName, password));
+		if (userName!=null && ! "".equals(userName)) client.addFilter(new HTTPBasicAuthFilter(userName, password));
 		return  client;
 	}
 
@@ -137,6 +145,7 @@ public class GraphMLRestJerseyClient {
 	 * @param graphmlType
 	 * @throws GraphmlClientException if graph cannot be created or connectivity fails
 	 */
+	@Override
 	public void createGraph(String graphname, GraphmlType graphmlType) throws GraphmlClientException {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(graphmlType==null ) throw new RuntimeException("graphmlType must be set");
@@ -152,13 +161,11 @@ public class GraphMLRestJerseyClient {
 		// POST method
 		ClientResponse response=null;
 		try{
-			LOG.debug("creating Graph from url="+urlStr);
+			LOG.info("creating Graph from url="+urlStr);
 			// Marshal graphmlType
 			ObjectFactory objectFactory = new ObjectFactory();
 			JAXBElement<GraphmlType> je =  objectFactory.createGraphml(graphmlType);
-			response = r
-					.type(MediaType.APPLICATION_XML)
-					.post(ClientResponse.class, je);
+			response = r.type(MediaType.APPLICATION_XML).post(ClientResponse.class, je);
 		}
 		catch(Exception e){
 			throw new GraphmlClientException("error creating new graph graphname="+graphname, e);
@@ -177,6 +184,7 @@ public class GraphMLRestJerseyClient {
 	 * @param graphname
 	 * @throws GraphmlClientException
 	 */
+	@Override
 	public void deleteGraph(String graphname) throws GraphmlClientException {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(graphname==null || "".equals(graphname)) throw new RuntimeException("graphname must be set");
@@ -192,7 +200,7 @@ public class GraphMLRestJerseyClient {
 		// DELETE method
 		ClientResponse response=null;
 		try{
-			LOG.debug("deleting Graph from url="+urlStr);
+			LOG.info("deleting Graph from url="+urlStr);
 			response = r
 					.type(MediaType.APPLICATION_XML)
 					.delete(ClientResponse.class);
@@ -215,6 +223,7 @@ public class GraphMLRestJerseyClient {
 	 * @return
 	 * @throws GraphmlClientException
 	 */
+	@Override
 	public GraphmlType getGraph( String graphname)  throws GraphmlClientException {
 		if(baseUrl==null || basePath==null) throw new RuntimeException("basePath and baseUrl must both be set");
 		if(graphname==null || "".equals(graphname)) throw new RuntimeException("graphname must be set");
@@ -232,7 +241,7 @@ public class GraphMLRestJerseyClient {
 		// GET method
 		ClientResponse response=null;
 		try{
-			LOG.debug("getting Graph from url="+urlStr);
+			LOG.info("getting Graph from url="+urlStr);
 			response = r.accept(MediaType.APPLICATION_XML)
 					.type(MediaType.APPLICATION_XML)
 					.get(ClientResponse.class);
@@ -254,7 +263,8 @@ public class GraphMLRestJerseyClient {
 			 
 			 LOG.debug("received xml string:"+xmlStr);
 			 
-			 JAXBContext ctx = JAXBContext.newInstance("org.graphdrawing.graphml.xmlns");
+			 //JAXBContext ctx = JAXBContext.newInstance("org.graphdrawing.graphml.xmlns");
+			 JAXBContext ctx = JAXBContext.newInstance(ObjectFactory.class);
 				Unmarshaller jaxbUnmarshaller = ctx.createUnmarshaller();
 				JAXBElement<GraphmlType> jaxbgraph =  (JAXBElement<GraphmlType>) jaxbUnmarshaller.unmarshal(reader);
 			
