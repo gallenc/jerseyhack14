@@ -11,5 +11,7 @@ public interface GraphMLKeyNames {
 	public static final String FOREIGN_SOURCE = "foreignSource";
 	public static final String FOREIGN_ID = "foreignID";
 	public static final String NODE_ID = "nodeID";
+	public static final String BREADCRUMB_STRATEGY = "breadcrumb-strategy";
+
 
 }

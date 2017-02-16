@@ -42,7 +42,17 @@
     <property name="password" value="${password}" />
   </bean>
   
-  <bean id="assetTopologyMapper" class="org.opennms.plugins.graphml.asset.AssetTopologyMapperImpl" />
+  <bean id="assetTopologyMapper" class="org.opennms.plugins.graphml.asset.AssetTopologyMapperImpl" >
+  <property name="layerHierarchy">
+        <list>
+        <value>asset-address1</value>
+        <value>asset-address2</value>
+<!--             <value>asset-region</value> -->
+<!--             <value>asset-building</value> -->
+<!--             <value>asset-rack</value> -->
+        </list>
+    </property>
+  </bean>
   
   <bean id="assetPluginController" class="org.opennms.plugins.graphml.asset.AssetPluginController" init-method="init" destroy-method="destroy">
     <property name="eventIpcManager" ref="eventIpcManager" />

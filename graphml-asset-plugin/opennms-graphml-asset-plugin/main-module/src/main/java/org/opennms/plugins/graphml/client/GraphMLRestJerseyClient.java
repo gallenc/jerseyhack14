@@ -28,6 +28,8 @@
 
 package org.opennms.plugins.graphml.client;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 
 import javax.ws.rs.core.MediaType;
@@ -173,8 +175,14 @@ public class GraphMLRestJerseyClient implements GraphMLRestClient {
 
 		// check response status code and reply error message
 		if (response.getStatus() != 201) { // 201 created
+			java.util.Scanner s = new java.util.Scanner(response.getEntityInputStream()).useDelimiter("\\A");
+			String errorStr =  s.hasNext() ? s.next() : "";
+			s.close();
+
 			throw new GraphmlClientException("error creating new graph graphname="+graphname
-					+ " response status="+response.getStatus());
+					+ " response status="+response.getStatus()
+					+ " response reason="+response.getStatusInfo().getReasonPhrase()
+					+ " response content="+errorStr);
 		}
 
 	}
@@ -211,8 +219,14 @@ public class GraphMLRestJerseyClient implements GraphMLRestClient {
 
 		// check response status code and reply error message
 		if (response.getStatus() != 200) {
+			java.util.Scanner s = new java.util.Scanner(response.getEntityInputStream()).useDelimiter("\\A");
+			String errorStr =  s.hasNext() ? s.next() : "";
+			s.close();
+
 			throw new GraphmlClientException("error deleting graph graphname="+graphname
-					+ " response status="+response.getStatus());
+					+ " response status="+response.getStatus()
+					+ " response reason="+response.getStatusInfo().getReasonPhrase()
+					+ " response content="+errorStr);
 		}
 
 	}
@@ -252,23 +266,31 @@ public class GraphMLRestJerseyClient implements GraphMLRestClient {
 
 		// check response status code and reply error message
 		if (response.getStatus() != 200) {
-			return null;
+			java.util.Scanner s = new java.util.Scanner(response.getEntityInputStream()).useDelimiter("\\A");
+			String errorStr =  s.hasNext() ? s.next() : "";
+			s.close();
+
+			throw new GraphmlClientException("error getting graph graphname="+graphname
+					+ " response status="+response.getStatus()
+					+ " response reason="+response.getStatusInfo().getReasonPhrase()
+					+ " response content="+errorStr);
 		}
-		
+
 		try{
-			
-			 java.util.Scanner s = new java.util.Scanner(response.getEntityInputStream()).useDelimiter("\\A");
-			 String xmlStr =  s.hasNext() ? s.next() : "";
-			 StringReader reader = new StringReader(xmlStr);
-			 
-			 LOG.debug("received xml string:"+xmlStr);
-			 
-			 //JAXBContext ctx = JAXBContext.newInstance("org.graphdrawing.graphml.xmlns");
-			 JAXBContext ctx = JAXBContext.newInstance(ObjectFactory.class);
-				Unmarshaller jaxbUnmarshaller = ctx.createUnmarshaller();
-				JAXBElement<GraphmlType> jaxbgraph =  (JAXBElement<GraphmlType>) jaxbUnmarshaller.unmarshal(reader);
-			
-			
+
+			java.util.Scanner s = new java.util.Scanner(response.getEntityInputStream()).useDelimiter("\\A");
+			String xmlStr =  s.hasNext() ? s.next() : "";
+			StringReader reader = new StringReader(xmlStr);
+			s.close();
+
+			LOG.debug("received xml string:"+xmlStr);
+
+			//JAXBContext ctx = JAXBContext.newInstance("org.graphdrawing.graphml.xmlns");
+			JAXBContext ctx = JAXBContext.newInstance(ObjectFactory.class);
+			Unmarshaller jaxbUnmarshaller = ctx.createUnmarshaller();
+			JAXBElement<GraphmlType> jaxbgraph =  (JAXBElement<GraphmlType>) jaxbUnmarshaller.unmarshal(reader);
+
+
 			//JAXBElement<GraphmlType> graphmlTypeJe = (JAXBElement<GraphmlType>) response.getEntity(JAXBElement.class);
 			graphmlType = jaxbgraph.getValue();
 		}
