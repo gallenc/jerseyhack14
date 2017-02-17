@@ -4,6 +4,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +44,7 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 		this.layerHierarchy = layerHierarchy;
 	}
 
-	
+
 	//TODO REMOVE
 	public GraphmlType oldNodeInfoToTopology(NodeInfoRepository nodeInfoRepository) {
 
@@ -68,15 +69,15 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 		String menuLabelStr = "Asset Topology "+ft.format(new Date());
 
 		// print log info for graph definition
-		StringBuffer s = new StringBuffer("creating topology "+menuLabelStr+" for layerHierarchy :");
+		StringBuffer msg = new StringBuffer("creating topology "+menuLabelStr+" for layerHierarchy :");
 		if(layerHierarchy.size()==0){
-			s.append("EMPTY");
+			msg.append("EMPTY");
 		} else {
 			for(String layer:layerHierarchy){
-				s.append(layer+",");
+				msg.append(layer+",");
 			}
 		}
-		LOG.info(s.toString());
+		LOG.info(msg.toString());
 
 		GraphmlType graphmlType = createGraphML(menuLabelStr);
 
@@ -84,22 +85,26 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 
 		if (layerHierarchy.size()==0){
 			//create simple graph with all nodes if layerHierarchy is empty
+			if( LOG.isDebugEnabled()) LOG.debug("create simple graph with all nodes as layerHierarchy is empty");
+
 			GraphType graph = createGraphInGraphmlType(graphmlType, "all_nodes");
 
 			Map<String, Map<String, String>> nodeInfo = nodeInfoRepository.getNodeInfo();
 			addOpenNMSNodes(graph, nodeInfo);
 
 		} else {
-			
+
+			msg = new StringBuffer("create graphs from asset and layerHierarchy: ");
 			// create graphs for all possible layers
 			List<GraphType> graphList = new ArrayList<GraphType>();
 			for(String graphname:layerHierarchy){
 				GraphType graph = createGraphInGraphmlType(graphmlType, graphname);
 				graphList.add(graph);
+				msg.append(graphname+",");
 			}
-			
-			// create graph heirarchy according to asset table contents
+			if( LOG.isDebugEnabled()) LOG.debug(msg.toString());
 
+			// create graph hierarchy according to asset table contents
 			// used to store all nodes which have been allocated to a graph layer
 			Map<String, Map<String, String>> allocatedNodeInfo = new LinkedHashMap<String, Map<String, String>>();
 
@@ -121,89 +126,154 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 		return graphmlType;
 	}
 
-	private void recursivelyAddlayers(List<String> layerHierarchy, int layerHierarchyIndex,  Map<String, Map<String, String>> nodeInfo, Map<String, Map<String, String>> allocatedNodeInfo, GraphmlType graphmlType, List<GraphType> graphList){
+	// returns list of nodes added in the next layer for use in edges
+	private Map<String, Map<String, String>> recursivelyAddlayers(List<String> layerHierarchy, int layerHierarchyIndex,  Map<String, Map<String, String>> nodeInfo, Map<String, Map<String, String>> allocatedNodeInfo, GraphmlType graphmlType, List<GraphType> graphList){
 		if(layerHierarchy==null||layerHierarchy.size()==0 ) throw new RuntimeException("AssetTopologyMapperImpl layerHierarchy must not be null or empty");
 
-		String layerNodeParamLabel= layerHierarchy.get(layerHierarchyIndex);
+		// returns list of nodes added - either OpenNMS nodes or higher level graphs
+		Map<String, Map<String, String>> addedNodes=null;
 
-		// get graph for this layer
-		if( LOG.isDebugEnabled()) LOG.debug("populating graph for index "+layerHierarchyIndex+ " name="+layerNodeParamLabel);
-		GraphType graph = graphList.get(layerHierarchyIndex);
+		if( LOG.isDebugEnabled()) LOG.debug("recursivelyAddlayers called for layerHierarchyIndex:"+layerHierarchyIndex);
 
 		// add nodes to graph
-		if(layerHierarchyIndex>=layerHierarchy.size()-1){
+		if(layerHierarchyIndex>=layerHierarchy.size()){
+			// we are at bottom of hierarchy so add real opennms nodes and edges
+
+			//get hierarchy name for this layer
+			String layerNodeParamLabel= layerHierarchy.get(layerHierarchyIndex-1);
+
+			// get graph for this layer
+			if( LOG.isDebugEnabled()) LOG.debug("populating graph with OpenNMS nodes for layer="+layerNodeParamLabel);
+			GraphType graph = graphList.get(layerHierarchyIndex-1);
+
 			//add real opennms nodes to graph
 			addOpenNMSNodes(graph, nodeInfo);
+
 			// add these nodes to the allocated node set
 			allocatedNodeInfo.putAll(nodeInfo);
 
-			if( LOG.isDebugEnabled()){
-				StringBuffer s= new StringBuffer("adding OpenNMS nodes to graphId="+layerNodeParamLabel+ " nodes:");
-				for(String nodeId:nodeInfo.keySet()){
-					s.append(nodeId+",");
+			if (LOG.isDebugEnabled()) {
+				StringBuffer msg= new StringBuffer("adding opennms nodes to graphId="+layerNodeParamLabel+ " nodes:");
+
+				for (String targetNodeId:nodeInfo.keySet()){
+					msg.append(targetNodeId+",");
 				}
-				LOG.debug(s.toString());
 			}
+
+			addedNodes=nodeInfo;
 
 		} else {
 			// else create and add supernodes for this layer
-			// find all values corresponding to nodeParamLabel in this layer
+			if( LOG.isDebugEnabled()) LOG.debug("populating parent graph for index "+layerHierarchyIndex);
+
+			//get hierarchy name for this layer
+			String layerNodeParamLabelKey= layerHierarchy.get(layerHierarchyIndex);
+			if( LOG.isDebugEnabled()) LOG.debug("parent graph name="+layerNodeParamLabelKey);
+
+			// get graph for this layer
+			GraphType graph = graphList.get(layerHierarchyIndex);
+
+			// find all values corresponding to nodeParamLabelKey in this layer
 			Set<String> layerNodeParamLabelValues = new TreeSet<String>();
 			for (String nodeId: nodeInfo.keySet()){
-				String nodeParamLabel = nodeInfo.get(nodeId).get(layerNodeParamLabel);
-				if(nodeParamLabel!=null)layerNodeParamLabelValues.add(nodeParamLabel);
+				String nodeParamValue = nodeInfo.get(nodeId).get(layerNodeParamLabelKey);
+				if(nodeParamValue!=null){
+					layerNodeParamLabelValues.add(nodeParamValue);
+				}
 			}
 
+			if (LOG.isDebugEnabled()){
+				StringBuffer msg=new StringBuffer("values corresponding to layerNodeParamLabelKey="+layerNodeParamLabelKey+ " in this layer :");
+				for (String nodeParamValue:layerNodeParamLabelValues){
+					msg.append(nodeParamValue+",");
+				}
+				LOG.debug(msg.toString());
+			}
+
+			// create added nodes to return - with empty parameters if these are only layers and not OpenNMS nodes
+			addedNodes = new LinkedHashMap<String, Map<String, String>>();
+
 			// iterate over values in this layer
-			for (String nodeParamLabel:layerNodeParamLabelValues){
+			for (String nodeParamLabelValue:layerNodeParamLabelValues){
 
 				// create new node for each value in this layer
-				NodeType node = createNodeType(nodeParamLabel);
+				NodeType node = createNodeType(nodeParamLabelValue);
 				graph.getDataOrNodeOrEdge().add(node);
+				StringBuffer msg=new StringBuffer("created node "+nodeParamLabelValue+ " in  graphId="+layerNodeParamLabelKey);
 
-				// create sub list of nodes corresponding to param label
-				Map<String, Map<String, String>> nodeInfoSubList = createNodeInfoSubList(nodeParamLabel, nodeInfo);
-
-				if( LOG.isDebugEnabled()){
-					LOG.debug("creating node "+nodeParamLabel+ " in  graphId="+layerNodeParamLabel);
-					StringBuffer s= new StringBuffer("adding edges to graphId="+nodeParamLabel+ " edges:");
-					for(String targetNodeId:nodeInfoSubList.keySet()){
-						s.append( nodeParamLabel+"_"+targetNodeId+",");
-					}
-					LOG.debug(s.toString());
-				}
-
-				// create edge for each node in sub list
-				for (String targetNodeId:nodeInfoSubList.keySet()){
-					addEdgeToGraph(graph, nodeParamLabel, targetNodeId);
-				}
+				// create sub list of nodes corresponding to param label 
+				Map<String, Map<String, String>> nodeInfoSubList =createNodeInfoSubList(layerNodeParamLabelKey, nodeParamLabelValue, nodeInfo);
 
 				// recursively add graphs and nodes until complete
-				recursivelyAddlayers(layerHierarchy, layerHierarchyIndex++, nodeInfoSubList, allocatedNodeInfo, graphmlType, graphList );
+				int nextLayerHierarchyIndex=layerHierarchyIndex+1;
+				Map<String, Map<String, String>> nextLayerNodesAdded = recursivelyAddlayers(layerHierarchy, nextLayerHierarchyIndex, nodeInfoSubList, allocatedNodeInfo, graphmlType, graphList );
+
+				// create edge for each node in returned nextLayerNodesAdded
+				if (nextLayerHierarchyIndex<layerHierarchy.size()){
+					// if not lowest layer then add edges pointing next layers
+					msg.append("edges added for next graph layer: " );
+					for (String targetNodeId:nextLayerNodesAdded.keySet()){
+						Map<String, String> nodeParamaters = nextLayerNodesAdded.get(targetNodeId);
+						String nodeLabelStr = nodeParamaters.get(layerHierarchy.get(nextLayerHierarchyIndex));
+						EdgeType edge = addEdgeToGraph(graph, nodeParamLabelValue, nodeLabelStr);
+						msg.append(edge.getId()+",");
+						
+						// create node for added nodes with dummy params
+						Map<String, String> emptyParms= new HashMap<String, String>();
+						addedNodes.put(targetNodeId, emptyParms);
+					}
+				} else {
+					// if lowest layer then add node ids (i.e. opennms node label)
+					msg.append("edges added for opennms nodes: " );
+					for (String targetNodeId:nextLayerNodesAdded.keySet()){
+						Map<String, String> nodeParamaters = nextLayerNodesAdded.get(targetNodeId);
+						String nodeLabelStr = nodeParamaters.get(NodeParamLabels.NODE_NODELABEL);
+						EdgeType edge = addEdgeToGraph(graph, nodeParamLabelValue, nodeLabelStr);
+						msg.append(edge.getId()+",");
+						
+						// create node for added nodes with real params
+						addedNodes.put(targetNodeId, nextLayerNodesAdded.get(targetNodeId));
+					}
+				}
+
+				if( LOG.isDebugEnabled()){
+					LOG.debug(msg.toString());
+				}
+
 			}
 
 		}
+
+		return addedNodes;
 	}
 
-	private Map<String, Map<String, String>> createNodeInfoSubList(String nodeParamLabel, Map<String, Map<String, String>> nodeInfo){
+	private Map<String, Map<String, String>> createNodeInfoSubList(String nodeParamLabelKey, String nodeParamValue, Map<String, Map<String, String>> nodeInfo){
+		if(nodeParamLabelKey==null) throw new RuntimeException("createNodeInfoSubList nodeParamLabel cannot be null");
+		if(nodeParamValue==null) throw new RuntimeException("createNodeInfoSubList nodeParamValue cannot be null");
 
 		Map<String,Map<String,String>> nodeInfoSubList = new LinkedHashMap<String, Map<String, String>>();
 
+		StringBuffer msg = new StringBuffer("creating NodeInfoSubList for nodeParamLabelKey:"+nodeParamLabelKey+" nodeParamValue:"+nodeParamValue+ " sublist nodeIds:");
 		for (String nodeId:nodeInfo.keySet()){
 			Map<String, String> nodeParams = nodeInfo.get(nodeId);
-			if(nodeParams.containsKey(nodeParamLabel)){
+			if(nodeParamValue.equals(nodeParams.get(nodeParamLabelKey))){
 				nodeInfoSubList.put(nodeId, nodeParams );
+				msg.append(nodeId+",");
 			}
 		}
+		if( LOG.isDebugEnabled()) LOG.debug(msg.toString());
 		return nodeInfoSubList;
 	}
 
-	private void addEdgeToGraph(GraphType graph, String sourceIdStr, String targetIdStr){
+	private EdgeType addEdgeToGraph(GraphType graph, String sourceIdStr, String targetIdStr){
 		EdgeType edge = of.createEdgeType();
 		String id =sourceIdStr+"_"+targetIdStr;
 		edge.setId(id);
 		edge.setSource(sourceIdStr);
 		edge.setTarget(targetIdStr);
+		if( LOG.isDebugEnabled()) LOG.debug("adding edge id="+id+ " to graph:"+graph.getId());
+		graph.getDataOrNodeOrEdge().add(edge);
+		return edge;
 	}
 
 	private NodeType createNodeType(String nodeId){
@@ -232,8 +302,8 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 
 		//<data key="breadcrumb-strategy">SHORTEST_PATH_TO_ROOT</data>
 		DataType breadcrumbStrategy = of.createDataType();
-		menuLabel.setKey(GraphMLKeyNames.BREADCRUMB_STRATEGY);
-		menuLabel.setContent("SHORTEST_PATH_TO_ROOT");
+		breadcrumbStrategy.setKey(GraphMLKeyNames.BREADCRUMB_STRATEGY);
+		breadcrumbStrategy.setContent("SHORTEST_PATH_TO_ROOT");
 		graphmltype.getGraphOrData().add(breadcrumbStrategy);
 
 		return graphmltype;
@@ -244,17 +314,17 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 		// <key id="label" for="graphml" attr.name="label"
 		// attr.type="string"></key>
 		KeyType graphmlLabel = of.createKeyType();
-		graphmlLabel.setAttrName("label");
+		graphmlLabel.setAttrName(GraphMLKeyNames.LABEL);
 		graphmlLabel.setAttrType(KeyTypeType.STRING);
-		graphmlLabel.setId("label");
+		graphmlLabel.setId(GraphMLKeyNames.LABEL);
 		graphmlLabel.setFor(KeyForType.GRAPHML);
 		graphmlType.getKey().add(graphmlLabel);
 
 		// <key id="breadcrumb-strategy" for="graphml" attr.name="breadcrumb-strategy" attr.type="string" />
 		KeyType breadcrumbStrategy = of.createKeyType();
-		breadcrumbStrategy.setAttrName("label");
+		breadcrumbStrategy.setAttrName(GraphMLKeyNames.BREADCRUMB_STRATEGY);
 		breadcrumbStrategy.setAttrType(KeyTypeType.STRING);
-		breadcrumbStrategy.setId("label");
+		breadcrumbStrategy.setId(GraphMLKeyNames.BREADCRUMB_STRATEGY);
 		breadcrumbStrategy.setFor(KeyForType.GRAPHML);
 		graphmlType.getKey().add(breadcrumbStrategy);
 
