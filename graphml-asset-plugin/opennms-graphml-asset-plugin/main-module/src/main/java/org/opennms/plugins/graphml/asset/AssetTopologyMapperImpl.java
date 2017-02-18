@@ -34,7 +34,9 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 		NodeParamLabels.ASSET_BUILDING,
 		NodeParamLabels.ASSET_RACK};
 
-	List<String> layerHierarchy  = Arrays.asList(defaultHierarchy);
+	private List<String> layerHierarchy  = Arrays.asList(defaultHierarchy);
+
+	private String preferredLayout="Grid Layout";
 
 	public List<String> getLayerHierarchy() {
 		return layerHierarchy;
@@ -44,21 +46,24 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 		this.layerHierarchy = layerHierarchy;
 	}
 
+	public void setLayerHierarchyFromProperty(String layerHierarchyProperty){
+		String[] lh = layerHierarchyProperty.split(",");
+		layerHierarchy  = Arrays.asList(lh);
 
-	//TODO REMOVE
-	public GraphmlType oldNodeInfoToTopology(NodeInfoRepository nodeInfoRepository) {
+		if (LOG.isDebugEnabled()){
+			StringBuffer msg = new StringBuffer("Hierarchy loaded from property:");
+			for (String layer:layerHierarchy) msg.append(layer+",");
+			LOG.debug(msg.toString());
+		}
 
-		//create unique menu label for graph
-		SimpleDateFormat ft = new SimpleDateFormat ("E dd.MM.yyyy_hh:mm:ss");
-		String menuLabelStr = "Asset Topology "+ft.format(new Date());
-		GraphmlType graphmlType = createGraphML(menuLabelStr);
+	}
 
-		GraphType graph = createGraphInGraphmlType(graphmlType, "all_nodes");
+	public String getPreferredLayout() {
+		return preferredLayout;
+	}
 
-		Map<String, Map<String, String>> nodeInfo = nodeInfoRepository.getNodeInfo();
-		addOpenNMSNodes(graph, nodeInfo);
-
-		return graphmlType;
+	public void setPreferredLayout(String preferredLayout) {
+		this.preferredLayout = preferredLayout;
 	}
 
 	@Override
@@ -69,7 +74,7 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 		String menuLabelStr = "Asset Topology "+ft.format(new Date());
 
 		// print log info for graph definition
-		StringBuffer msg = new StringBuffer("creating topology "+menuLabelStr+" for layerHierarchy :");
+		StringBuffer msg = new StringBuffer("Creating topology "+menuLabelStr+" for layerHierarchy :");
 		if(layerHierarchy.size()==0){
 			msg.append("EMPTY");
 		} else {
@@ -85,9 +90,12 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 
 		if (layerHierarchy.size()==0){
 			//create simple graph with all nodes if layerHierarchy is empty
-			if( LOG.isDebugEnabled()) LOG.debug("create simple graph with all nodes as layerHierarchy is empty");
+			if( LOG.isDebugEnabled()) LOG.debug("creating a simple graph containing all nodes as layerHierarchy is empty");
 
-			GraphType graph = createGraphInGraphmlType(graphmlType, "all_nodes");
+			Integer semanticZoomLevel=0;
+			String graphId ="all nodes";
+			String descriptionStr="A simple graph containing all nodes created because layerHierarchy property is empty";
+			GraphType graph = createGraphInGraphmlType(graphmlType, graphId, descriptionStr, preferredLayout, semanticZoomLevel);
 
 			Map<String, Map<String, String>> nodeInfo = nodeInfoRepository.getNodeInfo();
 			addOpenNMSNodes(graph, nodeInfo);
@@ -97,14 +105,27 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 			msg = new StringBuffer("create graphs from asset and layerHierarchy: ");
 			// create graphs for all possible layers
 			List<GraphType> graphList = new ArrayList<GraphType>();
+			Integer semanticZoomLevel=0;
+
+			String descriptionStr=null;
 			for(String graphname:layerHierarchy){
-				GraphType graph = createGraphInGraphmlType(graphmlType, graphname);
+				//(GraphmlType graphmlType, String graphId, String descriptionStr, String preferredLayout, Integer semanticZoomLevelInt)
+				GraphType graph = createGraphInGraphmlType(graphmlType, graphname, descriptionStr, preferredLayout, semanticZoomLevel);
 				graphList.add(graph);
 				msg.append(graphname+",");
+				semanticZoomLevel++;
 			}
+
+			//create graph for nodes layer (last layer in hierarchy)
+			String graphname="nodes";
+			GraphType nodegraph = createGraphInGraphmlType(graphmlType, graphname, descriptionStr, preferredLayout, semanticZoomLevel);
+			graphList.add(nodegraph);
+			msg.append(graphname);
+
 			if( LOG.isDebugEnabled()) LOG.debug(msg.toString());
 
 			// create graph hierarchy according to asset table contents
+
 			// used to store all nodes which have been allocated to a graph layer
 			Map<String, Map<String, String>> allocatedNodeInfo = new LinkedHashMap<String, Map<String, String>>();
 
@@ -119,7 +140,10 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 				unAllocatedNodeInfo.remove(allocatedNodeId);
 			}
 
-			GraphType graph = createGraphInGraphmlType(graphmlType, "unallocated_Nodes");
+			graphname="unallocated_Nodes";
+			descriptionStr="A graph containing all nodes which cannot be placed in topology hierarchy";
+			semanticZoomLevel=0;
+			GraphType graph = createGraphInGraphmlType(graphmlType, graphname, descriptionStr, preferredLayout, semanticZoomLevel);
 			addOpenNMSNodes(graph, unAllocatedNodeInfo);
 		}
 
@@ -144,7 +168,7 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 
 			// get graph for this layer
 			if( LOG.isDebugEnabled()) LOG.debug("populating graph with OpenNMS nodes for layer="+layerNodeParamLabel);
-			GraphType graph = graphList.get(layerHierarchyIndex-1);
+			GraphType graph = graphList.get(layerHierarchyIndex); // this will return the nodes graph - the last  graph in graphList
 
 			//add real opennms nodes to graph
 			addOpenNMSNodes(graph, nodeInfo);
@@ -217,7 +241,7 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 						String nodeLabelStr = nodeParamaters.get(layerHierarchy.get(nextLayerHierarchyIndex));
 						EdgeType edge = addEdgeToGraph(graph, nodeParamLabelValue, nodeLabelStr);
 						msg.append(edge.getId()+",");
-						
+
 						// create node for added nodes with dummy params
 						Map<String, String> emptyParms= new HashMap<String, String>();
 						addedNodes.put(targetNodeId, emptyParms);
@@ -230,7 +254,7 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 						String nodeLabelStr = nodeParamaters.get(NodeParamLabels.NODE_NODELABEL);
 						EdgeType edge = addEdgeToGraph(graph, nodeParamLabelValue, nodeLabelStr);
 						msg.append(edge.getId()+",");
-						
+
 						// create node for added nodes with real params
 						addedNodes.put(targetNodeId, nextLayerNodesAdded.get(targetNodeId));
 					}
@@ -431,7 +455,7 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 	}
 
 
-	private GraphType createGraphInGraphmlType(GraphmlType graphmlType, String graphId) {
+	private GraphType createGraphInGraphmlType(GraphmlType graphmlType, String graphId, String descriptionStr, String preferredLayout, Integer semanticZoomLevelInt) {
 
 		// <graph id="graph1">
 		GraphType graph = of.createGraphType();
@@ -450,6 +474,30 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 		focusStrategy.setKey(GraphMLKeyNames.FOCUS_STRATEGY);
 		focusStrategy.setContent("ALL");
 		graph.getDataOrNodeOrEdge().add(focusStrategy);
+
+		// <data key="preferred-layout">Circle Layout</data>
+		if (preferredLayout!=null){
+			DataType preferredLayoutDataType = of.createDataType();
+			preferredLayoutDataType.setKey(GraphMLKeyNames.PREFERRED_LAYOUT);
+			preferredLayoutDataType.setContent(preferredLayout);
+			graph.getDataOrNodeOrEdge().add(preferredLayoutDataType);
+		}
+
+		// <data key="description">The Regions Layer.</data>
+		if(descriptionStr!=null){
+			DataType description = of.createDataType();
+			description.setKey(GraphMLKeyNames.DESCRIPTION);
+			description.setContent(descriptionStr);
+			graph.getDataOrNodeOrEdge().add(description);
+		}
+
+		// <data key="semantic-zoom-level">0</data>
+		if (semanticZoomLevelInt!=null){
+			DataType semanticZoomLevel = of.createDataType();
+			semanticZoomLevel.setKey(GraphMLKeyNames.SEMANTIC_ZOOM_LEVEL);
+			semanticZoomLevel.setContent(Integer.toString(semanticZoomLevelInt));
+			graph.getDataOrNodeOrEdge().add(semanticZoomLevel);
+		}
 
 		return graph;
 	}

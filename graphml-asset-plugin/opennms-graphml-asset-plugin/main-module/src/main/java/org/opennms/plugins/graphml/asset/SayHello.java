@@ -36,10 +36,10 @@ package org.opennms.plugins.graphml.asset;
 public class SayHello {
 	public SayHello(){
 		super();
-		System.out.println("Hello - Asset Topology Pugin started 1");
+		System.out.println("Hello - Asset Topology Pugin has started");
 	}
 	
 	public void destroyMethod(){
-		System.out.println("Goodbye - Asset Topology Pugin stopped");
+		System.out.println("Goodbye - Asset Topology Pugin has stopped");
 	}
 }

@@ -27,6 +27,7 @@ public class AssetPluginController  implements EventListener{
 	public static final String ASSET_TOPOLOGY_FOLDER = "etc/assettopology/";
 	public static final String ASSET_TOPOLOGY_FILE = "AssetTopologyFile.xml"; 
 	public static final String ASSET_LIST_FILE = "AssetListFile.txt"; //for debugging
+	public static final String ASSET_LIST_XML_FILE = "AssetListFile.xml"; //for debugging
 	public static final String ASSET_TOPOLOGY_NAME="assetTopology";
 
 	public static final String CREATE_ASSET_TOPOLOGY = "uei.opennms.plugins/assettopology/create"; 
@@ -36,12 +37,14 @@ public class AssetPluginController  implements EventListener{
 	private static final Logger LOG = LoggerFactory.getLogger(AssetPluginController.class);
 
 	private NodeInfoRepository nodeInfoRepository=null;
-	
+
 	private AssetTopologyMapper assetTopologyMapper=null;
-	
+
 	private GraphMLRestClient graphMLRestClient=null;
 
 	private EventIpcManager eventIpcManager=null;
+
+	private boolean writeAssetListDebugFile=false;
 
 	public NodeInfoRepository getNodeInfoRepository() {
 		return nodeInfoRepository;
@@ -50,7 +53,7 @@ public class AssetPluginController  implements EventListener{
 	public void setNodeInfoRepository(NodeInfoRepository nodeInfoRepository) {
 		this.nodeInfoRepository = nodeInfoRepository;
 	}
-	
+
 	public GraphMLRestClient getGraphMLRestClient() {
 		return graphMLRestClient;
 	}
@@ -66,7 +69,7 @@ public class AssetPluginController  implements EventListener{
 	public void setEventIpcManager(EventIpcManager eventIpcManager) {
 		this.eventIpcManager = eventIpcManager;
 	}
-	
+
 
 	public AssetTopologyMapper getAssetTopologyMapper() {
 		return assetTopologyMapper;
@@ -75,6 +78,14 @@ public class AssetPluginController  implements EventListener{
 
 	public void setAssetTopologyMapper(AssetTopologyMapper assetTopologyMapper) {
 		this.assetTopologyMapper = assetTopologyMapper;
+	}
+
+	public boolean getWriteAssetListDebugFile() {
+		return writeAssetListDebugFile;
+	}
+
+	public void setWriteAssetListDebugFile(boolean writeAssetListDebugFile) {
+		this.writeAssetListDebugFile = writeAssetListDebugFile;
 	}
 
 	public void init() {
@@ -91,19 +102,39 @@ public class AssetPluginController  implements EventListener{
 
 	}
 
-	private void writeTopologyFileToDisk(String topologyString, String topologyFilename){
-		File topologyFolder = new File(ASSET_TOPOLOGY_FOLDER);
-		File file = new File(topologyFolder, topologyFilename);
+
+
+	private void writeFileToDisk(String content, String filename, String filefolder ){
+		File folder = new File(filefolder);
+		File file = new File(folder, filename );
 		LOG.info("writing to file:"+file.getAbsolutePath());
+		PrintWriter writer=null;
 		try{
-			topologyFolder.mkdirs();
-			PrintWriter writer = new PrintWriter(file, "UTF-8");
-			writer.println(topologyString);
-			writer.close();
+			folder.mkdirs();
+			writer = new PrintWriter(file, "UTF-8");
+			writer.println(content);
 		} catch (IOException e) {
 			LOG.error("problem writing file:"+file.getAbsolutePath(),e);
+		}finally{
+			if (writer!=null) writer.close();
 		}
 	}
+
+
+
+	//private void writeTopologyFileToDisk(String topologyString, String topologyFilename){
+	//		File topologyFolder = new File(ASSET_TOPOLOGY_FOLDER);
+	//		File file = new File(topologyFolder, topologyFilename);
+	//		LOG.info("writing to file:"+file.getAbsolutePath());
+	//		try{
+	//			topologyFolder.mkdirs();
+	//			PrintWriter writer = new PrintWriter(file, "UTF-8");
+	//			writer.println(topologyString);
+	//			writer.close();
+	//		} catch (IOException e) {
+	//			LOG.error("problem writing file:"+file.getAbsolutePath(),e);
+	//		}
+	//	}
 
 	private GraphmlType readTopologyFileFromDisk(String topologyFilename){
 		File topologyFolder = new File(ASSET_TOPOLOGY_FOLDER);
@@ -122,7 +153,6 @@ public class AssetPluginController  implements EventListener{
 			//return graphmlTypeToString(graph);
 			return graph;
 		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
 			LOG.error("problem reading file:"+graphmlfile.getAbsolutePath(),e);
 			throw new RuntimeException("problem reading file:"+graphmlfile.getAbsolutePath(),e);
 		}
@@ -155,22 +185,30 @@ public class AssetPluginController  implements EventListener{
 	public void onEvent(final Event event) {
 		if(event==null) throw new RuntimeException("onEvent(event) event must not be null");
 		if(graphMLRestClient==null) throw new RuntimeException("graphMLRestClient must not be null");
-		
+
 		if(CREATE_ASSET_TOPOLOGY.equals(event.getUei())){
 			LOG.info("CREATE_ASSET_TOPOLOGY event received. Creating topology file from Node Database");
 
 			nodeInfoRepository.initialiseNodeInfo();
 			LOG.info("Asset Topology Plugin loaded node info ");
-			writeTopologyFileToDisk(nodeInfoRepository.nodeInfoToString(), ASSET_LIST_FILE);
+
+			if(writeAssetListDebugFile){
+				writeFileToDisk(nodeInfoRepository.nodeInfoToString(), ASSET_LIST_FILE, ASSET_TOPOLOGY_FOLDER );
+				//TODO REMOVE writeTopologyFileToDisk(nodeInfoRepository.nodeInfoToString(), ASSET_LIST_FILE);
+				//writeTopologyFileToDisk(NodeInfoRepositoryXML.nodeInfoToXML(nodeInfoRepository.getNodeInfo()), ASSET_LIST_FILE+".xml");
+				writeFileToDisk(NodeInfoRepositoryXML.nodeInfoToXML(nodeInfoRepository.getNodeInfo()), ASSET_LIST_XML_FILE, ASSET_TOPOLOGY_FOLDER );
+			}
 			
 			GraphmlType graph = assetTopologyMapper.nodeInfoToTopology(nodeInfoRepository);
-			
+
 			String assetTopologyStr = graphmlTypeToString(graph);
-			
-			writeTopologyFileToDisk(assetTopologyStr, ASSET_TOPOLOGY_FILE);
+
+			//writeTopologyFileToDisk(assetTopologyStr, ASSET_TOPOLOGY_FILE);
+
+			writeFileToDisk(assetTopologyStr, ASSET_TOPOLOGY_FILE, ASSET_TOPOLOGY_FOLDER );
 
 
-		}else if(INSTALL_ASSET_TOPOLOGY.equals(event.getUei())){
+		} else if(INSTALL_ASSET_TOPOLOGY.equals(event.getUei())){
 			Parm topologyFileNameParm=event.getParm("topologyFilename");
 			String topologyFilename=ASSET_TOPOLOGY_FILE;
 			if(topologyFileNameParm!=null){
@@ -201,7 +239,7 @@ public class AssetPluginController  implements EventListener{
 			}
 			LOG.info("UNINSTALL_ASSET_TOPOLOGY event received. Uninstalling topologyName="+topologyName);
 			try{
-			graphMLRestClient.deleteGraph(topologyName);
+				graphMLRestClient.deleteGraph(topologyName);
 			} catch (Exception e){
 				LOG.error("UNINSTALL_ASSET_TOPOLOGY event received. unable to uninstall  topologyName="+topologyName, e);
 			}

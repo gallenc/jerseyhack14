@@ -1,10 +1,19 @@
 package org.opennms.plugins.graphml.asset;
 
+import java.io.StringWriter;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElementWrapper;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlAccessType;
 
 import org.opennms.netmgt.dao.api.NodeDao;
 import org.opennms.netmgt.model.OnmsAssetRecord;
@@ -98,7 +107,7 @@ public class NodeInfoRepository {
 		// make sure nodeInfo is empty
 		clearNodeInfo();
 
-		// populate nodeinfo from supplieed nodeList information
+		// populate nodeinfo from supplied nodeList information
 		for (OnmsNode node:nodeList){
 			Map<String, String> nodeParameters = new LinkedHashMap<String, String>();
 			populateNodeParametersWithNodeInfo(nodeParameters , node);
@@ -138,6 +147,7 @@ public class NodeInfoRepository {
 		}
 		return sb.toString();
 	}
+
 
 
 	/**
