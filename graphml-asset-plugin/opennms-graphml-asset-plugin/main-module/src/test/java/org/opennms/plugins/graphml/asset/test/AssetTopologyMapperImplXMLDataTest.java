@@ -12,8 +12,8 @@ import org.graphdrawing.graphml.xmlns.GraphmlType;
 import org.junit.Test;
 import org.opennms.plugins.graphml.asset.AssetTopologyMapperImpl;
 import org.opennms.plugins.graphml.asset.NodeInfoRepository;
-import org.opennms.plugins.graphml.asset.NodeInfoRepositoryXML;
 import org.opennms.plugins.graphml.asset.Utils;
+import org.opennms.plugins.graphml.asset.xml.NodeInfoRepositoryXML;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
