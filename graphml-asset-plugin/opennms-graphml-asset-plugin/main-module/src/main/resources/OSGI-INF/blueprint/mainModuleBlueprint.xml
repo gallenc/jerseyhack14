@@ -16,7 +16,7 @@
   </bean>
 
   <!-- Configuration properties -->
-  <cm:property-placeholder id="assetPluginConfigProperties" persistent-id="org.opennms.plugin.graphml.asset" update-strategy="reload">
+  <cm:property-placeholder id="assetPluginConfigProperties" persistent-id="org.opennms.plugins.graphml.asset" update-strategy="reload">
     <cm:default-properties>
       <cm:property name="baseUrl" value="http://localhost:8980" />
       <cm:property name="basePath" value="/opennms/rest" />

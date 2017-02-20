@@ -23,6 +23,7 @@ public class AssetTopologyMapperImplTest {
 		NodeInfoRepository nodeInfoRepository= NodeInfoRepositoryTest.getMockNodeInfoRepository();
 	
 		GraphmlType graphml = assetTopologyMapper.nodeInfoToTopology(nodeInfoRepository);
+		assertNotNull(graphml);
 		LOG.debug("graphml:\n"+Utils.graphmlTypeToString(graphml));
 		
 	}

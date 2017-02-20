@@ -2,10 +2,6 @@ package org.opennms.plugins.graphml.asset.test;
 
 import static org.junit.Assert.*;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.Reader;
 import java.util.Map;
 
 import org.graphdrawing.graphml.xmlns.GraphmlType;
@@ -20,7 +16,6 @@ import org.slf4j.LoggerFactory;
 public class AssetTopologyMapperImplXMLDataTest {
 	private static final Logger LOG = LoggerFactory.getLogger(AssetTopologyMapperImplXMLDataTest .class);
 	
-
 	public static final String TEST_RESOURCE_FOLDER="./src/test/resources";
 	public static final String NODE_TEST_DATA_FILE_NAME="nodeInfoMockTestData.xml";
 	public static final String GRAPHML_TEST_TOPOLOGY_FILE_NAME="graphmlTestTopology.xml";

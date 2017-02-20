@@ -2,9 +2,7 @@ package org.opennms.plugins.graphml.asset.test;
 
 import static org.junit.Assert.*;
 
-
 import java.util.ArrayList;
-
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -25,6 +23,7 @@ public class NodeInfoRepositoryTest {
 	public void test() {
 
 		NodeInfoRepository nir = getMockNodeInfoRepository();
+		assertNotNull(nir);
 
 		LOG.debug(nir.nodeInfoToString());
 

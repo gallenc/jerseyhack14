@@ -3,17 +3,13 @@ package org.opennms.plugins.graphml.client.test.manual;
 import static org.junit.Assert.*;
 
 import java.io.File;
-import java.io.StringWriter;
 
-import javax.xml.bind.JAXB;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBElement;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 import org.graphdrawing.graphml.xmlns.GraphmlType;
-import org.graphdrawing.graphml.xmlns.ObjectFactory;
 import org.junit.Test;
 import org.opennms.plugins.graphml.asset.Utils;
 import org.opennms.plugins.graphml.client.GraphMLRestJerseyClient;
