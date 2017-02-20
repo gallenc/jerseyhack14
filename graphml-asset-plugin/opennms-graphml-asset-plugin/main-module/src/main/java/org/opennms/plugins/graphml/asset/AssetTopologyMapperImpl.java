@@ -1,9 +1,7 @@
 package org.opennms.plugins.graphml.asset;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -37,6 +35,8 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 	private List<String> layerHierarchy  = Arrays.asList(defaultHierarchy);
 
 	private String preferredLayout="Grid Layout";
+	
+	private String menuLabelStr="Asset Topology";
 
 	public List<String> getLayerHierarchy() {
 		return layerHierarchy;
@@ -65,13 +65,20 @@ public class AssetTopologyMapperImpl implements AssetTopologyMapper {
 	public void setPreferredLayout(String preferredLayout) {
 		this.preferredLayout = preferredLayout;
 	}
+	
+	@Override
+	public String getMenuLabelStr() {
+		return menuLabelStr;
+	}
+
+	@Override
+	public void setMenuLabelStr(String menuLabelStr) {
+		this.menuLabelStr = menuLabelStr;
+	}
+	
 
 	@Override
 	public GraphmlType nodeInfoToTopology(NodeInfoRepository nodeInfoRepository) {
-
-		//create unique menu label for graph
-		SimpleDateFormat ft = new SimpleDateFormat ("E dd.MM.yyyy_hh:mm:ss");
-		String menuLabelStr = "Asset Topology "+ft.format(new Date());
 
 		// print log info for graph definition
 		StringBuffer msg = new StringBuffer("Creating topology "+menuLabelStr+" for layerHierarchy :");

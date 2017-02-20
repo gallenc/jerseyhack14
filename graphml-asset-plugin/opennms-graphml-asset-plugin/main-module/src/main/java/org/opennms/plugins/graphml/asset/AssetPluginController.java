@@ -1,18 +1,9 @@
 package org.opennms.plugins.graphml.asset;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import org.graphdrawing.graphml.xmlns.GraphmlType;
-import org.graphdrawing.graphml.xmlns.ObjectFactory;
 import org.opennms.netmgt.events.api.EventIpcManager;
 import org.opennms.netmgt.events.api.EventListener;
 import org.opennms.netmgt.xml.event.Event;
@@ -24,12 +15,13 @@ import org.springframework.util.Assert;
 
 public class AssetPluginController  implements EventListener{
 
-	public static final String ASSET_TOPOLOGY_FOLDER = "etc/assettopology/";
+	public static final String ASSET_TOPOLOGY_FOLDER = "etc/assettopology/"; // folder created in OpenNMS to store asset topology before installation
 	public static final String ASSET_TOPOLOGY_FILE = "AssetTopologyFile.xml"; 
-	public static final String ASSET_LIST_FILE = "AssetListFile.txt"; //for debugging
-	public static final String ASSET_LIST_XML_FILE = "AssetListFile.xml"; //for debugging
-	public static final String ASSET_TOPOLOGY_NAME="assetTopology";
+	public static final String ASSET_LIST_FILE = "AssetListFile.txt"; // file generated for debugging
+	public static final String ASSET_LIST_XML_FILE = "AssetListFile.xml"; // file generated for debugging
+	public static final String ASSET_TOPOLOGY_NAME="assetTopology"; // topology name used when client creates topology
 
+	//onms events usedc to generate, install and uninstall topologies
 	public static final String CREATE_ASSET_TOPOLOGY = "uei.opennms.plugins/assettopology/create"; 
 	public static final String INSTALL_ASSET_TOPOLOGY = "uei.opennms.plugins/assettopology/install"; 
 	public static final String UNINSTALL_ASSET_TOPOLOGY = "uei.opennms.plugins/assettopology/uninstall"; 
@@ -102,62 +94,6 @@ public class AssetPluginController  implements EventListener{
 
 	}
 
-
-
-	private void writeFileToDisk(String content, String filename, String filefolder ){
-		File folder = new File(filefolder);
-		File file = new File(folder, filename );
-		LOG.info("writing to file:"+file.getAbsolutePath());
-		PrintWriter writer=null;
-		try{
-			folder.mkdirs();
-			writer = new PrintWriter(file, "UTF-8");
-			writer.println(content);
-		} catch (IOException e) {
-			LOG.error("problem writing file:"+file.getAbsolutePath(),e);
-		}finally{
-			if (writer!=null) writer.close();
-		}
-	}
-
-
-
-	//private void writeTopologyFileToDisk(String topologyString, String topologyFilename){
-	//		File topologyFolder = new File(ASSET_TOPOLOGY_FOLDER);
-	//		File file = new File(topologyFolder, topologyFilename);
-	//		LOG.info("writing to file:"+file.getAbsolutePath());
-	//		try{
-	//			topologyFolder.mkdirs();
-	//			PrintWriter writer = new PrintWriter(file, "UTF-8");
-	//			writer.println(topologyString);
-	//			writer.close();
-	//		} catch (IOException e) {
-	//			LOG.error("problem writing file:"+file.getAbsolutePath(),e);
-	//		}
-	//	}
-
-	private GraphmlType readTopologyFileFromDisk(String topologyFilename){
-		File topologyFolder = new File(ASSET_TOPOLOGY_FOLDER);
-		File graphmlfile = new File(topologyFolder, topologyFilename);
-		LOG.info("reading from file:"+graphmlfile.getAbsolutePath());
-
-		JAXBContext ctx;
-		JAXBElement<GraphmlType> jaxbgraph=null;
-		GraphmlType graph=null;
-		try {
-			//ctx = JAXBContext.newInstance("org.graphdrawing.graphml.xmlns");
-			ctx = JAXBContext.newInstance(org.graphdrawing.graphml.xmlns.ObjectFactory.class);
-			Unmarshaller jaxbUnmarshaller = ctx.createUnmarshaller();
-			jaxbgraph =  (JAXBElement<GraphmlType>) jaxbUnmarshaller.unmarshal(graphmlfile);
-			graph = jaxbgraph.getValue();
-			//return graphmlTypeToString(graph);
-			return graph;
-		} catch (JAXBException e) {
-			LOG.error("problem reading file:"+graphmlfile.getAbsolutePath(),e);
-			throw new RuntimeException("problem reading file:"+graphmlfile.getAbsolutePath(),e);
-		}
-	}
-
 	private void installMessageSelectors() {
 		getEventIpcManager().addEventListener(this);
 	}
@@ -193,19 +129,24 @@ public class AssetPluginController  implements EventListener{
 			LOG.info("Asset Topology Plugin loaded node info ");
 
 			if(writeAssetListDebugFile){
-				writeFileToDisk(nodeInfoRepository.nodeInfoToString(), ASSET_LIST_FILE, ASSET_TOPOLOGY_FOLDER );
-				//TODO REMOVE writeTopologyFileToDisk(nodeInfoRepository.nodeInfoToString(), ASSET_LIST_FILE);
-				//writeTopologyFileToDisk(NodeInfoRepositoryXML.nodeInfoToXML(nodeInfoRepository.getNodeInfo()), ASSET_LIST_FILE+".xml");
-				writeFileToDisk(NodeInfoRepositoryXML.nodeInfoToXML(nodeInfoRepository.getNodeInfo()), ASSET_LIST_XML_FILE, ASSET_TOPOLOGY_FOLDER );
+				Utils.writeFileToDisk(nodeInfoRepository.nodeInfoToString(), ASSET_LIST_FILE, ASSET_TOPOLOGY_FOLDER );
+
+				Utils.writeFileToDisk(NodeInfoRepositoryXML.nodeInfoToXML(nodeInfoRepository.getNodeInfo()), ASSET_LIST_XML_FILE, ASSET_TOPOLOGY_FOLDER );
 			}
 			
+			//create unique menu label for graph
+			SimpleDateFormat ft = new SimpleDateFormat ("E dd.MM.yyyy_hh:mm:ss");
+			String menuLabelStr = "Asset Topology "+ft.format(new Date());
+			assetTopologyMapper.setMenuLabelStr(menuLabelStr);
+			
+			// create graphml from topology information
 			GraphmlType graph = assetTopologyMapper.nodeInfoToTopology(nodeInfoRepository);
 
-			String assetTopologyStr = graphmlTypeToString(graph);
+			String assetTopologyStr = Utils.graphmlTypeToString(graph);
 
 			//writeTopologyFileToDisk(assetTopologyStr, ASSET_TOPOLOGY_FILE);
 
-			writeFileToDisk(assetTopologyStr, ASSET_TOPOLOGY_FILE, ASSET_TOPOLOGY_FOLDER );
+			Utils.writeFileToDisk(assetTopologyStr, ASSET_TOPOLOGY_FILE, ASSET_TOPOLOGY_FOLDER );
 
 
 		} else if(INSTALL_ASSET_TOPOLOGY.equals(event.getUei())){
@@ -221,8 +162,9 @@ public class AssetPluginController  implements EventListener{
 			}
 			LOG.info("INSTALL_ASSET_TOPOLOGY event received. Installing topology topologyFilename="+topologyFilename+" topologyName="+topologyName);
 			try{
-				GraphmlType graph = readTopologyFileFromDisk(topologyFilename);
-				LOG.debug("topology to install topology:"+graphmlTypeToString(graph));
+				
+				GraphmlType graph = Utils.readTopologyFileFromDisk(ASSET_TOPOLOGY_FOLDER, topologyFilename);
+				LOG.debug("topology to install topology:"+Utils.graphmlTypeToString(graph));
 
 				//post file to opennms
 				graphMLRestClient.createGraph(topologyName, graph);
@@ -252,32 +194,6 @@ public class AssetPluginController  implements EventListener{
 	public String getName() {
 		return "AssetTopologyPlugin";
 	}
-
-
-	public String graphmlTypeToString(GraphmlType graphmlType){
-		try {
-
-			// Marshal graphmlType
-			ObjectFactory objectFactory = new ObjectFactory();
-			JAXBElement<GraphmlType> je =  objectFactory.createGraphml(graphmlType);
-
-			StringWriter sw = new StringWriter();
-			//JAXBContext ctx = JAXBContext.newInstance("org.graphdrawing.graphml.xmlns");  // classloader issues
-			JAXBContext ctx = JAXBContext.newInstance(org.graphdrawing.graphml.xmlns.ObjectFactory.class);
-
-			Marshaller marshaller = ctx.createMarshaller();
-
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.marshal(je, sw);
-
-			return sw.toString();
-		} catch (Exception e) {
-			LOG.error("graphmlTypeToString problem creating result", e);
-		}
-		return null;
-	}
-
-
 
 
 }

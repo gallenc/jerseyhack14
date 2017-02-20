@@ -75,7 +75,7 @@ public class NodeInfoRepositoryXML {
 
 	//nodeid, paramkey, paramvalue
 	//Map<String, Map<String, String>>
-	public void XMLtoNodeInfo(Map<String, Map<String, String>> nodeInfo, String xmlStr){
+	public static void XMLtoNodeInfo(Map<String, Map<String, String>> nodeInfo, String xmlStr){
 		try{
 
 			nodeInfo.clear();

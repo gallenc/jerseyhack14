@@ -6,4 +6,8 @@ public interface AssetTopologyMapper {
 	
 	public GraphmlType nodeInfoToTopology(NodeInfoRepository nodeInfo);
 
+	public String getMenuLabelStr();
+
+	public void setMenuLabelStr(String menuLabelStr);
+
 }

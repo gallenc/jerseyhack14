@@ -63,7 +63,7 @@
     <property name="nodeInfoRepository" ref="nodeInfoRepository" />
     <property name="graphMLRestClient" ref="graphMLRestClient" />
     <property name="assetTopologyMapper" ref="assetTopologyMapper" />
-    <property name="writeAssetListDebugFile" value=${writeAssetListDebugFile}" />
+    <property name="writeAssetListDebugFile" value="${writeAssetListDebugFile}" />
   </bean>
 
 </blueprint>

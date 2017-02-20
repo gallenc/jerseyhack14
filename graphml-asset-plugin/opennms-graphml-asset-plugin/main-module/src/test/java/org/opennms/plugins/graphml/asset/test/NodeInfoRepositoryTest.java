@@ -1,11 +1,10 @@
-package org.opennms.plugins.graphml.asset.test.manual;
+package org.opennms.plugins.graphml.asset.test;
 
 import static org.junit.Assert.*;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
+
 import java.util.ArrayList;
-import java.util.Iterator;
+
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
@@ -15,7 +14,6 @@ import org.opennms.netmgt.model.OnmsAssetRecord;
 import org.opennms.netmgt.model.OnmsCategory;
 import org.opennms.netmgt.model.OnmsGeolocation;
 import org.opennms.netmgt.model.OnmsNode;
-import org.opennms.netmgt.model.monitoringLocations.OnmsMonitoringLocation;
 import org.opennms.plugins.graphml.asset.NodeInfoRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

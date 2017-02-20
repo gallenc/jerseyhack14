@@ -1,4 +1,4 @@
-package org.opennms.plugin.graphml.client.test.manual;
+package org.opennms.plugins.graphml.client.test.manual;
 
 import static org.junit.Assert.*;
 
@@ -15,6 +15,7 @@ import javax.xml.bind.Unmarshaller;
 import org.graphdrawing.graphml.xmlns.GraphmlType;
 import org.graphdrawing.graphml.xmlns.ObjectFactory;
 import org.junit.Test;
+import org.opennms.plugins.graphml.asset.Utils;
 import org.opennms.plugins.graphml.client.GraphMLRestJerseyClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,7 +78,7 @@ public class GraphMLRestJerseyClientTest {
 					+ ""+x.toString()+" name " +x.getClass().getName());
 		}
 		
-		LOG.debug("unmarshaled test graph marshalled from file :"+graphmlTypeToString(graph));
+		LOG.debug("unmarshaled test graph marshalled from file :"+Utils.graphmlTypeToString(graph));
 		return graph;
 	}
 	
@@ -122,7 +123,7 @@ public class GraphMLRestJerseyClientTest {
 
 			String gmlstr=null;
 			if (graphmlType !=null){
-				gmlstr=graphmlTypeToString(graphmlType);
+				gmlstr=Utils.graphmlTypeToString(graphmlType);
 			}
 
 			LOG.debug("returned graphml "+ gmlstr);
@@ -133,28 +134,7 @@ public class GraphMLRestJerseyClientTest {
 		LOG.debug("testGetGraph() FINISH");
 	}
 
-	public String graphmlTypeToString(GraphmlType graphmlType){
-		try {
-			
-		      // Marshal graphmlType
-	        ObjectFactory objectFactory = new ObjectFactory();
-	        JAXBElement<GraphmlType> je =  objectFactory.createGraphml(graphmlType);
-	        
-			StringWriter sw = new StringWriter();
-			JAXBContext ctx = JAXBContext.newInstance("org.graphdrawing.graphml.xmlns");
 
-			Marshaller marshaller = ctx.createMarshaller();
-
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-			marshaller.marshal(je, sw);
-
-			return sw.toString();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
 
 
 }
