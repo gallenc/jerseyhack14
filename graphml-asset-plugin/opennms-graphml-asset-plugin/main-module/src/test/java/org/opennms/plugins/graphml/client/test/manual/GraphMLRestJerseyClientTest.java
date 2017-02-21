@@ -32,6 +32,7 @@ public class GraphMLRestJerseyClientTest {
 	@Test
 	public void testsInOrder(){
 		LOG.debug("testsInOrder() START");
+		// choose which tests you want to run by un-commenting below
 		readTestGraph();	
 		//testCreateGraph();
 		//testGetGraph(); 

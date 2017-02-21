@@ -13,7 +13,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -139,7 +139,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -265,7 +265,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -391,7 +391,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -516,7 +516,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -642,7 +642,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -767,7 +767,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -892,7 +892,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -1017,7 +1017,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -1143,7 +1143,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -1269,7 +1269,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -1394,7 +1394,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -1520,7 +1520,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -1645,7 +1645,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -1771,7 +1771,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -1897,7 +1897,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -2021,7 +2021,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -2146,7 +2146,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -2272,7 +2272,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -2397,7 +2397,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -2521,7 +2521,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -2647,7 +2647,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -2772,7 +2772,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -2897,7 +2897,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -3023,7 +3023,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -3149,7 +3149,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -3274,7 +3274,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -3400,7 +3400,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -3526,7 +3526,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -3650,7 +3650,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -3776,7 +3776,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -3901,7 +3901,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -4026,7 +4026,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -4082,7 +4082,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>asset-building</paramKey>
-                <paramValue>Adastral</paramValue>
+                <paramValue>TestAssetBuilding</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>asset-floor</paramKey>
@@ -4158,7 +4158,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -4284,7 +4284,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -4409,7 +4409,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -4534,7 +4534,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -4659,7 +4659,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -4785,7 +4785,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -4911,7 +4911,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -5037,7 +5037,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -5163,7 +5163,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -5288,7 +5288,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -5414,7 +5414,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -5540,7 +5540,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -5666,7 +5666,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -5792,7 +5792,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -5918,7 +5918,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -6044,7 +6044,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -6170,7 +6170,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -6296,7 +6296,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -6422,7 +6422,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -6548,7 +6548,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -6674,7 +6674,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -6800,7 +6800,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -6926,7 +6926,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -7051,7 +7051,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -7177,7 +7177,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -7303,7 +7303,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -7429,7 +7429,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -7554,7 +7554,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -7680,7 +7680,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -7805,7 +7805,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -7929,7 +7929,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -8055,7 +8055,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -8181,7 +8181,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -8307,7 +8307,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -8433,7 +8433,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -8559,7 +8559,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -8685,7 +8685,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -8811,7 +8811,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -8937,7 +8937,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -9063,7 +9063,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -9189,7 +9189,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -9315,7 +9315,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -9441,7 +9441,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -9567,7 +9567,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -9692,7 +9692,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -9818,7 +9818,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -9944,7 +9944,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -10069,7 +10069,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -10195,7 +10195,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -10321,7 +10321,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -10446,7 +10446,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -10571,7 +10571,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -10697,7 +10697,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -10823,7 +10823,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -10947,7 +10947,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -11073,7 +11073,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -11199,7 +11199,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -11324,7 +11324,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -11450,7 +11450,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -11576,7 +11576,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -11701,7 +11701,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -11827,7 +11827,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -11952,7 +11952,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -12078,7 +12078,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -12204,7 +12204,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -12328,7 +12328,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -12454,7 +12454,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -12580,7 +12580,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -12705,7 +12705,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -12831,7 +12831,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -12956,7 +12956,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -13082,7 +13082,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -13208,7 +13208,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -13334,7 +13334,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -13459,7 +13459,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -13585,7 +13585,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -13711,7 +13711,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -13837,7 +13837,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -13961,7 +13961,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -14086,7 +14086,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -14212,7 +14212,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -14337,7 +14337,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -14463,7 +14463,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -14589,7 +14589,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -14715,7 +14715,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -14841,7 +14841,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -14966,7 +14966,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -15091,7 +15091,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -15216,7 +15216,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -15342,7 +15342,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -15466,7 +15466,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -15592,7 +15592,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -15718,7 +15718,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -15843,7 +15843,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -15969,7 +15969,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -16095,7 +16095,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -16221,7 +16221,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -16347,7 +16347,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -16472,7 +16472,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -16598,7 +16598,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -16724,7 +16724,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -16850,7 +16850,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -16974,7 +16974,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -17100,7 +17100,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>
@@ -17226,7 +17226,7 @@
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignsource</paramKey>
-                <paramValue>BTOpenNMSInventory</paramValue>
+                <paramValue>TestAssetOpenNMSInventory</paramValue>
             </nodeParamList>
             <nodeParamList>
                 <paramKey>node-foreignid</paramKey>

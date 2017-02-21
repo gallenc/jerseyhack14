@@ -1,6 +1,7 @@
 ## OpenNMS GraphML Asset Plugin
 
-https://issues.opennms.org/browse/NMS-9128
+https://issues.opennms.org/browse/NMS-9128 
+Asset to topology mapper and ES enhamcements
 
 ### Maven Project
 ~~~~
