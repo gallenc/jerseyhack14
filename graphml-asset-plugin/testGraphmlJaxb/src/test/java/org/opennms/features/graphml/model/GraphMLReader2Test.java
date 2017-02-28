@@ -45,20 +45,13 @@ public class GraphMLReader2Test {
 		GraphML read = GraphMLReader.read(new FileInputStream("target/output1.graphml"));
 		Assert.assertEquals(read, graphML);
 
-		Assert.assertEquals(2, graphML.getGraphs().size());
-
-		GraphMLGraph graph = graphML.getGraphs().get(0);
-		Assert.assertEquals("regions", graph.getId());
-		Assert.assertEquals(4, graph.getNodes().size());
-
-		graph = graphML.getGraphs().get(1);
-		Assert.assertEquals("markets", graph.getId());
-		Assert.assertEquals(16, graph.getNodes().size());
-
-
-
 	}
 
+	/**
+	 * test based upon generated topology
+	 * @throws InvalidGraphException
+	 * @throws FileNotFoundException
+	 */
 	@Test
 	public void verifyRead2() throws InvalidGraphException, FileNotFoundException {
 		GraphML graphML = GraphMLReader.read(getClass().getResourceAsStream("/graphmlTestTopology2.xml"));
@@ -70,7 +63,7 @@ public class GraphMLReader2Test {
 	}
 
 	/**
-	 * test based upon documentation 
+	 * test based upon documentation topology examples
 	 * @throws InvalidGraphException
 	 * @throws FileNotFoundException
 	 */
