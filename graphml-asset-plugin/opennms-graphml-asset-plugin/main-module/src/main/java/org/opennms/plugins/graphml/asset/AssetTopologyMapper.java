@@ -32,10 +32,19 @@ import org.graphdrawing.graphml.xmlns.GraphmlType;
 
 public interface AssetTopologyMapper {
 	
-	public GraphmlType nodeInfoToTopology(NodeInfoRepository nodeInfo);
+	/**
+	 * This method generates the layer hierarchy graphml file from the
+	 * node asset information supplied in nodeInfoRepository
+	 */
+	public GraphmlType nodeInfoToTopology(NodeInfoRepository nodeInfoRepository);
 
+	
 	public String getMenuLabelStr();
 
+	/**
+	 * Sets the the label which will appear in the OpenNMS topology menu
+	 * used to set the graphml <data key="label"></data>
+	 */
 	public void setMenuLabelStr(String menuLabelStr);
 
 }

@@ -1,0 +1,298 @@
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <parent>
+    <groupId>org.opennms.plugins</groupId>
+    <artifactId>opennms-graphml-asset-plugin.parent</artifactId>
+    <version>19.0.0</version>
+  </parent>
+
+  <!-- Feature Definition -->
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>opennms-graphml-asset-plugin.assembly</artifactId>
+  <name>opennms-graphml-asset-plugin.assembly</name>
+  <description>assembly for opennms-graphml-asset-plugin</description>
+  <packaging>kar</packaging>
+
+  <build>
+
+    <plugins>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack</id>
+            <phase>process-resources</phase>
+            <goals>
+              <goal>copy</goal>
+            </goals>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>org.opennms.plugins</groupId>
+                  <artifactId>${productName}</artifactId>
+                  <version>${project.version}</version>
+                  <classifier>features</classifier>
+                  <type>xml</type>
+                  <overWrite>true</overWrite>
+                  <outputDirectory>${project.build.directory}/features</outputDirectory>
+                  <destFileName>feature.xml</destFileName>
+                </artifactItem>
+              </artifactItems>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- <plugin> -->
+      <!-- <groupId>org.apache.karaf.tooling</groupId> -->
+      <!-- <artifactId>features-maven-plugin</artifactId> -->
+      <!-- <version>2.4.4</version> -->
+      <!-- <executions> -->
+      <!-- <execution> -->
+      <!-- <id>kar</id> -->
+      <!-- <phase>process-resources</phase> -->
+      <!-- <goals> -->
+      <!-- <goal>create-kar</goal> -->
+      <!-- </goals> -->
+      <!-- <configuration> -->
+      <!-- <featuresFile>${project.build.directory}/features/feature.xml</featuresFile> -->
+      <!-- </configuration> -->
+      <!-- </execution> -->
+      <!-- </executions> -->
+      <!-- </plugin> -->
+
+
+
+      <plugin>
+        <groupId>org.apache.karaf.tooling</groupId>
+        <artifactId>karaf-maven-plugin</artifactId>
+        <extensions>true</extensions>
+        <version>${minionKarafVersion}</version>
+        <!-- <configuration> -->
+        <!-- <aggregateFeatures>true</aggregateFeatures> -->
+        <!-- <descriptors> -->
+        <!-- <descriptor>mvn:org.openoss.karaf.features/tmforum-rest-spm-ri/${project.version}/xml/features</descriptor> -->
+        <!-- </descriptors> -->
+        <!-- <features> -->
+        <!-- <feature>tmforum-rest-spm-ri</feature> -->
+        <!-- </features> -->
+        <!-- </configuration> -->
+
+
+        <executions>
+          <execution>
+            <id>kar</id>
+            <goals>
+              <goal>kar</goal>
+            </goals>
+            <configuration>
+              <featuresFile>${project.build.directory}/features/feature.xml</featuresFile>
+            </configuration>
+          </execution>
+
+          <!-- karaf:client -->
+          <!-- Description: Client MOJO to deployWithSsh command on a running Karaf instance -->
+          <!-- Implementation: org.apache.karaf.tooling.client.ClientMojo -->
+          <!-- Bound to phase: package -->
+          <!-- see https://github.com/apache/karaf/blob/master/tooling/karaf-maven-plugin/src/main/java/org/apache/karaf/tooling/client/ClientMojo.java -->
+
+          <execution>
+            <id>client-comands</id>
+            <goals>
+              <goal>client</goal>
+            </goals>
+            <configuration>
+              <!-- <commands></commands> -->
+              <!-- <scripts>test.txt</scripts> -->
+              <attempts>0</attempts>
+              <delay>2</delay>
+              <host>localhost</host>
+              <port>8101</port>
+              <user>karaf</user>
+              <password>karaf</password>
+              <!-- <keyFile></keyFile> -->
+            </configuration>
+
+          </execution>
+          <!-- <execution> -->
+          <!-- <id>run</id> -->
+          <!-- <goals> -->
+          <!-- <goal>run</goal> -->
+          <!-- </goals> -->
+          <!-- <configuration> -->
+          <!-- <karafDistribution>mvn:org.apache.karaf/apache-karaf/${minionKarafVersion}/zip</karafDistribution> -->
+          <!-- <keepRunning>true</keepRunning> -->
+          <!-- <deployProjectArtifact>true</deployProjectArtifact> -->
+          <!-- </configuration> -->
+          <!-- </execution> -->
+
+
+
+
+
+
+          <!-- <execution> -->
+          <!-- <id>generate</id> -->
+          <!-- <phase>package</phase> -->
+          <!-- <goals> -->
+          <!-- <goal>archive</goal> -->
+          <!-- </goals> -->
+          <!-- <configuration> -->
+          <!-- <destDir>${project.build.directory}</destDir> -->
+          <!-- <targetServerDirectory>${project.build.directory}/assembly</targetServerDirectory> -->
+          <!-- <targetFile>${project.file}</targetFile> -->
+          <!-- </configuration> -->
+          <!-- </execution> -->
+
+          <!-- <execution> -->
+          <!-- <id>features-add-to-repo</id> -->
+          <!-- <phase>generate-resources</phase> -->
+          <!-- <goals> -->
+          <!-- <goal>features-add-to-repository</goal> -->
+          <!-- </goals> -->
+          <!-- <configuration> -->
+          <!-- <descriptors> -->
+          <!-- <descriptor>mvn:org.apache.karaf.features/standard/${minionKarafVersion}/xml/features</descriptor> -->
+          <!-- <descriptor>mvn:org.openoss.karaf.features/tmforum-rest-spm-ri/${project.version}/xml/features</descriptor> -->
+          <!-- <descriptor>mvn:my.groupid/my.artifactid/1.0.0/xml/features</descriptor> -->
+          <!-- </descriptors> -->
+          <!-- <features> -->
+          <!-- <feature>http</feature> -->
+          <!-- <feature>http-whiteboard</feature> -->
+          <!-- <feature>tmforum-rest-spm-ri</feature> -->
+          <!-- </features> -->
+          <!-- <repository>target/classes/repository</repository> -->
+          <!-- </configuration> -->
+          <!-- </execution> -->
+
+          <!-- <execution> -->
+          <!-- <id>features-add-to-kar</id> -->
+          <!-- <phase>generate-resources</phase> -->
+          <!-- <goals> -->
+          <!-- <goal>features-add-to-repository</goal> -->
+          <!-- </goals> -->
+          <!-- <configuration> -->
+          <!-- <descriptors> -->
+          <!-- <descriptor>mvn:org.apache.karaf.features/standard/${minionKarafVersion}/xml/features</descriptor> -->
+          <!-- <descriptor>mvn:org.openoss.karaf.features/tmforum-rest-spm-ri/${project.version}/xml/features</descriptor> -->
+          <!-- <descriptor>mvn:my.groupid/my.artifactid/1.0.0/xml/features</descriptor> -->
+          <!-- </descriptors> -->
+          <!-- <features> -->
+          <!-- <feature>http</feature> -->
+          <!-- <feature>http-whiteboard</feature> -->
+          <!-- <feature>tmforum-rest-spm-ri</feature> -->
+          <!-- </features> -->
+          <!-- <repository>target/classes/repository</repository> -->
+          <!-- </configuration> -->
+          <!-- </execution> -->
+
+
+        </executions>
+      </plugin>
+    </plugins>
+
+  </build>
+
+  <dependencies>
+
+    <!-- <dependency> -->
+    <!-- <groupId>org.openoss.karaf.features</groupId> -->
+    <!-- <artifactId>${productName}</artifactId> -->
+    <!-- <version>${project.version}</version> -->
+    <!-- </dependency> -->
+
+
+    <!-- <dependency> -->
+    <!-- <groupId>org.apache.karaf.shell</groupId> -->
+    <!-- <artifactId>org.apache.karaf.shell.console</artifactId> -->
+    <!-- <scope>provided</scope> -->
+    <!-- </dependency> -->
+
+    <!-- <dependency> -->
+    <!-- <groupId>org.osgi</groupId> -->
+    <!-- <artifactId>org.osgi.core</artifactId> -->
+    <!-- <scope>provided</scope> -->
+    <!-- </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>org.osgi</groupId> -->
+    <!-- <artifactId>org.osgi.compendium</artifactId> -->
+    <!-- <scope>provided</scope> -->
+    <!-- </dependency> -->
+
+    <!-- Jersey Dependencies -->
+    <!-- <dependency> -->
+    <!-- <groupId>com.sun.jersey</groupId> -->
+    <!-- <artifactId>jersey-server</artifactId> -->
+    <!-- <scope>provided</scope> -->
+    <!-- </dependency> -->
+
+    <!-- <dependency> -->
+    <!-- <groupId>com.sun.jersey</groupId> -->
+    <!-- <artifactId>jersey-servlet</artifactId> -->
+    <!-- <scope>provided</scope> -->
+    <!-- </dependency> -->
+
+    <!-- <dependency> -->
+    <!-- <groupId>com.sun.jersey</groupId> -->
+    <!-- <artifactId>jersey-core</artifactId> -->
+    <!-- <scope>provided</scope> -->
+    <!-- </dependency> -->
+
+    <!-- <dependency> -->
+    <!-- <groupId>com.sun.jersey</groupId> -->
+    <!-- <artifactId>jersey-client</artifactId> -->
+    <!-- <scope>provided</scope> -->
+    <!-- </dependency> -->
+    <!-- <dependency> -->
+    <!-- <groupId>javax.ws.rs</groupId> -->
+    <!-- <artifactId>jsr311-api</artifactId> -->
+    <!-- <scope>provided</scope> -->
+    <!-- </dependency> -->
+
+    <!-- <dependency> -->
+    <!-- <groupId>javax.servlet</groupId> -->
+    <!-- <artifactId>servlet-api</artifactId> -->
+    <!-- <scope>provided</scope> -->
+    <!-- <version>2.5</version> -->
+    <!-- </dependency> -->
+
+    <!-- <dependency> -->
+    <!-- <groupId>javax.servlet</groupId> -->
+    <!-- <artifactId>javax.servlet-api</artifactId> -->
+    <!-- <version>2.5</version> -->
+    <!-- </dependency> -->
+
+
+
+    <!-- <dependency> -->
+    <!-- <groupId>org.openoss.karaf.features</groupId> -->
+    <!-- <artifactId>tmforum-rest-spm-ri</artifactId> -->
+    <!-- <version>0.0.1-SNAPSHOT</version> -->
+    <!-- </dependency> -->
+
+    <!-- <dependency> -->
+    <!-- <groupId>com.googlecode.json-simple</groupId> -->
+    <!-- <artifactId>json-simple</artifactId> -->
+    <!-- <version>${json-simpleVersion}</version> -->
+    <!-- </dependency> -->
+
+
+  </dependencies>
+
+  <pluginRepositories>
+    <pluginRepository>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+      <releases>
+        <enabled>true</enabled>
+      </releases>
+      <id>opennms-repo</id>
+      <name>OpenNMS Repository</name>
+      <url>http://maven.opennms.org/content/groups/opennms.org-release</url>
+    </pluginRepository>
+  </pluginRepositories>
+
+</project>

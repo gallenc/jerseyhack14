@@ -28,13 +28,6 @@
             </goals>
             <configuration>
               <bundles>
-                <!-- <bundle>wrap:mvn:io.searchbox/jest-common/${jestVersion}</bundle> -->
-                <!-- <bundle>wrap:mvn:io.searchbox/jest/${jestVersion}</bundle> -->
-                <!-- <bundle>wrap:mvn:io.searchbox/jest-complete-osgi/${jestVersion}</bundle> -->
-
-                <!-- <bundle>wrap:mvn:org.apache.httpcomponents/httpcore-nio/${httpcoreVersion}</bundle> -->
-                <!-- <bundle>wrap:mvn:org.apache.httpcomponents/httpasyncclient/4.1.1</bundle> -->
-                <!-- <bundle>wrap:mvn:org.apache.httpcomponents/httpasyncclient/${httpclientVersion}</bundle> -->
 
               </bundles>
             </configuration>
@@ -58,11 +51,14 @@
       <version>${project.version}</version>
     </dependency>
 
-<!--     <dependency> -->
-<!--       <groupId>com.googlecode.json-simple</groupId> -->
-<!--       <artifactId>json-simple</artifactId> -->
-<!--       <version>${json-simpleVersion}</version> -->
-<!--     </dependency> -->
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-core</artifactId>
+   </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+    </dependency>
 
   </dependencies>
 

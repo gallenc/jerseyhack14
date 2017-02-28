@@ -1,14 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
-    <groupId>org.opennms.plugins</groupId>
-    <artifactId>opennms-graphml-asset-plugin.parent</artifactId>
-    <version>19.0.0</version>
+    <groupId>org.opennms</groupId>
+    <artifactId>org.opennms.features</artifactId>
+    <version>19.0.0-SNAPSHOT</version>
   </parent>
 
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>opennms-graphml-asset-plugin.main-module</artifactId>
-  <name>opennms-graphml-asset-plugin.main-module</name>
-  <description>Main Module for opennms-graphml-asset-plugin</description>
+  <artifactId>opennms-graphml-jaxbtest</artifactId>
+  <name>opennms-graphml-jaxbtest</name>
+  <description>opennms-graphml-jaxbtest</description>
   <packaging>bundle</packaging>
 
   <build>
@@ -31,6 +31,30 @@
         </configuration>
       </plugin>
 
+      <!-- <plugin> -->
+      <!-- <groupId>org.codehaus.mojo</groupId> -->
+      <!-- <artifactId>jaxb2-maven-plugin</artifactId> -->
+      <!-- <version>1.6</version> -->
+      <!-- <executions> -->
+      <!-- <execution> -->
+      <!-- <id>xjc</id> -->
+      <!-- <goals> -->
+      <!-- <goal>xjc</goal> -->
+      <!-- </goals> -->
+      <!-- </execution> -->
+      <!-- </executions> -->
+      <!-- <configuration> -->
+      <!-- <outputDirectory>${project.build.directory}/generated-sources/jaxb</outputDirectory> -->
+      <!-- Set the package of the generated code -->
+      <!-- <packageName>org.opennms.plugin.graphdrawing.graphml</packageName> -->
+      <!-- <sourceType>xsd</sourceType> -->
+      <!-- <sources> -->
+      <!-- <source>src/main/xsd</source> -->
+      <!-- </sources> -->
+      <!-- <catalog>src/main/catalog.xml</catalog> -->
+      <!-- </configuration> -->
+      <!-- </plugin> -->
+
 
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -47,13 +71,8 @@
   </build>
 
   <dependencies>
-    <dependency>
-      <groupId>org.opennms.plugins</groupId>
-      <artifactId>org.opennms.plugin.licencemanager</artifactId>
-      <version>${licencemanagerVersion}</version>
-      <type>jar</type>
-      <scope>provided</scope>
-    </dependency>
+    <!-- <dependency> <groupId>org.opennms.plugins</groupId> <artifactId>org.opennms.plugin.licencemanager</artifactId> <version>${licencemanagerVersion}</version> 
+      <type>jar</type> <scope>provided</scope> </dependency> -->
     <dependency>
       <groupId>org.apache.karaf.shell</groupId>
       <artifactId>org.apache.karaf.shell.console</artifactId>
@@ -123,6 +142,12 @@
       <scope>provided</scope>
     </dependency>
 
+    <dependency>
+      <groupId>org.opennms.features</groupId>
+      <artifactId>org.opennms.features.graphml</artifactId>
+      <scope>provided</scope>
+      <version>${project.version}</version>
+    </dependency>
 
     <dependency>
       <groupId>org.opennms</groupId>
@@ -130,20 +155,30 @@
       <scope>provided</scope>
     </dependency>
 
+
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-core</artifactId>
+      <version>1.19</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.sun.jersey</groupId>
       <artifactId>jersey-client</artifactId>
+      <version>1.19</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>javax.ws.rs</groupId>
       <artifactId>jsr311-api</artifactId>
+      <version>1.1.1</version>
       <scope>provided</scope>
+    </dependency>
+
+    <dependency>
+      <groupId>org.opennms.plugins</groupId>
+      <artifactId>opennms-graphml-asset-plugin.main-module</artifactId>
+      <version>19.0.0-SNAPSHOT</version>
     </dependency>
 
   </dependencies>

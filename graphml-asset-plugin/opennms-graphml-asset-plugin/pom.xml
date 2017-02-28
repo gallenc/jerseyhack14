@@ -24,13 +24,14 @@
     <productName>opennms-graphml-asset-plugin</productName>
     <productId>${productName}/${project.version}</productId>
 
-    <json-simpleVersion>1.1.1</json-simpleVersion>
+    <jerseyVersion>1.19</jerseyVersion>
   </properties>
 
   <modules>
     <module>main-module</module>
     <module>product-descriptor</module>
     <module>feature</module>
+    <module>assembly</module>
   </modules>
 
   <build>
@@ -127,9 +128,19 @@
   <dependencyManagement>
     <dependencies>
       <dependency>
-        <groupId>io.searchbox</groupId>
-        <artifactId>jest</artifactId>
-        <version>${jestVersion}</version>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-core</artifactId>
+      <version>${jerseyVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sun.jersey</groupId>
+      <artifactId>jersey-client</artifactId>
+      <version>${jerseyVersion}</version>
+    </dependency>
+    <dependency>
+      <groupId>javax.ws.rs</groupId>
+      <artifactId>jsr311-api</artifactId>
+      <version>1.1.1</version>
       </dependency>
     </dependencies>
   </dependencyManagement>

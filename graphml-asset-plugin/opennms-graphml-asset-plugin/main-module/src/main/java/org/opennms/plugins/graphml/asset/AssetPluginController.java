@@ -42,6 +42,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
 
+/**
+ * Parent controller class which listens for OpenNMS events and generates/installs and uninstalls topologies
+ * @author admin
+ *
+ */
 public class AssetPluginController  implements EventListener{
 
 	public static final String ASSET_TOPOLOGY_FOLDER = "etc/assettopology/"; // folder created in OpenNMS to store asset topology before installation
@@ -115,6 +120,7 @@ public class AssetPluginController  implements EventListener{
 
 		installMessageSelectors();
 
+		// create a new asset topology on startup
 		Event event = new Event();
 		event.setUei(CREATE_ASSET_TOPOLOGY);
 		onEvent(event);
@@ -155,7 +161,7 @@ public class AssetPluginController  implements EventListener{
 			LOG.info("CREATE_ASSET_TOPOLOGY event received. Creating topology file from Node Database");
 
 			nodeInfoRepository.initialiseNodeInfo();
-			LOG.info("Asset Topology Plugin loaded node info ");
+			LOG.info("Asset Topology Plugin has loaded node info ");
 
 			if(writeAssetListDebugFile){
 				Utils.writeFileToDisk(nodeInfoRepository.nodeInfoToString(), ASSET_LIST_FILE, ASSET_TOPOLOGY_FOLDER );
@@ -172,20 +178,25 @@ public class AssetPluginController  implements EventListener{
 			GraphmlType graph = assetTopologyMapper.nodeInfoToTopology(nodeInfoRepository);
 
 			String assetTopologyStr = Utils.graphmlTypeToString(graph);
-
-			//writeTopologyFileToDisk(assetTopologyStr, ASSET_TOPOLOGY_FILE);
-
-			Utils.writeFileToDisk(assetTopologyStr, ASSET_TOPOLOGY_FILE, ASSET_TOPOLOGY_FOLDER );
-
-
-		} else if(INSTALL_ASSET_TOPOLOGY.equals(event.getUei())){
-			Parm topologyFileNameParm=event.getParm("topologyFilename");
+			
 			String topologyFilename=ASSET_TOPOLOGY_FILE;
+			
+			Parm topologyFileNameParm=event.getParm("topologyFilename");
 			if(topologyFileNameParm!=null){
 				topologyFilename = topologyFileNameParm.getValue().getContent();
 			}
-			Parm topologyNameParm=event.getParm("topologyName");
+
+			Utils.writeFileToDisk(assetTopologyStr, topologyFilename, ASSET_TOPOLOGY_FOLDER );
+
+
+		} else if(INSTALL_ASSET_TOPOLOGY.equals(event.getUei())){
+			String topologyFilename=ASSET_TOPOLOGY_FILE;
+			Parm topologyFileNameParm=event.getParm("topologyFilename");
+			if(topologyFileNameParm!=null){
+				topologyFilename = topologyFileNameParm.getValue().getContent();
+			}
 			String topologyName=ASSET_TOPOLOGY_NAME;
+			Parm topologyNameParm=event.getParm("topologyName");
 			if(topologyNameParm!=null){
 				topologyName = topologyNameParm.getValue().getContent();
 			}
@@ -203,8 +214,9 @@ public class AssetPluginController  implements EventListener{
 			}
 
 		}else if(UNINSTALL_ASSET_TOPOLOGY.equals(event.getUei())){
-			Parm topologyNameParm=event.getParm("topologyName");
 			String topologyName=ASSET_TOPOLOGY_NAME;
+			
+			Parm topologyNameParm=event.getParm("topologyName");
 			if(topologyNameParm!=null){
 				topologyName = topologyNameParm.getValue().getContent();
 			}

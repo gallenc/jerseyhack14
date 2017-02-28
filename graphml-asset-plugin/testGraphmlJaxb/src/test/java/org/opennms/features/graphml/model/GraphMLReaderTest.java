@@ -1,8 +1,8 @@
 /*******************************************************************************
  * This file is part of OpenNMS(R).
  *
- * Copyright (C) 2002-2014 The OpenNMS Group, Inc.
- * OpenNMS(R) is Copyright (C) 1999-2014 The OpenNMS Group, Inc.
+ * Copyright (C) 2016 The OpenNMS Group, Inc.
+ * OpenNMS(R) is Copyright (C) 1999-2016 The OpenNMS Group, Inc.
  *
  * OpenNMS(R) is a registered trademark of The OpenNMS Group, Inc.
  *
@@ -26,23 +26,25 @@
  *     http://www.opennms.com/
  *******************************************************************************/
 
-package org.opennms.plugins.graphml.asset;
+package org.opennms.features.graphml.model;
 
-/**
- * interface defining the list of graphml key names used in OpenNMS topology providers
- *
- */
-public interface GraphMLKeyNames {
-	public static final String LABEL = "label";
-	public static final String DESCRIPTION = "description";
-	public static final String NAMESPACE = "namespace";
-	public static final String PREFERRED_LAYOUT = "preferred-layout";
-	public static final String FOCUS_STRATEGY = "focus-strategy";
-	public static final String FOCUS_IDS = "focus-ids";
-	public static final String SEMANTIC_ZOOM_LEVEL = "semantic-zoom-level";
-	public static final String FOREIGN_SOURCE = "foreignSource";
-	public static final String FOREIGN_ID = "foreignID";
-	public static final String NODE_ID = "nodeID";
-	public static final String BREADCRUMB_STRATEGY = "breadcrumb-strategy";
-	public static final String VERTEX_STATUS_PROVIDER = "vertex-status-provider";
+import org.junit.Assert;
+import org.junit.Test;
+
+public class GraphMLReaderTest {
+
+    @Test
+    public void verifyRead() throws InvalidGraphException {
+        GraphML graphML = GraphMLReader.read(getClass().getResourceAsStream("/test-graph.xml"));
+        Assert.assertEquals(2, graphML.getGraphs().size());
+
+        GraphMLGraph graph = graphML.getGraphs().get(0);
+        Assert.assertEquals("regions", graph.getId());
+        Assert.assertEquals(4, graph.getNodes().size());
+
+        graph = graphML.getGraphs().get(1);
+        Assert.assertEquals("markets", graph.getId());
+        Assert.assertEquals(16, graph.getNodes().size());
+
+    }
 }
